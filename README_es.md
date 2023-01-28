@@ -1,8 +1,8 @@
-# lomap_0
+# lomap_en3b
 
-[![Actions Status](https://github.com/arquisoft/lomap_0/workflows/CI%20for%20LOMAP_0/badge.svg)](https://github.com/arquisoft/lomap_0/actions)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_0&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_0)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_0&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_0)
+[![Actions Status](https://github.com/arquisoft/lomap_en3b/workflows/CI%20for%20LOMAP_EN3B/badge.svg)](https://github.com/arquisoft/lomap_en3b/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_en3b&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_en3b)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_en3b&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_en3b)
 
 <p float="left">
 <img src="https://blog.wildix.com/wp-content/uploads/2020/06/react-logo.jpg" height="100">
@@ -16,7 +16,7 @@ Este proyecto es un ejemplo básico de un sitio web utilizando **React** con **T
 
 <mark>Si tienes instalados node.js y npm, asegúrate de actualizarlos antes de intentar construir las imagenes</mark>
 
-Si quieres ejecutar el proyecto necesitarás [git](https://git-scm.com/downloads), [Node.js and npm](https://www.npmjs.com/get-npm) y [Docker](https://docs.docker.com/get-docker/). Asegúrate de tenerlos instalados en tu equipo. Descarga el proyecto con `git clone https://github.com/arquisoft/lomap_0`. La manera más rápida de ejecutar todo es con Docker.
+Si quieres ejecutar el proyecto necesitarás [git](https://git-scm.com/downloads), [Node.js and npm](https://www.npmjs.com/get-npm) y [Docker](https://docs.docker.com/get-docker/). Asegúrate de tenerlos instalados en tu equipo. Descarga el proyecto con `git clone https://github.com/arquisoft/lomap_en3b`. La manera más rápida de ejecutar todo es con Docker.
 
 ```bash
 docker-compose up --build
@@ -47,6 +47,6 @@ Deberías ser capaz de acceder a la aplicación en [http://localhost:3000](http:
 
 ## Mas información
 Encontrarás más información sobre el repositorio en los otros archivos README:
-- Documentación: https://github.com/arquisoft/lomap_0/tree/master/docs
-- Webapp: https://github.com/arquisoft/lomap_0/tree/master/webapp
-- Restapi: https://github.com/arquisoft/lomap_0/tree/master/restapi
+- Documentación: https://github.com/arquisoft/lomap_en3b/tree/master/docs
+- Webapp: https://github.com/arquisoft/lomap_en3b/tree/master/webapp
+- Restapi: https://github.com/arquisoft/lomap_en3b/tree/master/restapi

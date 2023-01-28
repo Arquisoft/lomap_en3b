@@ -1,4 +1,4 @@
-name: CI for LOMAP_0
+name: CI for lomap_en3b
 
 on:
   release:
@@ -62,7 +62,7 @@ jobs:
       env:
         API_URI: http://${{ secrets.DEPLOY_HOST }}:5000/api
       with:
-          name: arquisoft/lomap_0/webapp
+          name: arquisoft/lomap_en3b/webapp
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
@@ -77,7 +77,7 @@ jobs:
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v5
       with:
-          name: arquisoft/lomap_0/restapi
+          name: arquisoft/lomap_en3b/restapi
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
@@ -94,7 +94,7 @@ jobs:
   #       user: ${{ secrets.DEPLOY_USER }}
   #       key: ${{ secrets.DEPLOY_KEY }}
   #       command: |
-  #         wget https://raw.githubusercontent.com/arquisoft/lomap_0/master/docker-compose-deploy.yml -O docker-compose.yml
+  #         wget https://raw.githubusercontent.com/arquisoft/lomap_en3b/master/docker-compose-deploy.yml -O docker-compose.yml
   #         docker-compose stop
   #         docker-compose rm -f
   #         docker-compose pull   

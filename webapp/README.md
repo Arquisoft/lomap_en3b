@@ -44,7 +44,7 @@ docker-compose down
 ### Continuous integration/Continuous Delivery
 In this step we are going to setup GitHub Actions in order to have CI in our system. The idea is that, every time we create a new release, build the system (restapi and webapp), run the tests, and if everything is ok, build the docker images and upload them to Github packages. Then we can deploy the application using these images.
 
-The workflow for this is in [lomap_0.yml](.github/workflow/lomap_0.yml). In this file you can see that there are two jobs, one for the restapi, one for the webapp. Jobs are executed in paralel so this will speed up our build.
+The workflow for this is in [lomap_en3b.yml](.github/workflow/lomap_en3b.yml). In this file you can see that there are two jobs, one for the restapi, one for the webapp. Jobs are executed in paralel so this will speed up our build.
 
 So, the first to jobs in this file build the webapp and the restapi (in parallel). If everything goes well, check the e2e tests (later in this document) and if these acceptance tests pass ok, create the docker images and deploy them.
 

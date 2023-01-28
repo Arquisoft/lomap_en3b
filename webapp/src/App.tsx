@@ -28,7 +28,7 @@ function App(): JSX.Element {
         <Box component="div" sx={{ py: 2}}>This is a basic example of a React application using Typescript. You can add your email to the list filling the form below.</Box>
         <EmailForm OnUserListChange={refreshUserList}/>        
         <UserList users={users}/>
-        <Link href="https://github.com/arquisoft/lomap_0">Source code</Link>
+        <Link href="https://github.com/arquisoft/lomap_en3b">Source code</Link>
       </Container>
     </>
   );

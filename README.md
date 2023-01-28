@@ -1,8 +1,8 @@
-# lomap_0
+# lomap_en3b
 
-[![Actions Status](https://github.com/arquisoft/lomap_0/workflows/CI%20for%20LOMAP_0/badge.svg)](https://github.com/arquisoft/lomap_0/actions)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_0&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_0)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_0&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_0)
+[![Actions Status](https://github.com/arquisoft/lomap_en3b/workflows/CI%20for%20LOMAP_EN3B/badge.svg)](https://github.com/arquisoft/lomap_en3b/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_en3b&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_en3b)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_en3b&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_en3b)
 
 <p float="left">
 <img src="https://blog.wildix.com/wp-content/uploads/2020/06/react-logo.jpg" height="100">
@@ -16,7 +16,7 @@ This project is a basic example of website using **React** with **Typescript** a
 ## Quick start guide
 <mark>In case you already have node.js and npm, make sure you update them before attempting to build the images</mark>
 
-If you want to execute the project you will need [git](https://git-scm.com/downloads), [Node.js and npm](https://www.npmjs.com/get-npm) and [Docker](https://docs.docker.com/get-docker/). Make sure the three of them are installed in your system. Download the project with `git clone https://github.com/arquisoft/lomap_0`. The fastest way to launch everything is with docker:
+If you want to execute the project you will need [git](https://git-scm.com/downloads), [Node.js and npm](https://www.npmjs.com/get-npm) and [Docker](https://docs.docker.com/get-docker/). Make sure the three of them are installed in your system. Download the project with `git clone https://github.com/arquisoft/lomap_en3b`. The fastest way to launch everything is with docker:
 ```bash
 docker-compose up --build
 ```
@@ -46,9 +46,9 @@ You should be able to access the application in [http://localhost:3000](http://l
 
 ## More information
 You can get more information about the repository in the other README files:
-- Documentation: https://github.com/arquisoft/lomap_0/tree/master/docs
-- Webapp: https://github.com/arquisoft/lomap_0/tree/master/webapp
-- Restapi: https://github.com/arquisoft/lomap_0/tree/master/restapi
+- Documentation: https://github.com/arquisoft/lomap_en3b/tree/master/docs
+- Webapp: https://github.com/arquisoft/lomap_en3b/tree/master/webapp
+- Restapi: https://github.com/arquisoft/lomap_en3b/tree/master/restapi
 
 
 ## Deployment
@@ -195,11 +195,11 @@ Now we are going to create a new docker-compose file called docker-compose-deplo
 version: '3.5'
 services:
   restapi:
-    image: ghcr.io/arquisoft/lomap_0/restapi:latest
+    image: ghcr.io/arquisoft/lomap_en3b/restapi:latest
     ports:
       - "5000:5000"
   webapp:
-    image: ghcr.io/arquisoft/lomap_0/webapp:latest
+    image: ghcr.io/arquisoft/lomap_en3b/webapp:latest
     ports:
       - "3000:3000"
     depends_on: 
@@ -222,7 +222,7 @@ deploy:
         user: ${{ secrets.DEPLOY_USER }}
         key: ${{ secrets.DEPLOY_KEY }}
         command: |
-          wget https://raw.githubusercontent.com/arquisoft/lomap_0/master/docker-compose-deploy.yml -O docker-compose.yml
+          wget https://raw.githubusercontent.com/arquisoft/lomap_en3b/master/docker-compose-deploy.yml -O docker-compose.yml
           docker-compose stop
           docker-compose rm -f
           docker-compose pull   
