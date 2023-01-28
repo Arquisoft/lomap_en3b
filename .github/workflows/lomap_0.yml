@@ -1,0 +1,101 @@
+name: CI for LOMAP_0
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  unit-test-webapp:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: webapp
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm ci
+    - run: npm test --coverage --watchAll
+    - name: Analyze with SonarCloud
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  unit-test-restapi:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: restapi
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm ci
+    - run: npm test --coverage --watchAll
+    - name: Analyze with SonarCloud
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  e2e-tests:
+    needs: [unit-test-webapp, unit-test-restapi]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm --prefix webapp install
+    - run: npm --prefix restapi install
+    - run: npm --prefix webapp run build
+    - run: npm --prefix webapp run test:e2e
+  docker-push-webapp:
+    name: Push webapp Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: [e2e-tests]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v5
+      env:
+        API_URI: http://${{ secrets.DEPLOY_HOST }}:5000/api
+      with:
+          name: arquisoft/lomap_0/webapp
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_PUSH_TOKEN }}
+          registry: ghcr.io
+          workdir: webapp
+          buildargs: API_URI
+  docker-push-restapi:
+    name: Push restapi Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: [e2e-tests]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v5
+      with:
+          name: arquisoft/lomap_0/restapi
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_PUSH_TOKEN }}
+          registry: ghcr.io
+          workdir: restapi
+  # deploy:
+  #   name: Deploy over SSH
+  #   runs-on: ubuntu-latest
+  #   needs: [docker-push-restapi,docker-push-webapp]
+  #   steps:
+  #   - name: Deploy over SSH
+  #     uses: fifsky/ssh-action@master
+  #     with:
+  #       host: ${{ secrets.DEPLOY_HOST }}
+  #       user: ${{ secrets.DEPLOY_USER }}
+  #       key: ${{ secrets.DEPLOY_KEY }}
+  #       command: |
+  #         wget https://raw.githubusercontent.com/arquisoft/lomap_0/master/docker-compose-deploy.yml -O docker-compose.yml
+  #         docker-compose stop
+  #         docker-compose rm -f
+  #         docker-compose pull   
+  #         docker-compose up -d
