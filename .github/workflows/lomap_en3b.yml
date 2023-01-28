@@ -1,4 +1,4 @@
-name: CI for lomap_en3b
+name: CI for LOMAP_EN3B
 
 on:
   release:
