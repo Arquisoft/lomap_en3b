@@ -1,6 +1,12 @@
 [[section-introduction-and-goals]]
 == Introduction and Goals
+LoMap is an application designed for citizens in order to allow them to personalize their city map.
 
+For that matter , users of LoMap will be allowed to do such things as leaving reviews of establishments, monuments or any other place of the city; as well as pinning those places they want to visit or have visited already.
+
+LoMap will also be a tool for establishment owners to boost their businesses digitally by allowing them to have their own space on the map.
+
+In brief, LoMap is more than a Map application , but a tool for cities to develop and offer their best to anybody that is interested in visiting them. Powered by its own inhabitants honest opinions, the city will open itself to outlanders allowing them to know places they probably would have never reached.
 [role="arc42help"]
 ****
 Describes the relevant requirements and the driving forces that software architects and development team must consider. These include
