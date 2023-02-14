@@ -18,6 +18,24 @@ Describes the relevant requirements and the driving forces that software archite
 
 === Requirements Overview
 
+
+*All LoMap* Users will be able to:
+
+* [x] Add locations and categorize them between a wide range of options, for example as restaurants or bars.
+* [x] Leave reviews and multimedia of their experiences in such places.
+* [x]  Stablish friendships , meaning that , they will be able to access all the contents other users label as friend-only.
+    ** Users will be able to decide, then, if their posts are shared with all users, their friends only or remain accesible to themselves only.
+* [x]  Filter the contents being displayed in the map by different parameters such as it being friend-content, it's  category...
+
+In further of stages of the project, _stablishment owners & public entities_ will be able to:
+
+* [x] create public map locations for their businesses
+
+
+Keeping privacy in mind, all of the above, will be supported by the **SOLID project specification **, making use of **SOLID Pods ** for individual data storage. This way , users will be in full control of *which* information they share *and of who* they are sharing it to.
+
+_More details are described in the following document: https://arquisoft.github.io/course2223/labAssignmentDescription.html[LoMap Assigment Description]_
+
 [role="arc42help"]
 ****
 .Contents
