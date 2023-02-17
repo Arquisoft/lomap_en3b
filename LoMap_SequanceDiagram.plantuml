@@ -1,0 +1,72 @@
+@startuml
+title LoMap APP Sequence Diagram
+actor User 
+actor Group 
+actor Places
+participant "LoMap APP" as App
+
+User -> App : Login 
+App -> User : Display Home Page 
+
+alt User choose a Role
+App -> User : Add different roles (citizen, tourist visitor, business owner)
+User -> App : choose a role (citizen, tourist visitor, business owner)
+App -> User : Display role info
+end
+alt User Adds Locations 
+    User -> App : Add Locations 
+    App -> User : Display Locations Details 
+    User -> App : Add Reviews/Comments/Pictures
+    App -> User : Confirm Added Info
+    else User Views Maps
+    User -> App : View Maps 
+    App -> User : Display Maps with Locations 
+end
+alt User adds friends/groups 
+    User -> App : Add Friends/Groups 
+    App -> User : Display Friends/Groups Info 
+else User views newsfeed 
+    User -> App : View Newsfeed 
+    App -> User : Display Newsfeed with Connected Places
+    end
+
+    alt Group adds Maps
+    Group -> App : Add Maps
+    App -> Group : Display Maps with Locations
+    else Group choose Role
+    Group -> App : chose role (family maps, tourist groups, etc. )
+    App -> Group : Display role Info
+    end
+
+    alt User(business owners) create a map
+    User -> App : business owners:create a map with recommended places near their own store (like other stores, or bars to chill after shopping, etc…)
+    App -> User :  Display Maps with Locations
+    end
+
+alt User creates route 
+    User -> App : Create Route 
+    App -> User : Display Route Info 
+else User compare maps 
+    User -> App : Compare Maps 
+    App -> User : Display Map Comparison Results 
+end
+
+alt User check address book 
+    User -> App : Check Address Book 
+    App -> User : Display Place Recommendations 
+end
+
+alt App adds gamification features
+App -> User : Add gamification features (e.g. collect places, discover new ones etc.)
+User -> App : Play games
+end 
+alt Places create their own pods
+Places -> App : (restaurants, shops, bars, etc.) to create their own pods
+User -> Places : can connect to them
+Group -> Places : can connect to them
+else App creates Newsfedd from connected places
+App -> User : Create a newsfeed from connected places
+App -> Group : Create a newsfeed from connected places
+end
+
+@enduml
