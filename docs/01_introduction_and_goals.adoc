@@ -118,7 +118,7 @@ Table with role names, person names, and their expectations with respect to the 
 [options="header",cols="1,2,2"]
 |===
 |Role/Name| Contact |Expectations
-|Product owners| Professor José Emilio Labra Gallo.   | They'll provide the project with architectural guidance, constraints and requirements.
+|Product owners| Professor José Emilio Labra Gayo.   | They'll provide the project with architectural guidance, constraints and requirements.
 | Citizen Users| - | To be able to intuitively pin places, leave reviews and rate places they visit. To be able to modify or remove any of the mentioned before. To establish a network of contacts that can access their content as well as being able to access those contact's information. To be able to revoke connections and to stop sharing information with them. To access public content posted by any other user / organization. To create several custom maps. To filter data displayed.
 | Business Owner Users| Representative figure (CTO, CEO..) depending on the business. | (FURTHER STAGES OF THE PROGRAM) To be able to create map locations for their business, so potential visitors and customers can access them.
 | Each city's council| Representative figure (Major, secretary, governor) depending on the location. | To boost the popularity and tourism of the city  , by making it easier for foreigners to discover good places. To give citizens a chance to discover new places. The application would have to complain certain specifications, for example, being secure.
