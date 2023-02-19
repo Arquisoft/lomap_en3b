@@ -532,15 +532,219 @@ building block instances depicted in this diagram.&gt;</em></p>
 
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_n">&lt;Runtime Scenario n&gt;</h3>
-
+<h3 id="_sequance_diagram_user_login">&lt;Sequance Diagram // User Login&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Login.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User Login
+User -&gt; App : Login
+App -&gt; User : Display Home Page
+end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_user_choose_a_role">&lt;Sequance Diagram // User Choose a Role&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Choose a Role.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User choose a Role
+App -&gt; User : Add different roles (citizen, tourist visitor, business owner)
+User -&gt; App : choose a role (citizen, tourist visitor, business owner)
+App -&gt; User : Display role info
+end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_user_add_location">&lt;Sequance Diagram // User Add Location&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Add Location.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User Adds Locations
+    User -&gt; App : Add Locations
+    App -&gt; User : Display Locations Details
+    User -&gt; App : Add Reviews/Comments/Pictures
+    App -&gt; User : Confirm Added Info
+    else User Views Maps
+    User -&gt; App : View Maps
+    App -&gt; User : Display Maps with Locations
+end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_user_creates_route">&lt;Sequance Diagram // User Creates Route&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Creates Route.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User creates route
+    User -&gt; App : Create Route
+    App -&gt; User : Display Route Info
+else User compare maps
+    User -&gt; App : Compare Maps
+    App -&gt; User : Display Map Comparison Results
+end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_user_check_address_book">&lt;Sequance Diagram // User Check Address Book&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Check Address Book.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User check address book
+    User -&gt; App : Check Address Book
+    App -&gt; User : Display Place Recommendations
+end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_user_check_address_book_2">&lt;Sequance Diagram // User Check Address Book&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Check Address Book.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User check address book
+    User -&gt; App : Check Address Book
+    App -&gt; User : Display Place Recommendations
+end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_user_adds_friendsgroups">&lt;Sequance Diagram // User Adds Friends/Groups&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ dir_s_mkdir - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Adds Friends
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User adds friends/groups
+    User -&gt; App : Add Friends/Groups
+    App -&gt; User : Display Friends/Groups Info
+else User views newsfeed
+    User -&gt; App : View Newsfeed
+    App -&gt; User : Display Newsfeed with Connected Places
+    end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_group_adds_maps">&lt;Sequance Diagram // Group adds Maps&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // Group adds Maps.png
+@startuml
+title LoMap APP Sequence Diagram
+actor Group
+participant "LoMap APP" as App
+alt Group adds Maps
+    Group -&gt; App : Add Maps
+    App -&gt; Group : Display Maps with Locations
+    else Group choose Role
+    Group -&gt; App : chose role (family maps, tourist groups, etc. )
+    App -&gt; Group : Display role Info
+    end
+    @enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_userbusiness_owners_create_a_map">&lt;Sequance Diagram // User(business owners) Create a Map&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User(business owners) Create a Map.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User(business owners) create a map
+    User -&gt; App : business owners:create a map with recommended places near their own store (like other stores, or bars to chill after shopping, etc…)
+    App -&gt; User :  Display Maps with Locations
+    end
+ @enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_adds_gamification_features">&lt;Sequance Diagram // Adds Gamification Features&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // Adds Gamification Features.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt App adds gamification features
+App -&gt; User : Add gamification features (e.g. collect places, discover new ones etc.)
+User -&gt; App : Play games
+end
+@enduml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequance_diagram_places_create_their_own_pods">&lt;Sequance Diagram // Places Create Their Own Pods&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // Places Create Their Own Pods.png
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+actor Group
+actor Places
+participant "LoMap APP" as App
+alt Places create their own pods
+Places -&gt; App : (restaurants, shops, bars, etc.) to create their own pods
+User -&gt; Places : can connect to them
+Group -&gt; Places : can connect to them
+else App creates Newsfedd from connected places
+App -&gt; User : Create a newsfeed from connected places
+App -&gt; Group : Create a newsfeed from connected places
+end
+@enduml</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-18 11:57:43 +0100
+Last updated 2023-02-19 13:06:35 +0100
 </div>
 </div>
 </body>

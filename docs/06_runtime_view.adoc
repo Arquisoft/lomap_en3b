@@ -52,53 +52,61 @@ Alice <-- Batu: another authentication Response
 
 === ...
 
-=== <Runtime Scenario n>
-
+=== <Sequance Diagram // User Login>
+[plantuml,"Sequance Diagram // User Login",png]
+----
 @startuml
 title LoMap APP Sequence Diagram
 actor User
-actor Group
-actor Places
 participant "LoMap APP" as App
-
+alt User Login
 User -> App : Login
 App -> User : Display Home Page
+end
+@enduml
+----
 
+=== <Sequance Diagram // User Choose a Role>
+[plantuml,"Sequance Diagram // User Choose a Role",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
 alt User choose a Role
 App -> User : Add different roles (citizen, tourist visitor, business owner)
 User -> App : choose a role (citizen, tourist visitor, business owner)
 App -> User : Display role info
 end
+@enduml
+----
+
+=== <Sequance Diagram // User Add Location>
+[plantuml,"Sequance Diagram // User Add Location",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
 alt User Adds Locations
     User -> App : Add Locations
     App -> User : Display Locations Details
     User -> App : Add Reviews/Comments/Pictures
-    User -> App : Confirm Added Info
+    App -> User : Confirm Added Info
     else User Views Maps
     User -> App : View Maps
     App -> User : Display Maps with Locations
 end
-alt User adds friends/groups
-    User -> App : Add Friends/Groups
-    App -> User : Display Friends/Groups Info
-else User views newsfeed
-    User -> App : View Newsfeed
-    App -> User : Display Newsfeed with Connected Places
-    end
+@enduml
+----
 
-    alt Group adds Maps
-    Group -> App : Add Maps
-    App -> Group : Display Maps with Locations
-    else Group choose Role
-    Group -> App : chose role (family maps, tourist groups, etc. )
-    App -> Group : Display role Info
-    end
-
-    alt User(business owners) create a map
-    User -> App : business owners:create a map with recommended places near their own store (like other stores, or bars to chill after shopping, etc…)
-    App -> User :  Display Maps with Locations
-    end
-
+=== <Sequance Diagram // User Creates Route>
+[plantuml,"Sequance Diagram // User Creates Route",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
 alt User creates route
     User -> App : Create Route
     App -> User : Display Route Info
@@ -106,16 +114,108 @@ else User compare maps
     User -> App : Compare Maps
     App -> User : Display Map Comparison Results
 end
+@enduml
+----
 
+=== <Sequance Diagram // User Check Address Book>
+[plantuml,"Sequance Diagram // User Check Address Book",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
 alt User check address book
     User -> App : Check Address Book
     App -> User : Display Place Recommendations
 end
+@enduml
+----
 
+=== <Sequance Diagram // User Check Address Book>
+[plantuml,"Sequance Diagram // User Check Address Book",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User check address book
+    User -> App : Check Address Book
+    App -> User : Display Place Recommendations
+end
+@enduml
+----
+
+=== <Sequance Diagram // User Adds Friends/Groups>
+[plantuml,"Sequance Diagram // User Adds Friends/Groups",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User adds friends/groups
+    User -> App : Add Friends/Groups
+    App -> User : Display Friends/Groups Info
+else User views newsfeed
+    User -> App : View Newsfeed
+    App -> User : Display Newsfeed with Connected Places
+    end
+@enduml
+----
+
+=== <Sequance Diagram // Group adds Maps>
+[plantuml,"Sequance Diagram // Group adds Maps",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor Group
+participant "LoMap APP" as App
+alt Group adds Maps
+    Group -> App : Add Maps
+    App -> Group : Display Maps with Locations
+    else Group choose Role
+    Group -> App : chose role (family maps, tourist groups, etc. )
+    App -> Group : Display role Info
+    end
+    @enduml
+----
+
+=== <Sequance Diagram // User(business owners) Create a Map>
+[plantuml,"Sequance Diagram // User(business owners) Create a Map",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
+alt User(business owners) create a map
+    User -> App : business owners:create a map with recommended places near their own store (like other stores, or bars to chill after shopping, etc…)
+    App -> User :  Display Maps with Locations
+    end
+ @enduml
+----
+
+=== <Sequance Diagram // Adds Gamification Features>
+[plantuml,"Sequance Diagram // Adds Gamification Features",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+participant "LoMap APP" as App
 alt App adds gamification features
 App -> User : Add gamification features (e.g. collect places, discover new ones etc.)
 User -> App : Play games
 end
+@enduml
+----
+
+=== <Sequance Diagram // Places Create Their Own Pods>
+[plantuml,"Sequance Diagram // Places Create Their Own Pods",png]
+----
+@startuml
+title LoMap APP Sequence Diagram
+actor User
+actor Group
+actor Places
+participant "LoMap APP" as App
 alt Places create their own pods
 Places -> App : (restaurants, shops, bars, etc.) to create their own pods
 User -> Places : can connect to them
@@ -124,5 +224,8 @@ else App creates Newsfedd from connected places
 App -> User : Create a newsfeed from connected places
 App -> Group : Create a newsfeed from connected places
 end
-
 @enduml
+----
+
+
+
