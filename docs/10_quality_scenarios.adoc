@@ -19,6 +19,10 @@ concrete and measurable.
 
 === Quality Tree
 
+
+image:QualityDiagram.png["The quality diagram"]
+
+
 [role="arc42help"]
 ****
 .Content
@@ -37,6 +41,24 @@ In any case the tree should include links to the scenarios of the following sect
 ****
 
 === Quality Scenarios
+
+
+
+
+|===
+ |**Quality Requirement**|**Scenario**|**Priority**
+ |Responsiveness|The application needs to have a fast response time. Any user should be able to use the features of the app with no major problems and without having noticeable delays on response times.|High
+ |Maintainability|All of the code should be written in such a way that it can be easily modified and reused. Also, it is important that any errors or bugs can be easily fixed.LoMap will be developed minding the readability of its code and documentation.|High
+ |Security|The user's data will be saved and retrieved from a secured pod. We want the users to trust our application with their private data.|High
+ |Usability|Our application will be easy to use for all types of users. It should be easy to understand and performing all the wanted actions shouldn't raise without problems.|Medium
+ |Privacy|The user will have the option to choose with who he wants to share his data with.|Medium
+|===
+
+
+
+
+
+
 
 [role="arc42help"]
 ****

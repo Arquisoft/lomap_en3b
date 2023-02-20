@@ -1,6 +1,39 @@
 [[section-technical-risks]]
 == Risks and Technical Debts
 
+.Risks
+|===
+ |**Risks**|**Description**
+ | Time | We don't have a very long time to develop the application so we need to organize ourselves in such way that we can do all the things that we propose.
+ | The team | We didn't knew each other before this project plus two of the team members are Erasmus students so we need to speak in english with is not our main language.
+ |The scale of the project| It is the first time some of us are working in such a project that needs the knowledge of a lot of new technologies which some of us need to learn from 0.
+|===
+
+
+
+
+
+.Technical debts
+|===
+ |**Technical debts**|**Description**
+ | SOLID API | First time we hear about SOLID Pods so we have to document about them.
+ |JavaScript| Some of the team members never used JavaScript.
+ |React| It is a new JavaScript that all of us have to learn from 0.
+|===
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [role="arc42help"]
 ****
