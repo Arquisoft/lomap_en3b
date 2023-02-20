@@ -29,7 +29,7 @@ There are many notations for describing scenarios, e.g.
 
 ****
 
-=== <Runtime Scenario 1>
+=== <Runtime Scenario 1 - User login>
 
 * _<insert runtime diagram or textual description of the scenario>_
 * _<insert description of the notable aspects of the interactions between the
@@ -37,23 +37,7 @@ building block instances depicted in this diagram.>_
 
 It is possible to use a sequence diagram:
 
-[plantuml,"Sequence diagram",png]
-----
-actor Alice
-actor Batu
-database Pod as "Batu's Pod"
-Alice -> Batu: Authentication Request
-Batu --> Alice: Authentication Response
-Alice  --> Pod: Store route
-Alice ->Batu: Another authentication Request
-Alice <-- Batu: another authentication Response
-----
-=== <Runtime Scenario 2>
-
-=== ...
-
-=== <Sequance Diagram // User Login>
-[plantuml,"Sequance Diagram // User Login",png]
+[plantuml,"UserLogin",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram
@@ -65,9 +49,8 @@ App -> User : Display Home Page
 end
 @enduml
 ----
-
-=== <Sequance Diagram // User Choose a Role>
-[plantuml,"Sequance Diagram // User Choose a Role",png]
+=== <Runtime Scenario 2 - User Chooses a Role>
+[plantuml,"UserRoleSelection",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram
@@ -81,8 +64,8 @@ end
 @enduml
 ----
 
-=== <Sequance Diagram // User Add Location>
-[plantuml,"Sequance Diagram // User Add Location",png]
+=== <Runtime Scenario 3 - User Adds a Location>
+[plantuml,"UserAddsLocation",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram
@@ -100,10 +83,11 @@ end
 @enduml
 ----
 
-=== <Sequance Diagram // User Creates Route>
-[plantuml,"Sequance Diagram // User Creates Route",png]
+=== <Runtime Scenario 4 -User Creates Route>
+[plantuml,"UserCreatesRoute",png]
 ----
 @startuml
+
 title LoMap APP Sequence Diagram
 actor User
 participant "LoMap APP" as App
@@ -117,8 +101,8 @@ end
 @enduml
 ----
 
-=== <Sequance Diagram // User Check Address Book>
-[plantuml,"Sequance Diagram // User Check Address Book",png]
+=== <Runtime Scenario 5 - User checks address book>
+[plantuml,"UserChecksAddressBook",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram
@@ -130,23 +114,8 @@ alt User check address book
 end
 @enduml
 ----
-
-=== <Sequance Diagram // User Check Address Book>
-[plantuml,"Sequance Diagram // User Check Address Book",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User check address book
-    User -> App : Check Address Book
-    App -> User : Display Place Recommendations
-end
-@enduml
-----
-
-=== <Sequance Diagram // User Adds Friends/Groups>
-[plantuml,"Sequance Diagram // User Adds Friends/Groups",png]
+=== <Runtime Scenario 6 - User Adds Friends/Groups>
+[plantuml,"UserAddsFriends",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram
@@ -162,8 +131,8 @@ else User views newsfeed
 @enduml
 ----
 
-=== <Sequance Diagram // Group adds Maps>
-[plantuml,"Sequance Diagram // Group adds Maps",png]
+=== <Runtime Scenario 6 - Groups create Maps>
+[plantuml,"GroupCreatesMap",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram
@@ -179,8 +148,8 @@ alt Group adds Maps
     @enduml
 ----
 
-=== <Sequance Diagram // User(business owners) Create a Map>
-[plantuml,"Sequance Diagram // User(business owners) Create a Map",png]
+=== <Runtime Scenario 7  - User(business owners) Create a Map>
+[plantuml," businessOwnerCreatesMap",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram
@@ -193,22 +162,9 @@ alt User(business owners) create a map
  @enduml
 ----
 
-=== <Sequance Diagram // Adds Gamification Features>
-[plantuml,"Sequance Diagram // Adds Gamification Features",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt App adds gamification features
-App -> User : Add gamification features (e.g. collect places, discover new ones etc.)
-User -> App : Play games
-end
-@enduml
-----
 
-=== <Sequance Diagram // Places Create Their Own Pods>
-[plantuml,"Sequance Diagram // Places Create Their Own Pods",png]
+=== <Runtime Scenario 8-Places create their pods>
+[plantuml,"placesCreateTheirOwnPods",png]
 ----
 @startuml
 title LoMap APP Sequence Diagram

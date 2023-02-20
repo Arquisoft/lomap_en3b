@@ -502,7 +502,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_1">&lt;Runtime Scenario 1&gt;</h3>
+<h3 id="_runtime_scenario_1_user_login">&lt;Runtime Scenario 1 - User login&gt;</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -519,223 +519,71 @@ building block instances depicted in this diagram.&gt;</em></p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="Sequence%20diagram.png" alt="Sequence diagram" width="338" height="335">
+<img src="images/UserLogin.png" alt="UserLogin" width="243" height="315">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_2">&lt;Runtime Scenario 2&gt;</h3>
-
-</div>
-<div class="sect2">
-<h3 id="">&#8230;&#8203;</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_sequance_diagram_user_login">&lt;Sequance Diagram // User Login&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_2_user_chooses_a_role">&lt;Runtime Scenario 2 - User Chooses a Role&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Login.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User Login
-User -&gt; App : Login
-App -&gt; User : Display Home Page
-end
-@enduml</pre>
+<img src="images/UserRoleSelection.png" alt="UserRoleSelection" width="453" height="345">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sequance_diagram_user_choose_a_role">&lt;Sequance Diagram // User Choose a Role&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_3_user_adds_a_location">&lt;Runtime Scenario 3 - User Adds a Location&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Choose a Role.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User choose a Role
-App -&gt; User : Add different roles (citizen, tourist visitor, business owner)
-User -&gt; App : choose a role (citizen, tourist visitor, business owner)
-App -&gt; User : Display role info
-end
-@enduml</pre>
+<img src="images/UserAddsLocation.png" alt="UserAddsLocation" width="314" height="452">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sequance_diagram_user_add_location">&lt;Sequance Diagram // User Add Location&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_4_user_creates_route">&lt;Runtime Scenario 4 -User Creates Route&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Add Location.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User Adds Locations
-    User -&gt; App : Add Locations
-    App -&gt; User : Display Locations Details
-    User -&gt; App : Add Reviews/Comments/Pictures
-    App -&gt; User : Confirm Added Info
-    else User Views Maps
-    User -&gt; App : View Maps
-    App -&gt; User : Display Maps with Locations
-end
-@enduml</pre>
+<img src="images/UserCreatesRoute.png" alt="UserCreatesRoute" width="314" height="391">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sequance_diagram_user_creates_route">&lt;Sequance Diagram // User Creates Route&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_5_user_checks_address_book">&lt;Runtime Scenario 5 - User checks address book&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Creates Route.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User creates route
-    User -&gt; App : Create Route
-    App -&gt; User : Display Route Info
-else User compare maps
-    User -&gt; App : Compare Maps
-    App -&gt; User : Display Map Comparison Results
-end
-@enduml</pre>
+<img src="images/UserChecksAddressBook.png" alt="UserChecksAddressBook" width="312" height="315">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sequance_diagram_user_check_address_book">&lt;Sequance Diagram // User Check Address Book&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_6_user_adds_friendsgroups">&lt;Runtime Scenario 6 - User Adds Friends/Groups&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Check Address Book.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User check address book
-    User -&gt; App : Check Address Book
-    App -&gt; User : Display Place Recommendations
-end
-@enduml</pre>
+<img src="images/UserAddsFriends.png" alt="UserAddsFriends" width="361" height="391">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sequance_diagram_user_check_address_book_2">&lt;Sequance Diagram // User Check Address Book&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_6_groups_create_maps">&lt;Runtime Scenario 6 - Groups create Maps&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Check Address Book.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User check address book
-    User -&gt; App : Check Address Book
-    App -&gt; User : Display Place Recommendations
-end
-@enduml</pre>
+<img src="images/GroupCreatesMap.png" alt="GroupCreatesMap" width="390" height="391">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sequance_diagram_user_adds_friendsgroups">&lt;Sequance Diagram // User Adds Friends/Groups&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_7_userbusiness_owners_create_a_map">&lt;Runtime Scenario 7  - User(business owners) Create a Map&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ dir_s_mkdir - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User Adds Friends
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User adds friends/groups
-    User -&gt; App : Add Friends/Groups
-    App -&gt; User : Display Friends/Groups Info
-else User views newsfeed
-    User -&gt; App : View Newsfeed
-    App -&gt; User : Display Newsfeed with Connected Places
-    end
-@enduml</pre>
+<img src="%20businessOwnerCreatesMap.png" alt=" businessOwnerCreatesMap" width="889" height="315">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sequance_diagram_group_adds_maps">&lt;Sequance Diagram // Group adds Maps&gt;</h3>
-<div class="listingblock">
+<h3 id="_runtime_scenario_8_places_create_their_pods">&lt;Runtime Scenario 8-Places create their pods&gt;</h3>
+<div class="imageblock">
 <div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // Group adds Maps.png
-@startuml
-title LoMap APP Sequence Diagram
-actor Group
-participant "LoMap APP" as App
-alt Group adds Maps
-    Group -&gt; App : Add Maps
-    App -&gt; Group : Display Maps with Locations
-    else Group choose Role
-    Group -&gt; App : chose role (family maps, tourist groups, etc. )
-    App -&gt; Group : Display role Info
-    end
-    @enduml</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_sequance_diagram_userbusiness_owners_create_a_map">&lt;Sequance Diagram // User(business owners) Create a Map&gt;</h3>
-<div class="listingblock">
-<div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // User(business owners) Create a Map.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User(business owners) create a map
-    User -&gt; App : business owners:create a map with recommended places near their own store (like other stores, or bars to chill after shopping, etc…)
-    App -&gt; User :  Display Maps with Locations
-    end
- @enduml</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_sequance_diagram_adds_gamification_features">&lt;Sequance Diagram // Adds Gamification Features&gt;</h3>
-<div class="listingblock">
-<div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // Adds Gamification Features.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt App adds gamification features
-App -&gt; User : Add gamification features (e.g. collect places, discover new ones etc.)
-User -&gt; App : Play games
-end
-@enduml</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_sequance_diagram_places_create_their_own_pods">&lt;Sequance Diagram // Places Create Their Own Pods&gt;</h3>
-<div class="listingblock">
-<div class="content">
-<pre>Failed to generate image: No such file or directory @ rb_sysopen - C:/Users/bbayi/IdeaProjects/lomap_en3b/docs/Sequance Diagram // Places Create Their Own Pods.png
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-actor Group
-actor Places
-participant "LoMap APP" as App
-alt Places create their own pods
-Places -&gt; App : (restaurants, shops, bars, etc.) to create their own pods
-User -&gt; Places : can connect to them
-Group -&gt; Places : can connect to them
-else App creates Newsfedd from connected places
-App -&gt; User : Create a newsfeed from connected places
-App -&gt; Group : Create a newsfeed from connected places
-end
-@enduml</pre>
+<img src="images/placesCreateTheirOwnPods.png" alt="placesCreateTheirOwnPods" width="637" height="422">
 </div>
 </div>
 </div>
@@ -744,7 +592,7 @@ end
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-19 13:06:35 +0100
+Last updated 2023-02-20 16:37:57 +0100
 </div>
 </div>
 </body>
