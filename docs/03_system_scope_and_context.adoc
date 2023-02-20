@@ -39,22 +39,36 @@ Alternatively (or additionally) you can use a table.
 The title of the table is the name of your system, the three columns contain the name of the communication partner, the inputs, and the outputs.
 ****
 
+LoMap will comunicate with two partners to get yhe main features this app is based on. 
+The first one will be a Map provider, from where we can obtain a map to displays. 
+This map will be dynamic to improve user's satisfaction.  We decided to use Maps JavaScript API by Google.
+
+The second one will be a POD provider. This will helps us accessing data and managing 
+permissions on data stored in Solid Pods. We decided to use Solid React SDK from Inrupt.
+
 **<Diagram or Table>**
-@startuml
-actor User as S
-rectangle “LoMap” as System
-rectangle “Map Provider” as MapAPI
+[plantuml,"Business Context diagram",png]
+----
+actor User as S 
+rectangle “LoMap” as System 
+rectangle “Map Provider” as MapAPI 
 rectangle “POD Provider (API)” as PodAPI
-
-S -down-> System: uses
-System --> PodAPI: location
-PodAPI --> System: map
-System --> MapAPI: request
-MapAPI --> System: data
-@enduml
-
+S --> System: uses 
+System --> PodAPI: location 
+PodAPI --> System: map 
+System --> MapAPI: request 
+MapAPI --> System: data 
+----
 **<optionally: Explanation of external domain interfaces>**
-
+|===
+|Communication partner|Inputs|Outputs
+| Maps JavaScript API (Google) 
+    | center:coords and zoom:int
+    | google.maps.Map
+| Solid React SDK (Inrupt) 
+    | 
+    |
+|===
 === Technical Context
 
 
