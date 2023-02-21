@@ -468,12 +468,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_runtime_scenario_1_user_login">6.1. &lt;Runtime Scenario 1 - User login&gt;</a></li>
 <li><a href="#_runtime_scenario_2_user_adds_private_elements_to_the_map">6.2. &lt;Runtime Scenario 2 - User adds private elements to the map&gt;</a></li>
-<li><a href="#_runtime_scenario_4_friend">6.3. &lt;Runtime Scenario 4 - Friend &gt;</a></li>
-<li><a href="#_runtime_scenario_5_user_checks_address_book">6.4. &lt;Runtime Scenario 5 - User checks address book&gt;</a></li>
-<li><a href="#_runtime_scenario_6_user_adds_friendsgroups">6.5. &lt;Runtime Scenario 6 - User Adds Friends/Groups&gt;</a></li>
-<li><a href="#_runtime_scenario_6_groups_create_maps">6.6. &lt;Runtime Scenario 6 - Groups create Maps&gt;</a></li>
-<li><a href="#_runtime_scenario_7_userbusiness_owners_create_a_map">6.7. &lt;Runtime Scenario 7  - User(business owners) Create a Map&gt;</a></li>
-<li><a href="#_runtime_scenario_8_places_create_their_pods">6.8. &lt;Runtime Scenario 8-Places create their pods&gt;</a></li>
+<li><a href="#_runtime_scenario_4_privacy_levels">6.3. &lt;Runtime Scenario 4 -Privacy levels &gt;</a></li>
 </ul>
 </li>
 <li><a href="#section-deployment-view">7. Deployment View</a>
@@ -872,6 +867,12 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 <div class="sect1">
 <h2 id="section-system-scope-and-context">3. System Scope and Context</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>LoMap is a Software system where citizens can hav personalised maps about places and locals businesses in their city. The personalised maps will be under full control of the users and the shared information will be stored in a personal pod according to the SOLID project.</p>
+</div>
+<div class="paragraph">
+<p>LoMap is a generic software solution that can be deployed and used in other cities. It is focus on the user but it also allows places to create their own space, like a digital version of their physical place.</p>
+</div>
 <div class="sidebarblock arc42help">
 <div class="content">
 <div class="paragraph">
@@ -926,16 +927,16 @@ The title of the table is the name of your system, the three columns contain the
 </div>
 </div>
 <div class="paragraph">
-<p>LoMap will comunicate with two partners to get yhe main features this app is based on.
-The first one will be a Map provider, from where we can obtain a map to displays.
-This map will be dynamic to improve user&#8217;s satisfaction.  We decided to use Maps JavaScript API by Google.</p>
+<p>LoMap software manages information from user’s POD and displays information from places in a map. In order to do that it need a map to display and a way to access to the user’s data.</p>
 </div>
 <div class="paragraph">
-<p>The second one will be a POD provider. This will helps us accessing data and managing
-permissions on data stored in Solid Pods. We decided to use Solid React SDK from Inrupt.</p>
+<p>Since it is a generic software solution, it communicates with two partners to satisfy this requirements.</p>
 </div>
 <div class="paragraph">
-<p><strong>&lt;Diagram or Table&gt;</strong></p>
+<p>First we need a map provider, that is because we want LoMap to be flexible to changes so we can change the city it displays without needing a big database with all this data stored by our system. And second, a POD Manager, that will help us with authentication and data manipulation.</p>
+</div>
+<div class="paragraph">
+<p><strong>Business context’s diagram</strong></p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -943,7 +944,8 @@ permissions on data stored in Solid Pods. We decided to use Solid React SDK from
 </div>
 </div>
 <div class="paragraph">
-<p><strong>&lt;optionally: Explanation of external domain interfaces&gt;</strong></p>
+<p><strong>External domain interfaces</strong>
+We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet) for the mapping features and open licence map provider (OpenStreetMap). And for managing the user’s data a React’s library that uses the Inrupt Javascript Client Libraries (Solid React SDK - solid-ui-react).</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -958,12 +960,17 @@ permissions on data stored in Solid Pods. We decided to use Solid React SDK from
 <td class="tableblock halign-left valign-top"><p class="tableblock">Outputs</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maps JavaScript API (Google)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">center:coords and zoom:int</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">google.maps.Map</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Leaflet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geographical coordinates and a zoom level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">map object</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Solid React SDK (Inrupt)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenStreetMap</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URL template, the attribution text and the maximum zoom level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenStreetMap tile layer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">solid-ui-react (Inrupt)</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -1534,50 +1541,50 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_4_friend">6.3. &lt;Runtime Scenario 4 - Friend &gt;</h3>
+<h3 id="_runtime_scenario_4_privacy_levels">6.3. &lt;Runtime Scenario 4 -Privacy levels &gt;</h3>
+<div class="paragraph">
+<p>LoMap will provide the users with three privacy levels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Public</strong> contributions to the map will be shown to <em>any</em> user.</p>
+</li>
+<li>
+<p><strong>Friends-Only</strong> posts will <em>only</em> be displayed to <em>their contacts</em></p>
+</li>
+<li>
+<p><strong>Private</strong> contributions will appear <em>to the creator only.</em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <strong>location</strong> of the data will change <strong>depending on it&#8217;s privacy level.</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All data the user decides to share with other users apart from his/her self will be stored in LoMaps database.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Friend-Only entries will be flagged so they are not shown if the user is not a contact of the creator.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>All contributions set as private will be stored in the POD associated to the id of the user.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>The references to Friend  users are stored in the Pod, not in LoMap&#8217;s database.</strong> That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.
+    &#8594; LoMap will retrieve the locations set as friend-only  by each contact from the database and then add them to the user&#8217;s personal rendered map.</p>
+</div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/UserCreatesRoute.png" alt="UserCreatesRoute" width="314" height="391">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_5_user_checks_address_book">6.4. &lt;Runtime Scenario 5 - User checks address book&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/UserChecksAddressBook.png" alt="UserChecksAddressBook" width="312" height="315">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_6_user_adds_friendsgroups">6.5. &lt;Runtime Scenario 6 - User Adds Friends/Groups&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/UserAddsFriends.png" alt="UserAddsFriends" width="361" height="391">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_6_groups_create_maps">6.6. &lt;Runtime Scenario 6 - Groups create Maps&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/GroupCreatesMap.png" alt="GroupCreatesMap" width="390" height="391">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_7_userbusiness_owners_create_a_map">6.7. &lt;Runtime Scenario 7  - User(business owners) Create a Map&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/%20businessOwnerCreatesMap.png" alt=" businessOwnerCreatesMap" width="885" height="315">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_8_places_create_their_pods">6.8. &lt;Runtime Scenario 8-Places create their pods&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/placesCreateTheirOwnPods.png" alt="placesCreateTheirOwnPods" width="637" height="422">
+<img src="./images/FriendsContent.png" alt="FriendsContent" width="1130" height="1212">
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -2185,7 +2192,7 @@ Created by Dr. Peter Hruschka &amp; Dr. Gernot Starke.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-18 15:34:38 -0300
+Last updated 2023-02-20 11:31:08 +0100
 </div>
 </div>
 </body>
