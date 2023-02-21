@@ -132,105 +132,96 @@ end
 ----
 _For the sake of simplicity, friend's locations CRUD & display will be covered in an independent runtime scenario._
 
-=== <Runtime Scenario 4 - Friend >
-[plantuml,"UserCreatesRoute",png]
+=== <Runtime Scenario 4 -Privacy levels >
+LoMap will provide the users with three privacy levels:
+
+    * *Public* contributions to the map will be shown to _any_ user.
+
+    * *Friends-Only* posts will _only_ be displayed to _their contacts_
+
+    * *Private* contributions will appear _to the creator only._
+
+The *location* of the data will change *depending on it's privacy level.*:
+
+    * All data the user decides to share with other users apart from his/her self will be stored in LoMaps database.
+
+        ** Friend-Only entries will be flagged so they are not shown if the user is not a contact of the creator.
+
+    * All contributions set as private will be stored in the POD associated to the id of the user.
+
+*The references to Friend  users are stored in the Pod, not in LoMap's database.* That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.
+    -> LoMap will retrieve the locations set as friend-only  by each contact from the database and then add them to the user's personal rendered map.
+
+[plantuml,"FriendsContent",png]
 ----
 @startuml
+title  Public & Friends-Only content
 
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User creates route
-    User -> App : Create Route
-    App -> User : Display Route Info
-else User compare maps
-    User -> App : Compare Maps
-    App -> User : Display Map Comparison Results
+actor "Authenticated user" as User
+actor "User's Friend" as Friend
+participant "LoMap"
+database "MONGO DB" as db
+participant "Maps Api" as maps
+participant "Inrupt solid-client API" as InruptApi
+database "POD"
+
+group User interactions
+group user adds public location
+    User-> LoMap: Adds Location as public
+    activate LoMap #LightBlue
+    LoMap-> LoMap : gets user id stored in session
+    LoMap ->db: inserts location
+    deactivate LoMap
 end
-@enduml
-----
-
-=== <Runtime Scenario 5 - User checks address book>
-[plantuml,"UserChecksAddressBook",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User check address book
-    User -> App : Check Address Book
-    App -> User : Display Place Recommendations
+group user adds friend-only location
+    User-> LoMap: Adds Location as friend Only
+    activate LoMap #LightBlue
+    LoMap-> LoMap : gets user id stored in session
+    LoMap ->db: inserts location as friend only
+    deactivate LoMap
 end
-@enduml
-----
-=== <Runtime Scenario 6 - User Adds Friends/Groups>
-[plantuml,"UserAddsFriends",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User adds friends/groups
-    User -> App : Add Friends/Groups
-    App -> User : Display Friends/Groups Info
-else User views newsfeed
-    User -> App : View Newsfeed
-    App -> User : Display Newsfeed with Connected Places
-    end
-@enduml
-----
+note over InruptApi
+       When a user witnesses the map , it will show:
+            -Posts other users made PUBLIC
+            -Friends-Only posts by their contacts
+            -their own private and friend-only contributions to the map.
+    end note
+group other (friend) user sees their personal map
 
-=== <Runtime Scenario 6 - Groups create Maps>
-[plantuml,"GroupCreatesMap",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor Group
-participant "LoMap APP" as App
-alt Group adds Maps
-    Group -> App : Add Maps
-    App -> Group : Display Maps with Locations
-    else Group choose Role
-    Group -> App : chose role (family maps, tourist groups, etc. )
-    App -> Group : Display role Info
-    end
-    @enduml
-----
-
-=== <Runtime Scenario 7  - User(business owners) Create a Map>
-[plantuml," businessOwnerCreatesMap",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User(business owners) create a map
-    User -> App : business owners:create a map with recommended places near their own store (like other stores, or bars to chill after shopping, etc…)
-    App -> User :  Display Maps with Locations
-    end
- @enduml
-----
-
-
-=== <Runtime Scenario 8-Places create their pods>
-[plantuml,"placesCreateTheirOwnPods",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-actor Group
-actor Places
-participant "LoMap APP" as App
-alt Places create their own pods
-Places -> App : (restaurants, shops, bars, etc.) to create their own pods
-User -> Places : can connect to them
-Group -> Places : can connect to them
-else App creates Newsfedd from connected places
-App -> User : Create a newsfeed from connected places
-App -> Group : Create a newsfeed from connected places
+Friend->LoMap: logs in
+activate LoMap #LightBlue
+LoMap-> maps: asks for base map
+activate maps #gold
+maps--> LoMap : returns map
+deactivate maps
+LoMap-> LoMap : adds DB (public user) info to map render
+LoMap-> InruptApi : asks for the related POD's IDs (friends)
+activate InruptApi#darkviolet
+InruptApi-> POD : asks for friend's POD's IDs
+activate POD #orchid
+POD--> InruptApi : shares friends' IDs.
+deactivate POD
+InruptApi--> LoMap:Returns POD's friends (set of IDs)
+LoMap->db:ask for each friend's shared locations
+activate db #green
+db-->LoMap: returns locations
+deactivate db
+LoMap->LoMap: adds locations to map's render
+deactivate InruptApi
+LoMap --> Friend :Displays personal map
+Friend->LoMap:interacts with authUser's location
+deactivate LoMap
 end
+end
+legend right
+    | COLOR | ACTIVITY |
+    |<#LightBlue>| LoMap |
+    |<#green>| Mongo DB |
+    |<#gold>| Maps API |
+    |<#darkviolet>| INRUPT API |
+    |<#orchid>| SOLID PODS |
+endlegend
+
 @enduml
+
 ----
-
-
-

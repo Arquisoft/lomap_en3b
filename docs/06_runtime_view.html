@@ -577,50 +577,50 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_4_friend">&lt;Runtime Scenario 4 - Friend &gt;</h3>
+<h3 id="_runtime_scenario_4_privacy_levels">&lt;Runtime Scenario 4 -Privacy levels &gt;</h3>
+<div class="paragraph">
+<p>LoMap will provide the users with three privacy levels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Public</strong> contributions to the map will be shown to <em>any</em> user.</p>
+</li>
+<li>
+<p><strong>Friends-Only</strong> posts will <em>only</em> be displayed to <em>their contacts</em></p>
+</li>
+<li>
+<p><strong>Private</strong> contributions will appear <em>to the creator only.</em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <strong>location</strong> of the data will change <strong>depending on it&#8217;s privacy level.</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All data the user decides to share with other users apart from his/her self will be stored in LoMaps database.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Friend-Only entries will be flagged so they are not shown if the user is not a contact of the creator.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>All contributions set as private will be stored in the POD associated to the id of the user.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>The references to Friend  users are stored in the Pod, not in LoMap&#8217;s database.</strong> That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.
+    &#8594; LoMap will retrieve the locations set as friend-only  by each contact from the database and then add them to the user&#8217;s personal rendered map.</p>
+</div>
 <div class="imageblock">
 <div class="content">
-<img src="images/UserCreatesRoute.png" alt="UserCreatesRoute" width="314" height="391">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_5_user_checks_address_book">&lt;Runtime Scenario 5 - User checks address book&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/UserChecksAddressBook.png" alt="UserChecksAddressBook" width="312" height="315">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_6_user_adds_friendsgroups">&lt;Runtime Scenario 6 - User Adds Friends/Groups&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/UserAddsFriends.png" alt="UserAddsFriends" width="361" height="391">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_6_groups_create_maps">&lt;Runtime Scenario 6 - Groups create Maps&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/GroupCreatesMap.png" alt="GroupCreatesMap" width="390" height="391">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_7_userbusiness_owners_create_a_map">&lt;Runtime Scenario 7  - User(business owners) Create a Map&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="%20businessOwnerCreatesMap.png" alt=" businessOwnerCreatesMap" width="889" height="315">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_8_places_create_their_pods">&lt;Runtime Scenario 8-Places create their pods&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/placesCreateTheirOwnPods.png" alt="placesCreateTheirOwnPods" width="637" height="422">
+<img src="images/FriendsContent.png" alt="FriendsContent" width="1130" height="1212">
 </div>
 </div>
 </div>
@@ -629,7 +629,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-21 14:02:39 +0100
+Last updated 2023-02-21 23:32:26 +0100
 </div>
 </div>
 </body>
