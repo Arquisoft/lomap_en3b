@@ -56,11 +56,13 @@ image:UmlDiagram.png["Example UML Diagram"]
 
 
 
-=== _<Concept 2>_
+=== Architectural and design patterns
 
-_<explanation>_
+For this application we choose to use the Modular Monolith Architecture.
 
-...
+
+The modular monolithic architecture consists of dividing our logic first into modules, and each module will be independent and isolated. Then, each module should have its own business logic. The system will only have one database.
+
 
 === _<Concept n>_
 
