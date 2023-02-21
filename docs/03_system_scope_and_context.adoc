@@ -1,5 +1,8 @@
 [[section-system-scope-and-context]]
 == System Scope and Context
+LoMap is a Software system where citizens can hav personalised maps about places and locals businesses in their city. The personalised maps will be under full control of the users and the shared information will be stored in a personal pod according to the SOLID project. 
+
+LoMap is a generic software solution that can be deployed and used in other cities. It is focus on the user but it also allows places to create their own space, like a digital version of their physical place.
 
 
 [role="arc42help"]
@@ -39,14 +42,13 @@ Alternatively (or additionally) you can use a table.
 The title of the table is the name of your system, the three columns contain the name of the communication partner, the inputs, and the outputs.
 ****
 
-LoMap will comunicate with two partners to get yhe main features this app is based on. 
-The first one will be a Map provider, from where we can obtain a map to displays. 
-This map will be dynamic to improve user's satisfaction.  We decided to use Maps JavaScript API by Google.
+LoMap software manages information from user’s POD and displays information from places in a map. In order to do that it need a map to display and a way to access to the user’s data.
 
-The second one will be a POD provider. This will helps us accessing data and managing 
-permissions on data stored in Solid Pods. We decided to use Solid React SDK from Inrupt.
+Since it is a generic software solution, it communicates with two partners to satisfy this requirements.
 
-**<Diagram or Table>**
+First we need a map provider, that is because we want LoMap to be flexible to changes so we can change the city it displays without needing a big database with all this data stored by our system. And second, a POD Manager, that will help us with authentication and data manipulation.
+
+**Business context’s diagram**
 [plantuml,"Business Context diagram",png]
 ----
 actor User as S 
@@ -59,13 +61,18 @@ PodAPI --> System: map
 System --> MapAPI: request 
 MapAPI --> System: data 
 ----
-**<optionally: Explanation of external domain interfaces>**
+**External domain interfaces**
+We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet) for the mapping features and open licence map provider (OpenStreetMap). And for managing the user’s data a React’s library that uses the Inrupt Javascript Client Libraries (Solid React SDK - solid-ui-react).
+
 |===
 |Communication partner|Inputs|Outputs
-| Maps JavaScript API (Google) 
-    | center:coords and zoom:int
-    | google.maps.Map
-| Solid React SDK (Inrupt) 
+| Leaflet 
+    | geographical coordinates and a zoom level
+    | map object
+| OpenStreetMap  
+    | URL template, the attribution text and the maximum zoom level
+    | OpenStreetMap tile layer
+| solid-ui-react (Inrupt) 
     | 
     |
 |===
