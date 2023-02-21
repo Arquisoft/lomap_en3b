@@ -1,5 +1,9 @@
 [[section-solution-strategy]]
 == Solution Strategy
+1. Implement LoMap in the MERN (MongoDB, Express, React, Node) framework.
+2. Use MongoDB in order to implement a database for the storage of non-private information.
+3. Private information stored in pods.
+4. Apply a modular monolithic architecture (client-modular server-database and pods).
 
 
 [role="arc42help"]
