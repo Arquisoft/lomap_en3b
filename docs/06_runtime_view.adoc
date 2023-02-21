@@ -29,61 +29,110 @@ There are many notations for describing scenarios, e.g.
 
 ****
 
+_All runtime scenarios where developed based on the http://solid.georgetown.domains/technical-component/[SOLID project documentation_]
+
 === <Runtime Scenario 1 - User login>
 
-* _<insert runtime diagram or textual description of the scenario>_
-* _<insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.>_
+* The user logs into LoMap, by using his POD credentials.
+** Credentials will be validated by making a petition to the POD provider (INRUPT) api
+*** LoMap checks the session's Login status.
+    **** If the data is correct, a new session will be started, and lomap will display the user's map.
+    **** In case the data is not found, user will be notified. No session will start.
 
-It is possible to use a sequence diagram:
 
 [plantuml,"UserLogin",png]
 ----
 @startuml
-title LoMap APP Sequence Diagram
+title User Logs Into LoMap
 actor User
-participant "LoMap APP" as App
-alt User Login
-User -> App : Login
-App -> User : Display Home Page
-end
-@enduml
-----
-=== <Runtime Scenario 2 - User Chooses a Role>
-[plantuml,"UserRoleSelection",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User choose a Role
-App -> User : Add different roles (citizen, tourist visitor, business owner)
-User -> App : choose a role (citizen, tourist visitor, business owner)
-App -> User : Display role info
-end
-@enduml
-----
-
-=== <Runtime Scenario 3 - User Adds a Location>
-[plantuml,"UserAddsLocation",png]
-----
-@startuml
-title LoMap APP Sequence Diagram
-actor User
-participant "LoMap APP" as App
-alt User Adds Locations
-    User -> App : Add Locations
-    App -> User : Display Locations Details
-    User -> App : Add Reviews/Comments/Pictures
-    App -> User : Confirm Added Info
-    else User Views Maps
-    User -> App : View Maps
-    App -> User : Display Maps with Locations
+participant "LoMap"
+participant "Maps Api" as maps
+participant "Inrupt solid-client API" as InruptApi
+database "POD"
+group User Login
+User-> LoMap: https://www.lomap.com
+activate LoMap
+LoMap--> User: LogInForm.html
+User->LoMap : Login(userId,password)
+LoMap-> InruptApi : getPodId(credentials)
+activate InruptApi
+InruptApi--> LoMap : POD's Id
+LoMap -> LoMap : Creates session that stores POD'S id
+LoMap -> InruptApi: asks for POD's data using id
+deactivate LoMap
+InruptApi-> POD : asks for data
+activate POD
+POD--> InruptApi : shares data
+deactivate POD
+InruptApi--> LoMap : responds with data from POD
+activate LoMap
+LoMap-> maps: gets base map
+maps--> LoMap : returns map
+LoMap-> LoMap : adds POD's info to map render
+deactivate InruptApi
+LoMap -> User : User's personal map
+deactivate LoMap
 end
 @enduml
 ----
 
-=== <Runtime Scenario 4 -User Creates Route>
+=== <Runtime Scenario 2 - User adds private elements to the map>
+Location Addition Deletion & Updating will work in a similar way architecture-wise. In general terms, the process will be the following :
+
+    * Petition to the Inrupt api using the POD's ID.
+
+    * Inrupt api will communicate with the pod, depending on the endpoint, it will ask the pod to add, update , delete or just retrieve information.
+
+    * In case of addition/deletion/update , LoMap will ask the POD to return the updated data (through Inrupts api)
+
+    * Once LoMap receives the updated data, the map will be rendered again.
+
+_Below, a sequence diagram for Additions it's provided_
+[plantuml,"UserCustomizesPrivateMapPrivate",png]
+----
+@startuml
+title Insertion of new private location
+actor "Authenticated user" as User
+participant "LoMap"
+participant "Maps Api" as maps
+participant "Inrupt solid-client API" as InruptApi
+database "POD"
+group User adds  a private Location
+User-> LoMap: Adds Location
+activate LoMap
+LoMap-> LoMap : gets POD's ID stored in session
+LoMap -> InruptApi: asks to add data to the pod of the ID
+deactivate LoMap
+activate InruptApi
+InruptApi-> POD : asks pod to insert new  location data
+activate POD
+POD --> InruptApi : notifies that data was inserted successfully
+deactivate POD
+LoMap-> InruptApi : asks for the POD's locations
+
+activate LoMap
+InruptApi-> POD : asks for the updated set of private map locations
+POD--> InruptApi : shares updated map locations
+deactivate POD
+InruptApi--> LoMap:Returns POD's locations (now updated)
+deactivate InruptApi
+LoMap-> maps: asks for base map
+activate maps
+maps--> LoMap : returns map
+deactivate maps
+LoMap-> LoMap : adds POD's info to map render
+
+deactivate InruptApi
+
+LoMap --> User :Displays User's personal map
+deactivate LoMap
+end
+@enduml
+
+----
+_For the sake of simplicity, friend's locations CRUD & display will be covered in an independent runtime scenario._
+
+=== <Runtime Scenario 4 - Friend >
 [plantuml,"UserCreatesRoute",png]
 ----
 @startuml

@@ -501,46 +501,83 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 </div>
+<div class="paragraph">
+<p><em>All runtime scenarios where developed based on the <a href="http://solid.georgetown.domains/technical-component/">SOLID project documentation</em></a></p>
+</div>
 <div class="sect2">
 <h3 id="_runtime_scenario_1_user_login">&lt;Runtime Scenario 1 - User login&gt;</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><em>&lt;insert runtime diagram or textual description of the scenario&gt;</em></p>
+<p>The user logs into LoMap, by using his POD credentials.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Credentials will be validated by making a petition to the POD provider (INRUPT) api</p>
+<div class="ulist">
+<ul>
+<li>
+<p>LoMap checks the session&#8217;s Login status.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>If the data is correct, a new session will be started, and lomap will display the user&#8217;s map.</p>
 </li>
 <li>
-<p><em>&lt;insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.&gt;</em></p>
+<p>In case the data is not found, user will be notified. No session will start.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/UserLogin.png" alt="UserLogin" width="697" height="705">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_runtime_scenario_2_user_adds_private_elements_to_the_map">&lt;Runtime Scenario 2 - User adds private elements to the map&gt;</h3>
+<div class="paragraph">
+<p>Location Addition Deletion &amp; Updating will work in a similar way architecture-wise. In general terms, the process will be the following :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Petition to the Inrupt api using the POD&#8217;s ID.</p>
+</li>
+<li>
+<p>Inrupt api will communicate with the pod, depending on the endpoint, it will ask the pod to add, update , delete or just retrieve information.</p>
+</li>
+<li>
+<p>In case of addition/deletion/update , LoMap will ask the POD to return the updated data (through Inrupts api)</p>
+</li>
+<li>
+<p>Once LoMap receives the updated data, the map will be rendered again.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>It is possible to use a sequence diagram:</p>
+<p><em>Below, a sequence diagram for Additions it&#8217;s provided</em></p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/UserLogin.png" alt="UserLogin" width="243" height="315">
+<img src="images/UserCustomizesPrivateMapPrivate.png" alt="UserCustomizesPrivateMapPrivate" width="954" height="675">
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_2_user_chooses_a_role">&lt;Runtime Scenario 2 - User Chooses a Role&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/UserRoleSelection.png" alt="UserRoleSelection" width="453" height="345">
-</div>
+<div class="paragraph">
+<p><em>For the sake of simplicity, friend&#8217;s locations CRUD &amp; display will be covered in an independent runtime scenario.</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_3_user_adds_a_location">&lt;Runtime Scenario 3 - User Adds a Location&gt;</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/UserAddsLocation.png" alt="UserAddsLocation" width="314" height="452">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_4_user_creates_route">&lt;Runtime Scenario 4 -User Creates Route&gt;</h3>
+<h3 id="_runtime_scenario_4_friend">&lt;Runtime Scenario 4 - Friend &gt;</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/UserCreatesRoute.png" alt="UserCreatesRoute" width="314" height="391">
@@ -592,7 +629,7 @@ building block instances depicted in this diagram.&gt;</em></p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-20 16:37:57 +0100
+Last updated 2023-02-21 14:02:39 +0100
 </div>
 </div>
 </body>
