@@ -4,6 +4,8 @@
 2. Use MongoDB in order to implement a database for the storage of non-private information.
 3. Private information stored in pods.
 4. Apply a modular monolithic architecture (client-modular server-database and pods).
+5. Use Google Maps API regarding the maps of the application.
+6. Use the corresponding APIs in order to establish proper connection with the pods.
 
 
 [role="arc42help"]
