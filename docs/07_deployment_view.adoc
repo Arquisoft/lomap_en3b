@@ -50,6 +50,49 @@ For multiple environments or alternative deployments please copy that section of
 
 _**<Overview Diagram>**_
 
+[plantuml,"DeploymentOverview",png]
+
+----
+@startuml
+
+node "User" as user {
+database "User Database" as userdb
+node "LoMap App" as lomap {
+database "LoMap Database" as lomapdb
+}
+node "Places" as places {
+database "Place Database" as placedb
+}
+node "Address Book" as addressbook {
+database "Address Book Database" as addressbookdb
+}
+node "Close Friends" as CloseFriends{
+database "Close Friends's Data" as closefrienddb
+}
+}
+node "Cloud Environment" as cloud {
+node "CI/CD" as cicd
+node "Deployment Server" as deploy
+node "Application Server" as appserver
+}
+node "Internet" as internet
+
+user --> lomap: Access\nLoMap App
+lomap --> userdb: Read/Write\nUser Database
+lomap --> lomapdb: Read/Write\nLoMap Database
+places --> placedb: Read/Write\nPlace Database
+addressbook --> addressbookdb: Read/Write\nAddress Book Database
+CloseFriends -> closefrienddb: Read/Write\nCloseFriends Book Database
+lomap --> internet: Access\nInternet
+cloud --> cicd: Execute\nCI/CD
+cicd --> deploy: Deploy\nApplication
+deploy --> appserver: Execute\nApplication Server
+appserver --> internet: Access\nInternet
+
+@enduml
+
+----
+
 Motivation::
 
 _<explanation in text form>_

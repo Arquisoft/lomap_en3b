@@ -24,3 +24,115 @@ Various options:
 * more detailed in form of separate sections per decision
 * ADR (architecture decision record) for every important decision
 ****
+=== NodeJs & Express ¿Why?
+Main reasons to choose these technologies have been:
+
+ * It will provide the app with *Horizontal scalability*, so we can model the system using different modules each of which, will represent a node.
+        * OpenSource** & has an Active community so there's also good documentation to be found.
+
+The main reason is **that it's  good with real-time apps **and , since the map will need for LoMap to make may I/O simultaneous operations. We know services like Uber , that also works with geolocation and maps does work with NodeJS too.
+
+
+_Also it's fair to mention that some of the members of the group have worked with this technologies before & we feel more powerful with JavaScript, BUT, as shown before  that was ** not** the only reason._
+
+=== Mongo DB ¿Why?
+
+Once we decided that we were going to use Node and  express, we figured MongoDb was a good fit because:
+
+        * It's non-relational and therefore, the schemas are flexible.
+
+        * It's simple to install and work with, specially using Node.
+
+
+
+=== Hosting service
+
+Regarding hosting services , we've  balanced the following options:
+
+|===
+|Hosting service | Pros | cons | Using it would imply...
+
+|Heroku
+| Used to offer free hosting
+| Not free hosting offered anymore
+| Paying - immediately rejected.
+
+|FireBase
+| Security.
+
+SSL Certifcate.
+
+Works nice with React.
+
+Free hosting.
+| Serverless ( for our architecture is a con)
+| Since we don't plan on going serverless , we would have to connect to the DB from the client using JS. Messy. Specially risky, since SOLID PODS require https.
+    Other option is to go serverless.
+
+|Azure
+| Free credits given by university.
+
+We used it already.
+
+Security.
+
+Compatibility.
+| Credit card info has to be provided even for free services.
+
+Machines consume credit each minute being used, and in order to spend 0 credits we would need to delete the machines.
+| Being really mindful of credit left.
+We are not really sure if it would be compatible with continuous deployment, since that would require the service to be working. We would probably run out of credit.
+
+| Amazon Web Services
+|
+     Free credits given by university.
+
+     Used it in SEW.
+
+     Security.
+
+    Compatibility.
+
+    Load Balancing & CDN
+
+| The free version is not what it used to be, now , part of the credit has to be used to take some courses aws provides , not to spend it in personal projects. So that would probably end up in credit running out.
+
+| Being really mindful of credit left. Having to make the tutorials. Just like azure, we are not really sure if it would be compatible with continuous deployment, since that would require the service to be working. We would probably run out of credit.
+
+| Netlify
+|
+    Free services
+
+         300 build minutes/month
+
+          500 Websites can be hosted for free
+
+         community forum
+
+|   Only one member for free
+
+| Only one person would be able to deploy and access the management UI. So each time someone of us wants to make a deploy, he/she would have to ask the person designed.
+
+
+
+|===
+
+We knew no option could be perfect, specially when looking for free services. But we also knew, these options were not the best fit they could be...At least not if we did not go serverless.
+
+Then we found *Render* hosting service. And we decided to use it because it provides , for free:
+
+   * Continuous integration with git.
+
+         ** render builds and deploys automatically everytime a push is made
+
+        ** it provides with *previews* of pull requests
+
+        ** It allows instant Rollbacks.
+
+    *  Custom domains
+    * Instant rollbacks
+    * DDoS protection
+    * Free and fully-managed TLS certificates(SSL)
+        ** Because of that, HTTPs can be used so compatibility with SOLID pods will be granted.
+
+
