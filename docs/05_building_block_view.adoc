@@ -116,6 +116,7 @@ In this view, we have a representation of the components of the system from a st
 **Level 2 diagram**
 [plantuml,"Level 2 diagram",png]
 ----
+title "LoMap Level 2"
 cloud {
   [Map Provider] as MapP
 }
@@ -154,10 +155,9 @@ database "Solid POD" as Pod1 {
 
   }
 }
-
 database "MongoDB" as DataB{
 }
-node "LoMap" as LoMap {
+node "LoMapUI" as LoMap {
   [LogIn] as SI
   [Locations Management] as LM
   [Friendships Management] as FM
@@ -167,9 +167,10 @@ node "LoMap" as LoMap {
 }
 
 
-SI -up---> PODAP: loads
-MapP -down---> MapM
-PODAP -down---> Pod1: identifies
+SI ----> PODAP: loads
+MapP -down---> MapM: Deliver map
+MapM -up---> MapP: request
+PODAP ----> Pod1: identifies
 data1 -up--> UP: Deliver Content
 review1 -up--> RM: Deliver Content
 friend1 -up--> FM: Deliver Content
@@ -177,12 +178,14 @@ reviewF1 -up--> RM: Deliver Content
 Loc1 -up--> LM: Deliver Content
 LocF1 --> LM: Deliver Content
     
-PODAP --up---> Pod2: identifies
+PODAP -----> Pod2: identifies
 reviewF2 --up---> RM: Deliver Content
 LocF2 --up---> LM: Deliver Content
 
 DataB -down--> RM: Deliver Content
 DataB -down--> LM: Deliver Content
+RM -up--> DataB: Request 
+LM -up--> DataB: Request
 ----
 
 [role="arc42help"]
