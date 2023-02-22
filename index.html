@@ -485,14 +485,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#section-design-decisions">9. Design Decisions</a></li>
-<li><a href="#section-quality-scenarios">10. Quality Requirements</a>
+<li><a href="#_nodejs_express_why">10. NodeJs &amp; Express ¿Why?</a></li>
+<li><a href="#_mongo_db_why">11. Mongo DB ¿Why?</a></li>
+<li><a href="#_hosting_service">12. Hosting service</a></li>
+<li><a href="#section-quality-scenarios">13. Quality Requirements</a>
 <ul class="sectlevel2">
-<li><a href="#_quality_tree">10.1. Quality Tree</a></li>
-<li><a href="#_quality_scenarios">10.2. Quality Scenarios</a></li>
+<li><a href="#_quality_tree">13.1. Quality Tree</a></li>
+<li><a href="#_quality_scenarios">13.2. Quality Scenarios</a></li>
 </ul>
 </li>
-<li><a href="#section-technical-risks">11. Risks and Technical Debts</a></li>
-<li><a href="#section-glossary">12. Glossary</a></li>
+<li><a href="#section-technical-risks">14. Risks and Technical Debts</a></li>
+<li><a href="#section-glossary">15. Glossary</a></li>
 </ul>
 </div>
 </div>
@@ -1675,6 +1678,11 @@ when your infrastructure is more complex.</p>
 <div class="paragraph">
 <p><em><strong>&lt;Overview Diagram&gt;</strong></em></p>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/DeploymentOverview.png" alt="DeploymentOverview" width="1561" height="767">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Motivation</dt>
@@ -1893,11 +1901,148 @@ here in this central section or whether you better document it locally
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_nodejs_express_why">10. NodeJs &amp; Express ¿Why?</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>Prueba</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mongo_db_why">11. Mongo DB ¿Why?</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>Prueba</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_hosting_service">12. Hosting service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Regarding hosting services , we&#8217;ve  balanced the following options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Hosting service</th>
+<th class="tableblock halign-left valign-top">Pros</th>
+<th class="tableblock halign-left valign-top">cons</th>
+<th class="tableblock halign-left valign-top">Using it would imply&#8230;&#8203;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Heroku</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to offer free hosting</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not free hosting offered anymore</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Paying - immediately rejected.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FireBase</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Security.</p>
+<p class="tableblock">SSL Certifcate.</p>
+<p class="tableblock">Works nice with React.</p>
+<p class="tableblock">Free hosting.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Serverless ( for our architecture is a con)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Since we don&#8217;t plan on going serverless , we would have to connect to the DB from the client using JS. Messy. Specially risky, since SOLID PODS require https.
+    Other option is to go serverless.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Azure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Free credits given by university.</p>
+<p class="tableblock">We used it already.</p>
+<p class="tableblock">Security.</p>
+<p class="tableblock">Compatibility.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Credit card info has to be provided even for free services.</p>
+<p class="tableblock">Machines consume credit each minute being used, and in order to spend 0 credits we would need to delete the machines.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Being really mindful of credit left.
+We are not really sure if it would be compatible with continuous deployment, since that would require the service to be working. We would probably run out of credit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Web Services</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Free credits given by university.</p>
+<p class="tableblock">     Used it in SEW.</p>
+<p class="tableblock">     Security.</p>
+<p class="tableblock">    Compatibility.</p>
+<p class="tableblock">    Load Balancing &amp; CDN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The free version is not what it used to be, now , part of the credit has to be used to take some courses aws provides , not to spend it in personal projects. So that would probably end up in credit running out.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Being really mindful of credit left. Having to make the tutorials. Just like azure, we are not really sure if it would be compatible with continuous deployment, since that would require the service to be working. We would probably run out of credit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Netlify</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Free services</p>
+<p class="tableblock">         300 build minutes/month</p>
+<p class="tableblock">          500 Websites can be hosted for free</p>
+<p class="tableblock">         community forum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only one member for free</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only one person would be able to deploy and access the management UI. So each time someone of us wants to make a deploy, he/she would have to ask the person designed.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>We knew no option could be perfect, specially when looking for free services. But we also knew, these options were not the best fit they could be&#8230;&#8203;At least not if we did not go serverless.</p>
+</div>
+<div class="paragraph">
+<p>Then we found <strong>Render</strong> hosting service. And we decided to use it because it provides , for free:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Continuous integration with git.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>render builds and deploys automatically everytime a push is made</p>
+</li>
+<li>
+<p>it provides with <strong>previews</strong> of pull requests</p>
+</li>
+<li>
+<p>It allows instant Rollbacks.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Custom domains</p>
+</li>
+<li>
+<p>Instant rollbacks</p>
+</li>
+<li>
+<p>DDoS protection</p>
+</li>
+<li>
+<p>Free and fully-managed TLS certificates(SSL)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Because of that, HTTPs can be used so compatibility with SOLID pods will be granted.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-quality-scenarios">10. Quality Requirements</h2>
+<h2 id="section-quality-scenarios">13. Quality Requirements</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -1918,7 +2063,7 @@ concrete and measurable.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_tree">10.1. Quality Tree</h3>
+<h3 id="_quality_tree">13.1. Quality Tree</h3>
 <div class="paragraph">
 <p><span class="image"><img src="./images/QualityDiagram.png" alt="The quality diagram"></span></p>
 </div>
@@ -1953,7 +2098,7 @@ concrete and measurable.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_scenarios">10.2. Quality Scenarios</h3>
+<h3 id="_quality_scenarios">13.2. Quality Scenarios</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2036,7 +2181,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-technical-risks">11. Risks and Technical Debts</h2>
+<h2 id="section-technical-risks">14. Risks and Technical Debts</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Risks</caption>
@@ -2111,7 +2256,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">12. Glossary</h2>
+<h2 id="section-glossary">15. Glossary</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
