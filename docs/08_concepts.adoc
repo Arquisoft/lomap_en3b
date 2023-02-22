@@ -64,6 +64,14 @@ For this application we choose to use the Modular Monolith Architecture.
 The modular monolithic architecture consists of dividing our logic first into modules, and each module will be independent and isolated. Then, each module should have its own business logic. The system will only have one database.
 
 
-=== _<Concept n>_
+=== Testability
 
-_<explanation>_
+We will use Unit Testing in order to assume that the development of this application goes as planed without having any functioning issues. Before implementing a new functionality we must be sure that the actual version of the application passes all our test and satisfies all our scenarios until that moment. We will test separately every part of our code.
+
+=== Protection and Security
+
+One of the main priorities of LoMap is to ensure our clients a about their privacy giving them the option with who they can share their data who and with who they want to interact by using the app.
+The app will be secure as every user's data will be safely saved in a POD.
+
+Everybody using the app should trust it.
+
