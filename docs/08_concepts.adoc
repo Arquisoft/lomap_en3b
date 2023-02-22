@@ -51,8 +51,41 @@ image:08-Crosscutting-Concepts-Structure-EN.png["Possible topics for crosscuttin
 
 
 === Domain model
+[plantuml,"Domain model UML Diagram",png]
+----
+title LoMap Object Diagram
 
-image:UmlDiagram.png["Example UML Diagram"]
+object Picture
+object Commnets 
+object Score
+object Post
+object Postable
+object Review
+object Location
+object Shop
+object Restaurant
+object Place
+object Map
+object User
+
+Post <|-- Picture 
+Post <|-- Commnets
+Post <|-- Score
+
+Postable <..  Post
+Review *--  Postable
+Location o-- Review
+
+Location <|-- Shop 
+Location <|-- Restaurant
+Location <|-- Place
+
+Map o-- Location
+
+User o-- Location
+User -right-> Map :uses
+
+----
 
 
 
