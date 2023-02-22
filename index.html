@@ -484,18 +484,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_concept_n">8.3. <em>&lt;Concept n&gt;</em></a></li>
 </ul>
 </li>
-<li><a href="#section-design-decisions">9. Design Decisions</a></li>
-<li><a href="#_nodejs_express_why">10. NodeJs &amp; Express ¿Why?</a></li>
-<li><a href="#_mongo_db_why">11. Mongo DB ¿Why?</a></li>
-<li><a href="#_hosting_service">12. Hosting service</a></li>
-<li><a href="#section-quality-scenarios">13. Quality Requirements</a>
+<li><a href="#section-design-decisions">9. Design Decisions</a>
 <ul class="sectlevel2">
-<li><a href="#_quality_tree">13.1. Quality Tree</a></li>
-<li><a href="#_quality_scenarios">13.2. Quality Scenarios</a></li>
+<li><a href="#_nodejs_express_why">9.1. NodeJs &amp; Express ¿Why?</a></li>
+<li><a href="#_mongo_db_why">9.2. Mongo DB ¿Why?</a></li>
+<li><a href="#_hosting_service">9.3. Hosting service</a></li>
 </ul>
 </li>
-<li><a href="#section-technical-risks">14. Risks and Technical Debts</a></li>
-<li><a href="#section-glossary">15. Glossary</a></li>
+<li><a href="#section-quality-scenarios">10. Quality Requirements</a>
+<ul class="sectlevel2">
+<li><a href="#_quality_tree">10.1. Quality Tree</a></li>
+<li><a href="#_quality_scenarios">10.2. Quality Scenarios</a></li>
+</ul>
+</li>
+<li><a href="#section-technical-risks">11. Risks and Technical Debts</a></li>
+<li><a href="#section-glossary">12. Glossary</a></li>
 </ul>
 </div>
 </div>
@@ -1901,31 +1904,46 @@ here in this central section or whether you better document it locally
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_nodejs_express_why">9.1. NodeJs &amp; Express ¿Why?</h3>
+<div class="paragraph">
+<p>Main reasons to choose these technologies have been:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It will provide the app with <strong>Horizontal scalability</strong>, so we can model the system using different modules each of which, will represent a node.</p>
+</li>
+<li>
+<p>OpenSource** &amp; has an Active community so there&#8217;s also good documentation to be found.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The main reason is <strong>that it&#8217;s  good with real-time apps </strong>and , since the map will need for LoMap to make may I/O simultaneous operations. We know services like Uber , that also works with geolocation and maps does work with NodeJS too.</p>
+</div>
+<div class="paragraph">
+<p><em>Also it&#8217;s fair to mention that some of the members of the group have worked with this technologies before &amp; we feel more powerful with JavaScript, BUT, as shown before  that was <strong> not</strong> the only reason.</em></p>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_nodejs_express_why">10. NodeJs &amp; Express ¿Why?</h2>
-<div class="sectionbody">
-<div class="literalblock">
-<div class="content">
-<pre>Prueba</pre>
+<div class="sect2">
+<h3 id="_mongo_db_why">9.2. Mongo DB ¿Why?</h3>
+<div class="paragraph">
+<p>Once we decided that we were going to use Node and  express, we figured MongoDb was a good fit because:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It&#8217;s non-relational and therefore, the schemas are flexible.</p>
+</li>
+<li>
+<p>It&#8217;s simple to install and work with, specially using Node.</p>
+</li>
+</ul>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_mongo_db_why">11. Mongo DB ¿Why?</h2>
-<div class="sectionbody">
-<div class="literalblock">
-<div class="content">
-<pre>Prueba</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_hosting_service">12. Hosting service</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_hosting_service">9.3. Hosting service</h3>
 <div class="paragraph">
 <p>Regarding hosting services , we&#8217;ve  balanced the following options:</p>
 </div>
@@ -2041,8 +2059,9 @@ We are not really sure if it would be compatible with continuous deployment, sin
 <div style="page-break-after: always;"></div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="section-quality-scenarios">13. Quality Requirements</h2>
+<h2 id="section-quality-scenarios">10. Quality Requirements</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -2063,7 +2082,7 @@ concrete and measurable.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_tree">13.1. Quality Tree</h3>
+<h3 id="_quality_tree">10.1. Quality Tree</h3>
 <div class="paragraph">
 <p><span class="image"><img src="./images/QualityDiagram.png" alt="The quality diagram"></span></p>
 </div>
@@ -2098,7 +2117,7 @@ concrete and measurable.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_scenarios">13.2. Quality Scenarios</h3>
+<h3 id="_quality_scenarios">10.2. Quality Scenarios</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2181,7 +2200,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-technical-risks">14. Risks and Technical Debts</h2>
+<h2 id="section-technical-risks">11. Risks and Technical Debts</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Risks</caption>
@@ -2256,7 +2275,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">15. Glossary</h2>
+<h2 id="section-glossary">12. Glossary</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
