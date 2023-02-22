@@ -163,7 +163,7 @@ participant "LoMap"
 database "MONGO DB" as db
 participant "Maps Api" as maps
 participant "Inrupt solid-client API" as InruptApi
-database "POD"
+database "POD" as pod
 
 group User interactions
 group user adds public location
@@ -176,9 +176,15 @@ end
 group user adds friend-only location
     User-> LoMap: Adds Location as friend Only
     activate LoMap #LightBlue
-    LoMap-> LoMap : gets user id stored in session
-    LoMap ->db: inserts location as friend only
+
+    LoMap-> LoMap : gets user's POD ID stored in session
+
+    LoMap -> InruptApi: petition to insert location in the POD
+    activate InruptApi
+    InruptApi -> pod:Insert location with friend-only privacy
+    deactivate InruptApi
     deactivate LoMap
+
 end
 note over InruptApi
        When a user witnesses the map , it will show:
@@ -197,12 +203,20 @@ deactivate maps
 LoMap-> LoMap : adds DB (public user) info to map render
 LoMap-> InruptApi : asks for the related POD's IDs (friends)
 activate InruptApi#darkviolet
-InruptApi-> POD : asks for friend's POD's IDs
-activate POD #orchid
-POD--> InruptApi : shares friends' IDs.
-deactivate POD
+InruptApi-> pod : asks for friend's POD's IDs
+activate pod #orchid
+pod--> InruptApi : shares friends' IDs.
+deactivate pod
 InruptApi--> LoMap:Returns POD's friends (set of IDs)
-LoMap->db:ask for each friend's shared locations
+deactivate InruptApi
+loop for each friend id
+
+    LoMap->InruptApi:ask for friend's locations shared
+    activate InruptApi#darkviolet
+    InruptApi-->LoMap: returns friend's locations
+    LoMap->LoMap: adds locations to map's render
+end loop
+LoMap->db:ask for all locations stored (public locations)
 activate db #green
 db-->LoMap: returns locations
 deactivate db
