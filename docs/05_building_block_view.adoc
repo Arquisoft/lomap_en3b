@@ -56,19 +56,25 @@ Since there are so many ways to specify interfaces why do not provide a specific
 In the best case you will get away with examples or simple signatures.
 
 ****
+**Whitebox Overall diagram**
+[plantuml,"Whitebox Overall diagram",png]
+----
+actor User as S 
+rectangle “LoMap” as System 
+rectangle “Map Provider” as MapAPI 
+rectangle “POD Provider (API)” as PodAPI
+S --> System: uses 
+System --> PodAPI: location 
+PodAPI --> System: map 
+System --> MapAPI: request 
+MapAPI --> System: data 
+----
 
-_**<Overview Diagram>**_
+The section shows the static decomposition of the system into building blocks as well as dependencies. We are following SOLID architecture, so the system will have three main sections which communicate between them:
+1. LoMap: allows users to manage personalised maps
+2. Map Provider: provides the app with a map to display 
+3. Data Access Provider: gives access to user’s data
 
-Motivation::
-
-_<text explanation>_
-
-
-Contained Building Blocks::
-_<Description of contained building block (black boxes)>_
-
-Important Interfaces::
-_<Description of important interfaces>_
 
 [role="arc42help"]
 ****
@@ -91,8 +97,6 @@ Its headline is the name of the black box.
 ****
 
 
-==== <Name black box 1>
-
 [role="arc42help"]
 ****
 Here you describe <black box 1>
@@ -107,39 +111,79 @@ according the the following black box template:
 
 ****
 
-_<Purpose/Responsibility>_
-
-_<Interface(s)>_
-
-_<(Optional) Quality/Performance Characteristics>_
-
-_<(Optional) Directory/File Location>_
-
-_<(Optional) Fulfilled Requirements>_
-
-_<(optional) Open Issues/Problems/Risks>_
-
-
-
-
-==== <Name black box 2>
-
-_<black box template>_
-
-==== <Name black box n>
-
-_<black box template>_
-
-
-==== <Name interface 1>
-
-...
-
-==== <Name interface m>
-
-
-
 === Level 2
+In this view, we have a representation of the components of the system from a standpoint of the each module’s dependencies.
+**Level 2 diagram**
+[plantuml,"Level 2 diagram",png]
+----
+cloud {
+  [Map Provider] as MapP
+}
+
+cloud {
+  [POD Access Provider] as PODAP
+}
+
+database "Someone else's Solid POD" as Pod2 {
+  folder "else's Private Data" {
+    [else's data] as data2
+    [else's reviews] as review2
+    [else's friends] as friend2
+    [else's locations] as Loc2
+
+  }
+  folder "else's Only Friend's Data" {
+    [else's reviews] as reviewF2
+    [else's locations] as LocF2
+
+
+  }
+}
+
+database "Solid POD" as Pod1 {
+  folder "Private Data" {
+    [data] as data1
+    [reviews] as review1
+    [friends] as friend1
+    [locations] as Loc1
+
+  }
+  folder "Only Friend's Data" {
+    [reviews] as reviewF1
+    [locations] as LocF1
+
+  }
+}
+
+database "MongoDB" as DataB{
+}
+node "LoMap" as LoMap {
+  [LogIn] as SI
+  [Locations Management] as LM
+  [Friendships Management] as FM
+  [Review Management] as RM
+  [Map Management] as MapM
+  [User Profile] as UP
+}
+
+
+SI -up---> PODAP: loads
+MapP -down---> MapM
+PODAP -down---> Pod1: identifies
+data1 -up--> UP: Deliver Content
+review1 -up--> RM: Deliver Content
+friend1 -up--> FM: Deliver Content
+reviewF1 -up--> RM: Deliver Content
+Loc1 -up--> LM: Deliver Content
+LocF1 --> LM: Deliver Content
+    
+PODAP --up---> Pod2: identifies
+reviewF2 --up---> RM: Deliver Content
+LocF2 --up---> LM: Deliver Content
+
+DataB -down--> RM: Deliver Content
+DataB -down--> LM: Deliver Content
+----
 
 [role="arc42help"]
 ****
@@ -150,30 +194,10 @@ Please prefer relevance over completeness. Specify important, surprising, risky,
 Leave out normal, simple, boring or standardized parts of your system
 ****
 
-==== White Box _<building block 1>_
-
 [role="arc42help"]
 ****
 ...describes the internal structure of _building block 1_.
 ****
-
-_<white box template>_
-
-==== White Box _<building block 2>_
-
-
-_<white box template>_
-
-...
-
-==== White Box _<building block m>_
-
-
-_<white box template>_
-
-
-
-=== Level 3
 
 [role="arc42help"]
 ****
@@ -183,24 +207,7 @@ When you need more detailed levels of your architecture please copy this
 part of arc42 for additional levels.
 ****
 
-
-==== White Box <_building block x.1_>
-
 [role="arc42help"]
 ****
 Specifies the internal structure of _building block x.1_.
 ****
-
-
-_<white box template>_
-
-
-==== White Box <_building block x.2_>
-
-_<white box template>_
-
-
-
-==== White Box <_building block y.1_>
-
-_<white box template>_
