@@ -55,39 +55,59 @@ _**<Overview Diagram>**_
 ----
 @startuml
 
-node "User" as user {
-database "User Database" as userdb
+actor user
+node "Render" as rn{
+  cloud "LoMap" as dp
+}
 node "LoMap App" as lomap {
-database "LoMap Database" as lomapdb
-}
-node "Places" as places {
-database "Place Database" as placedb
-}
-node "Address Book" as addressbook {
-database "Address Book Database" as addressbookdb
-}
-node "Close Friends" as CloseFriends{
-database "Close Friends's Data" as closefrienddb
-}
-}
-node "Cloud Environment" as cloud {
-node "CI/CD" as cicd
-node "Deployment Server" as deploy
-node "Application Server" as appserver
-}
-node "Internet" as internet
+    node "User interface"{
+        node "UI" as ui
+    }
+    node "Business Logic" as business{
+        node "Location management "
+        node "User management "
+        node "Friendship management "
+    }
+    node "MongoDB" as mongodb{
+        database "Shared locations"
+    }
 
-user --> lomap: Access\nLoMap App
-lomap --> userdb: Read/Write\nUser Database
-lomap --> lomapdb: Read/Write\nLoMap Database
-places --> placedb: Read/Write\nPlace Database
-addressbook --> addressbookdb: Read/Write\nAddress Book Database
-CloseFriends -> closefrienddb: Read/Write\nCloseFriends Book Database
-lomap --> internet: Access\nInternet
-cloud --> cicd: Execute\nCI/CD
-cicd --> deploy: Deploy\nApplication
-deploy --> appserver: Execute\nApplication Server
-appserver --> internet: Access\nInternet
+}
+
+
+node "Pod provider - Inrupt" as inrupt{
+    node "Solid Client Api" as api{
+    }
+    card "Pods" as pods{
+database "USER1'S POD "
+    database "USER2'S POD "
+    database "USER3'S POD "
+    database "USER4'S POD "
+    database "USER5'S POD "
+    database "USER6'S POD "
+    database "USER7'S POD "
+    database "USER8'S POD "
+    database "USERn'S POD"
+}
+
+
+}
+
+database "GitHub" as git{
+}
+
+node "WebBrowser" as wb
+rn-git
+ user -> wb
+
+wb-dp
+
+
+dp-lomap
+
+ui<->api
+
+api<->pods
 
 @enduml
 
@@ -103,27 +123,3 @@ _<explanation in text form>_
 
 Mapping of Building Blocks to Infrastructure::
 _<description of the mapping>_
-
-
-=== Infrastructure Level 2
-
-[role="arc42help"]
-****
-Here you can include the internal structure of (some) infrastructure elements from level 1.
-
-Please copy the structure from level 1 for each selected element.
-****
-
-==== _<Infrastructure Element 1>_
-
-_<diagram + explanation>_
-
-==== _<Infrastructure Element 2>_
-
-_<diagram + explanation>_
-
-...
-
-==== _<Infrastructure Element n>_
-
-_<diagram + explanation>_
