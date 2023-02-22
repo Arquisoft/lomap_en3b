@@ -54,9 +54,8 @@ _**<Overview Diagram>**_
 
 ----
 @startuml
-
 actor user
-node "Render" as rn{
+node "Render" as rn {
   cloud "LoMap" as dp
 }
 node "LoMap App" as lomap {
@@ -97,13 +96,17 @@ database "GitHub" as git{
 }
 
 node "WebBrowser" as wb
-rn-git
- user -> wb
+dp<->git
+user -> wb
+wb->dp
 
-wb-dp
 
 
-dp-lomap
+wb-[hidden]->rn
+/'
+   wb-[hidden]->rn => trick to position elements in a nicer way
+'/
+lomap-git
 
 ui<->api
 
@@ -114,12 +117,37 @@ api<->pods
 ----
 
 Motivation::
+In order to provide clients with a better understanding of the communication between system modules.
 
-_<explanation in text form>_
 
 Quality and/or Performance Features::
 
-_<explanation in text form>_
+We've chosen these modules in order to keep architecture easier to maintain , and therefore to have more control over attributes as privacy , scalability..
+
 
 Mapping of Building Blocks to Infrastructure::
-_<description of the mapping>_
+
+|===
+|Element | Description
+
+|Render
+| Hosting service
+
+|GitHub
+|Repository where LoMap's source code is stored.
+
+|MongoDb
+|LoMap's database for public information
+
+|Business Logic
+|Set of LoMap's application modules.
+
+|User interface
+| Frontend of the application that will communicate with pod provider's and user IO
+
+|Solid client api
+|Inrupt's api LoMap will use to communicate with pods.
+
+
+|===
+
