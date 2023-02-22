@@ -1606,25 +1606,60 @@ when your infrastructure is more complex.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/DeploymentOverview.png" alt="DeploymentOverview" width="2097" height="543">
+<img src="./images/DeploymentOverview.png" alt="DeploymentOverview" width="1948" height="552">
 </div>
 </div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Motivation</dt>
 <dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
+<p>In order to provide clients with a better understanding of the communication between system modules.</p>
 </dd>
 <dt class="hdlist1">Quality and/or Performance Features</dt>
 <dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
+<p>We&#8217;ve chosen these modules in order to keep architecture easier to maintain , and therefore to have more control over attributes as privacy , scalability..</p>
 </dd>
 <dt class="hdlist1">Mapping of Building Blocks to Infrastructure</dt>
-<dd>
-<p><em>&lt;description of the mapping&gt;</em></p>
-</dd>
 </dl>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Render</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hosting service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GitHub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Repository where LoMap&#8217;s source code is stored.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MongoDb</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LoMap&#8217;s database for public information</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Business Logic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set of LoMap&#8217;s application modules.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User interface</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frontend of the application that will communicate with pod provider&#8217;s and user IO</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solid client api</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Inrupt&#8217;s api LoMap will use to communicate with pods.</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -2285,7 +2320,7 @@ Created by Dr. Peter Hruschka &amp; Dr. Gernot Starke.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-18 15:34:38 -0300
+Last updated 2023-02-20 11:31:08 +0100
 </div>
 </div>
 </body>
