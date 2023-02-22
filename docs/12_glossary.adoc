@@ -26,6 +26,13 @@ Potentially more columns in case you need translations.
 [options="header"]
 |===
 | Term         | Definition
-| <Term-1>     | <definition-1>
-| <Term-2>     | <definition-2>
+| SOLID POD    | Solid Personal Online Datastores, or PODs, as “where you store your data… Once stored in a Pod, you control who can access your data.”. PODs can store any kind of data from text to videos to social networking data. You can think of PODs as “containers” for data, or even “digital twins” of users
+| REACT    | React is a free and open-source front-end JavaScript library for building user interfaces based on components.
+| Render   |Render is a unified cloud to build and run all your apps and websites with free TLS certificates, a global CDN, DDoS protection, private networks, and auto deploys from Git.
+|  API     |API stands for Application Programming Interface. In the context of APIs, the word Application refers to any software with a distinct function. Interface can be thought of as a contract of service between two applications. This contract defines how the two communicate with each other using requests and responses.
+| Decentralization | Are digital applications that run on a blockchain network of computers instead of relying on a single computer.
+|  JavaScript     | Is a scripting language that enables you to create dynamically updating content, control multimedia, animate images, and pretty much everything else.
+|   Node.js     | Is an open-source, cross-platform JavaScript runtime environment and library for running web applications outside the client's browser.
+|   Express   | Express is a node js web application framework that is used to build a single page, multipage, and hybrid web application
+|   Stakeholder  | Are all individuals or groups who have a vested interest in the performance of the business.
 |===
