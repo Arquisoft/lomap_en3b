@@ -19,17 +19,18 @@ In brief, LoMap is more than a Map application , but a tool for cities to develo
 
 
 ## Authors
-- [@juanmglzs](https://github.com/juanmglzs) 🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221440907-1e2f8306-6fc5-4f22-a8f7-7ef0d7b18c88.png)
+- [@juanmglzs](https://github.com/juanmglzs) 🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221441154-c393e1c1-a26d-405b-a3d5-fa60f7b54eb6.png)
+
  
 - [@RaduSeba](https://github.com/RaduSeba) 🇷🇴   ![image](https://user-images.githubusercontent.com/79209608/221440888-7bab097e-df91-4c0b-b3af-2e092ac85602.png)
 
-- [@Manuhcuartas](https://github.com/Manuhcuartas) 🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221440913-775ad341-671c-4c70-831e-caa427bad94e.png)
+- [@Manuhcuartas](https://github.com/Manuhcuartas) 🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221441154-c393e1c1-a26d-405b-a3d5-fa60f7b54eb6.png)
 
-- [@Batuhanbyr](https://github.com/Batuhanbyr) 🇹🇷 ![image](https://user-images.githubusercontent.com/79209608/221440973-1967b004-29ea-4d50-9e5f-2730789fc1fb.png)
-
-- [@FdezAriasSara](https://github.com/FdezAriasSara)  🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221440915-7a754a02-945e-45f1-a9a5-659d34da3321.png)
+- [@Batuhanbyr](https://github.com/Batuhanbyr) 🇹🇷  ![image](https://user-images.githubusercontent.com/79209608/221441108-e2574809-b3c8-469b-a483-9c15b0ac1a7b.png)
 
 
+
+- [@FdezAriasSara](https://github.com/FdezAriasSara)  🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221441154-c393e1c1-a26d-405b-a3d5-fa60f7b54eb6.png)
 
 ## FAQ
 
