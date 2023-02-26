@@ -19,11 +19,16 @@ In brief, LoMap is more than a Map application , but a tool for cities to develo
 
 
 ## Authors
-- [@juanmglzs](https://github.com/juanmglzs) 🇪🇸
-- [@RaduSeba](https://github.com/RaduSeba) 🇷🇴
-- [@Manuhcuartas](https://github.com/Manuhcuartas) 🇪🇸
-- [@Batuhanbyr](https://github.com/Batuhanbyr) 🇹🇷
-- [@FdezAriasSara](https://github.com/FdezAriasSara)  🇪🇸
+- [@juanmglzs](https://github.com/juanmglzs) 🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221440907-1e2f8306-6fc5-4f22-a8f7-7ef0d7b18c88.png)
+ 
+- [@RaduSeba](https://github.com/RaduSeba) 🇷🇴   ![image](https://user-images.githubusercontent.com/79209608/221440888-7bab097e-df91-4c0b-b3af-2e092ac85602.png)
+
+- [@Manuhcuartas](https://github.com/Manuhcuartas) 🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221440913-775ad341-671c-4c70-831e-caa427bad94e.png)
+
+- [@Batuhanbyr](https://github.com/Batuhanbyr) 🇹🇷 ![image](https://user-images.githubusercontent.com/79209608/221440973-1967b004-29ea-4d50-9e5f-2730789fc1fb.png)
+
+- [@FdezAriasSara](https://github.com/FdezAriasSara)  🇪🇸 ![image](https://user-images.githubusercontent.com/79209608/221440915-7a754a02-945e-45f1-a9a5-659d34da3321.png)
+
 
 
 ## FAQ
@@ -33,5 +38,5 @@ In brief, LoMap is more than a Map application , but a tool for cities to develo
 MERN(MongoDB, Express, React & Node.js)
 
 
-![Logo](https://i.pinimg.com/originals/36/da/48/36da48641304177e2ee3dc07f521418b.gif)
+![image](https://i.pinimg.com/originals/36/da/48/36da48641304177e2ee3dc07f521418b.gif)
 
