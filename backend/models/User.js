@@ -24,7 +24,6 @@ const UserSchema=new mongoose.Schema({
 
     },
     email:{
-        //not the pod id but the unique identifier of the user within the app.
         type:String,
         min:4,
         max:15,
