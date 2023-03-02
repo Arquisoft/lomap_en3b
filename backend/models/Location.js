@@ -25,3 +25,4 @@ const locationSchema=new mongoose.Schema({
 });
     //list of reviews?
     module.exports=mongoose.model("Location",locationSchema);
+//field of privacy level?
