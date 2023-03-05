@@ -4,7 +4,7 @@ import {
 } from './location.js';
 
 //DataModel -> String
-function fromLocationToString (list) {
+function fromLocationToStringList (list) {
     listLoc = [];
     list.forEach(element => {
         if(element instanceof LocationLM){
@@ -14,6 +14,13 @@ function fromLocationToString (list) {
         }
     });
     return listLoc;
+}
+function fromLocationToString (element) {
+    if(element instanceof LocationLM){
+        return element.toString();
+    } else{
+        throw new LocationFormatException(String(element));
+    }
 }
 
 //String -> DataModel
