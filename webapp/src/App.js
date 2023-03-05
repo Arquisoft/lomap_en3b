@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { useMemo } from 'react';
+import{GoogleMap, useLoadScript,Marker} from "@react-google-maps/api";
 import beachimg from './images/beach.jpg'; // Tell Webpack this JS file uses this image
 
 const ourApp= {
@@ -8,6 +10,11 @@ const ourApp= {
     lab:'ASW-En-L.3',
     groupMembers:['Manu','Juan','Sebastian','Sara'],
 
+};
+
+const containerStyle = {
+  width: '1000px',
+  height: '600px'
 };
 
 export function App() {
@@ -23,23 +30,21 @@ export function App() {
 }
 
 export default function First(){
-    return (
-            <section>
-            <h2>{ourApp.name} Info</h2>
-<p>        <img
-                // Import  the actual jpg
-                src= {beachimg} //equivalent to writing src={require('../public/beach.jpg'}
-                alt="A place to pin in lomap"
-            />
-</p>
-                <h3>Group members</h3>
-            <ul>
-                <li>{ourApp.groupMembers[0]}</li>
-                <li>{ourApp.groupMembers[1]}</li>
-                <li>{ourApp.groupMembers[2]}</li>
-                <li>{ourApp.groupMembers[3]}</li>
-            </ul>
 
-            </section>
-    );
+  const{isLoaded} = useLoadScript({
+    googleMapsApiKey: "AIzaSyDJkJ4juXNSUSO4JSi76lmz2NJqyc0gbRE",
+  });
+
+  if(!isLoaded) return <div>Loading...</div>
+  return <Map />
+  
+  
+}
+
+function Map(){
+  return (<GoogleMap zoom={10} center={{lat : 41.3623 , lng : -5.8485}}   mapContainerStyle={containerStyle} >
+
+    <Marker position={{lat : 41.3623 , lng : -5.8485}} />
+
+  </GoogleMap>);
 }
