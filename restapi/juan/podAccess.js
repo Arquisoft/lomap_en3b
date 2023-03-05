@@ -18,13 +18,13 @@ import {
 
 import { SCHEMA_INRUPT, RDF, AS } from "@inrupt/vocab-common-rdf";
 
-myDataset;
+var myDataset;
 /**
  * This method writes new data in the POD. It does not return nothing
- * @param {*} SELECTED_POD is the user's pod where data is gonna be stored
- * @param {*} writePath is the path within the pod where to write
- * @param {*} locList is a list of new Locations (that are not stored in the POD yet)
- * @param {*} mySolidDatase is the PODDataset with the current stored information
+ * @param {string} SELECTED_POD is the user's pod where data is gonna be stored
+ * @param {string} writePath is the path within the pod where to write
+ * @param {string} locList is a list of new Locations (that are not stored in the POD yet)
+ * @param {SolidDataset} mySolidDatase is the PODDataset with the current stored information
  */
 async function WriteList(SELECTED_POD, writePath, locList, mySolidDatase) {
     //Hardcoding url given as a parameter.
@@ -59,9 +59,9 @@ async function WriteList(SELECTED_POD, writePath, locList, mySolidDatase) {
     
 }
 /**
- * 
- * @param {*} SELECTED_POD is the user's pod where data is gonna be stored
- * @param {*} writePath is the path within the pod where to write
+ * This method reads from the user's Solid POD.
+ * @param {string} SELECTED_POD is the user's pod where data is gonna be stored
+ * @param {string} writePath is the path within the pod where to write
  * @returns a list of locations
  */
 async function ReadList(SELECTED_POD, writePath) {
