@@ -2,6 +2,12 @@
 import {
     LocationLM
 } from './location.js';
+// Import exception 
+import {
+    LocationFormatException, 
+    InvalidFormatException, 
+    ParsinErrorException    
+} from './Exceptions.js';  
 
 //DataModel -> String
 /**
@@ -95,30 +101,6 @@ function validValue(str, n1, n2) {
  */
 function isNumber(n) { 
     return !isNaN(parseFloat(n)) && !isNaN(n - 0) 
-}
-/**
- * InvalidFormatException class to manage error while parsing the conversion from object to string
- */
-class LocationFormatException extends Error {
-    constructor(obj) {
-        super(`${obj} does not conform to the expected format for a location`);
-    }
-}
-/**
- * InvalidFormatException class to manage error while parsing the conversion from string to LocationLM object
- */
-class InvalidFormatException extends Error {
-    constructor(obj) {
-        super(`${obj} does not conform to the expected format for creating a location`);
-    }
-}
-/**
- * ParsinErrorException class to manage error while parsing the conversion from string to LocationLM object
- */
-class ParsinErrorException extends Error {
-    constructor(obj) {
-        super(`${obj} does not conform to the expected format for creating a location. Size missmatch`);
-    }
 }
 
 export { fromStringToLocation, fromLocationToString};
