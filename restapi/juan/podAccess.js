@@ -22,7 +22,7 @@ var myDataset;
 /**
  * This method writes new data in the POD. It does not return nothing
  * @param {string} SELECTED_POD is the user's pod where data is gonna be stored
- * @param {string} writePath is the path within the pod where to write
+ * @param {string} writePath is the path within the pod where to write. It must be like: path/fileName
  * @param {string} locList is a list of new Locations (that are not stored in the POD yet)
  * @param {SolidDataset} mySolidDatase is the PODDataset with the current stored information
  */
@@ -61,7 +61,7 @@ async function WriteList(SELECTED_POD, writePath, locList, mySolidDatase) {
 /**
  * This method reads from the user's Solid POD.
  * @param {string} SELECTED_POD is the user's pod where data is gonna be stored
- * @param {string} writePath is the path within the pod where to write
+ * @param {string} writePath is the path within the pod where to write. It must be like: path/fileName
  * @returns a list of locations
  */
 async function ReadList(SELECTED_POD, writePath) {

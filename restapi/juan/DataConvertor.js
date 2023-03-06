@@ -76,7 +76,48 @@ function fromStringToLocation(str) {
         throw new InvalidFormatException(String(element));
     }
 }
+/**
+ * This method parse a list of location to a Json file. Write JSON Object to File in Node.js.
+ * If error like "SyntaxError: Unexpected token i in JSON at position 0" it because
+ * the list it's alrready a json.
+ * @param {LocationLM} listLoc list of locations
+ * @param {string} fileName name of the json file
+ * @returns the path were the JSON is saved.
+ */
+function LocationToJSON (listLoc, fileName){
+    if(checkExtension(fileName, ".json")){
+        fileName += ".json"
+    }
 
+    //parse json - maybe it will be rmeoved
+    listLoc = JSON.parse(listLoc);
+
+    // stringify JSON Object
+    var jsonData = JSON.stringify(listLoc);
+
+    // file system module to perform file operations
+    const fs = require('fs');
+
+    fs.writeFile("output.json", jsonData, 'utf8', function (err) {
+        if (err) {
+            console.log("An error occured while writing JSON Object to File.");
+            return console.log(err);
+        }
+    
+        console.log("JSON file has been saved.");
+    });
+
+    return "./" + fileName;
+}
+
+/**
+ * This function check is the fileName contains the extension already
+ * @param {string} fName file name with out without extension
+ * @param {string} ext extension to be checked if its contained the name.
+ */
+function checkExtension(fName, ext){
+    return !(fName.endsWith(ext));
+}
 /**
  * This method checks if an array can be converted into a LocationLM object
  * @param {string} str string value that must be a string
@@ -103,4 +144,8 @@ function isNumber(n) {
     return !isNaN(parseFloat(n)) && !isNaN(n - 0) 
 }
 
-export { fromStringToLocation, fromLocationToString};
+export { 
+    fromStringToLocation, 
+    fromLocationToString, 
+    LocationToJSON
+};
