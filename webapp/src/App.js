@@ -2,7 +2,8 @@
 import React from 'react';
 import { useMemo } from 'react';
 import{GoogleMap, useLoadScript,Marker} from "@react-google-maps/api";
-import beachimg from './images/beach.jpg'; // Tell Webpack this JS file uses this image
+import beachimg from './images/beach.jpg';
+import Header from "./Header"; // Tell Webpack this JS file uses this image
 
 const ourApp= {
     name: 'LoMap',
@@ -11,16 +12,15 @@ const ourApp= {
     groupMembers:['Manu','Juan','Sebastian','Sara'],
 
 };
-
 const containerStyle = {
-  width: '1000px',
-  height: '600px'
+    width: '1000px',
+    height: '500px'
 };
 
 export function App() {
-  return (
-      <div className="intro">
-        <h1>Welcome to {ourApp.name}!</h1>
+    return (
+        <div className="intro">
+            <h1>Welcome to {ourApp.name}!</h1>
 
         <p className="summary">
           This is our first mock in react!:)
@@ -36,15 +36,19 @@ export default function First(){
   });
 
   if(!isLoaded) return <div>Loading...</div>
-  return <Map />
-  
-  
+      return<div> <Header/> <Map/> </div>
+
+
+
 }
 
 function Map(){
-  return (<GoogleMap zoom={10} center={{lat : 41.3623 , lng : -5.8485}}   mapContainerStyle={containerStyle} >
+  return (<GoogleMap zoom={10} center={{lat : 41.3623 , lng : -5.8485}}   mapContainerStyle={containerStyle}>
 
     <Marker position={{lat : 41.3623 , lng : -5.8485}} />
 
   </GoogleMap>);
 }
+
+
+
