@@ -43,7 +43,7 @@ export function App() {
 export default function First(){
 
     const {isLoaded, loadError} = useLoadScript({
-        googleMapsApiKey:"AIzaSyDJkJ4juXNSUSO4JSi76lmz2NJqyc0gbRE",
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: ["places"],
     });
     const[markers, setMarkers] = React.useState([]);
