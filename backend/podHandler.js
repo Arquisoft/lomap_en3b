@@ -1,14 +1,10 @@
 import {
     getPodUrlAll,
     isContainer,
-    createContainerAt,
-    getSolidDataset, 
-    getThing,
-    getStringNoLocale,
-    getUrlAll
+    createContainerAt
 } from "@inrupt/solid-client";
 
-import { SCHEMA_INRUPT } from "@inrupt/vocab-common-rdf"
+
 
 /**
  * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which 
