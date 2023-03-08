@@ -7,7 +7,7 @@ import Header from "./Header"; // Tell Webpack this JS file uses this image
 import {formatRelative} from "date-fns";
 import mapStyles from "./mapStyles";
 import usePlacesAutocomplate, {getGeocode, getLatLng} from "use-places-autocomplete";
-import {Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox";
+
 import "@reach/combobox/styles.css";
 
 const ourApp= {
