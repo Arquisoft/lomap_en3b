@@ -4,7 +4,7 @@ import {LoginButton, SessionProvider} from "@inrupt/solid-ui-react";
 
 function  Login( ){
 
-    const provider="https://inrupt.net"; //url of the pod provider. Will consider making a multiple choice cbox.
+    const provider="https://login.inrupt.com/"; //url of the pod provider. Will consider making a multiple choice cbox.
     const appName="LoMap"; //Our app where the user has been redirected from
 
     //sessionProvider Wil provide child components of session data.
