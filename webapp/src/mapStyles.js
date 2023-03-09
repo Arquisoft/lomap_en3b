@@ -1,7 +1,16 @@
 export default [
     {
-        "featureType": "administrative",
-        "elementType": "all",
+        "featureType": "all",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "color": "#878787"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
         "stylers": [
             {
                 "visibility": "off"
@@ -13,34 +22,7 @@ export default [
         "elementType": "all",
         "stylers": [
             {
-                "visibility": "simplified"
-            },
-            {
-                "hue": "#0066ff"
-            },
-            {
-                "saturation": 74
-            },
-            {
-                "lightness": 100
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "simplified"
+                "color": "#f9f5ed"
             }
         ]
     },
@@ -49,52 +31,16 @@ export default [
         "elementType": "all",
         "stylers": [
             {
-                "visibility": "off"
-            },
-            {
-                "weight": 0.6
-            },
-            {
-                "saturation": -85
-            },
-            {
-                "lightness": 61
+                "color": "#f5f5f5"
             }
         ]
     },
     {
         "featureType": "road.highway",
-        "elementType": "geometry",
+        "elementType": "geometry.stroke",
         "stylers": [
             {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "simplified"
+                "color": "#c9c9c9"
             }
         ]
     },
@@ -103,16 +49,7 @@ export default [
         "elementType": "all",
         "stylers": [
             {
-                "visibility": "simplified"
-            },
-            {
-                "color": "#5f94ff"
-            },
-            {
-                "lightness": 26
-            },
-            {
-                "gamma": 5.86
+                "color": "#aee0f4"
             }
         ]
     }

@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useMemo } from 'react';
+
 import{GoogleMap, useLoadScript,Marker, InfoWindow} from "@react-google-maps/api";
-import beachimg from './images/beach.jpg';
+
 import Header from "./Header"; // Tell Webpack this JS file uses this image
 import {formatRelative} from "date-fns";
 import mapStyles from "./mapStyles";
@@ -15,16 +15,25 @@ const ourApp= {
     groupMembers:['Manu','Juan','Sebastian','Sara'],
 
 };
+
+//setting the width and height of the <div> arround the google map
 const containerStyle = {
     width: '100vw',
     height: '100vh'
 };
+
+
+//const for the map style
 const options = {
     styles: mapStyles,
-    disableDefaultUI: true,
+    disableDefaultUI: true, //gets rid of the unwanted google maps features
     zoomcontrol: true
 };
-const libraries = ["places"];
+
+
+
+
+
 export function App() {
 
     return (
@@ -38,80 +47,80 @@ export function App() {
     );
 }
 
+
+/*
+    Function used to 
+    load the google script
+*/
 export default function First(){
 
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-        libraries: ["places"],
-    });
-    const[markers, setMarkers] = React.useState([]);
-    const[selected, setSelected] = React.useState(null);
+        libraries: ["places"],  // places library
+    }); // hook to load the google script
 
-    const onMapClick = React.useCallback((event)=>
-    {setMarkers(current => [...current, {
-            lat: event.latLng.lat(), // ADİNG PLACES
-            lng: event.latLng.lng(),
-            time: new Date(),
-        }]
-    )}, []);
-    const mapRef = React.useRef();
-    const onMapLoad = React.useCallback((map) => {
-        mapRef.current = map;
-    },[]);
 
     if(loadError) return <div> Error Loading Maps </div>
-    if(!isLoaded) return <div>Loading Maps</div>
+    if(!isLoaded) return <div>Loading Maps</div> //Checking if the map loaded 
+
+
     return<div> <Header/> <Search/> <Map/>  </div>
 
 
 
 }
+
 function Search(){
 
 }
-function Map(){
-    const[markers, setMarkers] = React.useState([]);
-    const[selected, setSelected] = React.useState(null);
 
-    const onMapClick = React.useCallback((event)=>
+
+
+/*
+    The main map function
+*/
+function Map(){
+    const[markers, setMarkers] = React.useState([]); // use state when you want to cause react to rerender
+    const[selected, setSelected] = React.useState(null); // get the value when the user clicks 
+
+    const onMapClick = React.useCallback((event)=>  //use callback a function always retains the same value 
     {setMarkers(current => [...current, {
-            lat: event.latLng.lat(), // ADİNG PLACES
+            lat: event.latLng.lat(), // ADDING PLACES using lat and lng of the place clicked 
             lng: event.latLng.lng(),
-            time: new Date(),
+            time: new Date(), // time of the click
         }]
-    )}, []);
-    const mapRef = React.useRef();
+    )}, []); //adding a new marker to the already existing marker list
+
+
+    const mapRef = React.useRef(); //use ref when you want to retain state without reloading
+
     const onMapLoad = React.useCallback((map) => {
-        mapRef.current = map;
-    },[]);
+        mapRef.current = map; // saving a referance to the map to acces it without cousing rerenders 
+    },[]);  //gives the map that we assign to the ref for later use
+
+    // initializing the map
     return (<GoogleMap zoom={10} center={{lat : 43.361916 , lng : -5.849389}}
                        mapContainerStyle={containerStyle}
-                       options={options}
-                       onClick={onMapClick}
+                       options={options} 
+                       onClick={onMapClick} //
                        onLoad={onMapLoad}>
 
 
-        <Marker position={{lat: 43.361916 , lng: -5.849389}} />
-        {markers.map(marker => <Marker key={marker.time.toISOString()}
+        <Marker position={{lat: 43.361916 , lng: -5.849389}} /> 
+        {markers.map(marker => <Marker key={marker.time.toISOString()} //unique using a key that uses the time
                                        position={ {lat: marker.lat, lng: marker.lng}}
-                                       icon={{
-                                           url: "/location.svg",
-                                           scaledSize: new window.google.maps.Size(30,30),
-                                           origin: new window.google.maps.Point(0,0),
-                                           anchor: new window.google.maps.Point(15,15),
-                                       }}
                                        onClick={() => {
                                            setSelected(marker);
-                                       }}
+                                       }} //rendering markers inside the google maps component
         />)}
         {selected ? (
             <InfoWindow position={{lat: selected.lat, lng: selected.lng}} onCloseClick={() => {setSelected(null)}}>
                 <div>
                     <h2>Location</h2>
-                    <h3>details</h3>
-                    <h3>user comment</h3>
-                    <p>Spotted {formatRelative(selected.time, new Date())}</p>
-                </div>
-            </InfoWindow>) : null}
+                    <h3>Details</h3>
+                    <h3>User comments</h3>
+                    <p>Added {formatRelative(selected.time, new Date())}</p>
+                </div> 
+            </InfoWindow>) : null} 
     </GoogleMap>);
 }
