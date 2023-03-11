@@ -1,6 +1,7 @@
 import {LoginButton, SessionProvider} from "@inrupt/solid-ui-react";
 
-
+import React from 'react';
+import {Button} from "@mui/material";
 
 function  Login( ){
 
@@ -10,11 +11,14 @@ function  Login( ){
     //sessionProvider Wil provide child components of session data.
     //Its VERY important that login button is inside a session data component.
     return (
-        <SessionProvider>
-            <section name="login">
-                    <LoginButton oidcIssuer={provider} redirectUrl={window.location.href} clientName={appName}>Login</LoginButton>
-            </section>
+        <section >
+        <SessionProvider sessionId="">
+                    <LoginButton  oidcIssuer={provider} redirectUrl={window.location.href} clientName={appName}>
+                        <Button size="large" variant="outlined" color="primary"  >Log In</Button>
+            </LoginButton>
+
         </SessionProvider>
+        </section>
 
     );
 }
