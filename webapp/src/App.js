@@ -71,16 +71,22 @@ export default function First(){
 }
 
 function Search(){
+    // to do
 
 }
 
 
 
+const initialMarkers = [
+  { key : 1 ,lat: 43.361916, lng: -5.849389, time: new Date() },
+  { key : 2 ,lat: 43.371916, lng: -5.859389, time: new Date() }
+];
+
 /*
     The main map function
 */
 function Map(){
-    const[markers, setMarkers] = React.useState([]); // use state when you want to cause react to rerender
+    const[markers, setMarkers] = React.useState([...initialMarkers]); // use state when you want to cause react to rerender
     const[selected, setSelected] = React.useState(null); // get the value when the user clicks 
 
     const onMapClick = React.useCallback((event)=>  //use callback a function always retains the same value 
@@ -95,7 +101,10 @@ function Map(){
     const mapRef = React.useRef(); //use ref when you want to retain state without reloading
 
     const onMapLoad = React.useCallback((map) => {
-        mapRef.current = map; // saving a referance to the map to acces it without cousing rerenders 
+        
+        mapRef.current = map; // saving a referance to the map to acces it without cousing rerenders
+       
+    
     },[]);  //gives the map that we assign to the ref for later use
 
     // initializing the map
@@ -105,9 +114,8 @@ function Map(){
                        onClick={onMapClick} //
                        onLoad={onMapLoad}>
 
-
-        <Marker position={{lat: 43.361916 , lng: -5.849389}} /> 
-        {markers.map(marker => <Marker key={marker.time.toISOString()} //unique using a key that uses the time
+        
+        {markers.map((marker,index) => <Marker key={`${marker.time.toISOString()}-${index}`} //unique using a key that uses the time
                                        position={ {lat: marker.lat, lng: marker.lng}}
                                        onClick={() => {
                                            setSelected(marker);
@@ -122,5 +130,6 @@ function Map(){
                     <p>Added {formatRelative(selected.time, new Date())}</p>
                 </div> 
             </InfoWindow>) : null} 
+                
     </GoogleMap>);
 }
