@@ -64,7 +64,7 @@ export default function First(){
     if(!isLoaded) return <div>Loading Maps</div> //Checking if the map loaded 
 
 
-    return<div> <Header/> <Search/> <Map/>  </div>
+    return <div> <Header/> <Search/> <Map/>  </div>
 
 
 
@@ -76,60 +76,82 @@ function Search(){
 }
 
 
-
+// the list where I will retrive the markers from juan and preload them
 const initialMarkers = [
-  { key : 1 ,lat: 43.361916, lng: -5.849389, time: new Date() },
-  { key : 2 ,lat: 43.371916, lng: -5.859389, time: new Date() }
-];
+    { key : 'marker-1' ,lat: 43.361916, lng: -5.849389, time: new Date() },
+    { key : 'marker-2' ,lat: 43.371916, lng: -5.859389, time: new Date() }
+  ];
 
 /*
     The main map function
 */
-function Map(){
-    const[markers, setMarkers] = React.useState([...initialMarkers]); // use state when you want to cause react to rerender
-    const[selected, setSelected] = React.useState(null); // get the value when the user clicks 
-
-    const onMapClick = React.useCallback((event)=>  //use callback a function always retains the same value 
-    {setMarkers(current => [...current, {
-            lat: event.latLng.lat(), // ADDING PLACES using lat and lng of the place clicked 
+function Map() {
+    const [markers, setMarkers] = React.useState([]);
+    const [selected, setSelected] = React.useState(null);
+    const mapRef = React.useRef();
+  
+    const onMapClick = React.useCallback(
+      (event) =>
+        setMarkers((current) => [
+          ...current,
+          {
+            lat: event.latLng.lat(),
             lng: event.latLng.lng(),
-            time: new Date(), // time of the click
-        }]
-    )}, []); //adding a new marker to the already existing marker list
-
-
-    const mapRef = React.useRef(); //use ref when you want to retain state without reloading
-
+            time: new Date(),
+          },
+        ]),
+      []
+    );
+  
     const onMapLoad = React.useCallback((map) => {
-        
-        mapRef.current = map; // saving a referance to the map to acces it without cousing rerenders
-       
-    
-    },[]);  //gives the map that we assign to the ref for later use
-
-    // initializing the map
-    return (<GoogleMap zoom={10} center={{lat : 43.361916 , lng : -5.849389}}
-                       mapContainerStyle={containerStyle}
-                       options={options} 
-                       onClick={onMapClick} //
-                       onLoad={onMapLoad}>
-
-        
-        {markers.map((marker,index) => <Marker key={`${marker.time.toISOString()}-${index}`} //unique using a key that uses the time
-                                       position={ {lat: marker.lat, lng: marker.lng}}
-                                       onClick={() => {
-                                           setSelected(marker);
-                                       }} //rendering markers inside the google maps component
-        />)}
+      mapRef.current = map;
+    }, []);
+  
+    React.useEffect(() => {
+      setMarkers((current) => [...current, ...initialMarkers]);
+    }, []);
+  
+    return (
+      <GoogleMap
+        zoom={10}
+        center={{ lat: 43.361916, lng: -5.849389 }}
+        mapContainerStyle={containerStyle}
+        options={options}
+        onClick={onMapClick}
+        onLoad={onMapLoad}
+      >
+        {markers.map((marker, index) => (
+          <Marker
+            key={`${marker.time.toISOString()}-${index}`}
+            position={{ lat: marker.lat, lng: marker.lng }}
+            icon={{
+              url: "/location.svg",
+              scaledSize: new window.google.maps.Size(40, 40),
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+            }}
+            onClick={() => {
+              setSelected(marker);
+            }}
+          />
+        ))}
         {selected ? (
-            <InfoWindow position={{lat: selected.lat, lng: selected.lng}} onCloseClick={() => {setSelected(null)}}>
-                <div>
-                    <h2>Location</h2>
-                    <h3>Details</h3>
-                    <h3>User comments</h3>
-                    <p>Added {formatRelative(selected.time, new Date())}</p>
-                </div> 
-            </InfoWindow>) : null} 
-                
-    </GoogleMap>);
-}
+          <InfoWindow
+            position={{ lat: selected.lat, lng: selected.lng }}
+            onCloseClick={() => {
+              setSelected(null);
+            }}
+          >
+            <div>
+              <h2>Location</h2>
+              <h3>Details</h3>
+              <h3>User comments</h3>
+              <p>Added {formatRelative(selected.time, new Date())}</p>
+            </div>
+          </InfoWindow>
+        ) : null}
+      </GoogleMap>
+    );
+  }
+  
+                     
