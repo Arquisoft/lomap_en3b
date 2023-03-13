@@ -54,30 +54,34 @@ _**<Overview Diagram>**_
 
 ----
 @startuml
-actor user
-node "Render" as rn {
-  cloud "LoMap" as dp
+node "client" <<device>>{
+[Client's Web browser]
 }
-node "LoMap App" as lomap {
-    node "User interface"{
-        node "UI" as ui
+node "Github  server" <<device>> as repo{
+cloud "LoMAP deployment" as dep{
+    package "User interface"{
+       [ "UI" ] as ui
     }
-    node "Business Logic" as business{
-        node "Location management "
-        node "User management "
-        node "Friendship management "
+    package "Business Logic" as business{
+        [ "Location management " ]
+        ["User management "]
+        ["Friendship management "]
     }
-    node "MongoDB" as mongodb{
-        database "Shared locations"
-    }
+   }
 
 }
+node "Render hosting server" <<device>> as lomap {
+cloud "LoMAP execution enviroment" as env{
+    [Lomap Deployment]
+}
+}
+node "Google Maps' Server" <<device>> as maps{
+    [Google Maps JS API]
+}
 
-
-node "Pod provider - Inrupt" as inrupt{
-    node "Solid Client Api" as api{
-    }
-    card "Pods" as pods{
+node " Inrupt server" <<device>> as inrupt{
+  ["Solid Client Api"] as api
+    cloud "Pods enviroment" as pods{
 database "USER1'S POD "
     database "USER2'S POD "
     database "USER3'S POD "
@@ -92,23 +96,16 @@ database "USER1'S POD "
 
 }
 
-database "GitHub" as git{
-}
-
-node "WebBrowser" as wb
-dp<->git
-user -> wb
-wb->dp
 
 
 
-wb-[hidden]->rn
-/'
-   wb-[hidden]->rn => trick to position elements in a nicer way
-'/
-lomap-git
 
-ui<->api
+
+client-down->lomap
+lomap-down-repo
+repo-down->maps
+
+repo-right->inrupt
 
 api<->pods
 
