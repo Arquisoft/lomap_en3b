@@ -18,8 +18,7 @@ import mapStyles from "./mapStyles";
 
 
 
- function App(){
-    return (
+
 //setting the width and height of the <div> arround the google map
 const containerStyle = {
     width: '100vw',
@@ -41,8 +40,6 @@ const options = {
 export function App() {
 
     return (
-        <div className="intro">
-            <h1>Welcome to {ourApp.name}!</h1>
 
 
             <BrowserRouter>
@@ -51,6 +48,8 @@ export function App() {
                 </Routes>
 
             </BrowserRouter>
+            );
+        }
 
 /*
     Function used to
