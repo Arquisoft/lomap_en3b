@@ -6,7 +6,6 @@ import {
     Route
 } from "react-router-dom"
 
-import Login from "./components/Login.js";
 
 import{GoogleMap, useLoadScript,Marker, InfoWindow} from "@react-google-maps/api";
 
@@ -36,21 +35,6 @@ const options = {
 
 
 
-
-export function App() {
-
-    return (
-
-
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Login />}/>
-                </Routes>
-
-            </BrowserRouter>
-            );
-        }
-
 /*
     Function used to
     load the google script
@@ -67,7 +51,7 @@ export default function First(){
     if(!isLoaded) return <div>Loading Maps</div> //Checking if the map loaded
 
 
-    return <div> <Header/> <Search/> <Map/>  </div>
+    return <section> <Header/> <Search/> <Map/>  </section>
 
 
 
@@ -91,9 +75,12 @@ const initialMarkers = [
 function Map() {
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
-    const mapRef = React.useRef();
+    const mapRef = React.useRef(null);
+    /**
+     * 
+     */
 
-    const onMapClick = React.useCallback(
+        const addMarker = React.useCallback(
       (event) =>
         setMarkers((current) => [
           ...current,
@@ -120,7 +107,7 @@ function Map() {
         center={{ lat: 43.361916, lng: -5.849389 }}
         mapContainerStyle={containerStyle}
         options={options}
-        onClick={onMapClick}
+        onClick={addMarker}
         onLoad={onMapLoad}
       >
         {markers.map((marker, index) => (
