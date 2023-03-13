@@ -64,19 +64,13 @@ Keep these excerpts as short as possible. Balance readability of this document w
 | The user pins his/her own home in the map, and wants it to remain private, and not accesible to other users.
 It will be stored in his/her own POD, and won't be shared with any other user nor party.
 
-|Usability
-| LoMap will be intuitive and easily used by both experienced and non-technical users. For that, naming, and content structuring  will be specially taken care of.
-| User creates an account to record her favourite  city sight, and besides being elder &  non-technically skilled, she manages to create a pin succesfully , since the menu structure is intuitive and options are structured correctly. Hints and tips are provided too.
 
 
 |Responsiveness
 |LoMap will adapt it's size and content distribution to the device it's being accessed to, so usability is ensured.
 |User want's to know the general opinion of a local restaurant of a city she's visiting. She owns an old , small-screened phone, and so , LoMap contents will change their layout so this user can navigate successfully though it.
 
-|Maintainability
-| Any improvements or changes will easily be performed. Also , It will be ensured that documentation is  updated as changes take place in code, so it's updated.
-LoMap will be developed minding the readability of its code and documentation. Tests will be applied to each module in order to avoid unexpected failures and behaviors.
-|A developer is  assigned to a task involved in a service whose development she has not participated at. She is able to perform her duty because she can understand the code and documentation solves most of her doubts.
+
 
 |===
 
@@ -118,7 +112,12 @@ Table with role names, person names, and their expectations with respect to the 
 [options="header",cols="1,2,2"]
 |===
 |Role/Name| Contact |Expectations
-|Product owners| Professor José Emilio Labra Gayo.   | They'll provide the project with architectural guidance, constraints and requirements.
+|Product owners|
+
+ José Emilio Labra Gayo, Pablo González González ,
+Irene Cid Rico , Cristian Augusto Alonso
+
+| They'll provide the project with architectural guidance, constraints and requirements.
 | Citizen Users| - | To be able to intuitively pin places, leave reviews and rate places they visit. To be able to modify or remove any of the mentioned before. To establish a network of contacts that can access their content as well as being able to access those contact's information. To be able to revoke connections and to stop sharing information with them. To access public content posted by any other user / organization. To create several custom maps. To filter data displayed.
 | Business Owner Users| Representative figure (CTO, CEO..) depending on the business. | (FURTHER STAGES OF THE PROGRAM) To be able to create map locations for their business, so potential visitors and customers can access them.
 | Each city's council| Representative figure (Major, secretary, governor) depending on the location. | To boost the popularity and tourism of the city  , by making it easier for foreigners to discover good places. To give citizens a chance to discover new places. The application would have to complain certain specifications, for example, being secure.
@@ -126,7 +125,7 @@ Table with role names, person names, and their expectations with respect to the 
 | HappySw FrontEnd Engineers | Juan Manuel González Sierra, Manuel Hernández Cuartas, Sebastián Radu, Batuhan Bayir, Sara Fernández Arias  | They require to know the architecture in order to develop the user interface as well as to communicate it with other parts of the system. Also some constraints could take an effect on frontend decisions.
 | HappySw Backend Engineers | Juan Manuel González Sierra, Manuel Hernández Cuartas, Sebastián Radu, Batuhan Bayir, Sara Fernández Arias | In order to develop lower layers of the design, such as data management and business logic, these engineers will require to know all aspects of the system's architecture.
 | HappySw Testing Engineers |  Manuel Hernández Cuartas,Juan Manuel González Sierra, Manuel Hernández Cuartas, Sebastián Radu, Batuhan Bayir, Sara Fernández Arias | In order to test that the system is behaving as expected, engineers need to know how it is expected to work in the first place, and so, how not. For that, they'll need to have detailed knowledge about the system's architecture.
-|  Map/ geodatabase provider |Support of the provider (To be decided)| The provider of all map-related elements. We need to know their own api and probably some architecture aspects and constraints, to be able to comunicate with their services and to integrate their data into our app.
-|  Existing SOLID-based applications  | Other group's members. See LoMap_enX or LoMap_esX on GitHub. | To develop an application whose pods can communicate with other SOLID oriented applications.
+
+|  Existing SOLID-based applications  | Other group's members. See LoMap_enX or LoMap_esX on GitHub. Inrupt, & other pod providers.| To develop an application whose pods can communicate with other SOLID oriented applications.
 
 |===
