@@ -1468,13 +1468,10 @@ You will mainly capture scenarios in your documentation to communicate your arch
 <div class="sect2">
 <h3 id="_runtime_scenario_4_privacy_levels">6.3. &lt;Runtime Scenario 4 -Privacy levels &gt;</h3>
 <div class="paragraph">
-<p>LoMap will provide the users with three privacy levels:</p>
+<p>LoMap will provide the users with<strong> TWO privacy levels at the moment</strong>:</p>
 </div>
 <div class="ulist">
 <ul>
-<li>
-<p><strong>Public</strong> contributions to the map will be shown to <em>any</em> user.</p>
-</li>
 <li>
 <p><strong>Friends-Only</strong> posts will <em>only</em> be displayed to <em>their contacts</em></p>
 </li>
@@ -1484,32 +1481,35 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </ul>
 </div>
 <div class="paragraph">
-<p>The <strong>location</strong> of the data will change <strong>depending on it&#8217;s privacy level.</strong>:</p>
+<p>In <strong>further stages,</strong> a new privacy level will be implemented:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>All data the user decides to share with other users apart from his/her self will be stored in LoMaps database.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Friend-Only entries will be flagged so they are not shown if the user is not a contact of the creator.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>All contributions set as private will be stored in the POD associated to the id of the user.</p>
+<p><strong>Public</strong> contributions to the map will be shown to <em>any</em> user.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>The references to Friend  users are stored in the Pod, not in LoMap&#8217;s database.</strong> That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.
-    &#8594; LoMap will retrieve the locations set as friend-only  by each contact from the database and then add them to the user&#8217;s personal rendered map.</p>
+<p><strong>The references to Friend  users are stored in the Pod</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>LoMap will retrieve the locations set as friend-only  by each contact from the pod and then add them to the user&#8217;s personal rendered map.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/FriendsContent.png" alt="FriendsContent" width="1217" height="1379">
+<img src="./images/FriendsContent.png" alt="FriendsContent" width="1085" height="1098">
 </div>
 </div>
 <div style="page-break-after: always;"></div>
