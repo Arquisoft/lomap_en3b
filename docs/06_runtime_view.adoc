@@ -133,46 +133,37 @@ end
 _For the sake of simplicity, friend's locations CRUD & display will be covered in an independent runtime scenario._
 
 === <Runtime Scenario 4 -Privacy levels >
-LoMap will provide the users with three privacy levels:
-
-    * *Public* contributions to the map will be shown to _any_ user.
+LoMap will provide the users with** TWO privacy levels at the moment**:
 
     * *Friends-Only* posts will _only_ be displayed to _their contacts_
 
     * *Private* contributions will appear _to the creator only._
 
-The *location* of the data will change *depending on it's privacy level.*:
+In *further stages,* a new privacy level will be implemented:
 
-    * All data the user decides to share with other users apart from his/her self will be stored in LoMaps database.
+* *Public* contributions to the map will be shown to _any_ user.
 
-        ** Friend-Only entries will be flagged so they are not shown if the user is not a contact of the creator.
 
-    * All contributions set as private will be stored in the POD associated to the id of the user.
+*The references to Friend  users are stored in the Pod*
 
-*The references to Friend  users are stored in the Pod, not in LoMap's database.* That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.
-    -> LoMap will retrieve the locations set as friend-only  by each contact from the database and then add them to the user's personal rendered map.
+ * That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.
+
+    **  LoMap will retrieve the locations set as friend-only  by each contact from the pod and then add them to the user's personal rendered map.
 
 [plantuml,"FriendsContent",png]
 ----
 @startuml
-title  Public & Friends-Only content
+title Map & Friends-Only content
 
 actor "Authenticated user" as User
 actor "User's Friend" as Friend
 participant "LoMap"
-database "MONGO DB" as db
 participant "Maps Api" as maps
 participant "Inrupt solid-client API" as InruptApi
 database "POD" as pod
 
 group User interactions
-group user adds public location
-    User-> LoMap: Adds Location as public
-    activate LoMap #LightBlue
-    LoMap-> LoMap : gets user id stored in session
-    LoMap ->db: inserts location
-    deactivate LoMap
-end
+
 group user adds friend-only location
     User-> LoMap: Adds Location as friend Only
     activate LoMap #LightBlue
@@ -188,7 +179,6 @@ group user adds friend-only location
 end
 note over InruptApi
        When a user witnesses the map , it will show:
-            -Posts other users made PUBLIC
             -Friends-Only posts by their contacts
             -their own private and friend-only contributions to the map.
     end note
@@ -200,7 +190,6 @@ LoMap-> maps: asks for base map
 activate maps #gold
 maps--> LoMap : returns map
 deactivate maps
-LoMap-> LoMap : adds DB (public user) info to map render
 LoMap-> InruptApi : asks for the related POD's IDs (friends)
 activate InruptApi#darkviolet
 InruptApi-> pod : asks for friend's POD's IDs
@@ -216,21 +205,18 @@ loop for each friend id
     InruptApi-->LoMap: returns friend's locations
     LoMap->LoMap: adds locations to map's render
 end loop
-LoMap->db:ask for all locations stored (public locations)
-activate db #green
-db-->LoMap: returns locations
-deactivate db
+
+
 LoMap->LoMap: adds locations to map's render
 deactivate InruptApi
 LoMap --> Friend :Displays personal map
 Friend->LoMap:interacts with authUser's location
 deactivate LoMap
-end
+
 end
 legend right
     | COLOR | ACTIVITY |
     |<#LightBlue>| LoMap |
-    |<#green>| Mongo DB |
     |<#gold>| Maps API |
     |<#darkviolet>| INRUPT API |
     |<#orchid>| SOLID PODS |
