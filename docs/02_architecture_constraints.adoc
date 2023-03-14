@@ -7,7 +7,6 @@
 | _Use of pods_ | _Following with the users' focus, all the shared information by them should be stored in their corresponding personal pods according to the SOLID project, guaranteeing their real ownership of such information._| Technical
 | _Web application_ | _LoMap is a Full Stack web application, therefore should be composed of both a front-end and a back-end layer, making it easy for most if not all users to use the application._| Technical
 | _Generic software solution_ | _The idea is to develop a generic solution that could be deployed in any city needed, not just an exclusive solution to one city._| Technical
-| _TDD_ | _Test-Driven Development should be used regarding the development of the application in order to guarantee its proper functioning._ | Technical
 | _GitHub_ | _Use of a repository regarding version control._ | Technical
 | _Delivery deadlines_ | _There are 4 deliverables every 3 weeks that should be followed accordingly before the deployment of the application._ | Organizational 
 | _ARC42_ | _Documentation format must follow the ARC42 standards._ | Conventional
