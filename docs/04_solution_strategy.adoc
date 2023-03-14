@@ -1,5 +1,4 @@
 [[section-solution-strategy]]
-== Solution Strategy
 
 === Technology decisions
 * Implement LoMap in the MERN (MongoDB, Express, React, Node) framework. LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.
