@@ -1,5 +1,5 @@
 [[section-solution-strategy]]
-== Solution Strategy
+
 === Technology decisions
 * Implement LoMap in the MERN (MongoDB, Express, React, Node) framework. LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.
 * Use MongoDB in order to implement a database for the storage of non-private information. There will be some public information of public businesses and places that could be shared between all users' maps, so using a common database could be practical.

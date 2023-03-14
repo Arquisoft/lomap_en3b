@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@inrupt/solid-client-authn-node": "^1.13.3"
+  }
+}
