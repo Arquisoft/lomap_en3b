@@ -1,6 +1,7 @@
 import {
     getPodUrlAll,
     isContainer,
+    getLinkedResourceUrlAll,
     createContainerAt
 } from "@inrupt/solid-client";
 
@@ -13,14 +14,16 @@ import {
  */
 async function checkForLomap(session) {
     let anyContainer = false;
-    pods = getPodUrlAll(session.info.webId);
+    let pods = getPodUrlAll(session.info.webid);
     let podWithFolder;
+    console.log(pods);
     let i = 0;
     while (!anyContainer) {
         anyContainer = checkForLomapInPod(pods[i]);
         if (anyContainer)
             podWithFolder = pods[i];
         i++;
+        
     }
     
     if (anyContainer == false)
@@ -34,14 +37,15 @@ async function checkForLomap(session) {
 async function checkForLomapInPod(pod) {
     let container = false;
     try {
-        container = await isContainer('${pod}lomap/');
+        container = await isContainer(pod + "lomap/");
     } catch (error) {
         console.log(error);
     }
+    console.log(pod + "lomap/");
+    console.log(container);
     return container;
 }
 
 async function createLomapContainer(pod) {
-    createContainerAt('${pod}lomap/');
+    createContainerAt(pod + "lomap");
 }
-
