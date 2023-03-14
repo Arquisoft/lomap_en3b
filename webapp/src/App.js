@@ -1,5 +1,11 @@
 
 import React from 'react';
+import {
+    BrowserRouter,
+    Routes,
+    Route
+} from "react-router-dom"
+
 
 import{GoogleMap, useLoadScript,Marker, InfoWindow} from "@react-google-maps/api";
 
@@ -8,13 +14,9 @@ import {formatRelative} from "date-fns";
 import mapStyles from "./mapStyles";
 
 
-const ourApp= {
-    name: 'LoMap',
-    group:'3B',
-    lab:'ASW-En-L.3',
-    groupMembers:['Manu','Juan','Sebastian','Sara'],
 
-};
+
+
 
 //setting the width and height of the <div> arround the google map
 const containerStyle = {
@@ -33,23 +35,8 @@ const options = {
 
 
 
-
-export function App() {
-
-    return (
-        <div className="intro">
-            <h1>Welcome to {ourApp.name}!</h1>
-
-            <p className="summary">
-                This is our first mock in react!:)
-            </p>
-        </div>
-    );
-}
-
-
 /*
-    Function used to 
+    Function used to
     load the google script
 */
 export default function First(){
@@ -61,10 +48,10 @@ export default function First(){
 
 
     if(loadError) return <div> Error Loading Maps </div>
-    if(!isLoaded) return <div>Loading Maps</div> //Checking if the map loaded 
+    if(!isLoaded) return <div>Loading Maps</div> //Checking if the map loaded
 
 
-    return <div> <Header/> <Search/> <Map/>  </div>
+    return <section> <Header/> <Search/> <Map/>  </section>
 
 
 
@@ -88,9 +75,12 @@ const initialMarkers = [
 function Map() {
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
-    const mapRef = React.useRef();
-  
-    const onMapClick = React.useCallback(
+    const mapRef = React.useRef(null);
+    /**
+     * 
+     */
+
+        const addMarker = React.useCallback(
       (event) =>
         setMarkers((current) => [
           ...current,
@@ -102,22 +92,22 @@ function Map() {
         ]),
       []
     );
-  
+
     const onMapLoad = React.useCallback((map) => {
       mapRef.current = map;
     }, []);
-  
+
     React.useEffect(() => {
       setMarkers((current) => [...current, ...initialMarkers]);
     }, []);
-  
+
     return (
       <GoogleMap
         zoom={10}
         center={{ lat: 43.361916, lng: -5.849389 }}
         mapContainerStyle={containerStyle}
         options={options}
-        onClick={onMapClick}
+        onClick={addMarker}
         onLoad={onMapLoad}
       >
         {markers.map((marker, index) => (
@@ -153,5 +143,4 @@ function Map() {
       </GoogleMap>
     );
   }
-  
-                     
+

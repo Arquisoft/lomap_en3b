@@ -3,21 +3,23 @@ import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme}
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DrawerComp from "./DrawerComp";
+import DrawerComp from "./components/DrawerComp";
+import {LoginButton, SessionProvider} from "@inrupt/solid-ui-react";
 
 
 const PAGES = ["Explore","Maps","Friends","Groups"];
 const Header = () => {
-
+    const provider="https://login.inrupt.com/"; //url of the pod provider. Will consider making a multiple choice cbox.
+    const appName="LoMap"; //Our app where the user has been redirected from
     const [value, setValue] = useState();
     const theme = useTheme();
-    console.log(theme);
+// console.log(theme);
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
-    console.log(isMatch);
+// console.log(isMatch);
     return(
         <React.Fragment>
             <AppBar sx={{background: 'black'}}>
-                <Toolbar>
+                <Toolbar sx={{ gap: 2 }}>
                     <FmdGoodIcon/>
                     {
                         isMatch ? (
@@ -39,8 +41,14 @@ const Header = () => {
                                                   ))
                                               }
                                 </Tabs>
-                                <Button sx={{marginLeft: 'auto'}} variant="outlined" color="secondary" startIcon={<AccountCircleIcon />}>Login</Button>
-                                <Button sx={{marginLeft: '10px'}} variant="outlined" color="secondary" startIcon={<AddCircleOutlineIcon />}>Sign Up</Button>
+                                <SessionProvider sessionId="">
+                                    <LoginButton  oidcIssuer={provider} redirectUrl={window.location.href} clientName={appName}>
+                                        <Button sx={{marginLeft: '40em'}} variant="outlined" color="secondary" startIcon={<AccountCircleIcon />}>Login</Button>
+                                    </LoginButton>
+
+                                </SessionProvider>
+                                <Button sx={{marginLeft: '2em'}} variant="outlined" color="secondary" startIcon={<AddCircleOutlineIcon />}>Sign Up</Button>
+
                             </>
 
                         )
