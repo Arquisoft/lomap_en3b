@@ -1,21 +1,19 @@
 import React,{useState} from 'react'
 import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme} from "@mui/material";
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DrawerComp from "./components/DrawerComp";
-import {LoginButton, SessionProvider} from "@inrupt/solid-ui-react";
+
+import DrawerComp from "./DrawerComp";
+import {LogoutButton, SessionProvider} from "@inrupt/solid-ui-react";
 
 
 const PAGES = ["Explore","Maps","Friends","Groups"];
 const Header = () => {
-    const provider="https://login.inrupt.com/"; //url of the pod provider. Will consider making a multiple choice cbox.
-    const appName="LoMap"; //Our app where the user has been redirected from
+
     const [value, setValue] = useState();
     const theme = useTheme();
-// console.log(theme);
+
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
-// console.log(isMatch);
+
     return(
         <React.Fragment>
             <AppBar sx={{background: 'black'}}>
@@ -41,13 +39,15 @@ const Header = () => {
                                                   ))
                                               }
                                 </Tabs>
-                                <SessionProvider sessionId="">
-                                    <LoginButton  oidcIssuer={provider} redirectUrl={window.location.href} clientName={appName}>
-                                        <Button sx={{marginLeft: '40em'}} variant="outlined" color="secondary" startIcon={<AccountCircleIcon />}>Login</Button>
-                                    </LoginButton>
+                                <SessionProvider sessionId="LoMap">
+
+
+                                    <LogoutButton>
+                                        <Button sx={{marginLeft: '60em'}} variant="outlined" color="secondary" >Log out</Button>
+                                    </LogoutButton>
 
                                 </SessionProvider>
-                                <Button sx={{marginLeft: '2em'}} variant="outlined" color="secondary" startIcon={<AddCircleOutlineIcon />}>Sign Up</Button>
+
 
                             </>
 
