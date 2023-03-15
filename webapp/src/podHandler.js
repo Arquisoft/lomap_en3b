@@ -37,8 +37,10 @@ export async function checkForLomapInPod(pod) {
     try {
         lomap = await getSolidDataset(pod + "lomap/");
     } catch (error) {
+        alert("Not found lomap folder in pod, creating one...")
         return false;
     }   
+    alert("Found lomap folder in pod.")
     return true;
 }
 
