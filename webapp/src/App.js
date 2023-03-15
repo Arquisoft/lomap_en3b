@@ -3,6 +3,8 @@ import { SessionProvider} from "@inrupt/solid-ui-react";
 import { useState} from "react";
 import LoginForm from "./components/LoginForm"
 import { useSession } from "@inrupt/solid-ui-react/dist";
+import { checkForLomap } from './podHandler';
+import { handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
 
 import AuthenticatedUserView from "./components/UserView";
 
@@ -17,7 +19,10 @@ export default function App()
 
 //We have logged in
     session.onLogin(() => {
-        setIsLoggedIn(true)
+        setIsLoggedIn(true);
+        handleIncomingRedirect();
+        if (session.info.isLoggedIn)
+            checkForLomap(session.info.webId);
     })
 
 //We have logged out
