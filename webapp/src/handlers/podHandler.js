@@ -45,5 +45,5 @@ export async function checkForLomapInPod(pod) {
 }
 
 export async function createLomapContainer(pod) {
-    createContainerAt(pod + "lomap");
+    await createContainerAt(pod + "lomap");
 }
