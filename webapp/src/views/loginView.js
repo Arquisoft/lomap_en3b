@@ -1,4 +1,4 @@
-import '../styles/Login.css';
+import './styles/login.css';
 import {LoginButton, LogoutButton, SessionProvider} from "@inrupt/solid-ui-react";
 import React, { useState} from "react";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';

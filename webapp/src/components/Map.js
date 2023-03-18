@@ -3,7 +3,7 @@ import React from "react";
 import {GoogleMap, InfoWindow, Marker, useLoadScript} from "@react-google-maps/api";
 import {formatRelative} from "date-fns";
 import Header from "./Header";
-import mapStyles from "../mapStyles";
+import mapStyles from "./styles/MapStyles";
 
 function Search(){
     // to do

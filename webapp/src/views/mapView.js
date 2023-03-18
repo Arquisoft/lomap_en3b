@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {SessionProvider} from "@inrupt/solid-ui-react";
 import {useLoadScript} from "@react-google-maps/api";
-import Header from "./Header";
-import Map from "./Map";
+import Header from "../components/Header";
+import Map from "../components/Map";
 import {Search} from "@mui/icons-material";
 
 /*

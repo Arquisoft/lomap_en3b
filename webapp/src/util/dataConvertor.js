@@ -1,13 +1,13 @@
 //Import Location class
 import {
     LocationLM
-} from './location.js';
+} from '../models/location.js';
 // Import exception 
 import {
     LocationFormatException, 
     InvalidFormatException, 
     ParsinErrorException    
-} from './Exceptions.js';  
+} from './Exceptions/exceptions.js';
 
 //DataModel -> String
 /**

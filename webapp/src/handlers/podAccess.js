@@ -2,7 +2,7 @@
 import {
     fromStringToLocation, 
     fromLocationToString
-} from './DataConvertor.js';  
+} from '../util/dataConvertor.js';
 
 // Import from "@inrupt/solid-client"
 import {

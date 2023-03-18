@@ -5,7 +5,7 @@ import {
 // Import exception 
 import {
     CoordinatesInvalidFormatException
-} from './Exceptions.js';  
+} from '../util/Exceptions/exceptions.js';
 
 /**
  * Location LoMap class

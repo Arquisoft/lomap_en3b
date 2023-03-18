@@ -21,7 +21,7 @@ export async function checkForLomap(webid) {
             podWithFolder = pods[i];
         }
         if (i == pods.length - 1) {
-            createLomapContainer(pods[i]);
+          await  createLomapContainer(pods[i]);
         }
         i++;
         

@@ -1,15 +1,15 @@
-import './styles/App.css';
+import './views/styles/App.css';
 import { SessionProvider} from "@inrupt/solid-ui-react";
 import { useState} from "react";
-import LoginForm from "./components/LoginForm"
+import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
-import { checkForLomap } from './podHandler';
+import { checkForLomap } from './handlers/podHandler';
 import { handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
 
-import AuthenticatedUserView from "./components/UserView";
+import AuthenticatedUserView from "./views/mapView";
 
 
-export default function App()
+ export default function App()
 {
 //We use this state variable
     const [isLoggedIn, setIsLoggedIn] = useState(false);
