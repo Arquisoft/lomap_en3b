@@ -1,55 +1,32 @@
-import React,{useState} from 'react'
-import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme} from "@mui/material";
-import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import React from 'react';
+import { AppBar, Toolbar, IconButton, Typography, Button } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DrawerComp from "./DrawerComp";
+import PlaceIcon from '@mui/icons-material/Place';
+const Navbar = () => {
+// I AM NOT USİNG THİS FİLE ANYMORE I TRY TO MAKE IN THİS FİİLE BUT ITWAS HARD SO I GİVE UP
 
 
-const PAGES = ["Explore","Maps","Friends","Groups"];
-const Header = () => {
+    return (
+        <AppBar position="static" color="inherit">
+            <Toolbar>
+                <IconButton size="large" edge="start" color="inherit" aria-label="menu">
+                    <PlaceIcon />
+                </IconButton>
+                <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                    LOMAP
+                </Typography>
+                <div>
+                    <IconButton color="inherit">
+                        <AccountCircleIcon />
+                    </IconButton>
+                    <IconButton color="inherit">
+                        <AddCircleOutlineIcon />
+                    </IconButton>
+                </div>
+            </Toolbar>
+        </AppBar>
+    );
+};
 
-    const [value, setValue] = useState();
-    const theme = useTheme();
-    console.log(theme);
-    const isMatch = useMediaQuery(theme.breakpoints.down('md'));
-    console.log(isMatch);
-    return(
-        <React.Fragment>
-            <AppBar sx={{background: 'black'}}>
-                <Toolbar>
-                    <FmdGoodIcon/>
-                    {
-                        isMatch ? (
-                          <>
-                              <Typography sx={{fontsize:'1.5rem',paddingLeft: "10%"}}>LOMAP</Typography>
-                              <DrawerComp/>
-                          </>
-                        ) : (
-                            <>
-                                <Tabs
-                                    sx={{marginLeft: '10px'}}
-                                    textColor="inherit" value={value}
-                                    onChange={(e,value)=> setValue(value)}
-                                    indicatorColor="secondary">
-                                              {
-                                                  PAGES.map((page,index)=>(
-                                                      <Tab key={index} label={page}/>
-
-                                                  ))
-                                              }
-                                </Tabs>
-                                <Button sx={{marginLeft: 'auto'}} variant="outlined" color="secondary" startIcon={<AccountCircleIcon />}>Login</Button>
-                                <Button sx={{marginLeft: '10px'}} variant="outlined" color="secondary" startIcon={<AddCircleOutlineIcon />}>Sign Up</Button>
-                            </>
-
-                        )
-                    }
-
-                </Toolbar>
-
-            </AppBar>
-        </React.Fragment>
-    )
-}
- export default Header;
+export default Navbar;

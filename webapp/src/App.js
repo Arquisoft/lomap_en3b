@@ -5,8 +5,12 @@ import{GoogleMap, useLoadScript,Marker, InfoWindow} from "@react-google-maps/api
 import Header from "./Header";
 import {formatRelative} from "date-fns";
 import mapStyles from "./mapStyles";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-import { Typography, Box, Button, ButtonGroup } from "@mui/material";
+import {Typography, Box, Button, ButtonGroup, Toolbar, IconButton, AppBar} from "@mui/material";
+import PlaceIcon from "@mui/icons-material/Place";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 
 const containerStyle = {
@@ -32,9 +36,10 @@ export default function First(){
     const [selected, setSelected] = React.useState(null);
 
 
-
+    const [isAddMarker, setIsAddMarker] = React.useState(false); // lokasyon eklemek için deneme ON MAPCLİCKDEN ÖNCE ÇAĞIRDIK ÇÜNKÜ TANIMLANMAMA HATASI ALIYORDU!!
         const onMapClick = React.useCallback((event) => {
             setSelected(null);
+            if(isAddMarker){
             setMarkers(current => [...current, {
                 lat: event.latLng.lat(),
                 lng: event.latLng.lng(),
@@ -45,8 +50,8 @@ export default function First(){
                 image: '',
                 privacy: '',
                 rating: ''
-            }])
-        }, []);
+            }])  }
+        }, [isAddMarker]);
 
         const mapRef = React.useRef();
         const onMapLoad = React.useCallback((map) => {
@@ -88,29 +93,60 @@ export default function First(){
         }
         const [isPanelOpen, setIsPanelOpen] = React.useState(false); // panelin açılıp kapanmadığını kontrol eder {isPanelOpen && ( buradaki işi yapar
         const [isInfoWindowOpen, setOpenInfoWindow] = React.useState(false); // buda info paneli için
+        const [isLocation, setisLocation] = React.useState(false); // buda info paneli için
 
-        if (loadError) return <div> Error Loading Maps </div>
+
+
+    if (loadError) return <div> Error Loading Maps </div>
         if (!isLoaded) return <div>Loading Maps</div>
 
         return (
             <div className="content">
-                <Header/>
+
+                <AppBar position="static" color="inherit">
+                    <Toolbar>
+                        <IconButton size="large" edge="start" color="inherit" aria-label="menu">
+                            <PlaceIcon size="small" onClick={() => setisLocation(!isLocation)} />
+                        </IconButton>
+                        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                            LOMAP
+                            <Button>Home</Button>
+                            <Button>Friends</Button>
+                            <Button>Map</Button>
+                        </Typography>
+
+                        <div>
+                            <IconButton color="inherit">
+                                <AccountCircleIcon />
+                            </IconButton>
+                            <IconButton color="inherit">
+                                <AddCircleOutlineIcon />
+                            </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+
                 <div style={{display: "flex", height: "100vh"}}>
                     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
 
-                    </div><div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+                    </div>
+                    {isLocation && (
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
                     <ButtonGroup color="inherit" orientation="vertical">
-                        <Button  size="small" onClick={() => setOpenInfoWindow(selected)}>
+                        <Button  size="small" onClick={() => setOpenInfoWindow(true)}>
                             Info Window
                         </Button>
                         <Button  size="small" onClick={() => setIsPanelOpen(!isPanelOpen)}>
                             Toggle Panel
                         </Button>
+                        <Button size="small" onClick={() => setIsAddMarker(prevState => !prevState)}>
+                            {isAddMarker ? 'Cancel' : 'Add Location'}
+                        </Button>
                     </ButtonGroup>
-                </div>
+                </div> )}
 
                     {isInfoWindowOpen && (
-                        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 2 }}>
                             <Typography variant="h6" gutterBottom>
                                 Name
                             </Typography>
@@ -141,6 +177,16 @@ export default function First(){
                             <Typography variant="body1" gutterBottom>
                                 {selected.rate}
                             </Typography>
+                            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                                <Button
+                                    variant="contained"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => setOpenInfoWindow(false)}
+                                >
+                                    Close
+                                </Button>
+                            </Box>
                         </Box>
                     )}
 
@@ -163,7 +209,7 @@ export default function First(){
                                             onChange={(e) => handleCategoryChange(e, selected)}
                                             value={selected ? selected.category : ""}
                                         >
-                                            <option value="">Choose a category</option>
+                                            <option value="">Choose a category for marker</option>
                                             <option value="shop">Shop</option>
                                             <option value="bar">Bar</option>
                                             <option value="restaurant">Restaurant</option>
@@ -187,7 +233,7 @@ export default function First(){
                                             onChange={(e) => handleRateChange(e, selected)}
                                             value={selected ? selected.rate : ""}
                                         >
-                                            <option value="">Choose a rate number</option>
+                                            <option value="">Choose a rate for marker</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
@@ -218,7 +264,7 @@ export default function First(){
                     )}
 
                     <div style={{flex: 1}}>
-                        {<div className="map">
+                            {<div className="map">
                             <GoogleMap
                                 mapContainerStyle={containerStyle}
                                 center={{lat: 43.36029, lng: -5.84476}}
