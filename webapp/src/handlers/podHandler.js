@@ -1,7 +1,9 @@
 import {
     getPodUrlAll,
     createContainerAt,
-    getSolidDataset
+    getSolidDataset,
+    universalAccess,
+
 } from "@inrupt/solid-client";
 
 /**
@@ -13,18 +15,32 @@ export async function checkForLomap(webid) {
     let anyContainer = false;
     let pods = await getPodUrlAll(webid, {fetch : fetch});
     let podWithFolder;
-    alert(webid);
+    alert("Your webId: "+webid);
     let i = 0;
-    while (!anyContainer && i < pods.length) {
+    while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
         anyContainer = await checkForLomapInPod(pods[i]);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
-        if (i == pods.length - 1) {
-          await  createLomapContainer(pods[i]);
-        }
+
         i++;
         
+    }
+    if(!podWithFolder){//If no pod has that folder,
+        // I want to make the user choose in which pod that folder is being created
+        //For that im trying ot understand how access works and
+        universalAccess.getPublicAccess(
+            webid,
+            {fetch:fetch}
+
+        ).then((returnedAccess) => {
+            if (returnedAccess === null) {
+                console.log("Could not load access details for this Resource.");
+            } else {
+                console.log("Returned Public Access:: ", JSON.stringify(returnedAccess));
+            }
+        });
+        await  createLomapContainer(pods[0]);
     }
 }
 
@@ -33,9 +49,9 @@ export async function checkForLomap(webid) {
  * @param {} _pod 
  */
 export async function checkForLomapInPod(pod) {
-    let lomap;
+
     try {
-        lomap = await getSolidDataset(pod + "lomap/");
+      await getSolidDataset(pod + "lomap/");
     } catch (error) {
         alert("Not found lomap folder in pod, creating one...")
         return false;
