@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme,IconButton} from "@mui/material";
+import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme,Box,IconButton} from "@mui/material";
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -9,12 +9,17 @@ import DrawerComp from "./DrawerComp";
 import {LogoutButton, SessionProvider} from "@inrupt/solid-ui-react";
 
 
+const PAGES = ["Explore","Maps","Friends","Groups"];
 const Header = () => {
 
+const Header = ({ onAddMarker }) => {
 
     const theme = useTheme();
-
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
+  
+    const handleAddButtonClick = () => {
+      onAddMarker();
+    };
 
     return(
         <React.Fragment>
@@ -43,4 +48,6 @@ const Header = () => {
         </React.Fragment>
     )
 }
+}
+
 export default Header;
