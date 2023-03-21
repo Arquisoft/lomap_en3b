@@ -4,27 +4,38 @@ import { useState} from "react";
 import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
+import { requestAccessToLomap } from './handlers/podHandler';
 import  {issueAccessRequest} from '@inrupt/solid-client-access-grants';
 import AuthenticatedUserView from "./views/mapView";
+import ModalDialogue from "./components/ModalDialogue";
 
 
 export default  function App()
 {
 //We use this state variable
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [modal,setModal]=useState(false); //pop up wont be shown if not needed.
+
 //With this we can control the login status for solid
     const {session} = useSession();
-
+    let podSet=[];
 //We have logged in
     session.onLogin(() => {
+        checkForLomap(session).then((pods) => {
 
-            checkForLomap(session).then((podWithFolder)=>{
-                if(podWithFolder) {
-                    setIsLoggedIn(true);//now the user will see the map
-                }else{
-                    setModal(!modal);//display modal popup for choosing a pod to insert lomaps folder
-                }})
+            if (pods.length <= 1)
+                setIsLoggedIn(false);//now the user will see the map
+            else{
+                podSet=pods;
+            }
+        });
+        return (
+            <SessionProvider sessionId="log-in-example">
+
+                {(!isLoggedIn) ? <AuthenticatedUserView/> : <ModalDialogue podSet={podSet}/>}
+
+            </SessionProvider>
+        )
+
 
     });
 //We have logged out
@@ -36,27 +47,10 @@ export default  function App()
         <SessionProvider sessionId="log-in-example">
 
             {(!isLoggedIn) ?  <LoginForm/> : <AuthenticatedUserView/>}
+
         </SessionProvider>
     )
 
-    async function requestAccessToLomap( resourceOwner,webid){
-
-        //this part sets the requested access (if granted) to expire in 5 minutes.
-        let accessExpiration = new Date( Date.now() +  5 * 60000 );
-
-        // Call `issueAccessRequest` to create an access request
-        const requestVC = await issueAccessRequest( //Vc stands for Verifiable credential
-            {
-
-                "access":  { read: true , write:true},//the permissions to be asking
-                "resources":webid+'lomap/' ,   // Array of URLs=in this case lomaps folder url
-                "resourceOwner": resourceOwner,
-                "expirationDate": accessExpiration,
-                "purpose": [ "https://example.com/purposes#print" ]
-            },
-            { fetch : session.fetch ,updateAcr:true}//update acr makes the request grant effective if given
-        );
-    }
 }
 
 

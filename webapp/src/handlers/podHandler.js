@@ -5,6 +5,7 @@ import {
 
 
 } from "@inrupt/solid-client";
+import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 
 
 /**
@@ -14,12 +15,12 @@ import {
  */
 export async function checkForLomap(session) {
     let anyContainer = false;
-    alert("Your webId: "+session.info.webId);
     let pods = await getPodUrlAll(session.info.webId, {fetch : fetch});
     let podWithFolder;
-    alert("Your webId: "+session.info.webId);
+    console.log("WEB ID: "+session.info.webId)
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
+        console.log(pods[i])
         anyContainer = await checkForLomapInPod(pods[i]);
         if (anyContainer) {
             podWithFolder = pods[i];
@@ -28,8 +29,9 @@ export async function checkForLomap(session) {
         i++;
         
     }
-    if(!podWithFolder){//If no pod has that folder,
-
+    if(!podWithFolder){//If no pod has that folder, i return the set of pods associated to that user.
+       await requestAccessToLomap(session);
+      await createLomapContainer(pods[0])
 
 
     }
@@ -41,17 +43,43 @@ export async function checkForLomap(session) {
  * @param {} _pod 
  */
 export async function checkForLomapInPod(pod) {
-
     try {
-      await getSolidDataset(pod + "lomap/");
+     let aux= await getSolidDataset(pod+"lomap");
+      console.log(aux)
     } catch (error) {
-        alert("Not found lomap folder in pod, creating one...")
+       console.log("Not found lomap folder in pod, creating one...")
         return false;
-    }   
-    alert("Found lomap folder in pod.")
+    }
+    console.log("Found lomap folder in pod.")
     return true;
 }
+export async function requestAccessToLomap( session){
 
+    //this part sets the requested access (if granted) to expire in 5 minutes.
+    let accessExpiration = new Date( Date.now() +  5 * 60000 );
+
+    // Call `issueAccessRequest` to create an access request
+    const requestVC = await issueAccessRequest( //WE CREATE A NEW ACCESS REQUEST.
+        //Vc stands for Verifiable credential
+        {
+
+            "access":  { read: true , write:true},//the permissions to be asking
+            "resources":session.webId+'lomap/' ,   // Array of URLs=in this case lomaps folder url
+            "resourceOwner": session.webId,
+            "expirationDate": accessExpiration,
+            "purpose": [ "https://localhost:3000/" ]
+        },
+        { fetch : session.fetch ,updateAcr:true}//update acr makes the request grant effective if given
+    );
+    console.log(requestVC);
+    await redirectToAccessManagementUi(
+        requestVC.id,
+        window.location.href,
+        {
+            fallbackAccessManagementUi: session.info.webId
+        }
+    );
+}
 export async function createLomapContainer(pod) {
     await createContainerAt(pod + "lomap/");
 }

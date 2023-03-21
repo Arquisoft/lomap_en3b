@@ -16,7 +16,7 @@ import {
  * @returns {array} a list of strings representing the locations
  */
 function fromLocationToStringList (list) {
-    listLoc = [];
+    let listLoc = [];
     list.forEach(element => {
         if(element instanceof LocationLM){
             listLoc.push(element.toString());

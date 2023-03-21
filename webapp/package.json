@@ -8,6 +8,7 @@
     "@inrupt/solid-client": "^1.25.2",
     "@inrupt/solid-client-access-grants": "^2.1.2",
     "@inrupt/solid-ui-react": "^2.8.2",
+    "@inrupt/vocab-common-rdf": "^1.0.5",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
     "@react-google-maps/api": "^2.18.1",
@@ -20,6 +21,7 @@
     "react-router-dom": "^6.8.2",
     "react-scripts": "5.0.1",
     "react-widgets": "^5.8.4",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
