@@ -4,12 +4,12 @@ import { useState} from "react";
 import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
-
+import { handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
 
 import AuthenticatedUserView from "./views/mapView";
 
 
-export default  function App()
+export default function App()
 {
 //We use this state variable
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,12 +19,10 @@ export default  function App()
 
 //We have logged in
     session.onLogin(() => {
-            checkForLomap(session.info.webId).then((podWithFolder)=>{
-                if(podWithFolder) {
-                    setIsLoggedIn(true);//now the user will see the map
-                }
-                 }).catch(()=>{
-                     alert("An error has ocurred while entering lomap.")});
+        setIsLoggedIn(true);
+        handleIncomingRedirect();
+        if (session.info.isLoggedIn)
+            checkForLomap(session.info.webId);
     })
 
 //We have logged out
@@ -40,7 +38,6 @@ export default  function App()
 
 
 }
-
 
 
 

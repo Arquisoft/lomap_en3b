@@ -1,6 +1,6 @@
 //Import convertor functions
 import {
-    fromStringToLocation, 
+    fromStringToLocation,
     fromLocationToString
 } from '../util/dataConvertor.js';
 
@@ -56,7 +56,7 @@ async function WriteList(SELECTED_POD, writePath, locList, mySolidDatase) {
         labelCreateStatus.textContent = "Error" + error;
         labelCreateStatus.setAttribute("role", "alert");
     }
-    
+
 }
 /**
  * This method reads from the user's Solid POD.
@@ -66,12 +66,12 @@ async function WriteList(SELECTED_POD, writePath, locList, mySolidDatase) {
  */
 async function ReadList(SELECTED_POD, writePath) {
     const readingListUrl = `${SELECTED_POD}+${writePath}`;
-    
+
     // Make authenticated requests by passing `fetch` to the solid-client functions.
     myDataset = await getSolidDataset(
-        readingListUrl, 
+        readingListUrl,
         { fetch: fetch }    // fetch function from authenticated session
-                            //the user must be someone with Read access to the specified URL.
+        //the user must be someone with Read access to the specified URL.
     );
 
     let items = getThingAll(myDataset);
@@ -79,11 +79,11 @@ async function ReadList(SELECTED_POD, writePath) {
     let listcontentAux = [];
     for (let i = 0; i < items.length; i++) {
         let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name); //string 
-        if (item !== null) {          
+        if (item !== null) {
             //Convert string to list of locations
             listcontentAux.push(fromStringToLocation(listcontentAux));
         }
     }
     //Returning array
-    return listcontentAux;  
+    return listcontentAux;
 }

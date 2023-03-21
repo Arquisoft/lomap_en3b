@@ -1,63 +1,46 @@
 import React,{useState} from 'react'
-import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme} from "@mui/material";
+import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme,IconButton} from "@mui/material";
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import PlaceIcon from "@mui/icons-material/Place";
 
 import DrawerComp from "./DrawerComp";
 import {LogoutButton, SessionProvider} from "@inrupt/solid-ui-react";
 
 
-const PAGES = ["Explore","Maps","Friends","Groups"];
 const Header = () => {
 
-    const [value, setValue] = useState();
+
     const theme = useTheme();
 
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
 
     return(
         <React.Fragment>
-            <AppBar sx={{background: 'black'}}>
-                <Toolbar sx={{ gap: 2 }}>
-                    <FmdGoodIcon/>
-                    {
-                        isMatch ? (
-                          <>
-                              <Typography sx={{fontsize:'1.5rem',paddingLeft: "10%"}}>LOMAP</Typography>
-                              <DrawerComp/>
-                          </>
-                        ) : (
-                            <>
-                                <Tabs
-                                    sx={{marginLeft: '10px'}}
-                                    textColor="inherit" value={value}
-                                    onChange={(e,value)=> setValue(value)}
-                                    indicatorColor="secondary">
-                                              {
-                                                  PAGES.map((page,index)=>(
-                                                      <Tab key={index} label={page}/>
+            <AppBar position="static" color="inherit">
+                <Toolbar>
+                    <IconButton size="large" edge="start" color="inherit" aria-label="menu">
+                        <PlaceIcon size="small" />
+                    </IconButton>
+                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                        LOMAP
+                        <Button>Home</Button>
+                        <Button>Friends</Button>
+                        <Button>Map</Button>
+                    </Typography>
 
-                                                  ))
-                                              }
-                                </Tabs>
-                                <SessionProvider sessionId="LoMap">
-
-
-                                    <LogoutButton>
-                                        <Button sx={{marginLeft: '60em'}} variant="outlined" color="secondary" >Log out</Button>
-                                    </LogoutButton>
-
-                                </SessionProvider>
-
-
-                            </>
-
-                        )
-                    }
-
+                    <div>
+                        <IconButton color="inherit">
+                            <AccountCircleIcon />
+                        </IconButton>
+                        <IconButton color="inherit">
+                            <AddCircleOutlineIcon />
+                        </IconButton>
+                    </div>
                 </Toolbar>
-
             </AppBar>
         </React.Fragment>
     )
 }
- export default Header;
+export default Header;
