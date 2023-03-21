@@ -2,7 +2,7 @@ import {
     getPodUrlAll,
     createContainerAt,
     getSolidDataset,
-    universalAccess,
+
 
 } from "@inrupt/solid-client";
 
@@ -12,11 +12,12 @@ import {
  * all the application information is going to be stored.
  * @param {} session 
  */
-export async function checkForLomap(webid) {
+export async function checkForLomap(session) {
     let anyContainer = false;
-    let pods = await getPodUrlAll(webid, {fetch : fetch});
+    alert("Your webId: "+session.info.webId);
+    let pods = await getPodUrlAll(session.info.webId, {fetch : fetch});
     let podWithFolder;
-    alert("Your webId: "+webid);
+    alert("Your webId: "+session.info.webId);
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
         anyContainer = await checkForLomapInPod(pods[i]);
@@ -28,22 +29,11 @@ export async function checkForLomap(webid) {
         
     }
     if(!podWithFolder){//If no pod has that folder,
-        // I want to make the user choose in which pod that folder is being created
-        //For that im trying ot understand how access works and
-        universalAccess.getPublicAccess(
-            webid,
-            {fetch:fetch}
 
-        ).then((returnedAccess) => {
-            if (returnedAccess === null) {//public access returns null
-                console.log("Could not load access details for this Resource.");
-            } else {
-                console.log("Returned Public Access:: ", JSON.stringify(returnedAccess));
-            }
-        });
-        await  createLomapContainer(pods[0]);
-        return webid;
+
+
     }
+    return  podWithFolder;
 }
 
 /**
