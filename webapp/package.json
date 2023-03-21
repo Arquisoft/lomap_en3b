@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-
-
-    "@inrupt/solid-ui-react": "^2.8.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@inrupt/solid-client-access-grants": "^2.1.2",
+    "@inrupt/solid-ui-react": "^2.8.2",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
     "@react-google-maps/api": "^2.18.1",

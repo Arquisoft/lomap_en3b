@@ -6,6 +6,7 @@ import {
 
 } from "@inrupt/solid-client";
 
+
 /**
  * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which 
  * all the application information is going to be stored.
@@ -34,13 +35,14 @@ export async function checkForLomap(webid) {
             {fetch:fetch}
 
         ).then((returnedAccess) => {
-            if (returnedAccess === null) {
+            if (returnedAccess === null) {//public access returns null
                 console.log("Could not load access details for this Resource.");
             } else {
                 console.log("Returned Public Access:: ", JSON.stringify(returnedAccess));
             }
         });
         await  createLomapContainer(pods[0]);
+        return webid;
     }
 }
 
@@ -61,5 +63,5 @@ export async function checkForLomapInPod(pod) {
 }
 
 export async function createLomapContainer(pod) {
-    await createContainerAt(pod + "lomap");
+    await createContainerAt(pod + "lomap/");
 }
