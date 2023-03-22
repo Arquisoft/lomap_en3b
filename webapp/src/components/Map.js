@@ -26,11 +26,12 @@ const initialMarkers = [
 /*
   The main map function
 */
-function Map() {
+function Map({isInteractive}) {
+
+  console.log('isInteractive:', isInteractive);
     
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
-    const [isInteractive, setIsInteractive] = React.useState(false);
     const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
     const mapRef = React.useRef(null);
   
@@ -44,8 +45,10 @@ function Map() {
             time: new Date(),
           },
         ]);
-        setCanAddMarker(false); // Set canAddMarker to false after adding a marker
-        setIsInteractive(false);
+
+        console.log(1);
+        
+        setCanAddMarker(true); // Set canAddMarker to false after adding a marker
       },
       []
     );
@@ -60,20 +63,21 @@ function Map() {
   
     // Set canAddMarker to true when isInteractive changes to true
     React.useEffect(() => {
-      if (isInteractive) {
-        setCanAddMarker(true);
+      if (canAddMarker) {
+        setCanAddMarker(false);
+        
       }
-    }, [isInteractive]);
+    }, [canAddMarker]);
   
     return (
       <React.Fragment>
-        <Header onAddMarker={() => setIsInteractive(true)} />
+        
         <GoogleMap
           zoom={10}
           center={{ lat: 43.361916, lng: -5.849389 }}
           mapContainerStyle={containerStyle}
           options={options}
-          onClick={canAddMarker ? addMarker : null} // Only allow adding markers when canAddMarker is true
+          onClick={isInteractive ? addMarker : null} // Only allow adding markers when canAddMarker is true
           onLoad={onMapLoad}
         >
           {markers.map((marker, index) => (
