@@ -14,14 +14,14 @@ import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-cl
  * @param {} session 
  */
 export async function checkForLomap(session) {
+
     let anyContainer = false;
-    let pods = await getPodUrlAll(session.info.webId, {fetch : fetch});
+    let pods = await getPodUrlAll(session.info.webId, {fetch : session.fetch});
     let podWithFolder;
-    console.log("WEB ID: "+session.info.webId)
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
-        console.log(pods[i])
-        anyContainer = await checkForLomapInPod(pods[i]);
+        let currentPod=pods[i].replace("/profile/card#me","")//Remove profile url string.
+        anyContainer = await checkForLomapInPod(currentPod);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
@@ -29,9 +29,9 @@ export async function checkForLomap(session) {
         i++;
         
     }
-    if(!podWithFolder){//If no pod has that folder, i return the set of pods associated to that user.
-       await requestAccessToLomap(session);
-      await createLomapContainer(pods[0])
+    if(!podWithFolder){//If no pod has that folde
+        console.log("Logeado al intentar crear contenedor?" +session.info.isLoggedIn)
+      podWithFolder=await createLomapContainer(pods[0].replace("/profile/card#me",""))
 
 
     }
@@ -53,25 +53,33 @@ export async function checkForLomapInPod(pod) {
     console.log("Found lomap folder in pod.")
     return true;
 }
+
+/**
+ * This method is intended to be used to ask for access to the user's pod.
+ * Once LoMap has reding & writting access granted, then we can create and modify resources to the folder.
+ * @param session
+ * @returns {Promise<void>}
+ */
 export async function requestAccessToLomap( session){
 
     //this part sets the requested access (if granted) to expire in 5 minutes.
     let accessExpiration = new Date( Date.now() +  5 * 60000 );
-
-    // Call `issueAccessRequest` to create an access request
     const requestVC = await issueAccessRequest( //WE CREATE A NEW ACCESS REQUEST.
+
         //Vc stands for Verifiable credential
         {
 
             "access":  { read: true , write:true},//the permissions to be asking
-            "resources":session.webId+'lomap/' ,   // Array of URLs=in this case lomaps folder url
-            "resourceOwner": session.webId,
+            "resources":session.info.webId,
+            "resourceOwner": session.info.webId,
             "expirationDate": accessExpiration,
-            "purpose": [ "https://localhost:3000/" ]
+
         },
+
         { fetch : session.fetch ,updateAcr:true}//update acr makes the request grant effective if given
     );
-    console.log(requestVC);
+    console.log("rvc"+requestVC)
+    //we actually send the access request to the access management ui, so the user can accept the request.
     await redirectToAccessManagementUi(
         requestVC.id,
         window.location.href,
@@ -81,5 +89,6 @@ export async function requestAccessToLomap( session){
     );
 }
 export async function createLomapContainer(pod) {
+    console.log(pod)
     await createContainerAt(pod + "lomap/");
 }

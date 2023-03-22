@@ -5,9 +5,9 @@ import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
 import { requestAccessToLomap } from './handlers/podHandler';
-import  {issueAccessRequest} from '@inrupt/solid-client-access-grants';
 import AuthenticatedUserView from "./views/mapView";
-import ModalDialogue from "./components/ModalDialogue";
+import {handleIncomingRedirect} from "@inrupt/solid-client-authn-browser";
+
 
 
 export default  function App()
@@ -17,24 +17,12 @@ export default  function App()
 
 //With this we can control the login status for solid
     const {session} = useSession();
-    let podSet=[];
+
 //We have logged in
-    session.onLogin(() => {
-        checkForLomap(session).then((pods) => {
+    session.onLogin(async () => {
+        //await requestAccessToLomap(session);
 
-            if (pods.length <= 1)
-                setIsLoggedIn(false);//now the user will see the map
-            else{
-                podSet=pods;
-            }
-        });
-        return (
-            <SessionProvider sessionId="log-in-example">
-
-                {(!isLoggedIn) ? <AuthenticatedUserView/> : <ModalDialogue podSet={podSet}/>}
-
-            </SessionProvider>
-        )
+        await checkForLomap(session);
 
 
     });
@@ -44,7 +32,7 @@ export default  function App()
     })
 
     return (
-        <SessionProvider sessionId="log-in-example">
+        <SessionProvider sessionId="log-in-example"  restorePreviousSession='true' >
 
             {(!isLoggedIn) ?  <LoginForm/> : <AuthenticatedUserView/>}
 
