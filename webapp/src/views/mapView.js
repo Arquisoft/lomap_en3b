@@ -38,9 +38,9 @@ const MapView = () => {
       <CssBaseline />
       <Header onAddMarker={() => makeMapInteractive()} />
       <Grid container spacing={3} style={{ width: "100%" }}>
-        <Grid item xs={12} md={4}>
-          <List isVisible={showList} />
-        </Grid>
+        
+        <List isVisible={showList} />
+        
         <Grid item xs={12} md={8}>
         <Map isInteractive={isInteractive} onMarkerAdded={handleMarkerAdded} />
         </Grid>
