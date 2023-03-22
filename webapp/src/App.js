@@ -6,7 +6,7 @@ import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
 import { requestAccessToLomap } from './handlers/podHandler';
 import AuthenticatedUserView from "./views/mapView";
-import {handleIncomingRedirect} from "@inrupt/solid-client-authn-browser";
+
 
 
 
@@ -20,10 +20,9 @@ export default  function App()
 
 //We have logged in
     session.onLogin(async () => {
-        //await requestAccessToLomap(session);
 
-        await checkForLomap(session);
-
+         await checkForLomap(session);
+         setIsLoggedIn(true);
 
     });
 //We have logged out

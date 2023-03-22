@@ -20,8 +20,8 @@ export async function checkForLomap(session) {
     let podWithFolder;
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
-        let currentPod=pods[i].replace("/profile/card#me","")//Remove profile url string.
-        anyContainer = await checkForLomapInPod(currentPod);
+        let currentPod=pods[i].replace("/profile/card#me","/")//Remove profile url string.
+        anyContainer = await checkForLomapInPod(currentPod,session);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
@@ -30,8 +30,8 @@ export async function checkForLomap(session) {
         
     }
     if(!podWithFolder){//If no pod has that folde
-        console.log("Logeado al intentar crear contenedor?" +session.info.isLoggedIn)
-      podWithFolder=await createLomapContainer(pods[0].replace("/profile/card#me",""))
+
+      podWithFolder=await createLomapContainer(pods[0].replace("/profile/card#me","/"))
 
 
     }
@@ -42,12 +42,13 @@ export async function checkForLomap(session) {
  * This method checks if the lomap folder exists given a pod.
  * @param {} _pod 
  */
-export async function checkForLomapInPod(pod) {
+export async function checkForLomapInPod(pod,session) {
     try {
-     let aux= await getSolidDataset(pod+"lomap");
-      console.log(aux)
+
+     let aux= await getSolidDataset(pod+"lomap",{fetch : session.fetch});
+      console.log( aux)
     } catch (error) {
-       console.log("Not found lomap folder in pod, creating one...")
+        console.log("Not found lomap folder in pod, we'll try creating one...")
         return false;
     }
     console.log("Found lomap folder in pod.")
@@ -89,6 +90,6 @@ export async function requestAccessToLomap( session){
     );
 }
 export async function createLomapContainer(pod) {
-    console.log(pod)
+   // console.log('linea 94 '+pod)
     await createContainerAt(pod + "lomap/");
 }
