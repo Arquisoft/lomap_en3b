@@ -26,9 +26,8 @@ const initialMarkers = [
 /*
   The main map function
 */
-function Map({isInteractive}) {
+function Map({ isInteractive, onMarkerAdded}) {
 
-  console.log('isInteractive:', isInteractive);
     
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
@@ -47,7 +46,7 @@ function Map({isInteractive}) {
         ]);
 
         console.log(1);
-        
+        onMarkerAdded(); // Call the onMarkerAdded callback
         setCanAddMarker(true); // Set canAddMarker to false after adding a marker
       },
       []

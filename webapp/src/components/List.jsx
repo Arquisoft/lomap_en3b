@@ -16,7 +16,7 @@ import {
     MarginBottom,
 } from './styles/ListStyle.js';
 
-const List = () => {
+const List = ({ isVisible }) => {
     const [type, setType] = useState('Bars');
     const [rating, setRating] = useState('');
     const [name, setName] = useState('');
@@ -34,8 +34,12 @@ const List = () => {
         setVisibility(event.target.value);
     };
 
+    const style = {
+        display: isVisible ? 'block' : 'none',
+    };
+
     return (
-        <Container>
+        <Container style={style}>
             <Typography variant="h4">Click to add a marker</Typography>
             <FormControl>
                 <InputLabel>Type</InputLabel>

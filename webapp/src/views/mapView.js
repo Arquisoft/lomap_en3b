@@ -16,12 +16,13 @@ const MapView = () => {
   }); // hook to load the google script
 
 
+  const handleMarkerAdded = () => {
+    console.log(2);
+    setIsInteractive(false);
+  };
+  
   const makeMapInteractive = () => {
-
-   
     setIsInteractive(!isInteractive);
-    
-    
   };
 
   if (loadError) return <div> Error Loading Maps </div>;
@@ -38,7 +39,7 @@ const MapView = () => {
           <List />
         </Grid>
         <Grid item xs={12} md={8}>
-        <Map isInteractive={isInteractive} />
+        <Map isInteractive={isInteractive} onMarkerAdded={handleMarkerAdded} />
         </Grid>
       </Grid>
     </>
