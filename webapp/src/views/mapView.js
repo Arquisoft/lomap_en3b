@@ -9,6 +9,7 @@ import { CssBaseline, Grid } from "@mui/material";
 
 const MapView = () => {
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
+  const [showList, setShowList] = useState(false);
   
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -17,12 +18,14 @@ const MapView = () => {
 
 
   const handleMarkerAdded = () => {
-    console.log(2);
+    
     setIsInteractive(false);
   };
   
   const makeMapInteractive = () => {
     setIsInteractive(!isInteractive);
+    console.log(showList);
+    setShowList(!showList);
   };
 
   if (loadError) return <div> Error Loading Maps </div>;
@@ -36,7 +39,7 @@ const MapView = () => {
       <Header onAddMarker={() => makeMapInteractive()} />
       <Grid container spacing={3} style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
-          <List />
+          <List isVisible={showList} />
         </Grid>
         <Grid item xs={12} md={8}>
         <Map isInteractive={isInteractive} onMarkerAdded={handleMarkerAdded} />
