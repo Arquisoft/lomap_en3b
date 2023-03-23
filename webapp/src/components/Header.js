@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import {AppBar, Tabs, Toolbar, Typography, Tab, Button, useMediaQuery, useTheme} from "@mui/material";
+import {TabPanel} from '@mui/lab';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 
 import DrawerComp from "./DrawerComp";
@@ -7,9 +8,10 @@ import {LogoutButton, SessionProvider} from "@inrupt/solid-ui-react";
 
 
 const PAGES = ["Explore","Maps","Friends","Groups"];
+
 const Header = () => {
 
-    const [value, setValue] = useState();
+    const [value, setValue] = useState('Explore');
     const theme = useTheme();
 
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
@@ -34,10 +36,11 @@ const Header = () => {
                                     indicatorColor="secondary">
                                               {
                                                   PAGES.map((page,index)=>(
-                                                      <Tab key={index} label={page}/>
+                                                  <Tab key={index} label={page} />
 
                                                   ))
                                               }
+
                                 </Tabs>
                                 <SessionProvider sessionId="LoMap">
 

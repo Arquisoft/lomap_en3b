@@ -2,10 +2,12 @@ import {
     getPodUrlAll,
     createContainerAt,
     getSolidDataset,
-
-
+    getThing,
+    getUrlAll
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
+import {FOAF} from "@inrupt/vocab-common-rdf";
+
 
 
 /**
@@ -92,4 +94,16 @@ export async function requestAccessToLomap( session){
 export async function createLomapContainer(pod,session) {
    // console.log('linea 94 '+pod)
     await createContainerAt(pod + "lomap/",{fetch : session.fetch});
+}
+
+async function getFriends(webId) {
+    let dataset = await getSolidDataset(webId);
+    let friends = getThing(dataset, webId);
+    let ids = getUrlAll(friends, FOAF.knows);
+
+    let list = [];
+
+    ids.forEach(friend => list.push(friend));
+
+    return list;
 }
