@@ -37,3 +37,12 @@ class CoordinatesInvalidFormatException extends Error {
         super(`${obj} invalid value for coordinate.\n\tLatitude must be within [-90,90]\n\tLongitude must be within [-180,180]`);
     }
 }
+
+/**
+ * StringInvalidFormatException class to manage error while setting string values.
+ */
+export class StringInvalidFormatException extends Error {
+    constructor(obj) {
+        super(`${obj} invalid value for string. It must be valid value, not empty.`);
+    }
+}

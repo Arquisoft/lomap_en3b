@@ -6,27 +6,32 @@ import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
 import { requestAccessToLomap } from './handlers/podHandler';
 import AuthenticatedUserView from "./views/mapView";
+import {User} from "./models/user";
+import {writeLocations1} from "./handlers/podAccess";
 
 
 
-
+const {session} = useSession();
 export default  function App()
 {
 //We use this state variable
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 //With this we can control the login status for solid
-    const {session} = useSession();
+
+    const user = new User();
 
 //We have logged in
     session.onLogin(async () => {
 
-         await checkForLomap(session);
+        user.podURL = await checkForLomap(session);
          setIsLoggedIn(true);
 
     });
 //We have logged out
-    session.onLogout(() => {
+    session.onLogout(async () => {
+
+        await writeLocations1(session, user);
         setIsLoggedIn(false)
     })
 

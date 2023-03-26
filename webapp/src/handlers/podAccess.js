@@ -1,89 +1,102 @@
-//Import convertor functions
-import {
-    fromStringToLocation,
-    fromLocationToString
-} from './util/DataConvertor.js';
+import{
+    User
+} from "../models/user";
 
 // Import from "@inrupt/solid-client"
 import {
-    addUrl,
-    addStringNoLocale,
     createThing,
-    getSolidDataset,
-    getThingAll,
-    getStringNoLocale,
     saveSolidDatasetAt,
-    setThing
+    setThing,
+    buildThing,
+    createSolidDataset,
+    getThingAll,
+    getSolidDataset,
+    removeThing
 } from "@inrupt/solid-client";
+import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
+import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
+import {checkForLomap} from "./podHandler";
 
-import { SCHEMA_INRUPT, RDF, AS } from "@inrupt/vocab-common-rdf";
-
-var myDataset;
 /**
- * This method writes new data in the POD. It does not return nothing
- * @param {string} SELECTED_POD is the user's pod where data is gonna be stored
- * @param {string} writePath is the path within the pod where to write. It must be like: path/fileName
- * @param {string} locList is a list of new Locations (that are not stored in the POD yet)
- * @param {SolidDataset} mySolidDatase is the PODDataset with the current stored information
+ * Save user's session changes into de POD.
+ * @param {User} user
+ * @returns {Promise<void>}
  */
-async function WriteList(SELECTED_POD, writePath, locList, mySolidDatase) {
-    //Hardcoding url given as a parameter.
-    const readingListUrl = `${SELECTED_POD}+${writePath}`;
-
-    try {
-        // Get the current things in the writePath
-        let items = getThingAll(mySolidDatase);
-    } catch (error) {
-        console.error(error.message);
-    }
-
-    // Add locations to the Dataset
-    let i = 0;
-    locList.forEach((loc) => {
-        if (title.trim() !== "") {
-            let item = createThing({ name: loc.locID });
-            item = addUrl(item, RDF.type, AS.Article);
-            item = addStringNoLocale(item, SCHEMA_INRUPT.name, fromLocationToString(loc));
-            mySolidDatase = setThing(mySolidDatase, item);
-            i++;
-        }
-    });
-    try {
-        // Save the SolidDataset
-        await saveSolidDatasetAt(readingListUrl, mySolidDatase, { fetch: fetch } );
-    } catch (error) {
-        console.log(error);
-        labelCreateStatus.textContent = "Error" + error;
-        labelCreateStatus.setAttribute("role", "alert");
-    }
-
+async function writeLocations(user) {
+    pod = checkForLomap()
+    //This can be parallel
+    writeUserLocations(user.resourceURLPublic, user.publicLocat);
+    writeUserLocations(user.resourceURLPrivate, user.privateLocat);
 }
+
 /**
- * This method reads from the user's Solid POD.
- * @param {string} SELECTED_POD is the user's pod where data is gonna be stored
- * @param {string} writePath is the path within the pod where to write. It must be like: path/fileName
- * @returns a list of locations
+ *
+ * @param session
+ * @param {User} user
+ * @returns {Promise<void>}
  */
-async function ReadList(SELECTED_POD, writePath,session) {
-    const readingListUrl = `${SELECTED_POD}+${writePath}`;
+async function writeLocations1(session, user) {
+    let resourceURL =  checkForLomap(session);
+    //This can be parallel
+    writeUserLocations(await resourceURL, user.publicLocat);
+    return null;
+}
 
-    // Make authenticated requests by passing `fetch` to the solid-client functions.
-    myDataset = await getSolidDataset(
-        readingListUrl,
-        { fetch: session.fetch }    // fetch function from authenticated session
-        //the user must be someone with Read access to the specified URL.
-    );
-
-    let items = getThingAll(myDataset);
-
-    let listcontentAux = [];
-    for (let i = 0; i < items.length; i++) {
-        let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name); //string
-        if (item !== null) {
-            //Convert string to list of locations
-            listcontentAux.push(fromStringToLocation(listcontentAux));
+/**
+ *  This method saves in a given path the user's locations
+ * @param {String} resourceURL user's POD path
+ * @param {Array.<LocationLM>} list list of locations to save
+ * @returns {null}
+ */
+async function writeUserLocations(resourceURL, list) {
+    let mySolidDataset;
+    try {
+        //Get existing dataSet
+        let mySolidDataset = await getSolidDataset(resourceURL,
+            {fetch: getDefaultSession().fetch}
+            // { fetch: fetch } //Other way
+        );
+        // Clear the list to override the whole list
+        let items = getThingAll(mySolidDataset);
+        items.forEach((item) => {
+            mySolidDataset = removeThing(mySolidDataset, item);
+        });
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset (i.e., the reading list)
+            mySolidDataset = createSolidDataset();
+        } else {
+            console.error(error.message);
         }
     }
-    //Returning array
-    return listcontentAux;
+    list.forEach(loc => {
+            // Create a New Thing to Add
+            let locationThing = buildThing(createThing({name: loc.locID}))
+                .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
+                .addDecimal(SCHEMA_INRUPT.latitude, loc.lat)
+                .addDecimal(SCHEMA_INRUPT.longitude, loc.lng)
+                .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
+                .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
+                .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.cat)
+                // date (?)
+                .addUrl(RDF.type, "https://schema.org/Place")
+                .build();
+            // Update the SolidDataset with New Things
+            mySolidDataset = setThing(mySolidDataset, locationThing);
+        }
+    );
+    // Save the SolidDataset
+    /*    const savedSolidDataset = */
+    await saveSolidDatasetAt(
+        resourceURL,
+        mySolidDataset,
+        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
+        //{ fetch: fetch } //Other way
+    );
+    return null;
+}
+
+export {
+    writeLocations,
+    writeLocations1
 }
