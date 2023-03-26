@@ -1,4 +1,4 @@
-import {LocationLM} from "./location";
+import {LocationLM} from "./Location";
 /**
  * User LoMap class
  */
@@ -6,6 +6,7 @@ class User{
     publicLocat = new Array();
     privateLocat = new Array();
     podURL;
+    friendsLocat = new Array();
     constructor() {
         this.resourceURLPublic = "Public pod-url";
         this.resourceURLPrivate = "Private pod-url";

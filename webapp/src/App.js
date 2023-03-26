@@ -3,11 +3,11 @@ import { SessionProvider} from "@inrupt/solid-ui-react";
 import { useState} from "react";
 import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
-import { checkForLomap } from './handlers/podHandler';
-import { requestAccessToLomap } from './handlers/podHandler';
+import { checkForLomap } from './handlers/PodHandler';
+import { requestAccessToLomap } from './handlers/PodHandler';
 import AuthenticatedUserView from "./views/mapView";
-import {User} from "./models/user";
-import {writeLocations1} from "./handlers/podAccess";
+import {User} from "./models/User";
+import {writeLocations1} from "./handlers/PodAccess";
 
 
 

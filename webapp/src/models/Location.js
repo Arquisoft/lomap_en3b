@@ -6,13 +6,15 @@ import {
 import {
     CoordinatesInvalidFormatException,
     StringInvalidFormatException
-} from '../util/Exceptions/exceptions.js';
+} from '../util/Exceptions/Exceptions.js';
 
 /**
  * Location LoMap class
  */
 class LocationLM {
-    //Attributes should be private and access by setter/getters 
+    //Attributes
+    publicReview = new Array();
+    privateReview = new Array();
     constructor(CoorLat, CoorLng, name, description, category) {
         checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
@@ -25,6 +27,20 @@ class LocationLM {
         checkStringInvalidFormat(category, 'category' );
         this.cat = category;
         this.locID = uuidv4();
+    }
+
+    constructor(id, CoorLat, CoorLng, name, description, category) {
+        let aux = new LocationLM(CoorLat, CoorLng, name, description, category);
+        this.locID = id;
+        this.lat = aux.lat;
+        this.lng = aux.lng;
+        this.name = aux.name;
+        this.description = aux.description;
+        this.cat = aux.cat;
+    }
+
+    addPublicReview() {
+
     }
 }
 
