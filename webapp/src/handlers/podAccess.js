@@ -78,7 +78,7 @@ async function writeUserLocations(resourceURL, list) {
                 .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
                 .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
                 .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.cat)
-                // date (?)
+                // date (?) - We need to think if it's needed
                 .addUrl(RDF.type, "https://schema.org/Place")
                 .build();
             // Update the SolidDataset with New Things
