@@ -4,8 +4,10 @@ import {
     getSolidDataset,
 
 
+
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
+
 
 
 /**
@@ -21,7 +23,7 @@ export async function checkForLomap(session) {
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
         let currentPod=pods[i].replace("/profile/card#me","/")//Remove profile url string.
-        anyContainer = await checkForLomapInPod(currentPod,session);
+        anyContainer = await checkForLomapInPod(currentPod);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
@@ -29,7 +31,7 @@ export async function checkForLomap(session) {
         i++;
         
     }
-    if(!podWithFolder){//If no pod has that folde
+    if(!podWithFolder){//If no pod has that folder
 
       podWithFolder=await createLomapContainer(pods[0].replace("/profile/card#me","/"),session)
 
@@ -61,7 +63,7 @@ export async function checkForLomapInPod(pod,session) {
  * @param session
  * @returns {Promise<void>}
  */
-export async function requestAccessToLomap( session){
+export async function requestAccessToLomap(session){
 
     //this part sets the requested access (if granted) to expire in 5 minutes.
     let accessExpiration = new Date( Date.now() +  5 * 60000 );
@@ -90,6 +92,6 @@ export async function requestAccessToLomap( session){
     );
 }
 export async function createLomapContainer(pod,session) {
-   // console.log('linea 94 '+pod)
+
     await createContainerAt(pod + "lomap/",{fetch : session.fetch});
 }

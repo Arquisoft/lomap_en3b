@@ -64,13 +64,13 @@ async function WriteList(SELECTED_POD, writePath, locList, mySolidDatase) {
  * @param {string} writePath is the path within the pod where to write. It must be like: path/fileName
  * @returns a list of locations
  */
-async function ReadList(SELECTED_POD, writePath) {
+async function ReadList(SELECTED_POD, writePath,session) {
     const readingListUrl = `${SELECTED_POD}+${writePath}`;
 
     // Make authenticated requests by passing `fetch` to the solid-client functions.
     myDataset = await getSolidDataset(
         readingListUrl,
-        { fetch: fetch }    // fetch function from authenticated session
+        { fetch: session.fetch }    // fetch function from authenticated session
         //the user must be someone with Read access to the specified URL.
     );
 
