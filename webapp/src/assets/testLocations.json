@@ -1,0 +1,54 @@
+{
+  "locations": [
+    {
+      "name": "Parque de invierno",
+      "latitude": "43.35302550278352",
+      "longitude": "-5.849442050492078",
+      "category": "park",
+      "description": "A beautiful place I found when i went for a walk",
+      "reviewScore": "7",
+      "date": "16798326101",
+      "comments": [
+        {
+          "author": "https://manuhcuartas.inrupt.net/",
+          "comment": "I've been there with my dog !",
+          "date": "16798326111"
+        }
+      ]
+    },
+    {
+      "name": "Cute beach",
+      "latitude": "43.566553037285786",
+      "longitude": ", -6.295484452692698",
+      "category": "landscape",
+      "description": "A beautiful place I found when i went for a walk",
+      "reviewScore": "10",
+      "date": "16798326101",
+      "comments": [
+        {
+          "author": "https://fdezariassara.inrupt.net/",
+          "comment": "not accesible for handicapped individuals :( ",
+          "date": "1679832611"
+        }
+      ]
+    },
+    {
+      "name": "italian restaurant",
+      "latitude": "43.53158394322365",
+      "longitude": "-5.690021363082389",
+      "category": "restaurant",
+      "description": "food is really good, but I think is too expensive",
+      "reviewScore": "5",
+      "date": "16798326101",
+      "comments": [
+        {
+          "author": "https://fdezariassara.inrupt.net/",
+          "comment": "no gluten free options neither... ",
+          "date": "1679832611"
+        }
+      ]
+    }
+  ]
+}
+
+
