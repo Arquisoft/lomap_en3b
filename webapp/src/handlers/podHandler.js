@@ -3,7 +3,8 @@ import {
     createContainerAt,
     getSolidDataset,
     getThing,
-    getUrlAll
+    getUrlAll,
+    getStringNoLocale
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF} from "@inrupt/vocab-common-rdf";
@@ -16,7 +17,6 @@ import {FOAF} from "@inrupt/vocab-common-rdf";
  * @param {} session 
  */
 export async function checkForLomap(session) {
-
     let anyContainer = false;
     let pods = await getPodUrlAll(session.info.webId, {fetch : session.fetch});
     let podWithFolder;
@@ -96,14 +96,40 @@ export async function createLomapContainer(pod,session) {
     await createContainerAt(pod + "lomap/",{fetch : session.fetch});
 }
 
-async function getFriends(webId) {
-    let dataset = await getSolidDataset(webId);
-    let friends = getThing(dataset, webId);
-    let ids = getUrlAll(friends, FOAF.knows);
+/**
+ * It returns a list with the friends of the logged in user
+ * @param webId Containing the webId whose friends we are returning
+ * @returns {Promise<*[]>} Containing a List of the webIds of the friends
+ */
+async function getFriendsWebIds(webId) {
+    let profile = await getProfile(webId);
+    let ids = getUrlAll(profile, FOAF.knows);
 
     let list = [];
 
-    ids.forEach(friend => list.push(friend));
+    ids.forEach(friend => list.push(friend.split("#")[0])); //remove the right side of the "#"
+
+    list.forEach(f => alert(f))
 
     return list;
+}
+
+/**
+ * Returns the profile for a given webId
+ * @param webId containing the webId whose profile we want
+ * @returns {Promise<Thing & {url: UrlString}>} with the profile we need
+ */
+async function getProfile(webId) {
+    let dataset = await getSolidDataset(webId);
+    return getThing(dataset, webId);
+}
+
+async function findName(webId) {
+    if (webId === undefined)
+        return "No name found";
+    else {
+        let profile = getProfile(webId);
+        let name = getStringNoLocale(profile, FOAF.name);
+        return name === null ? "No name found" : name;
+    }
 }

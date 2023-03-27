@@ -6,7 +6,7 @@ import Header from "./Header";
 import mapStyles from "./styles/MapStyles";
 
 function Search(){
-    // to do
+    // todo
 
 }
 //setting the width and height of the <div> arround the google map
