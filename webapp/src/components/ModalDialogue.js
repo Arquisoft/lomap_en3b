@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {requestAccessToLomap} from "../handlers/podHandler";
+import {requestAccessToLomap} from "../handlers/PodHandler";
 //import DropdownList from "react-widgets/DropdownList";
 import {Box, Button, Modal, Typography} from "@mui/material";
 import {LogoutButton, SessionProvider, useSession} from "@inrupt/solid-ui-react";

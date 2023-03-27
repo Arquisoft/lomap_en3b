@@ -1,10 +1,7 @@
 import {
     getPodUrlAll,
     createContainerAt,
-    getSolidDataset,
-
-
-
+    getSolidDataset
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 
