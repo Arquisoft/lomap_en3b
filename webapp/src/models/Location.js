@@ -13,7 +13,7 @@ import {
  */
 class LocationLM {
     //Attributes
-    publicReview = new Array();
+
     privateReview = new Array();
     constructor(CoorLat, CoorLng, name, description, category) {
         checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
@@ -29,15 +29,7 @@ class LocationLM {
         this.locID = uuidv4();
     }
 
-    constructor(id, CoorLat, CoorLng, name, description, category) {
-        let aux = new LocationLM(CoorLat, CoorLng, name, description, category);
-        this.locID = id;
-        this.lat = aux.lat;
-        this.lng = aux.lng;
-        this.name = aux.name;
-        this.description = aux.description;
-        this.cat = aux.cat;
-    }
+
 
     addPublicReview() {
 
@@ -50,7 +42,7 @@ function checkCoordinatesInvalidFormat (cond, value, str){
     }
 }
 function checkStringInvalidFormat (value, str){
-    if(!!value){
+    if(!value){
         throw new StringInvalidFormatException(new String(str + '=' + value));
     }
 }

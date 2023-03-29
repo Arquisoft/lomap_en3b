@@ -2,8 +2,9 @@
 import React from "react";
 import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
-import Header from "./Header";
+import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
+import {readLocations} from "../handlers/podAccess";
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -18,15 +19,12 @@ const options = {
   zoomcontrol: true
 };
 
-const initialMarkers = [
-  { key: 'marker-1', lat: 43.361916, lng: -5.849389, time: new Date() },
-  { key: 'marker-2', lat: 43.371916, lng: -5.859389, time: new Date() }
-];
+
 
 /*
   The main map function
 */
-function Map({ isInteractive, onMarkerAdded}) {
+function Map({ isInteractive,session, onMarkerAdded}) {
 
     
     const [markers, setMarkers] = React.useState([]);
@@ -51,13 +49,22 @@ function Map({ isInteractive, onMarkerAdded}) {
       },
       []
     );
+    const retrieveLocations=async () => {
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    }
   
     const onMapLoad = React.useCallback((map) => {
       mapRef.current = map;
     }, []);
   
-    React.useEffect(() => {
-      setMarkers((current) => [...current, ...initialMarkers]);
+    React.useEffect( () => {
+        async function getAndSetLocations() {
+            let locationSet = await retrieveLocations()
+            setMarkers((current) => [...current, ...locationSet]);
+        }
+
+       getAndSetLocations();
     }, []);
   
     // Set canAddMarker to true when isInteractive changes to true
@@ -81,7 +88,7 @@ function Map({ isInteractive, onMarkerAdded}) {
         >
           {markers.map((marker, index) => (
             <Marker
-              key={`${marker.time.toISOString()}-${index}`}
+
               position={{ lat: marker.lat, lng: marker.lng }}
               icon={{
                 url: "/location.svg",
@@ -102,10 +109,18 @@ function Map({ isInteractive, onMarkerAdded}) {
               }}
             >
               <div>
-                <h2>Location</h2>
-                <h3>Details</h3>
-                <h3>User comments</h3>
-                <p>Added {formatRelative(selected.time, new Date())}</p>
+                  <section name="LocationInfo">
+                      <h2>{selected.name}</h2>
+                      <p name="coordinates">at {selected.lat}, {selected.lng}</p>
+                      <p name="category">Classified as {selected.cat}</p>
+                      <h3>Description</h3>
+                      <p>{selected.description}</p>
+                  </section>
+                  <section name="comments">
+                    <h3>Comment Section</h3>
+                      <p>No comments yet...</p>
+                  </section>
+
               </div>
             </InfoWindow>
           ) : null}

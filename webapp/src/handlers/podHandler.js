@@ -1,7 +1,10 @@
 import {
     getPodUrlAll,
     createContainerAt,
-    getSolidDataset
+    getSolidDataset,
+
+
+
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 
@@ -20,7 +23,7 @@ export async function checkForLomap(session) {
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
         let currentPod=pods[i].replace("/profile/card#me","/")//Remove profile url string.
-        anyContainer = await checkForLomapInPod(currentPod);
+        anyContainer = await checkForLomapInPod(currentPod,session);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
@@ -47,6 +50,7 @@ export async function checkForLomapInPod(pod,session) {
      let aux= await getSolidDataset(pod+"lomap",{fetch : session.fetch});
 
     } catch (error) {
+        console.log(error)
         console.log("Not found lomap folder in pod, we'll try creating one...")
         return false;
     }

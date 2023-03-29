@@ -11,11 +11,17 @@ import {
     createSolidDataset,
     getThingAll,
     getSolidDataset,
-    removeThing, getStringNoLocale, getDecimal
+    removeThing,
+    getStringNoLocale,
+    getDecimal,
+    toRdfJsDataset,
+    getThing,
+    getContainedResourceUrlAll,
+    getStringNoLocaleAll, responseToResourceInfo, getResourceInfo
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
-import {checkForLomap} from "./PodHandler";
+import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/Location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/Exceptions";
 
@@ -97,55 +103,64 @@ async function writeUserLocations(resourceURL, list) {
     return null;
 }
 
+
+async function getThingsFromDataset(resourceURL,session){
+    let dataset,allThings;
+     dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
+    allThings=getThingAll(dataset);
+    return allThings;
+
+
+
+}
 /**
  * This method reads from the user's Solid POD.
  * @param {string} resourceURL is the path within the pod where to write. It must be like: path/fileName
  * @returns a list of locations
  */
-async function readLocations(resourceURL) {
-    let mySolidDataset;
-    // Make authenticated requests by passing `fetch` to the solid-client functions.
-    try {
-        //Get existing dataSet
-        mySolidDataset = await getSolidDataset(resourceURL,
-            {fetch: getDefaultSession().fetch}
-            // { fetch: fetch } //Other way
-        );
-    } catch (error) {
-            console.error(error.message);
-    }
-    // Get all Things in a SolidDataset. Returns: Thing[]
-    let items = getThingAll(mySolidDataset);
-    //Initialize aux list
-    let listcontentAux = [];
-    for (let i = 0; i < items.length; i++) {
-        //Get a Thing
-        let item = items[i];
-        try {
-            //Convert into LocationLM object
-            let loc = new LocationLM(
-                getStringNoLocale(item, SCHEMA_INRUPT.identifier),      //id,
-                getDecimal(item, SCHEMA_INRUPT.latitude),               // CoorLat,
-                getDecimal(item, SCHEMA_INRUPT.longitude),              // CoorLng,
-                getStringNoLocale(item, SCHEMA_INRUPT.name),            // name,
-                getStringNoLocale(item, SCHEMA_INRUPT.description),     // description,
-                getStringNoLocale(item, SCHEMA_INRUPT.alternateName),   // category
-            );
-            //Add locationLM into List
-            listcontentAux.push(loc);
-        } catch (error){
-            if(error instanceof CoordinatesInvalidFormatException || error instanceof StringInvalidFormatException){
-                //Handle error while parsing
-            } else {
-                console.error(error.message);
+async function readLocations(resourceURL,session) {
+    let locationThings=await getThingsFromDataset(resourceURL,session);
+    let location,locationThing;
+    let locationsRetrieved = [];
+    if(locationThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
+        //Convert into LocationLM object
+        for (let i = 0; i < locationThings.length; i++) {
+            //Get a Thing
+            locationThing =locationThings[i];
+
+            try {
+
+                //Convert into LocationLM object
+               location= new LocationLM(
+
+                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),               // CoorLat,
+                   Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),              // CoorLng,
+                    getStringNoLocale(locationThing,SCHEMA_INRUPT.name),            // name,
+                    getStringNoLocale(locationThing, SCHEMA_INRUPT.description),     // description,
+                    getStringNoLocale(locationThing, SCHEMA_INRUPT.alternateName),   // category
+                );
+
+                //Add locationLM into List
+                locationsRetrieved.push(location);
+
+            } catch (error) {
+                if (error instanceof CoordinatesInvalidFormatException || error instanceof StringInvalidFormatException) {
+                    console.error(error.message);
+                    //Todo :handle?
+
+                } else {
+                    console.error(error.message);
+                }
             }
         }
     }
-    //Return list
-    return listcontentAux;
-}
 
+    //Return list
+    return locationsRetrieved;
+
+}
 export {
     writeLocations,
-    writeLocations1
+    writeLocations1,
+    readLocations
 }
