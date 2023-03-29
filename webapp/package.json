@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-
-
-    "@inrupt/solid-ui-react": "^2.8.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@inrupt/solid-ui-react": "^2.8.2",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
     "@react-google-maps/api": "^2.18.1",
@@ -17,6 +15,7 @@
     "date-fns": "^2.29.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-rating-stars-component": "^2.2.0",
     "react-router-dom": "^6.8.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"

@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 export const FormControl = styled('div')(({ theme }) => ({
     margin: theme.spacing(1),
     minWidth: 120,
-    marginBottom: '30px',
+    marginBottom: '20px',
 }));
 
 const SelectEmpty = styled('div')(({ theme }) => ({
@@ -19,6 +19,14 @@ const Loading = styled('div')({
 
 export const Container = styled('div')({
     padding: '25px',
+    position: 'absolute',
+    top: '80px', // header yüksekliğine göre değişebilir (değiştiriyoruz daha  doğrusu)
+    left: '0',
+    bottom: '20px',
+    width: '320px', // panelin genişliği
+    backgroundColor: '#ffffff', // panelin arkaplan rengi
+    zIndex: '1', // header'ın arkasında kalmasını engellemek için
+    borderRadius: '10px',
 });
 
 export const MarginBottom = styled('div')({

@@ -15,75 +15,87 @@ import {
     Container,
     MarginBottom,
 } from './styles/ListStyle.js';
+import Rating from "react-rating-stars-component";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import {IconButton, Grid, } from "@mui/material";
+import {Place as PlaceIcon} from "@mui/icons-material";
+import Map from  "../components/Map";
 
-const List = ({ isVisible }) => {
-    const [type, setType] = useState('Bars');
-    const [rating, setRating] = useState('');
-    const [name, setName] = useState('');
-    const [visibility, setVisibility] = useState('public');
 
-    const handleAdd = () => {
-        // logic for adding a new item to the list goes here
-    };
+const List = ({ isVisible, onAddMarker}) => {
 
-    const handleNameChange = (event) => {
-        setName(event.target.value);
-    };
-
-    const handleVisibilityChange = (event) => {
-        setVisibility(event.target.value);
+    const handleAddButtonClick = () => {
+        onAddMarker();
     };
 
     const style = {
         display: isVisible ? 'block' : 'none',
     };
 
+
+
+
     return (
         <Container style={style}>
-            <Typography variant="h4">Click to add a marker</Typography>
-            <FormControl>
-                <InputLabel>Type</InputLabel>
-                <Select value={type} onChange={(e) => setType(e.target.value)}>
-                    <MenuItem value="Bars">Bars</MenuItem>
-                    <MenuItem value="Shops">Shops</MenuItem>
-                    <MenuItem value="Restaurants">Restaurants</MenuItem>
-                    <MenuItem value="Parks">Parks</MenuItem>
-                </Select>
-            </FormControl>
-            <FormControl>
-                <InputLabel>Rating</InputLabel>
-                <Select value={rating} onChange={(e) => setRating(e.target.value)}>
-                    <MenuItem value={5}>5</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                </Select>
-            </FormControl>
-            <FormControl>
-                <InputLabel>Name</InputLabel>
-                <TextField value={name} onChange={handleNameChange} />
-            </FormControl>
-            <FormControl>
-                <RadioGroup value={visibility} onChange={handleVisibilityChange}>
-                    <FormControlLabel
-                        value="public"
-                        control={<Radio />}
-                        label="Public"
-                    />
-                    <FormControlLabel
-                        value="private"
-                        control={<Radio />}
-                        label="Private"
-                    />
-                </RadioGroup>
-            </FormControl>
-            <MarginBottom />
-            <Button variant="contained" color="primary" onClick={handleAdd}>
-                Finish
-            </Button>
+                <>
+                    <Typography variant="h5" style={{ fontFamily: 'Arial' }} >Click to add a marker</Typography>
+                    <FormControl>
+                        <InputLabel> Name: </InputLabel>
+                        <TextField style={{ width: '200px' }} />
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel>Type</InputLabel>
+                        <Select style={{ width: '200px' }} >
+                            <MenuItem value="Bars">Bars</MenuItem>
+                            <MenuItem value="Shops">Shops</MenuItem>
+                            <MenuItem value="Restaurants">Restaurants</MenuItem>
+                            <MenuItem value="Parks">Parks</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel>Rating</InputLabel>
+                        <Rating
+                            name="rating"
+                            count={5}
+                            size={48} // yıldızın sizeını beliriliyoruz
+                            activeColor="#ffd700"
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel>Privacy</InputLabel>
+                        <RadioGroup  row >
+                            <FormControlLabel
+                                value="public"
+                                control={<Radio color="default" />}
+                                label="Public"
+                            />
+                            <FormControlLabel
+                                value="private"
+                                control={<Radio color="default" />}
+                                label="Private"
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                    <FormControl>
+                        <Grid container alignItems="center" spacing={2}>
+                            <Grid item>
+                                <InputLabel>Picture</InputLabel>
+                            </Grid>
+                            <Grid item>
+                                <IconButton size="large" edge="start" color="default" aria-label="menu">
+                                    <AddAPhotoIcon />
+                                </IconButton>
+                            </Grid>
+                        </Grid>
+                    </FormControl>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
+                                handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+                            }}>
+                                Finish
+                            </Button>
+                        </div>
+                </>
         </Container>
-    );
-};
-
-export default List;
+    )};
+    export default List;
