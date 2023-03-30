@@ -1,4 +1,4 @@
-import {LocationLM} from "./Location";
+import {LocationLM} from "./location";
 /**
  * User LoMap class
  */
@@ -70,6 +70,10 @@ class User{
                 //throw error
             }
         }
+    }
+
+    setPodURL(pod){
+        this.podURL = pod;
     }
 }
 
