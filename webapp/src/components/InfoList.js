@@ -10,8 +10,10 @@ import {
     MarginBottom,
 } from './styles/ListStyle.js';
 import Rating from "react-rating-stars-component";
-import {IconButton, Grid,List, ListItem, ListItemText, Box } from "@mui/material";
+import {IconButton, Grid,List, ListItem, ListItemText, Box, ListItemAvatar, Avatar } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 
 
@@ -54,7 +56,18 @@ setComment(e.target.value);
                     <List sx={{ overflowY: 'scroll', maxHeight: '100px', fontWeight: 'bold', mb: '10px' }}>
                         {comments.map((text, index) => (
                             <ListItem key={index} sx={{ bgcolor: '#fafafa', borderRadius: '3px', my: '3px' }}>
-                                <ListItemText primary={text} primaryTypographyProps={{ fontSize: '14px', fontWeight: 'bold' }} />
+                                <ListItemAvatar>
+                                    <Avatar alt="Profile Picture" src="https://picsum.photos/id/446/50/50" />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary="Nate"
+                                    secondary={text}
+                                    primaryTypographyProps={{ fontSize: '14px', fontWeight: 'bold', mb: '5px' }}
+                                    secondaryTypographyProps={{ fontSize: '12px' }}
+                                />
+                                <Box sx={{ display: 'flex', alignItems: 'center', mt: '5px', width: '25%' }}>
+                                    <Rating name="rating" count={5} size={12} defaultValue={3} precision={0.5} readOnly />
+                                </Box>
                             </ListItem>
                         ))}
                     </List>
@@ -69,8 +82,14 @@ setComment(e.target.value);
                             sx={{ flexGrow: 1, mr: '10px', fontSize: '12px' }}
                             InputProps={{ sx: { borderRadius: '20px', pl: '10px' } }}
                         />
-                        <IconButton onClick={onClickHandler} sx={{ mt: '5px' }}>
-                            <SendIcon />
+                        <Box sx={{ display: 'flex', alignItems: 'center', mt: '5px', width: '35%' }}>
+                            <div><Rating name="rating" count={5} size={12} defaultValue={3} precision={0.5} readOnly /></div>
+                        </Box>
+                        <IconButton onClick={onClickHandler} size="small">
+                            <AddAPhotoIcon sx={{ fontSize: '18px' }} />
+                        </IconButton>
+                        <IconButton onClick={onClickHandler} size="small">
+                            <SendIcon sx={{ fontSize: '18px' }} />
                         </IconButton>
                     </Box>
                 </Box>

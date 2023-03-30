@@ -11,6 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Typography from "@mui/material/Typography";
 
 
+
 // setting the width and height of the <div> around the google map
 const containerStyle = {
   width: '100vw',
@@ -136,56 +137,7 @@ const initialMarkers = [
                             <InputLabel sx={{ fontSize: '16px', fontWeight: 'bold' }}>{selected.name}</InputLabel>
                             <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
                             <Typography variant="caption" sx={{ mt: '5px' }}>{selected.type} • {selected.privacy}</Typography>
-                            <IconButton
-                                style={{ width: "2px", height: "2px" }}
-                                onClick={() => setShowNameInput(!showNameInput)}
-                            >
-                                <EditLocationAltIcon />
-                            </IconButton>
                         </Box>
-
-                        {showNameInput && (  < input
-                            type="text"
-                            value={selected.name}
-                            onChange={(event) => {
-                                handleNameChange(event, selected);
-                            }}
-                            placeholder="Name"
-                            style={{ width: "150px" }}
-                          /> )}
-                        {showNameInput && (
-                            <div>
-                                <select
-                                    type="text"
-                                    value={selected.type}
-                                    style={{ width: "150px" }}
-                                    onChange={(event) => {
-                                        handleTypeChange(event, selected);
-                                    }}
-                                >
-                                    <option value="Bars">Bars</option>
-                                    <option value="Market">Market</option>
-                                    <option value="Park">Park</option>
-                                </select>
-                            </div>
-                        )}
-                        {showNameInput && (
-                            <div>
-                                <select
-                                    type="text"
-                                    value={selected.privacy}
-                                    style={{ width: "150px" }}
-                                    onChange={(event) => {
-                                        handlePrivacyChange(event, selected);
-                                    }}
-                                >
-                                    <option value="Public">Public</option>
-                                    <option value="Private">Private</option>
-                                </select>
-                            </div>
-                        )}
-
-
                         <div >
                             <p style={{ marginBottom: "4px" }}>
                                 <span >Added</span>
@@ -194,14 +146,9 @@ const initialMarkers = [
                              </span>
                                 <span>{new Date(selected.time).toLocaleTimeString()}</span>
                             </p>
-
                         </div>
-
-
-
                     </div>
                 </InfoWindow>
-
             ) : null}
         </GoogleMap>
       </React.Fragment>
