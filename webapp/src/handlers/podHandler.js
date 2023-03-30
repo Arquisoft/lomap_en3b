@@ -2,13 +2,10 @@ import {
     getPodUrlAll,
     createContainerAt,
     getSolidDataset,
-    getThing,
-    getUrlAll,
-    getStringNoLocale
+
+
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
-import {FOAF} from "@inrupt/vocab-common-rdf";
-
 
 
 /**
@@ -17,6 +14,7 @@ import {FOAF} from "@inrupt/vocab-common-rdf";
  * @param {} session 
  */
 export async function checkForLomap(session) {
+
     let anyContainer = false;
     let pods = await getPodUrlAll(session.info.webId, {fetch : session.fetch});
     let podWithFolder;

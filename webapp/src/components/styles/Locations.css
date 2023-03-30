@@ -1,0 +1,33 @@
+section[ name="LocationInfo"]> h2> h{
+
+    font-style: italic;
+    color:#293418;
+    font-family: "Noto Serif", "DejaVu Serif", serif;
+    font-size: 2.4em;
+}
+section[ name="comments"]> h3{
+
+    font-style: italic;
+    color:#293418;
+    font-family: "Noto Serif", "DejaVu Serif", serif;
+    font-size: 1.5em;
+}
+section[ name="LocationInfo"]{
+
+
+    font-family: "DejaVu Serif", serif;
+    font-size: 1.4em;
+}
+section[name="comments"]{
+    border-style: inset;
+    padding:1em;
+    border-color:seagreen;
+    border-width: medium;
+}
+p[name="coordinates"]{
+
+    font-style: italic;
+    color:#7A9645;
+    font-family: "Noto Serif", "DejaVu Serif", serif;
+    font-size: 1.1em;
+}
