@@ -1,6 +1,6 @@
 import{
     User
-} from "../models/User";
+} from "../models/user";
 
 // Import from "@inrupt/solid-client"
 import {
@@ -12,18 +12,13 @@ import {
     getThingAll,
     getSolidDataset,
     removeThing,
-    getStringNoLocale,
-    getDecimal,
-    toRdfJsDataset,
-    getThing,
-    getContainedResourceUrlAll,
-    getStringNoLocaleAll, responseToResourceInfo, getResourceInfo
+    getStringNoLocale
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
 import {checkForLomap} from "./podHandler";
-import {LocationLM} from "../models/Location";
-import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/Exceptions";
+import {LocationLM} from "../models/location";
+import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
 
 /**
  * Save user's session changes into de POD.
