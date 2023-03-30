@@ -2,38 +2,23 @@ import './views/styles/App.css';
 import { SessionProvider} from "@inrupt/solid-ui-react";
 import { useState} from "react";
 import LoginForm from "./views/loginView"
-import { useSession } from "@inrupt/solid-ui-react/dist";
-import { checkForLomap } from './handlers/PodHandler';
-import { requestAccessToLomap } from './handlers/PodHandler';
 import AuthenticatedUserView from "./views/mapView";
-import {User} from "./models/User";
-import {writeLocations1} from "./handlers/PodAccess";
+import {Controller} from "./handlers/controller";
 
 
 
-const {session} = useSession();
+
 export default  function App()
 {
-//We use this state variable
+    //We use this state variable
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const crl = new Controller();
+    //With this we can control the login status for solid
+    //const {session} = useSession();
 
-//With this we can control the login status for solid
+    crl.sessionHandler(isLoggedIn);
+    setIsLoggedIn(crl.getSessionState());
 
-    const user = new User();
-
-//We have logged in
-    session.onLogin(async () => {
-
-        user.podURL = await checkForLomap(session);
-         setIsLoggedIn(true);
-
-    });
-//We have logged out
-    session.onLogout(async () => {
-
-        await writeLocations1(session, user);
-        setIsLoggedIn(false)
-    })
 
     return (
         <SessionProvider sessionId="log-in-example"  restorePreviousSession='true' >
@@ -44,7 +29,3 @@ export default  function App()
     )
 
 }
-
-
-
-

@@ -1,6 +1,6 @@
 import{
     User
-} from "../models/User";
+} from "../models/user";
 
 // Import from "@inrupt/solid-client"
 import {
@@ -15,9 +15,9 @@ import {
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
-import {checkForLomap} from "./PodHandler";
-import {LocationLM} from "../models/Location";
-import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/Exceptions";
+import {checkForLomap} from "./podHandler";
+import {LocationLM} from "../models/location";
+import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
 
 /**
  * Save user's session changes into de POD.
@@ -117,10 +117,9 @@ async function readLocations(resourceURL) {
     // Get all Things in a SolidDataset. Returns: Thing[]
     let items = getThingAll(mySolidDataset);
     //Initialize aux list
-    let listcontentAux = [];
-    for (let i = 0; i < items.length; i++) {
+    let listContentAux = [];
+    items.forEach(item => {
         //Get a Thing
-        let item = items[i];
         try {
             //Convert into LocationLM object
             let loc = new LocationLM(
@@ -132,7 +131,7 @@ async function readLocations(resourceURL) {
                 getStringNoLocale(item, SCHEMA_INRUPT.alternateName),   // category
             );
             //Add locationLM into List
-            listcontentAux.push(loc);
+            listContentAux.push(loc);
         } catch (error){
             if(error instanceof CoordinatesInvalidFormatException || error instanceof StringInvalidFormatException){
                 //Handle error while parsing
@@ -140,9 +139,9 @@ async function readLocations(resourceURL) {
                 console.error(error.message);
             }
         }
-    }
+    })
     //Return list
-    return listcontentAux;
+    return listContentAux;
 }
 
 export {
