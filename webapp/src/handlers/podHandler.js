@@ -109,8 +109,6 @@ async function getFriendsWebIds(webId) {
 
     ids.forEach(friend => list.push(friend.split("#")[0])); //remove the right side of the "#"
 
-    list.forEach(f => alert(f))
-
     return list;
 }
 
