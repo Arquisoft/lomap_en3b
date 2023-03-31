@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { AppBar, Button, IconButton, Toolbar, Typography, InputBase } from '@mui/material';
-import { AddCircleOutline as AddIcon, AccountCircle as AccountIcon, Place as PlaceIcon, Search as SearchIcon } from '@mui/icons-material';
+import { AddCircleOutline as AddIcon, AccountCircle as AccountIcon, Place as PlaceIcon } from '@mui/icons-material';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import EditLocationIcon from '@mui/icons-material/EditLocation';
 
-const Header = ({ onAddMarker, onInfoList,   onEditMarker}) => {
-  const [searchValue, setSearchValue] = useState('');
+
+const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
+
+
 
   const handleAddButtonClick = () => {
     onAddMarker();
@@ -19,11 +21,15 @@ const Header = ({ onAddMarker, onInfoList,   onEditMarker}) => {
     onInfoList();
   };
 
+  const handleAccountPageClick = () => {
+    onAccountPage();
+  };
+
 
 
   return (
       <AppBar position="fixed" color="inherit">
-        <Toolbar>
+        <Toolbar >
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleInfoListClick}>
             <PlaceIcon />
           </IconButton>
@@ -41,7 +47,7 @@ const Header = ({ onAddMarker, onInfoList,   onEditMarker}) => {
             <IconButton color="inherit" onClick={handleAddButtonClick} >
               <AddLocationAltIcon />
             </IconButton>
-            <IconButton color="inherit">
+            <IconButton color="inherit"  onClick={handleAccountPageClick} >
               <AccountIcon />
             </IconButton>
             <IconButton color="inherit" >

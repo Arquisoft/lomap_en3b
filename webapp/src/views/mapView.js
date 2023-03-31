@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import List from "../components/List";
 import Map from "../components/Map";
 import InfoList from "../components/InfoList"
+import AccountPage from "../components/AccountPage"
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase} from "@mui/material";
 
@@ -12,6 +13,7 @@ const MapView = ({onSearch}) => {
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
   const [showList, setShowList] = useState(false);
   const [showInfoList, setShowInfoList] = useState(false);
+  const [showAccountPage, setShowAccountPage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
   const { isLoaded, loadError } = useLoadScript({
@@ -34,6 +36,10 @@ const MapView = ({onSearch}) => {
   };
   const makeInfoPanelDisapear = () => {
     setShowInfoList(!showInfoList);
+  };
+
+  const makeAccountPageDisapear = () => {
+    setShowAccountPage(!showAccountPage);
   };
 
   if (loadError) return <div> Error Loading Maps </div>;
@@ -72,9 +78,11 @@ const MapView = ({onSearch}) => {
             onAddMarker={() => makeMapInteractive()}
             onInfoList={() => makeInfoPanelDisapear()}
             onEditMarker={() => makePanelDisapear()}
+            onAccountPage={() => makeAccountPageDisapear()}
         />    <Grid container spacing={3} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={() => makePanelDisapear()} />
-        <InfoList isInfoVisible={showInfoList} />
+        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
+        <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
           <Map isInteractive={isInteractive} onMarkerAdded={handleMarkerAdded} />
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '8px', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>

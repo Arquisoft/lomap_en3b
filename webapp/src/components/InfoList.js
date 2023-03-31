@@ -52,7 +52,7 @@ setComment(e.target.value);
                     <Typography variant="caption" sx={{ mt: '5px' }}>Park • Private</Typography>
                 </Box>
                 <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '5px', p: '10px', my: '10px' }}>
-                    <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '10px' }}>Comments</Typography>
+                    <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '10px' }}>Reviews</Typography>
                     <List sx={{ overflowY: 'scroll', maxHeight: '100px', fontWeight: 'bold', mb: '10px' }}>
                         {comments.map((text, index) => (
                             <ListItem key={index} sx={{ bgcolor: '#fafafa', borderRadius: '3px', my: '3px' }}>

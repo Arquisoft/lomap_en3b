@@ -26,8 +26,8 @@ const options = {
 };
 
 const initialMarkers = [
-  { key: 'marker-1', lat: 43.361916, lng: -5.849389, time: new Date() },
-  { key: 'marker-2', lat: 43.371916, lng: -5.859389, time: new Date()} // ismi çalışıyor mu diye ben verdim
+  { key: 'marker-1', lat: 43.361916, lng: -5.849389, time: new Date(),  type:'park' },
+  { key: 'marker-2', lat: 43.371916, lng: -5.859389, time: new Date(), type:'shop' } // ismi çalışıyor mu diye ben verdim
 ];
 
 /*
@@ -98,7 +98,17 @@ const initialMarkers = [
          }
      }, [canAddMarker]);
 
-    return (
+      const iconUrls = {
+          park: "/greenLocation.svg",
+          bar: "/redLocation.svg",
+          restaurant: "/orangeLocation.svg",
+          shop: "/blueLocation.svg",
+          other:  "/blackLocation.svg",
+          // u can Adding more types and URLs as needed
+      };
+
+
+      return (
       <React.Fragment>
         <GoogleMap
           zoom={10}
@@ -109,19 +119,20 @@ const initialMarkers = [
           onLoad={onMapLoad}
         >
           {markers.map((marker, index) => (
-            <Marker
-              key={`${marker.time.toISOString()}-${index}`}
-              position={{ lat: marker.lat, lng: marker.lng }}
-              icon={{
-                url: "/location.svg",
-                scaledSize: new window.google.maps.Size(40, 40),
-                origin: new window.google.maps.Point(0, 0),
-                anchor: new window.google.maps.Point(15, 15),
-              }}
-              onClick={() => {
-                setSelected(marker);
-              }}
-            />
+              <Marker
+                  key={`${marker.time.toISOString()}-${index}`}
+                  position={{ lat: marker.lat, lng: marker.lng }}
+                  icon={{
+                      url: iconUrls[marker.type] || "/blackLocation.svg",
+                      scaledSize: new window.google.maps.Size(40, 40),
+                      origin: new window.google.maps.Point(0, 0),
+                      anchor: new window.google.maps.Point(15, 15),
+                  }}
+                  onClick={() => {
+                      setSelected(marker);
+                  }}
+              />
+
           ))}
             {selected ? (
                 <InfoWindow
