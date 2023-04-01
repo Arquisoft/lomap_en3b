@@ -15,8 +15,6 @@ import SendIcon from '@mui/icons-material/Send';
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-
-
 const InfoList = ({isInfoVisible, onInfoList}) => {
 
 const[comment,setComment] = useState("");
