@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Container } from "@mui/material";
-import { Avatar, Typography, Divider, Tabs, Tab,IconButton,ListItemButton,List,ListItem } from "@mui/material";
+import { Avatar, Typography, Divider, Tabs, Tab,IconButton,ListItemButton,List,ListItem, TextField } from "@mui/material";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
@@ -32,6 +32,26 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
         top: '0',
         right: '0', // sağ tarafta
     }
+
+    ///////////////////////////////For Friend Part
+
+    const [filter, setFilter] = useState('');
+
+    const contacts = [
+        { name: 'Sofia Martinez', avatar: 'https://picsum.photos/id/239/200/300' },
+        { name: 'Alejandro Reyes', avatar: 'https://picsum.photos/id/240/200/300' },
+        { name: 'Valentina Torres', avatar: 'https://picsum.photos/id/258/200/300' },
+        { name: 'Diego Ramirez', avatar: 'https://picsum.photos/id/275/200/300' },
+        { name: 'Isabella Garcia', avatar: 'https://picsum.photos/id/334/200/300' },
+    ];
+
+    const handleFilterChange = (event) => {
+        setFilter(event.target.value);
+    };
+
+    const filteredContacts = contacts.filter((contact) => {
+        return contact.name.toLowerCase().includes(filter.toLowerCase());
+    });
 
     return (
         <Container style={style}>
@@ -70,7 +90,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                                         <ListItemIcon>
                                             <Avatar variant="square" src="https://picsum.photos/id/39/200/300" />
                                         </ListItemIcon>
-                                        <ListItemText primary="El Sol Dorado" />
+                                        <ListItemText primary="El Sol Dorado" secondary="Jan 9, 2023" />
                                         <ListItemText>
                                             <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.54)' }}>
                                                 <List><ListItem>public · bar</ListItem>
@@ -86,7 +106,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                                         <ListItemIcon>
                                             <Avatar variant="square" src="https://picsum.photos/id/55/200/300" />
                                         </ListItemIcon>
-                                        <ListItemText primary="Relax Spot" />
+                                        <ListItemText primary="Relax Spot" secondary="Jan 9, 2023"/>
                                         <ListItemText>
                                             <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.54)' }}>
                                                 <List><ListItem>private · park</ListItem>
@@ -103,7 +123,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                                         <ListItemIcon>
                                             <Avatar variant="square" src="https://picsum.photos/id/211/200/300" />
                                         </ListItemIcon>
-                                        <ListItemText primary="Danny's Boat" />
+                                        <ListItemText primary="Danny's Boat" secondary="Jan 9, 2023"/>
                                         <ListItemText>
                                             <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.54)' }}>
                                                 <List><ListItem>private · other</ListItem>
@@ -121,64 +141,32 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                     </Typography>}
 
                     {selectedTab === 1 && <Typography variant="body1">
-                        <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
-                            <List sx={{ width: '100%', maxWidth: 360,  }} aria-label="contacts">
-                                <ListItem disablePadding>
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <Avatar src="https://picsum.photos/id/239/200/300"/>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Sofia Martinez" />
-                                        <IconButton>
-                                            <PersonRemoveIcon/>
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <Avatar src="https://picsum.photos/id/240/200/300"/>
-                                        </ListItemIcon>
-                                        <ListItemText  primary="Alejandro Reyes" />
-                                        <IconButton>
-                                            <PersonRemoveIcon/>
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <Avatar src="https://picsum.photos/id/258/200/300"/>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Valentina Torres" />
-                                        <IconButton>
-                                            <PersonRemoveIcon/>
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <Avatar src="https://picsum.photos/id/275/200/300"/>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Diego Ramirez" />
-                                        <IconButton>
-                                            <PersonRemoveIcon/>
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <Avatar src="https://picsum.photos/id/334/200/300"/>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Isabella Garcia" />
-                                        <IconButton>
-                                            <PersonRemoveIcon/>
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>
-                            </List>
+                        <div>
+                            <TextField
+                                label="Search Friend"
+                                variant="outlined"
+                                value={filter}
+                                onChange={handleFilterChange}
+                                sx={{ mb: 2, width: '100%', height: '50px', fontSize: '1.5rem' }}
+                            />
+
+                            <div style={{ overflowY: 'auto', maxHeight: '140px' }}>
+                                <List sx={{ width: '100%', maxWidth: 360 }} aria-label="contacts">
+                                    {filteredContacts.map((contact) => (
+                                        <ListItem disablePadding key={contact.name}>
+                                            <ListItemButton>
+                                                <ListItemIcon>
+                                                    <Avatar src={contact.avatar} />
+                                                </ListItemIcon>
+                                                <ListItemText primary={contact.name} />
+                                                <IconButton>
+                                                    <PersonRemoveIcon />
+                                                </IconButton>
+                                            </ListItemButton>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </div>
                         </div>
 
                     </Typography>}

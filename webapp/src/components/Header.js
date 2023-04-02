@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Button, IconButton, Toolbar, Typography, InputBase} from '@mui/material';
+import {AppBar, Button, IconButton, Toolbar, Typography, InputBase, TextField} from '@mui/material';
 import { AddCircleOutline as AddIcon, AccountCircle as AccountIcon, Place as PlaceIcon } from '@mui/icons-material';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import EditLocationIcon from '@mui/icons-material/EditLocation';
@@ -94,7 +94,24 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+////////////////////////////////For Friend Part
+  const [filter, setFilter] = useState('');
 
+  const contacts = [
+    { name: 'Sofia Martinez', avatar: 'https://picsum.photos/id/239/200/300' },
+    { name: 'Alejandro Reyes', avatar: 'https://picsum.photos/id/240/200/300' },
+    { name: 'Valentina Torres', avatar: 'https://picsum.photos/id/258/200/300' },
+    { name: 'Diego Ramirez', avatar: 'https://picsum.photos/id/275/200/300' },
+    { name: 'Isabella Garcia', avatar: 'https://picsum.photos/id/334/200/300' },
+  ];
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const filteredContacts = contacts.filter((contact) => {
+    return contact.name.toLowerCase().includes(filter.toLowerCase());
+  });
 
   return (
       <AppBar position="fixed" color="inherit">
@@ -127,31 +144,32 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                 open={open}
                 onClose={handleClose}
             >
-              <div style={{ overflowY: 'auto', maxHeight: '100px' }}>
-                <List sx={{ width: '100%', maxWidth: 360,  }} aria-label="contacts">
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <Avatar src="https://picsum.photos/id/318/200/300"/>
-                </ListItemIcon>
-                <ListItemText  primary="Martina García" />
-                <IconButton>
-                  <PersonRemoveIcon/>
-                </IconButton>
-              </ListItemButton>
-            </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <Avatar src="https://picsum.photos/id/331/200/300"/>
-                      </ListItemIcon>
-                      <ListItemText  primary="Alejandro Torres" />
-                      <IconButton>
-                        <PersonRemoveIcon/>
-                      </IconButton>
-                    </ListItemButton>
-                  </ListItem>
-                </List>
+              <div>
+                <TextField
+                    label="Search Friend"
+                    variant="outlined"
+                    value={filter}
+                    onChange={handleFilterChange}
+                    sx={{ mb: 2, width: '100%', height: '50px', fontSize: '1.5rem' }}
+                />
+
+                <div style={{ overflowY: 'auto', maxHeight: '140px' }}>
+                  <List sx={{ width: '100%', maxWidth: 360 }} aria-label="contacts">
+                    {filteredContacts.map((contact) => (
+                        <ListItem disablePadding key={contact.name}>
+                          <ListItemButton>
+                            <ListItemIcon>
+                              <Avatar src={contact.avatar} />
+                            </ListItemIcon>
+                            <ListItemText primary={contact.name} />
+                            <IconButton>
+                              <PersonRemoveIcon />
+                            </IconButton>
+                          </ListItemButton>
+                        </ListItem>
+                    ))}
+                  </List>
+                </div>
               </div>
               <Divider sx={{ my: 0.5 }} />
             </StyledMenu>
