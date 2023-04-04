@@ -42,27 +42,7 @@ const MapView = ({session,onSearch}) => {
   const makeAccountPageDisapear = () => {
     setShowAccountPage(!showAccountPage);
   };
-
-  if (loadError) return <div> Error Loading Maps </div>;
-  if (!isLoaded) return <div>Loading Maps</div>; //Checking if the map loaded
-
-    return (
-        <>
-          <CssBaseline/>
-          <Header onAddMarker={() => makeMapInteractive()}/>
-          <Grid container spacing={3} style={{width: "100%"}}>
-
-            <List isVisible={showList}/>
-
-            <Grid item xs={12} md={8}>
-              <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
-            </Grid>
-          </Grid>
-        </>
-    );
-  };
-
-  //Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
+//Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
   }
@@ -87,7 +67,8 @@ const MapView = ({session,onSearch}) => {
       }
     });
   };
-
+  if (loadError) return <div> Error Loading Maps </div>;
+  if (!isLoaded) return <div>Loading Maps</div>; //Checking if the map loaded
   return (
       <>
         <CssBaseline />
@@ -101,7 +82,7 @@ const MapView = ({session,onSearch}) => {
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map isInteractive={isInteractive} onMarkerAdded={handleMarkerAdded} />
+          <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '8px', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
@@ -120,4 +101,9 @@ const MapView = ({session,onSearch}) => {
       </>
   );
 };
+
+
+
+
+
 export default MapView;

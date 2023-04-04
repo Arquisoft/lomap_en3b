@@ -63,7 +63,7 @@ function Map({ isInteractive,session, onMarkerAdded}) {
         []
     );
     const retrieveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/example.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
@@ -140,7 +140,7 @@ function Map({ isInteractive,session, onMarkerAdded}) {
         >
           {markers.map((marker, index) => (
               <Marker
-                  key={`${marker.time.toISOString()}-${index}`}
+                 // key={`${marker.time.toISOString()}-${index}`}
                   position={{ lat: marker.lat, lng: marker.lng }}
                   icon={{
                       url: iconUrls[marker.type] || "/blackLocation.svg",

@@ -1,11 +1,12 @@
 import {
     getPodUrlAll,
     createContainerAt,
-    getSolidDataset,
+    getSolidDataset, getStringNoLocale, getThing, getUrlAll,
 
 
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
+import {FOAF} from "@inrupt/vocab-common-rdf";
 
 
 /**
