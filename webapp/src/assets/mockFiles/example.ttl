@@ -1,0 +1,17 @@
+@prefix loc: <http://schema.org/> .
+
+loc:Loc_1 a loc:Place ;
+    loc:identifier "ResidentEvilMockPlace";
+    loc:name "Racoon City" ;
+    loc:description "Everybody is so weird.." ;
+    loc:latitude "43.35302550278352" ;
+    loc:longitude "-5.849442050492078" ;
+    loc:alternateName "city" .
+
+loc:Loc_2 a loc:Place ;
+    loc:identifier "MockBeach" ;
+    loc:name "Silence Beach" ;
+    loc:description "Amazing place" ;
+    loc:latitude "43.565795088475504" ;
+    loc:longitude "-6.296431272044736" ;
+    loc:alternateName "beach" .

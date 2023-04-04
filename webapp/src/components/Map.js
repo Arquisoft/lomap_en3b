@@ -2,8 +2,9 @@
 import React, {useState} from "react";
 import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
-import Header from "./Header";
+import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
+import {readLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, IconButton} from '@mui/material';
@@ -25,46 +26,66 @@ const options = {
   zoomcontrol: true
 };
 
-const initialMarkers = [
-  { key: 'marker-1', lat: 43.361916, lng: -5.849389, time: new Date(),  type:'park' },
-  { key: 'marker-2', lat: 43.371916, lng: -5.859389, time: new Date(), type:'shop' } // ismi çalışıyor mu diye ben verdim
-];
+export function handleRateChange(newRating, selected) { // ı made this export cause all ın other file
+    selected.rate = newRating;
+}
 
 /*
   The main map function
 */
- export function handleRateChange(newRating, selected) { // ı made this export cause all ın other file
-    selected.rate = newRating;
-}
+function Map({ isInteractive,session, onMarkerAdded}) {
 
-  function Map({ isInteractive, onMarkerAdded}) {
-     const [markers, setMarkers] = React.useState([]);
-     const [selected, setSelected] = React.useState(null);
-     const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
-     const mapRef = React.useRef(null);
-     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
+    const [markers, setMarkers] = React.useState([]);
+    const [selected, setSelected] = React.useState(null);
+    const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
+    const mapRef = React.useRef(null);
+    const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
 
-     const addMarker = React.useCallback(
-         (event) => {
-             setMarkers((current) => [
-                 ...current,
-                 {
-                     lat: event.latLng.lat(),
-                     lng: event.latLng.lng(),
-                     time: new Date(),
-                     name: '', // isim ekliyoruz
-                     type: '',
-                     privacy: '',
-                     rate: '',
+    const addMarker = React.useCallback(
+        (event) => {
+            setMarkers((current) => [
+                ...current,
+                {
+                    lat: event.latLng.lat(),
+                    lng: event.latLng.lng(),
+                    time: new Date(),
+                    name: '', // isim ekliyoruz
+                    type: '',
+                    privacy: '',
+                    rate: '',
 
-                 },
-             ]);
-             console.log(1);
-             onMarkerAdded(); // Call the onMarkerAdded callback
-             setCanAddMarker(true); // Set canAddMarker to false after adding a marker
-         },
-         []
-     );
+                },
+            ]);
+
+            onMarkerAdded(); // Call the onMarkerAdded callback
+            setCanAddMarker(true); // Set canAddMarker to false after adding a marker
+        },
+        []
+    );
+    const retrieveLocations=async () => {
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    }
+
+    React.useEffect( () => {
+        async function getAndSetLocations() {
+            let locationSet = await retrieveLocations()
+            setMarkers((current) => [...current, ...locationSet]);
+        }
+
+       getAndSetLocations();
+    }, []);
+  
+    // Set canAddMarker to true when isInteractive changes to true
+    React.useEffect(() => {
+      if (canAddMarker) {
+        setCanAddMarker(false);
+        
+      }
+    }, [canAddMarker]);
+  
+
+
      const handleMarkerClick = (marker) => {
          setSelected(marker);
      }
@@ -87,9 +108,7 @@ const initialMarkers = [
          mapRef.current = map;
      }, []);
 
-     React.useEffect(() => {
-         setMarkers((current) => [...current, ...initialMarkers]);
-     }, []);
+
 
      // Set canAddMarker to true when isInteractive changes to true
      React.useEffect(() => {
@@ -110,6 +129,7 @@ const initialMarkers = [
 
       return (
       <React.Fragment>
+        
         <GoogleMap
           zoom={10}
           center={{ lat: 43.361916, lng: -5.849389 }}
@@ -165,6 +185,6 @@ const initialMarkers = [
       </React.Fragment>
     );
   }
-
+  
 
 export default Map;

@@ -6,11 +6,11 @@ export const FormControl = styled('div')(({ theme }) => ({
     marginBottom: '20px',
 }));
 
-const SelectEmpty = styled('div')(({ theme }) => ({
+export const SelectEmpty = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(2),
 }));
 
-const Loading = styled('div')({
+export const Loading = styled('div')({
     height: '600px',
     display: 'flex',
     justifyContent: 'center',
@@ -33,7 +33,7 @@ export const MarginBottom = styled('div')({
     marginBottom: '30px',
 });
 
-const List = styled('div')({
+export const List = styled('div')({
     height: '75vh',
     overflow: 'auto',
 });

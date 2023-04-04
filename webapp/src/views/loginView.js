@@ -1,11 +1,11 @@
 import './styles/login.css';
-import { LoginButton, LogoutButton, SessionProvider } from "@inrupt/solid-ui-react";
-import React, { useState } from "react";
+import {LoginButton} from "@inrupt/solid-ui-react";
+import React from "react";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Button, Box, Grid, Typography, CssBaseline } from "@mui/material";
 
 const Login = () => {
-    const provider="https://inrupt.net/"; //url of the pod provider. Will consider making a multiple choice cbox.
+    const provider="https://inrupt.net"; //url of the pod provider. Will consider making a multiple choice cbox./
     const authOptions={
         clientName:"LoMap",
     }; //Our app where the user has been redirected from

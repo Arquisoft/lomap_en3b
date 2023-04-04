@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { SessionProvider } from "@inrupt/solid-ui-react";
 import { useLoadScript } from "@react-google-maps/api";
 import Header from "../components/Header";
 import List from "../components/List";
 import Map from "../components/Map";
-import InfoList from "../components/InfoList"
-import AccountPage from "../components/AccountPage"
+import InfoList from "../components/InfoList";
+import AccountPage from "../components/AccountPage";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase} from "@mui/material";
 
-const MapView = ({onSearch}) => {
+
+
+const MapView = ({session,onSearch}) => {
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
   const [showList, setShowList] = useState(false);
   const [showInfoList, setShowInfoList] = useState(false);
@@ -44,6 +45,22 @@ const MapView = ({onSearch}) => {
 
   if (loadError) return <div> Error Loading Maps </div>;
   if (!isLoaded) return <div>Loading Maps</div>; //Checking if the map loaded
+
+    return (
+        <>
+          <CssBaseline/>
+          <Header onAddMarker={() => makeMapInteractive()}/>
+          <Grid container spacing={3} style={{width: "100%"}}>
+
+            <List isVisible={showList}/>
+
+            <Grid item xs={12} md={8}>
+              <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
+            </Grid>
+          </Grid>
+        </>
+    );
+  };
 
   //Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
   const handleSearchChange = (event) => {
