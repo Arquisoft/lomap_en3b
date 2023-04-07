@@ -135,6 +135,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
             >
               Friends
             </Button>
+
             <StyledMenu
                 id="demo-customized-menu"
                 MenuListProps={{
@@ -144,6 +145,8 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                 open={open}
                 onClose={handleClose}
             >
+              <Divider sx={{ my: 0.5 }} />
+
               <div>
                 <TextField
                     label="Search Friend"
@@ -153,8 +156,8 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                     sx={{ mb: 2, width: '100%', height: '50px', fontSize: '1.5rem' }}
                 />
 
-                <div style={{ overflowY: 'auto', maxHeight: '140px' }}>
-                  <List sx={{ width: '100%', maxWidth: 360 }} aria-label="contacts">
+                <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
+                  <List sx={{ width: '100%', maxWidth: 600 }} aria-label="contacts">
                     {filteredContacts.map((contact) => (
                         <ListItem disablePadding key={contact.name}>
                           <ListItemButton>
@@ -171,7 +174,9 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                   </List>
                 </div>
               </div>
+
               <Divider sx={{ my: 0.5 }} />
+
             </StyledMenu>
 
             <Button color="inherit">Map</Button>

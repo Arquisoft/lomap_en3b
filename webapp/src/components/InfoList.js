@@ -14,6 +14,7 @@ import {IconButton, Grid,List, ListItem, ListItemText, Box, ListItemAvatar, Avat
 import SendIcon from '@mui/icons-material/Send';
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CloseIcon from "@mui/icons-material/Close";
 
 const InfoList = ({isInfoVisible, onInfoList}) => {
 
@@ -28,6 +29,7 @@ const[comments,setComments]=useState(['This is a great spot!', 'I love coming he
         maxWidth: '300px',
         minWidth: '250px',
     };
+
 const onClickHandler = () =>{
     setComments((comments) => [...comments, comment]);
     setComment('');
@@ -36,12 +38,26 @@ const onChangeHandler = (e) => {
 setComment(e.target.value);
 };
 
+////////////////////////
+    const handleAddButtonClick = () => {
+        onInfoList();
+    };
+
 
     return (
         <Container style={style}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <img src="https://picsum.photos/200" alt="Image" style={{ width: '100%', borderRadius: '5px' }} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >
+
+                <IconButton style={{marginLeft: '260px', marginTop: '-10px'}} onClick={() => {
+                    handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+                }}><CloseIcon/>
+                </IconButton>
+
+
+                <img src="https://picsum.photos/200" alt="Image" style={{ width: '90%', borderRadius: '5px' }} />
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '10px', width: '100%' }}>
+
+
                     <InputLabel sx={{ fontSize: '16px', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
                     <Box sx={{ display: 'flex', alignItems: 'center', my: '5px' }}>
                         <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />

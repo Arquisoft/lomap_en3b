@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import LocationOffIcon from '@mui/icons-material/LocationOff';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import CloseIcon from "@mui/icons-material/Close";
 
 const AccountPage = ({ isAccountVisible, onAccountPage }) => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -32,6 +33,10 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
         top: '0',
         right: '0', // sağ tarafta
     }
+
+    const handleAddButtonClick = () => {
+        onAccountPage();
+    };
 
     ///////////////////////////////For Friend Part
 
@@ -56,6 +61,12 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
     return (
         <Container style={style}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
+                <IconButton style={{marginRight: '420px'}} onClick={() => {
+                    handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+                }}><CloseIcon/>
+                </IconButton>
+
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar
                         alt="John Doe"
@@ -83,7 +94,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                 </Tabs>
                 <Box sx={{ marginTop: 3, width: '90%' }}>
                     {selectedTab === 0 && <Typography variant="body1">
-                        <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
+                        <div style={{ overflowY: 'auto', maxHeight: '170px' }}>
                             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                                 <ListItem disablePadding>
                                     <ListItemButton>
@@ -150,7 +161,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                                 sx={{ mb: 2, width: '100%', height: '50px', fontSize: '1.5rem' }}
                             />
 
-                            <div style={{ overflowY: 'auto', maxHeight: '140px' }}>
+                            <div style={{ overflowY: 'auto', maxHeight: '100px' }}>
                                 <List sx={{ width: '100%', maxWidth: 360 }} aria-label="contacts">
                                     {filteredContacts.map((contact) => (
                                         <ListItem disablePadding key={contact.name}>

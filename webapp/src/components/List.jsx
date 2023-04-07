@@ -20,6 +20,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import {IconButton, Grid, } from "@mui/material";
 import {Place as PlaceIcon} from "@mui/icons-material";
 import Map from  "../components/Map";
+import CloseIcon from "@mui/icons-material/Close";
 
 
 const List = ({ isVisible, onAddMarker}) => {
@@ -30,6 +31,9 @@ const List = ({ isVisible, onAddMarker}) => {
 
     const style = {
         display: isVisible ? 'block' : 'none',
+        width: '100%',
+        maxWidth: '320px',
+        margin: '0 auto',
     };
 
 
@@ -38,6 +42,11 @@ const List = ({ isVisible, onAddMarker}) => {
     return (
         <Container style={style}>
                 <>
+                    <IconButton style={{marginLeft: '250px',  marginTop: '-20px'}} onClick={() => {
+                        handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+                    }}>
+                        <CloseIcon/>
+                    </IconButton>
                     <Typography variant="h5" style={{ fontFamily: 'Arial' }} >Click to add a marker</Typography>
                     <FormControl>
                         <InputLabel> Name: </InputLabel>
@@ -53,15 +62,6 @@ const List = ({ isVisible, onAddMarker}) => {
                         </Select>
                     </FormControl>
                     <FormControl>
-                        <InputLabel>Rating</InputLabel>
-                        <Rating
-                            name="rating"
-                            count={5}
-                            size={48} // yıldızın sizeını beliriliyoruz
-                            activeColor="#ffd700"
-                        />
-                    </FormControl>
-                    <FormControl>
                         <InputLabel>Privacy</InputLabel>
                         <RadioGroup  row >
                             <FormControlLabel
@@ -75,18 +75,6 @@ const List = ({ isVisible, onAddMarker}) => {
                                 label="Private"
                             />
                         </RadioGroup>
-                    </FormControl>
-                    <FormControl>
-                        <Grid container alignItems="center" spacing={2}>
-                            <Grid item>
-                                <InputLabel>Picture</InputLabel>
-                            </Grid>
-                            <Grid item>
-                                <IconButton size="large" edge="start" color="default" aria-label="menu">
-                                    <AddAPhotoIcon />
-                                </IconButton>
-                            </Grid>
-                        </Grid>
                     </FormControl>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
