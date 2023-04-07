@@ -1,9 +1,7 @@
 import {
     getPodUrlAll,
     createContainerAt,
-    getSolidDataset, getStringNoLocale, getThing, getUrlAll,
-
-
+    getSolidDataset, getStringNoLocale, getThing, getUrlAll,  acp_ess_2, asUrl
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF} from "@inrupt/vocab-common-rdf";
@@ -91,8 +89,84 @@ export async function requestAccessToLomap( session){
     );
 }
 export async function createLomapContainer(pod,session) {
-   // console.log('linea 94 '+pod)
     await createContainerAt(pod + "lomap/",{fetch : session.fetch});
+    await setUpPolicy(session, pod + "lomap");
+}
+
+async function setUpPolicy(session, resourceURL) {
+
+    const agentsToMatch = (await getFriendsWebIds(session.info.webId)).map(f => f.replace("/card", ""));
+    const clientIDsToMatch = session.info.webId.replace("/card#me", "");
+
+    try {
+        // 1. Fetch the SolidDataset with its Access Control Resource (ACR).
+        let resourceWithAcr = await acp_ess_2.getSolidDatasetWithAcr(
+            resourceURL,            // Resource whose ACR to set up
+            { fetch: session.fetch }       // fetch from the authenticated session
+        );
+
+        // 2. Initialize a new Matcher.
+        let lomapFriendsMatcher = acp_ess_2.createResourceMatcherFor(
+            resourceWithAcr,
+            "lomap-friends-matcher"
+        );
+
+        // 3. For the Matcher, specify the Agent(s) to match.
+        agentsToMatch.forEach(agent => {
+            lomapFriendsMatcher = acp_ess_2.addAgent(lomapFriendsMatcher, agent);
+        })
+
+        // 4. For the Matcher, specify the Client ID(s) to match.
+        clientIDsToMatch.forEach(clientID => {
+            lomapFriendsMatcher = acp_ess_2.addClient(lomapFriendsMatcher, clientID);
+        })
+
+        // 5. Add the Matcher definition to the Resource's ACR.
+        resourceWithAcr = acp_ess_2.setResourceMatcher(
+            resourceWithAcr,
+            lomapFriendsMatcher
+        );
+
+        // 6. Create a Policy for the Matcher.
+        let lomapFriendsPolicy = acp_ess_2.createResourcePolicyFor(
+            resourceWithAcr,
+            "lomap-friends-policy",
+        );
+
+        // 7. Add the appFriendsMatcher to the Policy as an allOf() expression.
+        // Since using allOf() with a single Matcher, could also use anyOf() expression
+
+        lomapFriendsPolicy = acp_ess_2.addAllOfMatcherUrl(
+            lomapFriendsPolicy,
+            lomapFriendsMatcher
+        );
+
+        // 8. Specify the access modes (e.g., allow Read and Write).
+        lomapFriendsPolicy = acp_ess_2.setAllowModes(lomapFriendsPolicy,
+            { read: true, write: false }
+        );
+
+        // 9. Apply the Policy to the resource.
+        resourceWithAcr = acp_ess_2.addPolicyUrl(
+            resourceWithAcr,
+            asUrl(lomapFriendsPolicy)
+        );
+
+        // 10. Add the Policy definition to the resource's ACR.
+        resourceWithAcr = acp_ess_2.setResourcePolicy(
+            resourceWithAcr,
+            lomapFriendsPolicy
+        );
+
+        // 11. Save the modified ACR for the resource.
+        const updatedResourceWithAcr = await acp_ess_2.saveAcrFor(
+            resourceWithAcr,
+            { fetch: session.fetch }          // fetch from the authenticated session
+        );
+
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 /**
@@ -100,7 +174,7 @@ export async function createLomapContainer(pod,session) {
  * @param webId Containing the webId whose friends we are returning
  * @returns {Promise<*[]>} Containing a List of the webIds of the friends
  */
-async function getFriendsWebIds(webId) {
+export async function getFriendsWebIds(webId) {
     let profile = await getProfile(webId);
     let ids = getUrlAll(profile, FOAF.knows);
 

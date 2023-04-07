@@ -23,7 +23,6 @@ export default  function App()
          await checkForLomap(session);
          //Todo if no folder, give the option to create it or to logout
         setIsLoggedIn(true);
-
     });
 //We have logged out
     session.onLogout(() => {
