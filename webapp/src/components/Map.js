@@ -7,9 +7,8 @@ import mapStyles from "./styles/MapStyles";
 import {readLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import {Box, IconButton} from '@mui/material';
-import InputLabel from "@mui/material/InputLabel";
-import Typography from "@mui/material/Typography";
+import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
+
 
 
 
@@ -33,7 +32,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
 /*
   The main map function
 */
-function Map({ isInteractive,session, onMarkerAdded}) {
+function Map({ filter,isInteractive,session, onMarkerAdded}) {
 
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
@@ -49,8 +48,9 @@ function Map({ isInteractive,session, onMarkerAdded}) {
                     lat: event.latLng.lat(),
                     lng: event.latLng.lng(),
                     time: new Date(),
+                    description:'',
                     name: '', // isim ekliyoruz
-                    type: '',
+                    category: '',
                     privacy: '',
                     rate: '',
 
@@ -63,7 +63,7 @@ function Map({ isInteractive,session, onMarkerAdded}) {
         []
     );
     const retrieveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/example.ttl")
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
@@ -75,7 +75,7 @@ function Map({ isInteractive,session, onMarkerAdded}) {
 
        getAndSetLocations();
     }, []);
-  
+
     // Set canAddMarker to true when isInteractive changes to true
     React.useEffect(() => {
       if (canAddMarker) {
@@ -109,7 +109,22 @@ function Map({ isInteractive,session, onMarkerAdded}) {
      }, []);
 
 
+    const onFilterLocations=React.useCallback((filter)=>{
 
+            let filteredSet =[];
+            filteredSet=markers.filter(marker=>marker.type==filter);
+
+
+        setMarkers((current) => [...current, ...filteredSet]);
+    });
+    React.useEffect( () => {
+        async function getAndSetLocations() {
+            let locationSet = await retrieveLocations()
+            setMarkers((current) => [...current, ...locationSet]);
+        }
+
+        getAndSetLocations();
+    }, []);
      // Set canAddMarker to true when isInteractive changes to true
      React.useEffect(() => {
          if (canAddMarker) {
@@ -163,22 +178,24 @@ function Map({ isInteractive,session, onMarkerAdded}) {
                     style={{ display: 'block' }}
                 >
                     <div>
+
                         <img src="https://picsum.photos/200" alt="Image" style={{width: "150px", height: "100px"}} />
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '10px', width: '100%' }}>
                             <InputLabel sx={{ fontSize: '16px', fontWeight: 'bold' }}>{selected.name}</InputLabel>
+                            <Typography variant="subtitle2" sx={{ mt: '6px' }}> {selected.category} </Typography>
                             <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
-                            <Typography variant="caption" sx={{ mt: '5px' }}>{selected.type} • {selected.privacy}</Typography>
+                            <Typography variant="caption" sx={{ mt: '10px' }}> {selected.privacy ? 'private' :'public'}</Typography>
+                            <div style={{width: "150px", height: "100px"}}>
+
+                                <Typography variant="caption" sx={{display: 'flex', flexWrap:"wrap", flexDirection: 'column', alignItems: 'center', fontSize: '13px', fontWeight: 'bold' }}>Description</Typography>
+                                <Typography variant="caption"sx={{display: 'flex', flexWrap:"wrap", flexDirection: 'column', alignItems: 'center',width: '100%' }}>
+
+                                    {selected.description}
+
+                                </Typography>
+                            </div>
                         </Box>
-                        <div >
-                            <p style={{ marginBottom: "4px" }}>
-                                <span >Added</span>
-                            <span style={{ display: "block" }}>
-                            {new Date(selected.time).toLocaleDateString()}
-                             </span>
-                                <span>{new Date(selected.time).toLocaleTimeString()}</span>
-                            </p>
-                        </div>
-                    </div>
+                                          </div>
                 </InfoWindow>
             ) : null}
         </GoogleMap>

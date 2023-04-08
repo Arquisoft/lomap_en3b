@@ -6,9 +6,8 @@ import Map from "../components/Map";
 import InfoList from "../components/InfoList";
 import AccountPage from "../components/AccountPage";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
-import {CssBaseline, Grid, IconButton, InputBase} from "@mui/material";
-
-
+import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
+import FilterSidebar from "../components/Filters";
 
 const MapView = ({session,onSearch}) => {
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
@@ -16,7 +15,7 @@ const MapView = ({session,onSearch}) => {
   const [showInfoList, setShowInfoList] = useState(false);
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-
+  const [filterSideBar,setFilterSideBar]=useState(false);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // places library
@@ -38,10 +37,13 @@ const MapView = ({session,onSearch}) => {
   const makeInfoPanelDisapear = () => {
     setShowInfoList(!showInfoList);
   };
-
+  const displayFilterSideBar = () =>{
+    setFilterSideBar(!filterSideBar);
+  }
   const makeAccountPageDisapear = () => {
     setShowAccountPage(!showAccountPage);
   };
+
 //Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
@@ -77,12 +79,14 @@ const MapView = ({session,onSearch}) => {
             onInfoList={() => makeInfoPanelDisapear()}
             onEditMarker={() => makePanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
-        />    <Grid container spacing={3} style={{ width: "100%" }}>
+            onFilterLocations={() => displayFilterSideBar()}
+        />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={() => makePanelDisapear()} />
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
+        <FilterSidebar isVisible={filterSideBar} />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
+          <Map  isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '8px', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
