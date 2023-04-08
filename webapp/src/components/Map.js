@@ -1,10 +1,16 @@
 // the list where I will retrive the markers from juan and preload them
-import React from "react";
+import React, {useState} from "react";
 import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
 import {readLocations} from "../handlers/podAccess";
+import Rating from "react-rating-stars-component";
+import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
+import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
+
+
+
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -19,45 +25,48 @@ const options = {
   zoomcontrol: true
 };
 
-
+export function handleRateChange(newRating, selected) { // ı made this export cause all ın other file
+    selected.rate = newRating;
+}
 
 /*
   The main map function
 */
-function Map({ isInteractive,session, onMarkerAdded}) {
+function Map({ filter,isInteractive,session, onMarkerAdded}) {
 
-    
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
     const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
     const mapRef = React.useRef(null);
-  
-    const addMarker = React.useCallback(
-      (event) => {
-        setMarkers((current) => [
-          ...current,
-          {
-            lat: event.latLng.lat(),
-            lng: event.latLng.lng(),
-            time: new Date(),
-          },
-        ]);
+    const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
 
-        console.log(1);
-        onMarkerAdded(); // Call the onMarkerAdded callback
-        setCanAddMarker(true); // Set canAddMarker to false after adding a marker
-      },
-      []
+    const addMarker = React.useCallback(
+        (event) => {
+            setMarkers((current) => [
+                ...current,
+                {
+                    lat: event.latLng.lat(),
+                    lng: event.latLng.lng(),
+                    time: new Date(),
+                    description:'',
+                    name: '', // isim ekliyoruz
+                    category: '',
+                    privacy: '',
+                    rate: '',
+
+                },
+            ]);
+
+            onMarkerAdded(); // Call the onMarkerAdded callback
+            setCanAddMarker(true); // Set canAddMarker to false after adding a marker
+        },
+        []
     );
     const retrieveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
-  
-    const onMapLoad = React.useCallback((map) => {
-      mapRef.current = map;
-    }, []);
-  
+
     React.useEffect( () => {
         async function getAndSetLocations() {
             let locationSet = await retrieveLocations()
@@ -66,7 +75,7 @@ function Map({ isInteractive,session, onMarkerAdded}) {
 
        getAndSetLocations();
     }, []);
-  
+
     // Set canAddMarker to true when isInteractive changes to true
     React.useEffect(() => {
       if (canAddMarker) {
@@ -75,7 +84,65 @@ function Map({ isInteractive,session, onMarkerAdded}) {
       }
     }, [canAddMarker]);
   
-    return (
+
+
+     const handleMarkerClick = (marker) => {
+         setSelected(marker);
+     }
+
+     const handleNameChange = (event, marker) => {
+         marker.name = event.target.value;
+         setMarkers([...markers]);
+     }
+
+     const handleTypeChange = (event, marker) => {
+         marker.type = event.target.value;
+         setMarkers([...markers]);
+     }
+     const handlePrivacyChange = (event, marker) => {
+         marker.privacy = event.target.value;
+         setMarkers([...markers]);
+     }
+
+     const onMapLoad = React.useCallback((map) => {
+         mapRef.current = map;
+     }, []);
+
+
+    const onFilterLocations=React.useCallback((filter)=>{
+
+            let filteredSet =[];
+            filteredSet=markers.filter(marker=>marker.type==filter);
+
+
+        setMarkers((current) => [...current, ...filteredSet]);
+    });
+    React.useEffect( () => {
+        async function getAndSetLocations() {
+            let locationSet = await retrieveLocations()
+            setMarkers((current) => [...current, ...locationSet]);
+        }
+
+        getAndSetLocations();
+    }, []);
+     // Set canAddMarker to true when isInteractive changes to true
+     React.useEffect(() => {
+         if (canAddMarker) {
+             setCanAddMarker(false);
+         }
+     }, [canAddMarker]);
+
+      const iconUrls = {
+          park: "/greenLocation.svg",
+          bar: "/redLocation.svg",
+          restaurant: "/orangeLocation.svg",
+          shop: "/blueLocation.svg",
+          other:  "/blackLocation.svg",
+          // u can Adding more types and URLs as needed
+      };
+
+
+      return (
       <React.Fragment>
         
         <GoogleMap
@@ -87,43 +154,50 @@ function Map({ isInteractive,session, onMarkerAdded}) {
           onLoad={onMapLoad}
         >
           {markers.map((marker, index) => (
-            <Marker
+              <Marker
+                 // key={`${marker.time.toISOString()}-${index}`}
+                  position={{ lat: marker.lat, lng: marker.lng }}
+                  icon={{
+                      url: iconUrls[marker.type] || "/blackLocation.svg",
+                      scaledSize: new window.google.maps.Size(40, 40),
+                      origin: new window.google.maps.Point(0, 0),
+                      anchor: new window.google.maps.Point(15, 15),
+                  }}
+                  onClick={() => {
+                      setSelected(marker);
+                  }}
+              />
 
-              position={{ lat: marker.lat, lng: marker.lng }}
-              icon={{
-                url: "/location.svg",
-                scaledSize: new window.google.maps.Size(40, 40),
-                origin: new window.google.maps.Point(0, 0),
-                anchor: new window.google.maps.Point(15, 15),
-              }}
-              onClick={() => {
-                setSelected(marker);
-              }}
-            />
           ))}
-          {selected ? (
-            <InfoWindow
-              position={{ lat: selected.lat, lng: selected.lng }}
-              onCloseClick={() => {
-                setSelected(null);
-              }}
-            >
-              <div>
-                  <section name="LocationInfo">
-                      <h2>{selected.name}</h2>
-                      <p name="coordinates">at {selected.lat}, {selected.lng}</p>
-                      <p name="category">Classified as {selected.cat}</p>
-                      <h3>Description</h3>
-                      <p>{selected.description}</p>
-                  </section>
-                  <section name="comments">
-                    <h3>Comment Section</h3>
-                      <p>No comments yet...</p>
-                  </section>
+            {selected ? (
+                <InfoWindow
+                    position={{ lat: selected.lat, lng: selected.lng }}
+                    onCloseClick={() => {
+                        setSelected(null);
+                    }}
+                    style={{ display: 'block' }}
+                >
+                    <div>
 
-              </div>
-            </InfoWindow>
-          ) : null}
+                        <img src="https://picsum.photos/200" alt="Image" style={{width: "150px", height: "100px"}} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '10px', width: '100%' }}>
+                            <InputLabel sx={{ fontSize: '16px', fontWeight: 'bold' }}>{selected.name}</InputLabel>
+                            <Typography variant="subtitle2" sx={{ mt: '6px' }}> {selected.category} </Typography>
+                            <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
+                            <Typography variant="caption" sx={{ mt: '10px' }}> {selected.privacy ? 'private' :'public'}</Typography>
+                            <div style={{width: "150px", height: "100px"}}>
+
+                                <Typography variant="caption" sx={{display: 'flex', flexWrap:"wrap", flexDirection: 'column', alignItems: 'center', fontSize: '13px', fontWeight: 'bold' }}>Description</Typography>
+                                <Typography variant="caption"sx={{display: 'flex', flexWrap:"wrap", flexDirection: 'column', alignItems: 'center',width: '100%' }}>
+
+                                    {selected.description}
+
+                                </Typography>
+                            </div>
+                        </Box>
+                                          </div>
+                </InfoWindow>
+            ) : null}
         </GoogleMap>
       </React.Fragment>
     );

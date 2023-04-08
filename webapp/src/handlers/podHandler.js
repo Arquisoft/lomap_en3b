@@ -1,13 +1,12 @@
 import {
     getPodUrlAll,
     createContainerAt,
-    getSolidDataset,
-
+    getSolidDataset, getStringNoLocale, getThing, getUrlAll,
 
 
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
-
+import {FOAF} from "@inrupt/vocab-common-rdf";
 
 
 /**
@@ -31,7 +30,7 @@ export async function checkForLomap(session) {
         i++;
         
     }
-    if(!podWithFolder){//If no pod has that folder
+    if(!podWithFolder){//If no pod has that folde
 
       podWithFolder=await createLomapContainer(pods[0].replace("/profile/card#me","/"),session)
 
@@ -50,7 +49,6 @@ export async function checkForLomapInPod(pod,session) {
      let aux= await getSolidDataset(pod+"lomap",{fetch : session.fetch});
 
     } catch (error) {
-        console.log(error)
         console.log("Not found lomap folder in pod, we'll try creating one...")
         return false;
     }
@@ -64,7 +62,7 @@ export async function checkForLomapInPod(pod,session) {
  * @param session
  * @returns {Promise<void>}
  */
-export async function requestAccessToLomap(session){
+export async function requestAccessToLomap( session){
 
     //this part sets the requested access (if granted) to expire in 5 minutes.
     let accessExpiration = new Date( Date.now() +  5 * 60000 );
@@ -93,6 +91,42 @@ export async function requestAccessToLomap(session){
     );
 }
 export async function createLomapContainer(pod,session) {
-
+   // console.log('linea 94 '+pod)
     await createContainerAt(pod + "lomap/",{fetch : session.fetch});
+}
+
+/**
+ * It returns a list with the friends of the logged in user
+ * @param webId Containing the webId whose friends we are returning
+ * @returns {Promise<*[]>} Containing a List of the webIds of the friends
+ */
+async function getFriendsWebIds(webId) {
+    let profile = await getProfile(webId);
+    let ids = getUrlAll(profile, FOAF.knows);
+
+    let list = [];
+
+    ids.forEach(friend => list.push(friend.split("#")[0])); //remove the right side of the "#"
+
+    return list;
+}
+
+/**
+ * Returns the profile for a given webId
+ * @param webId containing the webId whose profile we want
+ * @returns {Promise<Thing & {url: UrlString}>} with the profile we need
+ */
+async function getProfile(webId) {
+    let dataset = await getSolidDataset(webId);
+    return getThing(dataset, webId);
+}
+
+async function findName(webId) {
+    if (webId === undefined)
+        return "No name found";
+    else {
+        let profile = getProfile(webId);
+        let name = getStringNoLocale(profile, FOAF.name);
+        return name === null ? "No name found" : name;
+    }
 }

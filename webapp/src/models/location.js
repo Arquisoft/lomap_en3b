@@ -6,7 +6,7 @@ import {
 import {
     CoordinatesInvalidFormatException,
     StringInvalidFormatException
-} from '../util/Exceptions/Exceptions.js';
+} from '../util/Exceptions/exceptions.js';
 
 /**
  * Location LoMap class
@@ -15,7 +15,7 @@ class LocationLM {
     //Attributes
 
     privateReview = new Array();
-    constructor(CoorLat, CoorLng, name, description, category) {
+    constructor(CoorLat, CoorLng, name, description, category,privacy=false) {
         checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
         checkCoordinatesInvalidFormat((CoorLng>= -180 && CoorLng<= 180), CoorLng, 'longitude');
@@ -25,8 +25,9 @@ class LocationLM {
         checkStringInvalidFormat(description, 'description' );
         this.description = description;
         checkStringInvalidFormat(category, 'category' );
-        this.cat = category;
+        this.category = category;
         this.locID = uuidv4();
+        this.privacy=privacy;
     }
 
 
