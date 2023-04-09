@@ -163,23 +163,24 @@ function Map({ isInteractive,session, onMarkerAdded}) {
                     style={{ display: 'block' }}
                 >
                     <div>
-                        <img src="https://picsum.photos/200" alt="Image" style={{width: "150px", height: "100px"}} />
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '10px', width: '100%' }}>
-                            <InputLabel sx={{ fontSize: '16px', fontWeight: 'bold' }}>{selected.name}</InputLabel>
+                        <img src="https://picsum.photos/200" alt="Image" style={{ width: '9.375rem', height: '6.25rem' }} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '0.625rem', width: '100%' }}>
+                            <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{selected.name}</InputLabel>
                             <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
-                            <Typography variant="caption" sx={{ mt: '5px' }}>{selected.type} • {selected.privacy}</Typography>
+                            <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{selected.type} • {selected.privacy}</Typography>
                         </Box>
-                        <div >
-                            <p style={{ marginBottom: "4px" }}>
-                                <span >Added</span>
-                            <span style={{ display: "block" }}>
-                            {new Date(selected.time).toLocaleDateString()}
-                             </span>
+                        <div>
+                            <p style={{ marginBottom: '0.25rem' }}>
+                                <span>Added</span>
+                                <span style={{ display: 'block' }}>
+          {new Date(selected.time).toLocaleDateString()}
+        </span>
                                 <span>{new Date(selected.time).toLocaleTimeString()}</span>
                             </p>
                         </div>
                     </div>
                 </InfoWindow>
+
             ) : null}
         </GoogleMap>
       </React.Fragment>

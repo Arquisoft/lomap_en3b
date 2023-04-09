@@ -23,15 +23,29 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
     const style = {
         display: isAccountVisible ? 'block' : 'none',
         backgroundColor: '#fff',
-        borderRadius: '10px', // kenar yuvarlatma
+        borderRadius: '1rem', // kenar yuvarlatma
         width: '30%', // panel genişliği %30
         height: '88vh', // biraz boşluk bırakmak için %10 boşluk
-        margin: '10vh 2vh 100vh 100vh', // üstünden ve altından boşluk bırak
+        margin: '10vh 2vh 10vh 10vh', // üstünden ve altından boşluk bırak
         padding: '0',
         zIndex: '999',
         position: 'fixed',
         top: '0',
         right: '0', // sağ tarafta
+
+        // Responsive styles
+        '@media screen and (max-width: 768px)': {
+            width: '60%',
+            height: '70vh',
+            margin: '5vh auto',
+        },
+
+        '@media screen and (max-width: 480px)': {
+            width: '80%',
+            height: '60vh',
+            margin: '5vh auto',
+            borderRadius: '0.5rem',
+        }
     }
 
     const handleAddButtonClick = () => {
@@ -62,7 +76,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
         <Container style={style}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-                <IconButton style={{marginRight: '420px'}} onClick={() => {
+                <IconButton style={{marginRight: '26.25rem'}} onClick={() => {
                     handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
                 }}><CloseIcon/>
                 </IconButton>
@@ -71,31 +85,31 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                     <Avatar
                         alt="John Doe"
                         src="https://picsum.photos/id/27/200/300"
-                        sx={{ width: 128, height: 128, marginTop: 4 }}
+                        sx={{ width: '8rem', height: '8rem', marginTop: '0.5rem' }}
                     />
-                    <IconButton sx={{ marginLeft: '-36px', marginTop: '-36px' }}>
+                    <IconButton sx={{ marginLeft: '-2.25rem', marginTop: '-2.25rem' }}>
                         <AddPhotoAlternateIcon />
                     </IconButton>
                 </Box>
-                <Typography variant="h5" sx={{ marginTop: 2 }}>Javier Rodriguez</Typography>
-                <Typography variant="subtitle1" sx={{ marginTop: 1 }}>@javiier</Typography>
+                <Typography variant="h5" sx={{ marginTop: '0.125rem' }}>Javier Rodriguez</Typography>
+                <Typography variant="subtitle1" sx={{ marginTop: '0.0625rem' }}>@javiier</Typography>
                 <Typography variant="subtitle2">3 locations · 5 friends</Typography>
-                <Divider sx={{ width: '90%', marginTop: 3 }} />
+                <Divider sx={{ width: '90%', marginTop: '0.1875rem' }} />
                 <Tabs
                     value={selectedTab}
                     onChange={handleTabChange}
                     indicatorColor="inherit"
                     textColor="inherit"
-                    sx={{ marginTop: 3 }}
+                    sx={{ marginTop: '0.1875rem' }}
                 >
                     <Tab label="Locations" icon={<LocationOnIcon />} />
                     <Tab label="Friends" icon={<PeopleIcon />} />
                     <Tab label="About me" icon={<PersonIcon />} />
                 </Tabs>
-                <Box sx={{ marginTop: 3, width: '90%' }}>
+                <Box sx={{ marginTop: '0.1875rem', width: '90%' }}>
                     {selectedTab === 0 && <Typography variant="body1">
-                        <div style={{ overflowY: 'auto', maxHeight: '170px' }}>
-                            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                        <div style={{ overflowY: 'auto', maxHeight: '14.625rem' }}>
+                            <List sx={{ width: '100%', maxWidth: '22.5rem', bgcolor: 'background.paper' }}>
                                 <ListItem disablePadding>
                                     <ListItemButton>
                                         <ListItemIcon>
@@ -161,8 +175,8 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
                                 sx={{ mb: 2, width: '100%', height: '50px', fontSize: '1.5rem' }}
                             />
 
-                            <div style={{ overflowY: 'auto', maxHeight: '100px' }}>
-                                <List sx={{ width: '100%', maxWidth: 360 }} aria-label="contacts">
+                            <div style={{ overflowY: 'auto', maxHeight: '10.625rem' }}>
+                                <List sx={{ width: '100%', maxWidth: '22.5rem' }} aria-label="contacts">
                                     {filteredContacts.map((contact) => (
                                         <ListItem disablePadding key={contact.name}>
                                             <ListItemButton>
@@ -182,7 +196,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
 
                     </Typography>}
                     {selectedTab === 2 && <Typography variant="body1">
-                        <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
+                        <div style={{ overflowY: 'auto', maxHeight: '12.5rem' }}>
                         <div>Hello! I'm a software engineering student at the University of Oviedo.
                             My hobbies include listening to music, reading books, and exploring new places!</div>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 3 }}>

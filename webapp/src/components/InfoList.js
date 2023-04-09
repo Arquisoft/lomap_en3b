@@ -24,10 +24,10 @@ const[comments,setComments]=useState(['This is a great spot!', 'I love coming he
     const style = {
         display: isInfoVisible ? 'block' : 'none',
         backgroundColor: '#fff',
-        borderRadius: '5px',
-        padding: '10px',
-        maxWidth: '300px',
-        minWidth: '250px',
+        borderRadius: '0.3125rem',
+        padding: '0.625rem',
+        maxWidth: '18.75rem',
+        minWidth: '15.625rem',
     };
 
 const onClickHandler = () =>{
@@ -48,44 +48,40 @@ setComment(e.target.value);
         <Container style={style}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >
 
-                <IconButton style={{marginLeft: '260px', marginTop: '-10px'}} onClick={() => {
+                <IconButton style={{ marginLeft: '16.25rem', marginTop: '-0.625rem'}} onClick={() => {
                     handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
                 }}><CloseIcon/>
                 </IconButton>
-
-
-                <img src="https://picsum.photos/200" alt="Image" style={{ width: '90%', borderRadius: '5px' }} />
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '10px', width: '100%' }}>
-
-
-                    <InputLabel sx={{ fontSize: '16px', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
-                    <Box sx={{ display: 'flex', alignItems: 'center', my: '5px' }}>
+                <img src="https://picsum.photos/200" alt="Image" style={{ width: '90%', borderRadius: '0.3125rem' }} />
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
+                    <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
+                    <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                         <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
-                        <Typography variant="caption" sx={{ ml: '5px' }}>3.0</Typography>
+                        <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                     </Box>
-                    <Typography variant="caption" sx={{ mt: '5px' }}>Park • Private</Typography>
+                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>Park • Private</Typography>
                 </Box>
-                <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '5px', p: '10px', my: '10px' }}>
-                    <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '10px' }}>Reviews</Typography>
-                    <List sx={{ overflowY: 'scroll', maxHeight: '100px', fontWeight: 'bold', mb: '10px' }}>
+                <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
+                    <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
+                    <List sx={{ overflowY: 'scroll',  maxHeight: '6.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
                         {comments.map((text, index) => (
-                            <ListItem key={index} sx={{ bgcolor: '#fafafa', borderRadius: '3px', my: '3px' }}>
+                            <ListItem key={index} sx={{ bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                 <ListItemAvatar>
                                     <Avatar alt="Profile Picture" src="https://picsum.photos/id/446/50/50" />
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary="Nate"
                                     secondary={text}
-                                    primaryTypographyProps={{ fontSize: '14px', fontWeight: 'bold', mb: '5px' }}
-                                    secondaryTypographyProps={{ fontSize: '12px' }}
+                                    primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 'bold', mb: '0.3125rem' }}
+                                    secondaryTypographyProps={{ fontSize: '0.75rem' }}
                                 />
-                                <Box sx={{ display: 'flex', alignItems: 'center', mt: '5px', width: '25%' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '25%' }}>
                                     <Rating name="rating" count={5} size={12} defaultValue={3} precision={0.5} readOnly />
                                 </Box>
                             </ListItem>
                         ))}
                     </List>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mt: '10px', width: '100%' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.625rem', width: '100%' }}>
                         <TextField
                             label="Add a comment"
                             placeholder="Add a comment"
@@ -93,22 +89,21 @@ setComment(e.target.value);
                             onChange={onChangeHandler}
                             variant="outlined"
                             size="small"
-                            sx={{ flexGrow: 1, mr: '10px', fontSize: '12px' }}
-                            InputProps={{ sx: { borderRadius: '20px', pl: '10px' } }}
+                            sx={{ flexGrow: 1,  mr: '0.625rem', fontSize: '0.75rem' }}
+                            InputProps={{ sx: { borderRadius: '1.25rem', pl: '0.625rem' } }}
                         />
-                        <Box sx={{ display: 'flex', alignItems: 'center', mt: '5px', width: '35%' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center',  mt: '0.3125rem', width: '35%'  }}>
                             <div><Rating name="rating" count={5} size={12} defaultValue={3} precision={0.5} readOnly /></div>
                         </Box>
                         <IconButton onClick={onClickHandler} size="small">
-                            <AddAPhotoIcon sx={{ fontSize: '18px' }} />
+                            <AddAPhotoIcon sx={{ fontSize: '1.125rem' }} />
                         </IconButton>
                         <IconButton onClick={onClickHandler} size="small">
-                            <SendIcon sx={{ fontSize: '18px' }} />
+                            <SendIcon sx={{ fontSize: '1.125rem' }} />
                         </IconButton>
                     </Box>
                 </Box>
             </Box>
         </Container>
-
     )};
 export default InfoList;

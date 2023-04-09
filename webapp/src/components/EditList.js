@@ -31,64 +31,60 @@ const EditList = ({ isEditVisible, onEditMarker}) => {
     };
 
     const style = {
-        display:  isEditVisible ? 'block' : 'none',
+        display: isEditVisible ? 'block' : 'none',
         width: '100%',
-        maxWidth: '320px',
+        maxWidth: '20rem',
         margin: '0 auto',
     };
 
     return (
         <Container style={style}>
             <>
-
-                <IconButton style={{marginLeft: '250px', marginTop: '-20px'}} onClick={() => {
+                <IconButton style={{ marginLeft: '15.625rem', marginTop: '-1.25rem' }} onClick={() => {
                     handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
                 }}>
-                    <CloseIcon/>
+                    <CloseIcon />
                 </IconButton>
-
-
-                <Typography variant="h5" style={{ fontFamily: 'Arial' }} >Select a marker for Edit</Typography>
-                <FormControl>
-                    <InputLabel> Name: </InputLabel>
-                    <TextField style={{ width: '200px' }} />
-                </FormControl>
-                <FormControl>
-                    <InputLabel>Type</InputLabel>
-                    <Select style={{ width: '200px' }} >
-                        <MenuItem value="Bar">Bar</MenuItem>
-                        <MenuItem value="Shop">Shop</MenuItem>
-                        <MenuItem value="Restaurant">Restaurant</MenuItem>
-                        <MenuItem value="Park">Park</MenuItem>
-                    </Select>
-                </FormControl>
-
-                <FormControl>
-                    <InputLabel>Privacy</InputLabel>
-                    <RadioGroup  row >
-                        <FormControlLabel
-                            value="public"
-                            control={<Radio color="default" />}
-                            label="Public"
-                        />
-                        <FormControlLabel
-                            value="private"
-                            control={<Radio color="default" />}
-                            label="Private"
-                        />
-                    </RadioGroup>
-                </FormControl>
-
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
-                        handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+                <Typography variant="h5" style={{ fontFamily: 'Arial' }}>Select a marker for Edit</Typography>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '3rem' }}>
+                    <FormControl style={{ width: '100%' }}>
+                        <InputLabel> Name: </InputLabel>
+                        <TextField style={{ width: '100%' }} />
+                    </FormControl>
+                    <FormControl style={{ width: '100%' }}>
+                        <InputLabel>Type</InputLabel>
+                        <Select style={{ width: '100%' }}>
+                            <MenuItem value="Bar">Bar</MenuItem>
+                            <MenuItem value="Shop">Shop</MenuItem>
+                            <MenuItem value="Restaurant">Restaurant</MenuItem>
+                            <MenuItem value="Park">Park</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl style={{ width: '100%' }}>
+                        <InputLabel>Privacy</InputLabel>
+                        <RadioGroup row>
+                            <FormControlLabel
+                                value="public"
+                                control={<Radio color="default" />}
+                                label="Public"
+                            />
+                            <FormControlLabel
+                                value="private"
+                                control={<Radio color="default" />}
+                                label="Private"
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                        <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
+                            handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
                     }}>
                         Finish
                     </Button>
                 </div>
-
+                </div>
             </>
-
         </Container>
     )};
-export default EditList;
+
+    export default EditList;

@@ -91,13 +91,13 @@ const MapView = ({session,onSearch}) => {
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
           <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
-          <form onSubmit={handleSearchSubmit} style={{ borderRadius: '8px', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+          <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
                   placeholder="Search Location"
                   value={searchValue}
                   onChange={handleSearchChange} // handleSearchChange fonksiyonunun çalışmasını sağlıyoruz
-                  style={{ marginRight: '16px' }}
+                  style={{ marginRight: '1rem' }}
               />
               <IconButton type="submit" aria-label="search">
                 <SearchIcon />

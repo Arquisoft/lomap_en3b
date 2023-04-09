@@ -40,21 +40,21 @@ const StyledMenu = styled((props) => (
     />
 ))(({ theme }) => ({
   '& .MuiPaper-root': {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
+    borderRadius: '0.375rem',
+    marginTop: '0.5rem',
+    minWidth: '11.25rem',
     color:
         theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
     boxShadow:
         'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
     '& .MuiMenu-list': {
-      padding: '4px 0',
+      padding: '0.25rem 0',
     },
     '& .MuiMenuItem-root': {
       '& .MuiSvgIcon-root': {
-        fontSize: 18,
+        fontSize: '1.125rem',
         color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
+        marginRight: '0.9375rem',
       },
       '&:active': {
         backgroundColor: alpha(
@@ -66,9 +66,8 @@ const StyledMenu = styled((props) => (
   },
 }));
 
+
 const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
-
-
 
   const handleAddButtonClick = () => {
     onAddMarker();
@@ -132,6 +131,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                 disableElevation
                 onClick={handleClick}
                 endIcon={<KeyboardArrowDownIcon />}
+                sx={{ fontSize: '1rem' }}
             >
               Friends
             </Button>
@@ -144,8 +144,9 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
+                sx={{ fontSize: '1rem' }}
             >
-              <Divider sx={{ my: 0.5 }} />
+              <Divider sx={{ my: '0.5rem' }} />
 
               <div>
                 <TextField
@@ -153,11 +154,11 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                     variant="outlined"
                     value={filter}
                     onChange={handleFilterChange}
-                    sx={{ mb: 2, width: '100%', height: '50px', fontSize: '1.5rem' }}
+                    sx={{ mb: '1rem', width: '100%', height: '3rem', fontSize: '1.5rem' }}
                 />
 
-                <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
-                  <List sx={{ width: '100%', maxWidth: 600 }} aria-label="contacts">
+                <div style={{ overflowY: 'auto', maxHeight: '12.5rem' }}>
+                  <List sx={{ width: '100%', maxWidth: '37.5rem' }} aria-label="contacts">
                     {filteredContacts.map((contact) => (
                         <ListItem disablePadding key={contact.name}>
                           <ListItemButton>
@@ -174,10 +175,9 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
                   </List>
                 </div>
               </div>
-
-              <Divider sx={{ my: 0.5 }} />
-
+              <Divider sx={{ my: '0.5rem' }} />
             </StyledMenu>
+
 
             <Button color="inherit">Map</Button>
           </Typography>
