@@ -32,7 +32,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
 /*
   The main map function
 */
-function Map({ filter,isInteractive,session, onMarkerAdded}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded}) {
 
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
@@ -40,6 +40,10 @@ function Map({ filter,isInteractive,session, onMarkerAdded}) {
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
 
+    React.useEffect(()=>{
+        let filteredSet=markers.filter((marker)=> {selectedFilters.find((marker)=>marker.category)});
+        setMarkers((current) => [...current, ...filteredSet]);
+    });//TODO QUE PONGO COMO DEPENDENCIA? )
     const addMarker = React.useCallback(
         (event) => {
             setMarkers((current) => [
@@ -96,7 +100,7 @@ function Map({ filter,isInteractive,session, onMarkerAdded}) {
      }
 
      const handleTypeChange = (event, marker) => {
-         marker.type = event.target.value;
+         marker.category= event.target.value;
          setMarkers([...markers]);
      }
      const handlePrivacyChange = (event, marker) => {
@@ -109,10 +113,14 @@ function Map({ filter,isInteractive,session, onMarkerAdded}) {
      }, []);
 
 
-    const onFilterLocations=React.useCallback((filter)=>{
+    const onFilterLocations=React.useCallback((filtersSelected)=>{
 
             let filteredSet =[];
-            filteredSet=markers.filter(marker=>marker.type==filter);
+           filteredSet=markers.map((pin)=>{
+               if(filtersSelected.find(pin.category)){
+                   filteredSet.push(pin);
+               }
+           });
 
 
         setMarkers((current) => [...current, ...filteredSet]);
@@ -137,6 +145,8 @@ function Map({ filter,isInteractive,session, onMarkerAdded}) {
           bar: "/redLocation.svg",
           restaurant: "/orangeLocation.svg",
           shop: "/blueLocation.svg",
+          sight:"/trasnparentLocation.svg",
+          monument:"/purpleLocation.svg",
           other:  "/blackLocation.svg",
           // u can Adding more types and URLs as needed
       };
@@ -155,10 +165,11 @@ function Map({ filter,isInteractive,session, onMarkerAdded}) {
         >
           {markers.map((marker, index) => (
               <Marker
-                 // key={`${marker.time.toISOString()}-${index}`}
+                 key={marker.locId}
                   position={{ lat: marker.lat, lng: marker.lng }}
                   icon={{
-                      url: iconUrls[marker.type] || "/blackLocation.svg",
+
+                      url: iconUrls[marker.category] || "/blackLocation.svg",
                       scaledSize: new window.google.maps.Size(40, 40),
                       origin: new window.google.maps.Point(0, 0),
                       anchor: new window.google.maps.Point(15, 15),

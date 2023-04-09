@@ -72,6 +72,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
     onAddMarker();
   };
   const handleFilterLocations = () => {
+
     onFilterLocations();
   };
   const handleEditLocationButtonClick = () => {

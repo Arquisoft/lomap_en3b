@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import Header from "../components/Header";
 import List from "../components/List";
@@ -10,24 +10,29 @@ import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/
 import FilterSidebar from "../components/Filters";
 
 const MapView = ({session,onSearch}) => {
+  const [changesInFilters,setChangesInFilters]=useState(false);
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
   const [showList, setShowList] = useState(false);
   const [showInfoList, setShowInfoList] = useState(false);
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [filterSideBar,setFilterSideBar]=useState(false);
+  const [selectedFilters,setSelectedFilters]=useState([]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // places library
   }); // hook to load the google script
+  const updateFilterListInUse= (filters)=>{
+    setSelectedFilters(filters);
 
+  };
   const handleMarkerAdded = () => {
     setIsInteractive(false);
   };
 
   const makeMapInteractive = () => {
     setIsInteractive(!isInteractive);
-    console.log(showList);
+    //console.log(showList);
     setShowList(!showList);
   };
 
@@ -38,10 +43,13 @@ const MapView = ({session,onSearch}) => {
     setShowInfoList(!showInfoList);
   };
   const displayFilterSideBar = () =>{
+
     setFilterSideBar(!filterSideBar);
+
   }
   const makeAccountPageDisapear = () => {
     setShowAccountPage(!showAccountPage);
+
   };
 
 //Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
@@ -83,10 +91,10 @@ const MapView = ({session,onSearch}) => {
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={() => makePanelDisapear()} />
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
-        <FilterSidebar isVisible={filterSideBar} />
+        <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map  isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '8px', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase

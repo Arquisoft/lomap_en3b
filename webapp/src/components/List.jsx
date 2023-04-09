@@ -45,11 +45,13 @@ const List = ({ isVisible, onAddMarker}) => {
                     </FormControl>
                     <FormControl>
                         <InputLabel>Type</InputLabel>
-                        <Select style={{ width: '200px' }} >
+                        <Select style={{ width: '200px' }} defaultValue={''} >
                             <MenuItem value="Bar">Bar</MenuItem>
                             <MenuItem value="Shop">Shop</MenuItem>
                             <MenuItem value="Restaurant">Restaurant</MenuItem>
                             <MenuItem value="Park">Park</MenuItem>
+                            <MenuItem value="Monument">Monument</MenuItem>
+                            <MenuItem value="Sight">Sight</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl>
