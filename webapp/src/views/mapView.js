@@ -23,7 +23,22 @@ const MapView = ({session,onSearch}) => {
     libraries: ["places"], // places library
   }); // hook to load the google script
   const updateFilterListInUse= (filters)=>{
-    setSelectedFilters(filters);
+
+    if(selectedFilters.length==0){
+      console.log("entre")
+      setSelectedFilters(filters);
+      setChangesInFilters(!changesInFilters);
+    }
+      else{
+        for (const filter of filters) {
+          //When a filter is not found in the previous list, we insert it.
+          if(!selectedFilters.find((element)=>element===filter)){
+            setSelectedFilters(filters);
+            setChangesInFilters(!changesInFilters);
+          }
+        }
+      }
+
 
   };
   const handleMarkerAdded = () => {
