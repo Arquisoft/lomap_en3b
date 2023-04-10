@@ -33,90 +33,106 @@ export function handleRateChange(newRating, selected) { // ı made this export c
 /*
   The main map function
 */
-function Map({ isInteractive,session, onMarkerAdded}) {
+function Map({ isInteractive,session, onMarkerAdded,markerData}) {
 
     const [markers, setMarkers] = React.useState([]);
-    const [selected, setSelected] = React.useState(null);
-    const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
-    const mapRef = React.useRef(null);
-    const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
+  const [selected, setSelected] = React.useState(null);
+  const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
+  const mapRef = React.useRef(null);
+  const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
 
-    const addMarker = React.useCallback(
-        (event) => {
-            setMarkers((current) => [
-                ...current,
-                {
-                    lat: event.latLng.lat(),
-                    lng: event.latLng.lng(),
-                    time: new Date(),
-                    name: '', // isim ekliyoruz
-                    type: '',
-                    privacy: '',
-                    rate: '',
-
-                },
-            ]);
-
-            onMarkerAdded(); // Call the onMarkerAdded callback
-            setCanAddMarker(true); // Set canAddMarker to false after adding a marker
+  const addMarker = React.useCallback(
+    (event) => {
+      setMarkers((current) => [
+        ...current,
+        {
+          lat: event.latLng.lat(),
+          lng: event.latLng.lng(),
+          time: new Date(),
+          name: '',
+          type: '',
+          privacy: '',
+          rate: "",
         },
-        []
+      ]);
+
+      onMarkerAdded(); // Call the onMarkerAdded callback
+      setCanAddMarker(true); // Set canAddMarker to false after adding a marker
+    },
+    []
+  );
+
+  const retrieveLocations = async () => {
+    let resource = session.info.webId.replace(
+      "/profile/card#me",
+      "/lomap/example.ttl"
     );
-    const retrieveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/example.ttl")
-        return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    return await readLocations(resource, session);
+  };
+
+  React.useEffect(() => {
+    async function getAndSetLocations() {
+      let locationSet = await retrieveLocations();
+      setMarkers((current) => [...current, ...locationSet]);
     }
 
-    React.useEffect( () => {
-        async function getAndSetLocations() {
-            let locationSet = await retrieveLocations()
-            setMarkers((current) => [...current, ...locationSet]);
-        }
+    getAndSetLocations();
+  }, []);
 
-       getAndSetLocations();
-    }, []);
-  
-    // Set canAddMarker to true when isInteractive changes to true
-    React.useEffect(() => {
-      if (canAddMarker) {
-        setCanAddMarker(false);
+  // Set canAddMarker to true when isInteractive changes to true
+  React.useEffect(() => {
+    if (canAddMarker) {
+      setCanAddMarker(false);
+    }
+  }, [canAddMarker]);
+
+  const handleMarkerClick = (marker) => {
+    setSelected(marker);
+  };
+
+  const handleNameChange = (event, marker) => {
+    marker.name = event.target.value;
+    setMarkers([...markers]);
+  };
+
+  const handleTypeChange = (event, marker) => {
+    marker.type = event.target.value;
+    setMarkers([...markers]);
+  };
+  const handlePrivacyChange = (event, marker) => {
+    marker.privacy = event.target.value;
+    setMarkers([...markers]);
+  };
+
+  const onMapLoad = React.useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
+  // Function to update the last marker with the markerData values
+  const updateLastMarker = () => {
+    
+    setMarkers((current) => {
+
         
-      }
-    }, [canAddMarker]);
-  
+      const lastMarker = current[current.length - 1];
+      const marker = markerData[0]; // Access the object inside the array
+      
+      lastMarker.name = marker.name;
+      lastMarker.type = marker.type;
+      lastMarker.privacy = marker.privacy;
 
+     
+      return [...current];
+    });
+  };
 
-     const handleMarkerClick = (marker) => {
-         setSelected(marker);
-     }
-
-     const handleNameChange = (event, marker) => {
-         marker.name = event.target.value;
-         setMarkers([...markers]);
-     }
-
-     const handleTypeChange = (event, marker) => {
-         marker.type = event.target.value;
-         setMarkers([...markers]);
-     }
-     const handlePrivacyChange = (event, marker) => {
-         marker.privacy = event.target.value;
-         setMarkers([...markers]);
-     }
-
-     const onMapLoad = React.useCallback((map) => {
-         mapRef.current = map;
-     }, []);
-
-
-
-     // Set canAddMarker to true when isInteractive changes to true
-     React.useEffect(() => {
-         if (canAddMarker) {
-             setCanAddMarker(false);
-         }
-     }, [canAddMarker]);
-
+  // Set canAddMarker to true when isInteractive changes to true
+  React.useEffect(() => {
+    if (canAddMarker) {
+      setCanAddMarker(false);
+      updateLastMarker(); // Call the updateLastMarker function
+    }
+  }, [canAddMarker]);
       const iconUrls = {
           park: "/greenLocation.svg",
           bar: "/redLocation.svg",

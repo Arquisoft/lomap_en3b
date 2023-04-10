@@ -9,70 +9,105 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import {
-    FormControl,
-    SelectEmpty,
-    Loading,
-    Container,
-    MarginBottom,
+  FormControl,
+  SelectEmpty,
+  Loading,
+  Container,
+  MarginBottom,
 } from './styles/ListStyle.js';
-import Rating from "react-rating-stars-component";
+import Rating from 'react-rating-stars-component';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {IconButton, Grid, } from "@mui/material";
-import {Place as PlaceIcon} from "@mui/icons-material";
-import Map from  "../components/Map";
-import CloseIcon from "@mui/icons-material/Close";
+import { IconButton, Grid } from '@mui/material';
+import { Place as PlaceIcon } from '@mui/icons-material';
+import Map from '../components/Map';
+import CloseIcon from '@mui/icons-material/Close';
 
+const List = ({ isVisible, onAddMarker, onUpdateMarker }) => {
+  const [name, setName] = useState('');
+  const [type, setType] = useState('');
+  const [privacy, setPrivacy] = useState('public');
 
-const List = ({ isVisible, onAddMarker}) => {
+  const handleAddButtonClick = () => {
+    if (name !== '' && type !== '') {
+      onAddMarker({ name, type, privacy });
+      setName('');
+      setType('');
+      setPrivacy('public');
+      
+    }
+  };
 
-    const handleAddButtonClick = () => {
-        onAddMarker();
-    };
+  const style = {
+    display: isVisible ? 'block' : 'none',
+    width: '100%',
+    maxWidth: '20rem',
+    margin: '0 auto',
+  };
 
-    const style = {
-        display: isVisible ? 'block' : 'none',
-        width: '100%',
-        maxWidth: '20rem',
-        margin: '0 auto',
-    };
+  return (
+    <Container style={style}>
+      <>
+        <IconButton
+          style={{ marginLeft: '15.625rem', marginTop: '-1.25rem' }}
+          onClick={() => {
+            onUpdateMarker(null); // RESET THE SELECTED MARKER
+            handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Typography variant="h5" style={{ fontFamily: 'Arial' }}>
+          Click for Add a Marker
+        </Typography>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            marginTop: '3rem',
+          }}
+        >
+          <FormControl style={{ width: '100%' }}>
+            <InputLabel>Name:</InputLabel>
+            <TextField
+              style={{ width: '100%' }}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormControl>
+          <FormControl style={{ width: '100%' }}>
+            <InputLabel>Type</InputLabel>
+            <Select
+              style={{ width: '100%' }}
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <MenuItem value="Bar">Bar</MenuItem>
+              <MenuItem value="Shop">Shop</MenuItem>
+              <MenuItem value="Restaurant">Restaurant</MenuItem>
+              <MenuItem value="Park">Park</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl style={{ width: '100%' }}>
+            <InputLabel>Privacy</InputLabel>
+            <RadioGroup
+              row
+              value={privacy}
+              onChange={(e) => setPrivacy(e.target.value)}
+            >
+              <FormControlLabel
+                value="public"
+                control={<Radio color="default" />}
+                label="Public"
+              />
+              <FormControlLabel
+                value="private"
+                control={<Radio color="default" />}
+                label="Private"
+              />
+           
 
-    return (
-        <Container style={style}>
-            <>
-                <IconButton style={{ marginLeft: '15.625rem', marginTop: '-1.25rem' }} onClick={() => {
-                    handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
-                }}>
-                    <CloseIcon />
-                </IconButton>
-                <Typography variant="h5" style={{ fontFamily: 'Arial' }}>Click for Add a Marker</Typography>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '3rem' }}>
-                    <FormControl style={{ width: '100%' }}>
-                        <InputLabel> Name: </InputLabel>
-                        <TextField style={{ width: '100%' }} />
-                    </FormControl>
-                    <FormControl style={{ width: '100%' }}>
-                        <InputLabel>Type</InputLabel>
-                        <Select style={{ width: '100%' }}>
-                            <MenuItem value="Bar">Bar</MenuItem>
-                            <MenuItem value="Shop">Shop</MenuItem>
-                            <MenuItem value="Restaurant">Restaurant</MenuItem>
-                            <MenuItem value="Park">Park</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl style={{ width: '100%' }}>
-                        <InputLabel>Privacy</InputLabel>
-                        <RadioGroup row>
-                            <FormControlLabel
-                                value="public"
-                                control={<Radio color="default" />}
-                                label="Public"
-                            />
-                            <FormControlLabel
-                                value="private"
-                                control={<Radio color="default" />}
-                                label="Private"
-                            />
-                        </RadioGroup>
+            </RadioGroup>
                     </FormControl>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
                         <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
