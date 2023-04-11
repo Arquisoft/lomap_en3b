@@ -10,7 +10,7 @@ import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, IconButton} from '@mui/material';
 import InputLabel from "@mui/material/InputLabel";
 import Typography from "@mui/material/Typography";
-import {getFriendsWebIds} from "../handlers/podHandler";
+import {getFriendsWebIds, giveLomapAccessToFriends} from "../handlers/podHandler";
 
 
 // setting the width and height of the <div> around the google map
@@ -74,6 +74,7 @@ function Map({isInteractive, session, onMarkerAdded}) {
         //     let resource = friendsWebIds[1].replace("/profile/card", "lomap/locations.ttl")
         //     locations.push(await readLocations(resource, session))
         // }
+        await giveLomapAccessToFriends(session.info.webId.replace("/profile/card#me", ""), session);
         locations.push(await readLocations(friendsWebIds[0] + "lomap/locations.ttl", session))
         return locations;
     }

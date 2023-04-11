@@ -101,7 +101,7 @@ async function writeUserLocations(resourceURL, list) {
 
 async function getThingsFromDataset(resourceURL,session){
     let dataset,allThings;
-     dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
+    dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
     allThings=getThingAll(dataset);
     return allThings;
 

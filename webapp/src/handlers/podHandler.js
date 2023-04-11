@@ -9,7 +9,18 @@ import {
     asUrl,
     getAgentAccess,
     getPublicAccess,
-    getSolidDatasetWithAcl, access, setAgentResourceAccess, getResourceAcl, getResourceInfo
+    getSolidDatasetWithAcl,
+    access,
+    setAgentResourceAccess,
+    getResourceAcl,
+    getResourceInfo,
+    getLinkedResourceUrlAll,
+    getFallbackAcl,
+    createAclFromFallbackAcl,
+    saveAclFor,
+    setAgentDefaultAccess,
+    getResourceInfoWithAcl,
+    getAgentDefaultAccess, hasAccessibleAcl, hasResourceAcl, hasFallbackAcl, createAcl
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF} from "@inrupt/vocab-common-rdf";
@@ -18,49 +29,48 @@ import {fetch} from "@inrupt/solid-client-authn-browser";
 
 
 /**
- * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which 
+ * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which
  * all the application information is going to be stored.
- * @param {} session 
+ * @param {} session
  */
 export async function checkForLomap(session) {
 
     let anyContainer = false;
-    let pods = await getPodUrlAll(session.info.webId, {fetch : session.fetch});
+    let pods = await getPodUrlAll(session.info.webId, {fetch: session.fetch});
     let podWithFolder;
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
-        let currentPod=pods[i].replace("/profile/card#me","/")//Remove profile url string.
-        anyContainer = await checkForLomapInPod(currentPod,session);
+        let currentPod = pods[i].replace("/profile/card#me", "/")//Remove profile url string.
+        anyContainer = await checkForLomapInPod(currentPod, session);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
 
         i++;
-        
-    }
-    if(!podWithFolder){//If no pod has that folde
-
-      podWithFolder=await createLomapContainer(pods[0].replace("/profile/card#me","/"),session)
-
 
     }
-    return  podWithFolder;
+    if (!podWithFolder) {//If no pod has that folde
+
+        podWithFolder = await createLomapContainer(pods[0].replace("/profile/card#me", "/"), session)
+
+
+    }
+    return podWithFolder;
 }
 
 /**
  * This method checks if the lomap folder exists given a pod.
- * @param {} _pod 
+ * @param {} _pod
  */
-export async function checkForLomapInPod(pod,session) {
+export async function checkForLomapInPod(pod, session) {
     try {
 
-     let aux= await getSolidDataset(pod+"lomap",{fetch : session.fetch});
+        let aux = await getSolidDataset(pod + "lomap", {fetch: session.fetch});
 
     } catch (error) {
         console.log("Not found lomap folder in pod, we'll try creating one...")
         return false;
     }
-    giveLomapAccessToFriends(pod, session)
     console.log("Found lomap folder in pod.")
     return true;
 }
@@ -71,26 +81,63 @@ export async function checkForLomapInPod(pod,session) {
  * @param session
  * @returns {Promise<void>}
  */
-export async function giveLomapAccessToFriends( pod,session){
+export async function giveLomapAccessToFriends(pod, session) {
     let friendsWebIds = await getFriendsWebIds(session.info.webId);
 
-
     for (let i = 0; i < friendsWebIds.length; i++) {
-        const myDatasetWithAcl = await getSolidDatasetWithAcl(pod+ "lomap", {fetch: session.fetch})
-        await setAgentAccess(pod+"lomap", friendsWebIds[i].replace("/profile/card", ""), {read: true, write : true},
-            {fetch:session.fetch})
-        const access = await getAgentAccess(myDatasetWithAcl,friendsWebIds[i].replace("/profile/card", ""))
-        console.log(friendsWebIds[i].replace("/profile/card", "") + " has the following access: " + access.read.toString() + access.write.toString());
-
-
-
-        // const acl = await getResourceAcl(myDatasetWithAcl);
-        // await setAgentResourceAccess(acl, friendsWebIds[i].replace("/card/me", ""), {read: true})
-        // const agentAccess = await getAgentAccess(myDatasetWithAcl, friendsWebIds[i].replace("/card/me", ""));
-        // console.log(agentAccess.read.toString());
+        const myDatasetWithAcl = await getSolidDatasetWithAcl(pod + "/lomap/", {fetch: session.fetch})
+        const acl = await getResourceAcl(myDatasetWithAcl)
+        await giveLomapAccessTo(friendsWebIds[i], pod, session, true);
+        //await setAgentDefaultAccess(acl,"localhost:3000", {read: true, append: true, write: true, control: true})
+        //await setAgentDefaultAccess(acl,friendsWebIds[i], {read: true, append: true, write: true, control: true})
+        //await setAgentAccess(pod+"lomap/", "http://localhost:3000", {read: true, write : true},
+        //  {fetch:session.fetch})
+        // const access = await getAgentAccess(myDatasetWithAcl,friendsWebIds[i])
+        //const access = await getAgentAccess(myDatasetWithAcl, "http://localhost:3000")
+        //console.log("http://localhost:3000" + " has the following access: " + access.read.toString() + access.write.toString());
     }
 
 }
+
+
+async function giveLomapAccessTo(friendWebId, pod, session, access) {
+    let resourceURL = pod + "/lomap/"
+    let myDatasetWithAcl;
+    try {
+        myDatasetWithAcl = await getSolidDatasetWithAcl(resourceURL, {fetch:session.fetch});
+        let resourceAcl;
+        if (!hasResourceAcl(myDatasetWithAcl)) {
+            if (!hasAccessibleAcl(myDatasetWithAcl)) {
+            }
+            if (!hasFallbackAcl(myDatasetWithAcl)) {
+                resourceAcl = createAcl(myDatasetWithAcl);
+            } else {
+                resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
+            }
+        } else {
+            resourceAcl = getResourceAcl(myDatasetWithAcl);
+        }
+
+        let updatedAcl;
+        if (access) {
+            updatedAcl = setAgentDefaultAccess(
+                resourceAcl,
+                friendWebId,
+                {read: true, append: true, write: false, control: false}
+            );
+        } else {
+            updatedAcl = setAgentResourceAccess(
+                resourceAcl,
+                friendWebId,
+                {read: false, append: false, write: false, control: false}
+            );
+        }
+        await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: fetch});
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 /**
  * This method is intended to be used to ask for access to the user's pod.
@@ -98,25 +145,25 @@ export async function giveLomapAccessToFriends( pod,session){
  * @param session
  * @returns {Promise<void>}
  */
-export async function requestAccessToLomap( session){
+export async function requestAccessToLomap(session) {
 
     //this part sets the requested access (if granted) to expire in 5 minutes.
-    let accessExpiration = new Date( Date.now() +  5 * 60000 );
+    let accessExpiration = new Date(Date.now() + 5 * 60000);
     const requestVC = await issueAccessRequest( //WE CREATE A NEW ACCESS REQUEST.
 
         //Vc stands for Verifiable credential
         {
 
-            "access":  { read: true , write:true},//the permissions to be asking
-            "resources":session.info.webId,
+            "access": {read: true, write: true},//the permissions to be asking
+            "resources": session.info.webId,
             "resourceOwner": session.info.webId,
             "expirationDate": accessExpiration,
 
         },
 
-        { fetch : session.fetch ,updateAcr:true}//update acr makes the request grant effective if given
+        {fetch: session.fetch, updateAcr: true}//update acr makes the request grant effective if given
     );
-    console.log("rvc"+requestVC)
+    console.log("rvc" + requestVC)
     //we actually send the access request to the access management ui, so the user can accept the request.
     await redirectToAccessManagementUi(
         requestVC.id,
@@ -126,8 +173,9 @@ export async function requestAccessToLomap( session){
         }
     );
 }
-export async function createLomapContainer(pod,session) {
-    await createContainerAt(pod + "lomap/",{fetch : session.fetch});
+
+export async function createLomapContainer(pod, session) {
+    await createContainerAt(pod + "lomap/", {fetch: session.fetch});
 }
 
 // async function setUpPolicy(session, resourceURL) {
