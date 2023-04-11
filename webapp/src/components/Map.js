@@ -67,10 +67,22 @@ function Map({isInteractive, session, onMarkerAdded}) {
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
+    const retrieveFriendsLocations = async () => {
+        let locations = []
+        let friendsWebIds = await getFriendsWebIds(session.info.webId);
+        // for (let i = 0 ; i < friendsWebIds.length; i++) {
+        //     let resource = friendsWebIds[1].replace("/profile/card", "lomap/locations.ttl")
+        //     locations.push(await readLocations(resource, session))
+        // }
+        locations.push(await readLocations(friendsWebIds[0] + "lomap/locations.ttl", session))
+        return locations;
+    }
+
 
     React.useEffect(() => {
         async function getAndSetLocations() {
             let locationSet = await retrieveLocations()
+            locationSet.push(await retrieveFriendsLocations())
             setMarkers((current) => [...current, ...locationSet]);
         }
 
