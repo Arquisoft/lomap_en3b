@@ -5,7 +5,11 @@ export const FormControl = styled('div')(({ theme }) => ({
     minWidth: `${120 / 16}rem`,
     marginBottom: `${20 / 16}rem`,
 }));
+export const FilterCheckBox=styled('input type="checkbox"')(({ theme }) => ({
+    flexDirection:'column'
 
+
+}));
 export const SelectEmpty = styled('div')(({ theme }) => ({
     marginTop: `${theme.spacing(2) / 16}rem`, // px'den rem'e dönüştürülüyor
 }));

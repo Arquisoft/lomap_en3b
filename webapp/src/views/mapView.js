@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import Header from "../components/Header";
 import List from "../components/List";
@@ -7,25 +7,29 @@ import InfoList from "../components/InfoList";
 import EditList from "../components/EditList";
 import AccountPage from "../components/AccountPage";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
-import {CssBaseline, Grid, IconButton, InputBase} from "@mui/material";
-
-
+import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
+import FilterSidebar from "../components/Filters";
 
 const MapView = ({session,onSearch}) => {
+  const [changesInFilters,setChangesInFilters]=useState(false);
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
   const [showList, setShowList] = useState(false);
   const [showEditList, setShowEditList] = useState(false);
   const [showInfoList, setShowInfoList] = useState(false);
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [markerData, setMarkerData] = useState([]);
+  const [filterSideBar,setFilterSideBar]=useState(false);
+  const [selectedFilters,setSelectedFilters]=useState([]);  const [markerData, setMarkerData] = useState([]);
   const [selected, setSelected] = React.useState(['']);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // places library
   }); // hook to load the google script
+  const updateFilterListInUse= (filters)=>{
+    setSelectedFilters(filters);
 
+  };
   const handleMarkerAdded = () => {
     setIsInteractive(false);
    
@@ -56,10 +60,16 @@ const MapView = ({session,onSearch}) => {
     setSelected([marker]);
     
   };
+  const displayFilterSideBar = () =>{
 
+    setFilterSideBar(!filterSideBar);
+
+  }
   const makeAccountPageDisapear = () => {
     setShowAccountPage(!showAccountPage);
+
   };
+
 //Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
@@ -96,13 +106,15 @@ const MapView = ({session,onSearch}) => {
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
-        />    <Grid container spacing={3} style={{ width: "100%" }}>
+            onFilterLocations={() => displayFilterSideBar()}
+        />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()}  />
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected}/>
+        <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker) => makeInfoPanelDisapear(marker)}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker) => makeInfoPanelDisapear(marker)}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase

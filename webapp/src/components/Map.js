@@ -7,9 +7,8 @@ import mapStyles from "./styles/MapStyles";
 import {readLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import {Box, IconButton} from '@mui/material';
-import InputLabel from "@mui/material/InputLabel";
-import Typography from "@mui/material/Typography";
+import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
+
 
 
 
@@ -33,7 +32,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
 /*
   The main map function
 */
-function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
 
     const [markers, setMarkers] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
@@ -42,6 +41,10 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
   const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
   const [selectedMarker, setSelectedMarker] = useState(null);
 
+    React.useEffect(()=>{
+        let filteredSet=markers.filter((marker)=> {selectedFilters.find((marker)=>marker.category)});
+        setMarkers((current) => [...current, ...filteredSet]);
+    });//TODO QUE PONGO COMO DEPENDENCIA? )
   const addMarker = React.useCallback(
     (event) => {
       setMarkers((current) => [
@@ -50,26 +53,23 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
           lat: event.latLng.lat(),
           lng: event.latLng.lng(),
           time: new Date(),
+                    description:'',
           name: '',
-          type: '',
+          category: '',
           privacy: '',
           rate: "",
         },
       ]);
 
-      onMarkerAdded(); // Call the onMarkerAdded callback
-      setCanAddMarker(true); // Set canAddMarker to false after adding a marker
-    },
-    []
-  );
-
-  const retrieveLocations = async () => {
-    let resource = session.info.webId.replace(
-      "/profile/card#me",
-      "/lomap/example.ttl"
+            onMarkerAdded(); // Call the onMarkerAdded callback
+            setCanAddMarker(true); // Set canAddMarker to false after adding a marker
+        },
+        []
     );
-    return await readLocations(resource, session);
-  };
+    const retrieveLocations=async () => {
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    }
 
   React.useEffect(() => {
     async function getAndSetLocations() {
@@ -97,7 +97,7 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
   };
 
   const handleTypeChange = (event, marker) => {
-    marker.type = event.target.value;
+    marker.category= event.target.value;
     setMarkers([...markers]);
   };
   const handlePrivacyChange = (event, marker) => {
@@ -105,12 +105,9 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
     setMarkers([...markers]);
   };
 
-  const onMapLoad = React.useCallback((map) => {
-    mapRef.current = map;
-  }, []);
 
-  // Function to update the last marker with the markerData values
-  const updateLastMarker = () => {
+   // Function to update the last marker with the markerData values
+   const updateLastMarker = () => {
     
     setMarkers((current) => {
 
@@ -126,6 +123,43 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
       return [...current];
     });
   };
+  const onMapLoad = React.useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
+
+    const onFilterLocations=React.useCallback((filtersSelected)=>{
+
+            let filteredSet =[];
+           filteredSet=markers.map((pin)=>{
+               if(filtersSelected.find(pin.category)){
+                   filteredSet.push(pin);
+               }
+           });
+
+
+
+           
+
+
+        setMarkers((current) => [...current, ...filteredSet]);
+    });
+
+
+    React.useEffect( () => {
+        async function getAndSetLocations() {
+            let locationSet = await retrieveLocations()
+            setMarkers((current) => [...current, ...locationSet]);
+        }
+
+        getAndSetLocations();
+    }, []);
+     // Set canAddMarker to true when isInteractive changes to true
+     React.useEffect(() => {
+         if (canAddMarker) {
+             setCanAddMarker(false);
+         }
+     }, [canAddMarker]);
 
   // Set canAddMarker to true when isInteractive changes to true
   React.useEffect(() => {
@@ -139,6 +173,8 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
           bar: "/redLocation.svg",
           restaurant: "/orangeLocation.svg",
           shop: "/blueLocation.svg",
+          sight:"/trasnparentLocation.svg",
+          monument:"/purpleLocation.svg",
           other:  "/blackLocation.svg",
           // u can Adding more types and URLs as needed
       };
@@ -157,10 +193,11 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
         >
           {markers.map((marker, index) => (
               <Marker
-                 // key={`${marker.time.toISOString()}-${index}`}
+                 key={marker.locId}
                   position={{ lat: marker.lat, lng: marker.lng }}
                   icon={{
-                      url: iconUrls[marker.type] || "/blackLocation.svg",
+
+                      url: iconUrls[marker.category] || "/blackLocation.svg",
                       scaledSize: new window.google.maps.Size(40, 40),
                       origin: new window.google.maps.Point(0, 0),
                       anchor: new window.google.maps.Point(15, 15),
@@ -182,11 +219,22 @@ function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
                     style={{ display: 'block' }}
                 >
                     <div>
-                        <img src="https://picsum.photos/200" alt="Image" style={{ width: '9.375rem', height: '6.25rem' }} />
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '0.625rem', width: '100%' }}>
-                            <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{selected.name}</InputLabel>
+
+                        <img src="https://picsum.photos/200" alt="Image" style={{width: "150px", height: "100px"}} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: '10px', width: '100%' }}>
+                            <InputLabel sx={{ fontSize: '16px', fontWeight: 'bold' }}>{selected.name}</InputLabel>
+                            <Typography variant="subtitle2" sx={{ mt: '6px' }}> {selected.category} </Typography>
                             <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
-                            <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{selected.type} • {selected.privacy}</Typography>
+                            <Typography variant="caption" sx={{ mt: '10px' }}> {selected.privacy ? 'private' :'public'}</Typography>
+                            <div style={{width: "150px", height: "100px"}}>
+
+                                <Typography variant="caption" sx={{display: 'flex', flexWrap:"wrap", flexDirection: 'column', alignItems: 'center', fontSize: '13px', fontWeight: 'bold' }}>Description</Typography>
+                                <Typography variant="caption"sx={{display: 'flex', flexWrap:"wrap", flexDirection: 'column', alignItems: 'center',width: '100%' }}>
+
+                                    {selected.description}
+
+                                </Typography>
+                            </div>
                         </Box>
                         <div>
                             <p style={{ marginBottom: '0.25rem' }}>

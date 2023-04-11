@@ -13,8 +13,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-
-
+import TuneIcon from '@mui/icons-material/Tune';
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -67,12 +66,16 @@ const StyledMenu = styled((props) => (
 }));
 
 
-const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
+const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterLocations}) => {
+
 
   const handleAddButtonClick = () => {
     onAddMarker();
   };
+  const handleFilterLocations = () => {
 
+    onFilterLocations();
+  };
   const handleEditLocationButtonClick = () => {
     onEditMarker();
   };
@@ -182,6 +185,9 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
             <Button color="inherit">Map</Button>
           </Typography>
           <div>
+            <IconButton color="inherit" onClick={handleFilterLocations} >
+              <TuneIcon />
+            </IconButton>
             <IconButton color="inherit" onClick={handleEditLocationButtonClick} >
               <EditLocationIcon />
             </IconButton>
