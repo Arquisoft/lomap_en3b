@@ -20,6 +20,7 @@ const MapView = ({session,onSearch}) => {
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [showHomePage, setShowHomePage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [markerData, setMarkerData] = useState([]);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -28,16 +29,24 @@ const MapView = ({session,onSearch}) => {
 
   const handleMarkerAdded = () => {
     setIsInteractive(false);
+   
   };
+
+  
 
   const makeMapInteractive = () => {
     setIsInteractive(!isInteractive);
-    console.log(showList);
+    
     setShowList(!showList);
   };
 
-  const makePanelDisapear = () => {
+  const makePanelDisapear = (marker) => {
     setShowList(!showList);
+    setMarkerData([marker]);
+    
+
+    
+    
   };
 
   const makeEditPanelDisapear = () => {
@@ -88,17 +97,17 @@ const MapView = ({session,onSearch}) => {
             onAddMarker={() => makeMapInteractive()}
             onInfoList={() => makeInfoPanelDisapear()}
             onEditMarker={() => makePanelDisapear()}
-            onEditMarker={() => makeEditPanelDisapear()}
+            onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
             onHomePage={() => makeHomePageDisapear()}
         />    <Grid container spacing={3} style={{ width: "100%" }}>
-        <List isVisible={showList} onAddMarker={() => makePanelDisapear()} />
+        <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <HomePage isHomeVisible={showHomePage} onHomePage={() => makeHomePageDisapear ()}/>
         <Grid item xs={12} md={8}>
-          <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
+          <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
