@@ -16,7 +16,7 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CloseIcon from "@mui/icons-material/Close";
 
-const InfoList = ({isInfoVisible, onInfoList}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected}) => {
 
 const[comment,setComment] = useState("");
 const[comments,setComments]=useState(['This is a great spot!', 'I love coming here.']);
@@ -33,6 +33,7 @@ const[comments,setComments]=useState(['This is a great spot!', 'I love coming he
 const onClickHandler = () =>{
     setComments((comments) => [...comments, comment]);
     setComment('');
+    console.log(selected.name);
 };
 const onChangeHandler = (e) => {
 setComment(e.target.value);
@@ -54,12 +55,12 @@ setComment(e.target.value);
                 </IconButton>
                 <img src="https://picsum.photos/200" alt="Image" style={{ width: '90%', borderRadius: '0.3125rem' }} />
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
-                    <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
+                    <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{selected[0].name}</InputLabel>
                     <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                         <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
                         <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                     </Box>
-                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>Park • Private</Typography>
+                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{selected[0].type} • {selected[0].privacy}</Typography>
                 </Box>
                 <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                     <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
@@ -76,7 +77,7 @@ setComment(e.target.value);
                                     secondaryTypographyProps={{ fontSize: '0.75rem' }}
                                 />
                                 <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '25%' }}>
-                                    <Rating name="rating" count={5} size={12} defaultValue={3} precision={0.5} readOnly />
+                                    <Rating name="rating" count={5} size={12} defaultValue={3} precision={0.5} readOnly  />
                                 </Box>
                             </ListItem>
                         ))}

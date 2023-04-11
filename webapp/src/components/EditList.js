@@ -24,7 +24,7 @@ import Map from  "../components/Map";
 import CloseIcon from '@mui/icons-material/Close';
 
 
-const EditList = ({ isEditVisible, onEditMarker}) => {
+const EditList = ({ isEditVisible, onEditMarker,selected}) => {
 
     const handleAddButtonClick = () => {
         onEditMarker();

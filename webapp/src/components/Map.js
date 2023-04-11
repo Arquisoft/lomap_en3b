@@ -33,13 +33,14 @@ export function handleRateChange(newRating, selected) { // ı made this export c
 /*
   The main map function
 */
-function Map({ isInteractive,session, onMarkerAdded,markerData}) {
+function Map({ isInteractive,session, onMarkerAdded,markerData , onInfoList}) {
 
     const [markers, setMarkers] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
   const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
   const mapRef = React.useRef(null);
   const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const addMarker = React.useCallback(
     (event) => {
@@ -166,6 +167,8 @@ function Map({ isInteractive,session, onMarkerAdded,markerData}) {
                   }}
                   onClick={() => {
                       setSelected(marker);
+                      onInfoList(marker);
+                      //handleMarkerClick(marker);
                   }}
               />
 

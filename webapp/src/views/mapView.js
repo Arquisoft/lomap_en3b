@@ -19,6 +19,7 @@ const MapView = ({session,onSearch}) => {
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [markerData, setMarkerData] = useState([]);
+  const [selected, setSelected] = React.useState([]);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -50,8 +51,10 @@ const MapView = ({session,onSearch}) => {
   const makeEditPanelDisapear = () => {
     setShowEditList(!showEditList);
   };
-  const makeInfoPanelDisapear = () => {
+  const makeInfoPanelDisapear = (marker) => {
     setShowInfoList(!showInfoList);
+    setSelected([marker]);
+    
   };
 
   const makeAccountPageDisapear = () => {
@@ -89,17 +92,17 @@ const MapView = ({session,onSearch}) => {
         <CssBaseline />
         <Header
             onAddMarker={() => makeMapInteractive()}
-            onInfoList={() => makeInfoPanelDisapear()}
+            
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
         />    <Grid container spacing={3} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
-        <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
-        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
+        <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()}  />
+        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected}/>
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData}/>
+          <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker) => makeInfoPanelDisapear(marker)}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
