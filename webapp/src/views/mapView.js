@@ -19,7 +19,7 @@ const MapView = ({session,onSearch}) => {
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [markerData, setMarkerData] = useState([]);
-  const [selected, setSelected] = React.useState([]);
+  const [selected, setSelected] = React.useState(['']);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
