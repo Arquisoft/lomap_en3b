@@ -45,6 +45,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         let filteredSet=markers.filter((marker)=> {selectedFilters.find((marker)=>marker.category)});
         setMarkers((current) => [...current, ...filteredSet]);
     });//TODO QUE PONGO COMO DEPENDENCIA? )
+
   const addMarker = React.useCallback(
     (event) => {
       setMarkers((current) => [
@@ -58,6 +59,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
           category: '',
           privacy: '',
           rate: "",
+          comments:["so cool","great"],
         },
       ]);
 
@@ -66,6 +68,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         },
         []
     );
+
     const retrieveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?

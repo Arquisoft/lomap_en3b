@@ -57,6 +57,7 @@ const MapView = ({session,onSearch}) => {
   };
   const makeInfoPanelDisapear = (marker) => {
     setShowInfoList(!showInfoList);
+    console.log(marker.comments);
     setSelected([marker]);
     
   };
