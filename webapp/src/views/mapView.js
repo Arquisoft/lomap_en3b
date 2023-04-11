@@ -6,6 +6,7 @@ import Map from "../components/Map";
 import InfoList from "../components/InfoList";
 import EditList from "../components/EditList";
 import AccountPage from "../components/AccountPage";
+import HomePage from "../components/HomePage";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase} from "@mui/material";
 
@@ -17,6 +18,7 @@ const MapView = ({session,onSearch}) => {
   const [showEditList, setShowEditList] = useState(false);
   const [showInfoList, setShowInfoList] = useState(false);
   const [showAccountPage, setShowAccountPage] = useState(false);
+  const [showHomePage, setShowHomePage] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
   const { isLoaded, loadError } = useLoadScript({
@@ -47,6 +49,10 @@ const MapView = ({session,onSearch}) => {
 
   const makeAccountPageDisapear = () => {
     setShowAccountPage(!showAccountPage);
+  };
+
+  const makeHomePageDisapear = () => {
+    setShowHomePage(!showHomePage);
   };
 //Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
   const handleSearchChange = (event) => {
@@ -84,11 +90,13 @@ const MapView = ({session,onSearch}) => {
             onEditMarker={() => makePanelDisapear()}
             onEditMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
+            onHomePage={() => makeHomePageDisapear()}
         />    <Grid container spacing={3} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={() => makePanelDisapear()} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
+        <HomePage isHomeVisible={showHomePage} onHomePage={() => makeHomePageDisapear ()}/>
         <Grid item xs={12} md={8}>
           <Map isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>

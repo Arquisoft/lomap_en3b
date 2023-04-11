@@ -67,7 +67,7 @@ const StyledMenu = styled((props) => (
 }));
 
 
-const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
+const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage, onHomePage}) => {
 
   const handleAddButtonClick = () => {
     onAddMarker();
@@ -83,6 +83,10 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
 
   const handleAccountPageClick = () => {
     onAccountPage();
+  };
+
+  const handleHomeClick = () => {
+    onHomePage();
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -120,7 +124,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage}) => {
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             LOMAP
-            <Button color="inherit">Home</Button>
+            <Button color="inherit" onClick={handleHomeClick} >Home</Button>
 
             <Button
                 id="demo-customized-button"

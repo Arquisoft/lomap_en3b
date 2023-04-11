@@ -15,6 +15,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import CloseIcon from "@mui/icons-material/Close";
 
 const AccountPage = ({ isAccountVisible, onAccountPage }) => {
+
     const [selectedTab, setSelectedTab] = useState(0);
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
