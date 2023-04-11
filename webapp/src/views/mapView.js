@@ -22,23 +22,18 @@ const MapView = ({session,onSearch}) => {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // places library
   }); // hook to load the google script
+  /**
+   * This function is responsible from passing the filters selected in the FilterSidebar component into the Map component.
+   * For that i stablish a "common point" for both , here in their parent component, map view.
+   * That common point is the array of filters and the state changesInFilters
+   * (using the array of filters as a dependency for useEffect in map was not allowed, since it changed sizes between renders)
+   *This method is a way of using the set functionality of both states without passing the setters to both components.
+   * @param filters
+   */
   const updateFilterListInUse= (filters)=>{
 
-    if(selectedFilters.length==0){
-      console.log("entre")
-      setSelectedFilters(filters);
-      setChangesInFilters(!changesInFilters);
-    }
-      else{
-        for (const filter of filters) {
-          //When a filter is not found in the previous list, we insert it.
-          if(!selectedFilters.find((element)=>element===filter)){
             setSelectedFilters(filters);
             setChangesInFilters(!changesInFilters);
-          }
-        }
-      }
-
 
   };
   const handleMarkerAdded = () => {

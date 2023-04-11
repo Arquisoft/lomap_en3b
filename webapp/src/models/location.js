@@ -28,6 +28,7 @@ class LocationLM {
         this.category = category;
         this.locID = uuidv4();
         this.privacy=privacy;
+
     }
 
 
