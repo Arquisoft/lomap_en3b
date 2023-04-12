@@ -20,6 +20,10 @@ const MapView = ({session,onSearch}) => {
   const [searchValue, setSearchValue] = useState('');
   const [filterSideBar,setFilterSideBar]=useState(false);
   const [selectedFilters,setSelectedFilters]=useState([]);
+  const [markerData, setMarkerData] = useState([]);
+  const [selected, setSelected] = React.useState(['']);
+
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // places library
@@ -48,15 +52,18 @@ const MapView = ({session,onSearch}) => {
     setShowList(!showList);
   };
 
-  const makePanelDisapear = () => {
+  const makePanelDisapear = (marker) => {
     setShowList(!showList);
+    
+    setMarkerData([marker]);
   };
 
   const makeEditPanelDisapear = () => {
     setShowEditList(!showEditList);
   };
-  const makeInfoPanelDisapear = () => {
+  const makeInfoPanelDisapear = (marker) => {
     setShowInfoList(!showInfoList);
+    setSelected([marker]);
   };
   const displayFilterSideBar = () =>{
 
@@ -100,19 +107,19 @@ const MapView = ({session,onSearch}) => {
         <CssBaseline />
         <Header
             onAddMarker={() => makeMapInteractive()}
-            onInfoList={() => makeInfoPanelDisapear()}
+            
             onEditMarker={() => makePanelDisapear()}
-            onEditMarker={() => makeEditPanelDisapear()}
+            onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
-        <List isVisible={showList} onAddMarker={() => makePanelDisapear()} />
+        <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
-        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
+        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected}/>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
