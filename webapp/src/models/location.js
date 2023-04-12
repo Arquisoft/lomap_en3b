@@ -1,4 +1,4 @@
-// Import uuid fron generating id
+// Import uuid for generating id
 import { 
     v4 as uuidv4 
 } from 'uuid';
@@ -7,15 +7,16 @@ import {
     CoordinatesInvalidFormatException,
     StringInvalidFormatException
 } from '../util/Exceptions/exceptions.js';
+import {Review} from "./review";
 
 /**
  * Location LoMap class
  */
 class LocationLM {
     //Attributes
-    publicReviews = new Array();
-    privateReviews = new Array();
-    constructor(CoorLat, CoorLng, name, description, category) {
+    publicReviews;
+    privateReviews;
+    constructor(CoorLat, CoorLng, name, description, category,privacy=false, locID = uuidv4()) {
         checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
         checkCoordinatesInvalidFormat((CoorLng>= -180 && CoorLng<= 180), CoorLng, 'longitude');
@@ -26,7 +27,8 @@ class LocationLM {
         this.description = description;
         checkStringInvalidFormat(category, 'category' );
         this.cat = category;
-        this.locID = uuidv4();
+        this.locID = locID;
+        this.privacy=privacy;
     }
 
     getPublicReviews(){
@@ -45,16 +47,55 @@ class LocationLM {
         //Check type
         this.privateReviews.push(Review);
     }
+
+    addScoreReview(locId, scr, privacy){
+        if(privacy){
+            if(this.privateReviews == null){
+                this.privateReviews = new Review(locId);
+            }
+            this.privateReviews.addScoreReview(scr);
+        } else {
+            if(this.publicReviews == null){
+                this.publicReviews = new Review(locId);
+            }
+            this.publicReviews.addScoreReview(scr);
+
+        }
+    }
+
+    addCommentReview(locId, cmmt, privacy){
+        if(privacy){
+            if(this.privateReviews == null){
+                this.privateReviews = new Review(locId);
+            }
+            this.privateReviews.addCommentReview(cmmt);
+        } else {
+            if(this.publicReviews == null){
+                this.publicReviews = new Review(locId);
+            }
+            this.publicReviews.addCommentReview(cmmt);
+
+        }
+
+    }
+
+    getAllReviews() {
+        let ret = [];
+
+        return ret
+                .concat(this.publicReviews)
+                .concat(this.privateReviews);
+    }
 }
 
 function checkCoordinatesInvalidFormat (cond, value, str){
     if(!cond){
-        throw new CoordinatesInvalidFormatException(new String(str + '=' + value));
+        throw new CoordinatesInvalidFormatException( String(str + '=' + value));
     }
 }
 function checkStringInvalidFormat (value, str){
     if(!value){
-        throw new StringInvalidFormatException(new String(str + '=' + value));
+        throw new StringInvalidFormatException( String(str + '=' + value));
     }
 }
 

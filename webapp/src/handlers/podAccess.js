@@ -28,32 +28,16 @@ import {CoordinatesInvalidFormatException, StringInvalidFormatException} from ".
  * @param {User} user
  * @returns {Promise<void>}
  */
-async function writeLocations(user) {
+async function writeLocations(user, session) {
     //This can be parallel
-    writeUserLocations(user.resourceURLPublic, user.publicLocat);
-    writeUserLocations(user.resourceURLPrivate, user.privateLocat);
+    writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
+    writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
 }
 
 async function writeReviews(user) {
     user.getReviews();
-    writeUserReviews(user.resourceURLPublic, user.publicReviews);
-    writeUserReviews(user.resourceURLPrivate, user.privateReviews);
-}
-
-
-/**
- *
- * @param session
- * @param {User} user
- * @returns {Promise<void>}
- */
-async function writeLocations1(session, user) {
-    let resourceURLPublic =  checkForLomap(session);
-    let resourceURLPrivate =  checkForLomap(session);
-    //This can be parallel
-    writeUserLocations(await resourceURLPublic, user.publicLocat);
-    writeUserLocations(await resourceURLPrivate, user.privateLocat);
-    return null;
+    await writeUserReviews(user.resourceURLPublic, user.publicReviews);
+    await writeUserReviews(user.resourceURLPrivate, user.privateReviews);
 }
 
 /**
@@ -62,12 +46,12 @@ async function writeLocations1(session, user) {
  * @param {Array.<LocationLM>} list list of locations to save
  * @returns {null}
  */
-async function writeUserLocations(resourceURL, list) {
+async function writeLocIntoPOD(resourceURL, list, session) {
     let mySolidDataset;
     try {
         //Get existing dataSet
         let mySolidDataset = await getSolidDataset(resourceURL,
-            {fetch: getDefaultSession().fetch}
+            {fetch: session.fetch}
             // { fetch: fetch } //Other way
         );
         // Clear the list to override the whole list
@@ -112,42 +96,50 @@ async function writeUserLocations(resourceURL, list) {
 
 async function writeUserReviews(resourceURL, list) {
 
-    let mySolidDataset;
+    let myReviewSolidDataset;
     try {
         //Get existing dataSet
-        let mySolidDataset = await getSolidDataset(resourceURL,
+        let myReviewSolidDataset = await getSolidDataset(resourceURL,
             {fetch: getDefaultSession().fetch}
             // { fetch: fetch } //Other way
         );
         // Clear the list to override the whole list
-        let items = getThingAll(mySolidDataset);
+        let items = getThingAll(myReviewSolidDataset);
         items.forEach((item) => {
-            mySolidDataset = removeThing(mySolidDataset, item);
+            myReviewSolidDataset = removeThing(myReviewSolidDataset, item);
         });
     } catch (error) {
         if (typeof error.statusCode === "number" && error.statusCode === 404) {
             // if not found, create a new SolidDataset (i.e., the reading list)
-            mySolidDataset = createSolidDataset();
+            myReviewSolidDataset = createSolidDataset();
         } else {
             console.error(error.message);
         }
     }
-    list.forEach(rev => {
-            // Create a New Thing to Add
-            let locationThing = buildThing(createThing({name: rev.revID}))
-                .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.revID)
-                // TODO
-                .addUrl(RDF.type, "https://schema.org/Review")
-                .build();
-            // Update the SolidDataset with New Things
-            mySolidDataset = setThing(mySolidDataset, locationThing);
-        }
-    );
+
+    for (const rev of list) {
+        // Create a New Thing to Add
+        let locationThing = buildThing(createThing({name: rev.revID}))
+            // ->   | revID
+            .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.revID)
+            // Get Thing associated -> about  | locationID
+            .addStringNoLocale("https://schema.org/about", rev.locationID)
+            // -> (?)  | revScore
+            .addStringNoLocale(SCHEMA_INRUPT.value, rev.revScore)
+            // -> text  | revComment
+            .addStringNoLocale("https://schema.org/text", rev.getCommentsToPOD())
+            //This needs to be an url -> image  | revImg
+            .addStringNoLocale("https://schema.org/image", rev.revImg)
+            .addUrl(RDF.type, "https://schema.org/Review")
+            .build();
+        // Update the SolidDataset with New Things
+        myReviewSolidDataset = setThing(myReviewSolidDataset, locationThing);
+    }
     // Save the SolidDataset
     /*    const savedSolidDataset = */
     await saveSolidDatasetAt(
         resourceURL,
-        mySolidDataset,
+        myReviewSolidDataset,
         {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
         //{ fetch: fetch } //Other way
     );
@@ -167,6 +159,7 @@ async function getThingsFromDataset(resourceURL,session){
 /**
  * This method reads from the user's Solid POD.
  * @param {string} resourceURL is the path within the pod where to write. It must be like: path/fileName
+ * @param session
  * @returns a list of locations
  */
 async function readLocations(resourceURL,session) {
@@ -182,7 +175,7 @@ async function readLocations(resourceURL,session) {
             try {
 
                 //Convert into LocationLM object
-               location= new LocationLM(
+                location= new LocationLM(
                     Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),   // CoorLat,
                     Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),  // CoorLng,
                     getStringNoLocale(locationThing,SCHEMA_INRUPT.name),                // name,
@@ -207,6 +200,40 @@ async function readLocations(resourceURL,session) {
 
     //Return list
     return locationsRetrieved;
+
+}
+async function readReviews(resourceURL,session) {
+    let reviewThings = await getThingsFromDataset(resourceURL, session);
+    let review, reviewThing;
+    let reviewsRetrieved = [];
+    if (reviewThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
+        //Convert into Review object
+        for (let i = 0; i < reviewThings.length; i++) {
+            //Get a Thing
+            reviewThing = reviewThings[i];
+            try {
+                //Convert into Review object
+                review = new Review(
+                    getStringNoLocale(reviewThing, "https://schema.org/about") , // CoorLng,
+                    getStringNoLocale(reviewThing, SCHEMA_INRUPT.identifier)   // CoorLat,
+                );
+                review.addComment(getStringNoLocale(reviewThing, "https://schema.org/text"));
+                review.addScore(getStringNoLocale(reviewThing,SCHEMA_INRUPT.value));
+                review.addImg(getStringNoLocale(reviewThing, "https://schema.org/image"));
+
+                //Add locationLM into List
+                reviewsRetrieved.push(review);
+
+            } catch (error) {
+                if (error instanceof CoordinatesInvalidFormatException || error instanceof StringInvalidFormatException) {
+                    console.error(error.message);
+                }
+            }
+        }
+    }
+
+    //Return list
+    return reviewsRetrieved;
 
 }
 export {
