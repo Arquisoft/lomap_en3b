@@ -1,6 +1,9 @@
 import{
     User
 } from "../models/user";
+import{
+    Review
+} from "../models/review";
 
 // Import from "@inrupt/solid-client"
 import {
@@ -25,23 +28,16 @@ import {CoordinatesInvalidFormatException, StringInvalidFormatException} from ".
  * @param {User} user
  * @returns {Promise<void>}
  */
-async function writeLocations(user) {
+async function writeLocations(user, session) {
     //This can be parallel
-    writeUserLocations(user.resourceURLPublic, user.publicLocat);
-    writeUserLocations(user.resourceURLPrivate, user.privateLocat);
+    writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
+    writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
 }
 
-/**
- *
- * @param session
- * @param {User} user
- * @returns {Promise<void>}
- */
-async function writeLocations1(session, user) {
-    let resourceURL =  checkForLomap(session);
-    //This can be parallel
-    writeUserLocations(await resourceURL, user.publicLocat);
-    return null;
+async function writeReviews(user) {
+    user.getReviews();
+    await writeUserReviews(user.resourceURLPublic, user.publicReviews);
+    await writeUserReviews(user.resourceURLPrivate, user.privateReviews);
 }
 
 /**
@@ -50,12 +46,12 @@ async function writeLocations1(session, user) {
  * @param {Array.<LocationLM>} list list of locations to save
  * @returns {null}
  */
-async function writeUserLocations(resourceURL, list) {
+async function writeLocIntoPOD(resourceURL, list, session) {
     let mySolidDataset;
     try {
         //Get existing dataSet
         let mySolidDataset = await getSolidDataset(resourceURL,
-            {fetch: getDefaultSession().fetch}
+            {fetch: session.fetch}
             // { fetch: fetch } //Other way
         );
         // Clear the list to override the whole list
@@ -75,8 +71,8 @@ async function writeUserLocations(resourceURL, list) {
             // Create a New Thing to Add
             let locationThing = buildThing(createThing({name: loc.locID}))
                 .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
-                .addDecimal(SCHEMA_INRUPT.latitude, loc.lat)
-                .addDecimal(SCHEMA_INRUPT.longitude, loc.lng)
+                .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
+                .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
                 .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
                 .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
                 .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.cat)
@@ -98,6 +94,58 @@ async function writeUserLocations(resourceURL, list) {
     return null;
 }
 
+async function writeUserReviews(resourceURL, list) {
+
+    let myReviewSolidDataset;
+    try {
+        //Get existing dataSet
+        let myReviewSolidDataset = await getSolidDataset(resourceURL,
+            {fetch: getDefaultSession().fetch}
+            // { fetch: fetch } //Other way
+        );
+        // Clear the list to override the whole list
+        let items = getThingAll(myReviewSolidDataset);
+        items.forEach((item) => {
+            myReviewSolidDataset = removeThing(myReviewSolidDataset, item);
+        });
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset (i.e., the reading list)
+            myReviewSolidDataset = createSolidDataset();
+        } else {
+            console.error(error.message);
+        }
+    }
+
+    for (const rev of list) {
+        // Create a New Thing to Add
+        let locationThing = buildThing(createThing({name: rev.revID}))
+            // ->   | revID
+            .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.revID)
+            // Get Thing associated -> about  | locationID
+            .addStringNoLocale("https://schema.org/about", rev.locationID)
+            // -> (?)  | revScore
+            .addStringNoLocale(SCHEMA_INRUPT.value, rev.revScore)
+            // -> text  | revComment
+            .addStringNoLocale("https://schema.org/text", rev.getCommentsToPOD())
+            //This needs to be an url -> image  | revImg
+            .addStringNoLocale("https://schema.org/image", rev.revImg)
+            .addUrl(RDF.type, "https://schema.org/Review")
+            .build();
+        // Update the SolidDataset with New Things
+        myReviewSolidDataset = setThing(myReviewSolidDataset, locationThing);
+    }
+    // Save the SolidDataset
+    /*    const savedSolidDataset = */
+    await saveSolidDatasetAt(
+        resourceURL,
+        myReviewSolidDataset,
+        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
+        //{ fetch: fetch } //Other way
+    );
+    return null;
+}
+
 
 async function getThingsFromDataset(resourceURL,session){
     let dataset,allThings;
@@ -111,6 +159,7 @@ async function getThingsFromDataset(resourceURL,session){
 /**
  * This method reads from the user's Solid POD.
  * @param {string} resourceURL is the path within the pod where to write. It must be like: path/fileName
+ * @param session
  * @returns a list of locations
  */
 async function readLocations(resourceURL,session) {
@@ -126,13 +175,12 @@ async function readLocations(resourceURL,session) {
             try {
 
                 //Convert into LocationLM object
-               location= new LocationLM(
-
-                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),               // CoorLat,
-                   Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),              // CoorLng,
-                    getStringNoLocale(locationThing,SCHEMA_INRUPT.name),            // name,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.description),     // description,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.alternateName),   // category
+                location= new LocationLM(
+                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),   // CoorLat,
+                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),  // CoorLng,
+                    getStringNoLocale(locationThing,SCHEMA_INRUPT.name),                // name,
+                    getStringNoLocale(locationThing, SCHEMA_INRUPT.description),        // description,
+                    getStringNoLocale(locationThing, SCHEMA_INRUPT.alternateName),      // category
                 );
 
                 //Add locationLM into List
@@ -152,6 +200,40 @@ async function readLocations(resourceURL,session) {
 
     //Return list
     return locationsRetrieved;
+
+}
+async function readReviews(resourceURL,session) {
+    let reviewThings = await getThingsFromDataset(resourceURL, session);
+    let review, reviewThing;
+    let reviewsRetrieved = [];
+    if (reviewThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
+        //Convert into Review object
+        for (let i = 0; i < reviewThings.length; i++) {
+            //Get a Thing
+            reviewThing = reviewThings[i];
+            try {
+                //Convert into Review object
+                review = new Review(
+                    getStringNoLocale(reviewThing, "https://schema.org/about") , // CoorLng,
+                    getStringNoLocale(reviewThing, SCHEMA_INRUPT.identifier)   // CoorLat,
+                );
+                review.addComment(getStringNoLocale(reviewThing, "https://schema.org/text"));
+                review.addScore(getStringNoLocale(reviewThing,SCHEMA_INRUPT.value));
+                review.addImg(getStringNoLocale(reviewThing, "https://schema.org/image"));
+
+                //Add locationLM into List
+                reviewsRetrieved.push(review);
+
+            } catch (error) {
+                if (error instanceof CoordinatesInvalidFormatException || error instanceof StringInvalidFormatException) {
+                    console.error(error.message);
+                }
+            }
+        }
+    }
+
+    //Return list
+    return reviewsRetrieved;
 
 }
 export {
