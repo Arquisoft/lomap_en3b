@@ -25,9 +25,24 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const List = ({ isVisible, onAddMarker}) => {
 
-    const handleAddButtonClick = () => {
-        onAddMarker();
-    };
+
+    const [name, setName] = useState('');
+  const [type, setType] = useState('');
+  const [privacy, setPrivacy] = useState('public');
+
+  const handleAddButtonClick = () => {
+    if (name !== '' && type !== '') {
+      onAddMarker({ name, type, privacy });
+      setName('');
+      setType('');
+      setPrivacy('public');
+      
+      
+    }
+  };
+
+
+    
 
     const style = {
         display: isVisible ? 'block' : 'none',
@@ -43,19 +58,19 @@ const List = ({ isVisible, onAddMarker}) => {
         <Container style={style}>
             <>
                 <IconButton style={{ marginLeft: '15.625rem', marginTop: '-1.25rem' }} onClick={() => {
-                    handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+                  
                 }}>
                     <CloseIcon />
                 </IconButton>
-                <Typography variant="h5" style={{ fontFamily: 'Arial' }}>Click for Add a Marker</Typography>
+                <Typography variant="h5" style={{ fontFamily: 'Arial' }}>Click after you finish to Add a Marker</Typography>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '3rem' }}>
                     <FormControl style={{ width: '100%' }}>
                         <InputLabel> Name: </InputLabel>
-                        <TextField style={{ width: '100%' }} />
+                        <TextField style={{ width: '100%' }} value={name} onChange={(e) => setName(e.target.value)} />
                     </FormControl>
                     <FormControl style={{ width: '100%' }}>
                         <InputLabel>Type</InputLabel>
-                        <Select style={{ width: '100px' }} defaultValue={''}  >
+                        <Select style={{ width: '100px' }} value={type} onChange={(e) => setType(e.target.value)}>
                             <MenuItem value="bar">Bar</MenuItem>
                             <MenuItem value="shop">Shop</MenuItem>
                             <MenuItem value="restaurant">Restaurant</MenuItem>
@@ -66,7 +81,7 @@ const List = ({ isVisible, onAddMarker}) => {
                     </FormControl>
                     <FormControl style={{ width: '100%' }}>
                         <InputLabel>Privacy</InputLabel>
-                        <RadioGroup row>
+                        <RadioGroup row value={privacy} onChange={(e) => setPrivacy(e.target.value)}>
                             <FormControlLabel
                                 value="public"
                                 control={<Radio color="default" />}

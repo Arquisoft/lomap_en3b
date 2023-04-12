@@ -32,37 +32,39 @@ export function handleRateChange(newRating, selected) { // ı made this export c
 /*
   The main map function
 */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList}) {
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
     const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
+    const [selectedMarker, setSelectedMarker] = useState(null);
 
 
     const addMarker = React.useCallback(
-        (event) => {
-            setMarkers((current) => [
-                ...current,
-                {
-                    lat: event.latLng.lat(),
-                    lng: event.latLng.lng(),
-                    time: new Date(),
-                    description:'',
-                    name: '', // isim ekliyoruz
-                    category: '',
-                    privacy: '',
-                    rate: '',
+      (event) => {
+        setMarkers((current) => [
+          ...current,
+          {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng(),
+            time: new Date(),
+                      description:'',
+            name: '',
+            category: '',
+            privacy: '',
+            rate: "",
+            comments:["so cool","great"],
+          },
+        ]);
+  
+              onMarkerAdded(); // Call the onMarkerAdded callback
+              setCanAddMarker(true); // Set canAddMarker to false after adding a marker
+          },
+          []
+      );
 
-                },
-            ]);
-
-            onMarkerAdded(); // Call the onMarkerAdded callback
-            setCanAddMarker(true); // Set canAddMarker to false after adding a marker
-        },
-        []
-    );
     const retrieveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
@@ -102,6 +104,25 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         setMarkers([...markers]);
     }
 
+    
+    const updateLastMarker = () => {
+    
+      setMarkers((current) => {
+  
+          
+        const lastMarker = current[current.length - 1];
+        console.log(lastMarker);
+        const marker = markerData[0]; // Access the object inside the array
+        
+        lastMarker.name = marker.name;
+        lastMarker.type = marker.type;
+        lastMarker.privacy = marker.privacy;
+  
+       
+        return [...current];
+      });
+    };
+
     const onMapLoad = async (map) => {
         mapRef.current = map;
        await getAndSetLocations();
@@ -134,6 +155,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     React.useEffect(() => {
         if (canAddMarker) {
             setCanAddMarker(false);
+            updateLastMarker(); // Call the updateLastMarker function
         }
     }, [canAddMarker]);
 
@@ -173,6 +195,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                         }}
                         onClick={() => {
                             setSelected(marker);
+                            onInfoList(marker);
                         }}
                     />
 

@@ -16,10 +16,10 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CloseIcon from "@mui/icons-material/Close";
 
-const InfoList = ({isInfoVisible, onInfoList}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected}) => {
 
 const[comment,setComment] = useState("");
-const[comments,setComments]=useState(['This is a great spot!', 'I love coming here.']);
+const[comments,setComments]=useState([]);
 
     const style = {
         display: isInfoVisible ? 'block' : 'none',
@@ -64,7 +64,7 @@ setComment(e.target.value);
                 <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                     <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
                     <List sx={{ overflowY: 'scroll',  maxHeight: '6.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
-                        {comments.map((text, index) => (
+                        {selected?.[0]?.comments?.map((text, index) => (
                             <ListItem key={index} sx={{ bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                 <ListItemAvatar>
                                     <Avatar alt="Profile Picture" src="https://picsum.photos/id/446/50/50" />
