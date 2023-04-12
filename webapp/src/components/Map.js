@@ -108,7 +108,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     } ;
 
     React.useEffect(()=>{
-        console.log("Changes in filters detected- re render ! " +selectedFilters)
+
 
         if(selectedFilters.length>0){//If there are no filters selected i want the original, non filtered set of markers displayed.
             let filteredSet =[];
@@ -119,16 +119,11 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                     }
 
                 }
-                console.log("Map re-renders with the following filters")
-                console.log(selectedFilters)
-                console.log("Map re-renders with the following locations")
-                console.log(filteredSet)
+
                 setMarkers(filteredSet);
 
             }}else{
-            console.log("no filters where found so original markers are shown")
-            console.log("Map re-renders with the following filters")
-            console.log(selectedFilters)
+
             setMarkers( originalMarkers);
         }
 

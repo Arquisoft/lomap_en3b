@@ -15,7 +15,7 @@ class LocationLM {
     //Attributes
 
     privateReview = new Array();
-    constructor(CoorLat, CoorLng, name, description, category,privacy=false) {
+    constructor(CoorLat, CoorLng, name, description, category,privacy=false,rating=null) {
         checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
         checkCoordinatesInvalidFormat((CoorLng>= -180 && CoorLng<= 180), CoorLng, 'longitude');
@@ -28,6 +28,9 @@ class LocationLM {
         this.category = category;
         this.locID = uuidv4();
         this.privacy=privacy;
+        if(rating){
+            this.rating=rating;
+        }
 
     }
 
