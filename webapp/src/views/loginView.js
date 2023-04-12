@@ -10,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 const Login = () => {
     const [redirectUrl, setRedirectUrl] = useState("");
-    const [provider,setProvider]= useState("");
+    const [provider,setProvider]= useState("https://inrupt.net");
     const authOptions={
         clientName:"LoMap",
     };
@@ -42,12 +42,14 @@ const Login = () => {
                     <Typography variant="subtitle1" sx={{ color: '#555555', mb: 2 }}>Welcome to LoMap</Typography>
                     <FormControl style={{ width: '50%' }} >
                         <InputLabel>Select an Identity provider</InputLabel>
-                        <Select style={{ width: '100%' }}>
+                        <Select style={{ width: '100%' } } value="Inrupt.net" label="inrupt.net">
+                            <MenuItem  value="https://inrupt.net"  >Inrupt.net</MenuItem>
                             <MenuItem value="https://solidcommunity.net/login" >Solid Community</MenuItem>
                             <MenuItem value="https://solidcommunity.net/login" >Solid Web</MenuItem>
-                            <MenuItem value="https://inrupt.net"  >Inrupt.net</MenuItem>
                             <MenuItem value="https://podbrowser.inrupt.com/login"  >Pod spaces browser</MenuItem>
+
                         </Select>
+                        <InputLabel>(Inrupt By default)</InputLabel>
                     </FormControl>
                     <LoginButton oidcIssuer={provider} redirectUrl={redirectUrl} authOptions={authOptions}>
                         <Button name="lomapLoginButton" variant="contained" color="inherit" startIcon={<AccountCircleIcon />} onClick={handleLogin}>Login</Button>
