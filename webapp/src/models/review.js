@@ -6,13 +6,13 @@ import {ReviewInvalidFormatException, ReviewInvalidFormatForCommentException} fr
 
 function check(value, str) {
     if(!value){
-        throw new ReviewInvalidFormatException(String(str + '=' + value));
+        throw new ReviewInvalidFormatException(String(str  ));
     }
 }
 
 function checkValidComment(str) {
     if (/\n/.exec(str) || !str) {
-        throw new ReviewInvalidFormatForCommentException(String(str + '=' + value));
+        throw new ReviewInvalidFormatForCommentException(String(str));
     }
 }
 

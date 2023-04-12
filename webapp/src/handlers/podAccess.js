@@ -75,7 +75,7 @@ async function writeLocIntoPOD(resourceURL, list, session) {
                 .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
                 .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
                 .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
-                .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.cat)
+                .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
                 // date (?) - We need to think if it's needed.
                 .addUrl(RDF.type, "https://schema.org/Place")
                 .build();
@@ -238,6 +238,5 @@ async function readReviews(resourceURL,session) {
 }
 export {
     writeLocations,
-    writeLocations1,
     readLocations
 }
