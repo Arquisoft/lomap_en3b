@@ -13,8 +13,8 @@ import {
  */
 class LocationLM {
     //Attributes
-
-    privateReview = new Array();
+    publicReviews = new Array();
+    privateReviews = new Array();
     constructor(CoorLat, CoorLng, name, description, category) {
         checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
@@ -29,10 +29,21 @@ class LocationLM {
         this.locID = uuidv4();
     }
 
+    getPublicReviews(){
+        return this.publicReviews;
+    }
 
+    getPrivateReviews(){
+        return this.privateReviews;
+    }
 
-    addPublicReview() {
-
+    addPublicReview(Review) {
+        //Check type
+        this.publicReviews.push(Review);
+    }
+    addPrivateReview(Review) {
+        //Check type
+        this.privateReviews.push(Review);
     }
 }
 

@@ -1,4 +1,5 @@
 import {SessionManager} from "./sessionManager";
+import {User} from "../models/user";
 
 class Controller{
     sessionMng;

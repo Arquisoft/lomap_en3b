@@ -1,6 +1,9 @@
 import{
     User
 } from "../models/user";
+import{
+    Review
+} from "../models/review";
 
 // Import from "@inrupt/solid-client"
 import {
@@ -31,6 +34,13 @@ async function writeLocations(user) {
     writeUserLocations(user.resourceURLPrivate, user.privateLocat);
 }
 
+async function writeReviews(user) {
+    user.getReviews();
+    writeUserReviews(user.resourceURLPublic, user.publicReviews);
+    writeUserReviews(user.resourceURLPrivate, user.privateReviews);
+}
+
+
 /**
  *
  * @param session
@@ -38,9 +48,11 @@ async function writeLocations(user) {
  * @returns {Promise<void>}
  */
 async function writeLocations1(session, user) {
-    let resourceURL =  checkForLomap(session);
+    let resourceURLPublic =  checkForLomap(session);
+    let resourceURLPrivate =  checkForLomap(session);
     //This can be parallel
-    writeUserLocations(await resourceURL, user.publicLocat);
+    writeUserLocations(await resourceURLPublic, user.publicLocat);
+    writeUserLocations(await resourceURLPrivate, user.privateLocat);
     return null;
 }
 
@@ -75,13 +87,57 @@ async function writeUserLocations(resourceURL, list) {
             // Create a New Thing to Add
             let locationThing = buildThing(createThing({name: loc.locID}))
                 .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
-                .addDecimal(SCHEMA_INRUPT.latitude, loc.lat)
-                .addDecimal(SCHEMA_INRUPT.longitude, loc.lng)
+                .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
+                .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
                 .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
                 .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
                 .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.cat)
                 // date (?) - We need to think if it's needed.
                 .addUrl(RDF.type, "https://schema.org/Place")
+                .build();
+            // Update the SolidDataset with New Things
+            mySolidDataset = setThing(mySolidDataset, locationThing);
+        }
+    );
+    // Save the SolidDataset
+    /*    const savedSolidDataset = */
+    await saveSolidDatasetAt(
+        resourceURL,
+        mySolidDataset,
+        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
+        //{ fetch: fetch } //Other way
+    );
+    return null;
+}
+
+async function writeUserReviews(resourceURL, list) {
+
+    let mySolidDataset;
+    try {
+        //Get existing dataSet
+        let mySolidDataset = await getSolidDataset(resourceURL,
+            {fetch: getDefaultSession().fetch}
+            // { fetch: fetch } //Other way
+        );
+        // Clear the list to override the whole list
+        let items = getThingAll(mySolidDataset);
+        items.forEach((item) => {
+            mySolidDataset = removeThing(mySolidDataset, item);
+        });
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset (i.e., the reading list)
+            mySolidDataset = createSolidDataset();
+        } else {
+            console.error(error.message);
+        }
+    }
+    list.forEach(rev => {
+            // Create a New Thing to Add
+            let locationThing = buildThing(createThing({name: rev.revID}))
+                .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.revID)
+                // TODO
+                .addUrl(RDF.type, "https://schema.org/Review")
                 .build();
             // Update the SolidDataset with New Things
             mySolidDataset = setThing(mySolidDataset, locationThing);
@@ -127,12 +183,11 @@ async function readLocations(resourceURL,session) {
 
                 //Convert into LocationLM object
                location= new LocationLM(
-
-                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),               // CoorLat,
-                   Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),              // CoorLng,
-                    getStringNoLocale(locationThing,SCHEMA_INRUPT.name),            // name,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.description),     // description,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.alternateName),   // category
+                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),   // CoorLat,
+                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),  // CoorLng,
+                    getStringNoLocale(locationThing,SCHEMA_INRUPT.name),                // name,
+                    getStringNoLocale(locationThing, SCHEMA_INRUPT.description),        // description,
+                    getStringNoLocale(locationThing, SCHEMA_INRUPT.alternateName),      // category
                 );
 
                 //Add locationLM into List

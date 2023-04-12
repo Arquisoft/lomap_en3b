@@ -5,6 +5,8 @@ import {LocationLM} from "./location";
 class User{
     publicLocat = new Array();
     privateLocat = new Array();
+    privateReviews = new Array();
+    publicReviews = new Array();
     podURL;
     friendsLocat = new Array();
     constructor() {
@@ -74,6 +76,44 @@ class User{
 
     setPodURL(pod){
         this.podURL = pod;
+    }
+
+
+    addNewPublicReview (LocID, Review){
+        this.publicLocat.forEach((loc) =>
+        {
+            if(loc.id.equals(LocID)){
+                loc.addPublicReview(Review);
+            }
+        });
+    }
+
+    addNewPrivateReview (LocID, Review){
+        this.privateLocat.forEach((loc) =>
+        {
+            if(loc.id.equals(LocID)){
+                loc.addPrivateReview(Review);
+            }
+        });
+        //If the location is not private, it's added to a public location as private
+        this.publicLocat.forEach((loc) =>
+        {
+            if(loc.id.equals(LocID)){
+                loc.addPrivateReview(Review);
+            }
+        });
+
+    }
+    getReviews(){
+        this.publicLocat.forEach((loc) =>
+        {
+            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
+            this.publicReviews = this.publicReviews.concat(loc.getPublicReviews());
+        });
+        this.privateLocat.forEach((loc) =>
+        {
+            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
+        });
     }
 }
 
