@@ -10,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 const Login = () => {
     const [redirectUrl, setRedirectUrl] = useState("");
-    const provider="https://inrupt.net";
+    const [provider,setProvider]= useState("");
     const authOptions={
         clientName:"LoMap",
     };
@@ -40,13 +40,13 @@ const Login = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                     <Typography variant="h3" sx={{ color: '#333333', fontWeight: 'bold', mb: 1 }}>LoMAP</Typography>
                     <Typography variant="subtitle1" sx={{ color: '#555555', mb: 2 }}>Welcome to LoMap</Typography>
-                    <FormControl style={{ width: '50%' }}>
+                    <FormControl style={{ width: '50%' }} >
                         <InputLabel>Select an Identity provider</InputLabel>
                         <Select style={{ width: '100%' }}>
-                            <MenuItem value="Solid Community">Solid Community</MenuItem>
-                            <MenuItem value="Solid Web">Solid Web</MenuItem>
-                            <MenuItem value="Inrupted.net">Inrupted.net</MenuItem>
-                            <MenuItem value="pod.inropted.com">pod.inropted.com</MenuItem>
+                            <MenuItem value="https://solidcommunity.net/login" >Solid Community</MenuItem>
+                            <MenuItem value="https://solidcommunity.net/login" >Solid Web</MenuItem>
+                            <MenuItem value="https://inrupt.net"  >Inrupt.net</MenuItem>
+                            <MenuItem value="https://podbrowser.inrupt.com/login"  >Pod spaces browser</MenuItem>
                         </Select>
                     </FormControl>
                     <LoginButton oidcIssuer={provider} redirectUrl={redirectUrl} authOptions={authOptions}>
