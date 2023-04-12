@@ -36,6 +36,9 @@ const List = ({ isVisible, onAddMarker}) => {
         margin: '0 auto',
     };
 
+
+
+
     return (
         <Container style={style}>
             <>
@@ -52,11 +55,13 @@ const List = ({ isVisible, onAddMarker}) => {
                     </FormControl>
                     <FormControl style={{ width: '100%' }}>
                         <InputLabel>Type</InputLabel>
-                        <Select style={{ width: '100%' }}>
-                            <MenuItem value="Bar">Bar</MenuItem>
-                            <MenuItem value="Shop">Shop</MenuItem>
-                            <MenuItem value="Restaurant">Restaurant</MenuItem>
-                            <MenuItem value="Park">Park</MenuItem>
+                        <Select style={{ width: '100px' }} defaultValue={''}  >
+                            <MenuItem value="bar">Bar</MenuItem>
+                            <MenuItem value="shop">Shop</MenuItem>
+                            <MenuItem value="restaurant">Restaurant</MenuItem>
+                            <MenuItem value="park">Park</MenuItem>
+                            <MenuItem value="monument">Monument</MenuItem>
+                            <MenuItem value="sight">Sight</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl style={{ width: '100%' }}>
