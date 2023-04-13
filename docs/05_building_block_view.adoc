@@ -61,8 +61,8 @@ In the best case you will get away with examples or simple signatures.
 ----
 actor User as S 
 rectangle “LoMap” as System 
-rectangle “Map Provider” as MapAPI 
-rectangle “POD Provider (API)” as PodAPI
+rectangle “Map Provider (Google)” as MapAPI
+rectangle “POD Provider (Inrupt)” as PodAPI
 S --> System: uses 
 System --> PodAPI: location 
 PodAPI --> System: map 
@@ -155,37 +155,41 @@ database "Solid POD" as Pod1 {
 
   }
 }
-database "MongoDB" as DataB{
-}
-node "LoMapUI" as LoMap {
-  [LogIn] as SI
-  [Locations Management] as LM
-  [Friendships Management] as FM
-  [Review Management] as RM
-  [Map Management] as MapM
-  [User Profile] as UP
+node "LoMapUI" as LoMapFE {
+  [views] as UI
 }
 
+node "LoMap" as LoMapBE {
+  [Controller] as crl
+  [SessionManager] as ssmng
+  [podHandler] as PODHdr
+  [podAccess] as PODAcc
+  [Location] as Loc
+  [Review] as Rev
+  [User] as U
+  [Util] as Utl
+}
 
-SI ----> PODAP: loads
-MapP -down---> MapM: Deliver map
-MapM -up---> MapP: request
-PODAP ----> Pod1: identifies
-data1 -up--> UP: Deliver Content
-review1 -up--> RM: Deliver Content
-friend1 -up--> FM: Deliver Content
-reviewF1 -up--> RM: Deliver Content
-Loc1 -up--> LM: Deliver Content
-LocF1 --> LM: Deliver Content
-    
-PODAP -----> Pod2: identifies
-reviewF2 --up---> RM: Deliver Content
-LocF2 --up---> LM: Deliver Content
+UI --> MapP : request Map (changes)
+MapP --> UI : return changes
+UI --> crl : request changes
+crl --> PODAP : request Data
+PODAP --> crl : return Data
+crl --> UI : update values
 
-DataB -down--> RM: Deliver Content
-DataB -down--> LM: Deliver Content
-RM -up--> DataB: Request 
-LM -up--> DataB: Request
+crl --> Utl
+ssmng --> PODAcc
+UI --> PODHdr : request data from POD
+PODHdr ---> PODAP : request data changes
+PODAcc ---> PODAP : request data changes
+
+PODAP --> Pod1
+PODAP --> Pod2
+
+crl --> ssmng
+ssmng --> U
+U --> Loc
+Loc --> Rev
 ----
 
 [role="arc42help"]
