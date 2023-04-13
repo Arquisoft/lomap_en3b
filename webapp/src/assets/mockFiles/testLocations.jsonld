@@ -1,0 +1,36 @@
+{
+  "@context": {
+        "name": "http://schema.org/name",
+        "description": "http://schema.org/description",
+        "alternateName":"https://schema.org/alternateName",
+        "image": {
+          "@id": "http://schema.org/image",
+          "@type": "@id"
+        },
+        "geo": "http://schema.org/geo",
+        "latitude": {
+          "@id": "http://schema.org/latitude",
+          "@type": "xsd:float"
+        },
+        "longitude": {
+          "@id": "http://schema.org/longitude",
+          "@type": "xsd:float"
+        },
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+    	"locations": [
+  		{
+  		 "geo": {
+             "latitude": "43.35302550278352",
+             "longitude": "-5.849442050492078"
+          },
+          "name": "Racoon City",
+          "image": "https://www.guardadorapido.com/wp-content/uploads/2021/04/resident-evil-welcome-to-racoon-city-imagen-principal-696x392.jpg",
+          "alternateName":"city",
+          "description": "For some reason the streets where empty"
+          }
+
+	    ]
+
+      }
+
+}

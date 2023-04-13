@@ -35,14 +35,14 @@ The main reason is **that it's  good with real-time apps **and , since the map w
 
 _Also it's fair to mention that some of the members of the group have worked with this technologies before & we feel more powerful with JavaScript, BUT, as shown before  that was ** not** the only reason._
 
-=== Mongo DB ¿Why?
-
-Once we decided that we were going to use Node and  express, we figured MongoDb was a good fit because:
+=== Mongo DB ¿Why not?
+At the beginning we have decided that we were going to use Node and  express and that MongoDb was a good fit because:
 
         * It's non-relational and therefore, the schemas are flexible.
 
         * It's simple to install and work with, specially using Node.
-
+But have decline this option because we realised that we were not using it for storing anything. all the data will come from the user's POD
+or from the user's friends' PODS
 
 
 === Hosting service

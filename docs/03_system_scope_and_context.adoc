@@ -66,15 +66,12 @@ We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet)
 
 |===
 |Communication partner|Inputs|Outputs
-| Leaflet 
+| Google
     | geographical coordinates and a zoom level
     | map object
-| OpenStreetMap  
-    | URL template, the attribution text and the maximum zoom level
-    | OpenStreetMap tile layer
-| solid-ui-react (Inrupt) 
-    | 
-    |
+| solid-ui-react (Inrupt)
+    | podURL, session
+    | datasets/things
 |===
 === Technical Context
 
@@ -92,7 +89,6 @@ Users are the ones that own and manage the access to their information, not the 
 
 |===
 |Technology|Explication
-| MongoDB | We use it to store the location of the SOLID POD.
 | React | React is a free and open-source front-end JavaScript library for building user interfaces based on components. We use it to develop the website in frontend.
 | JavaScript | Is the programming language used for the development. It is one of the core technologies of the World Wide Web.
 | SOLID | Is used to store each users data in a POD.
