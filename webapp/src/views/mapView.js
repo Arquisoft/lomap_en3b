@@ -9,8 +9,11 @@ import AccountPage from "../components/AccountPage";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
+import {Controller} from "../handlers/controller";
 
 const MapView = ({session,onSearch}) => {
+  const [crl] = new Controller();
+  crl.setSession(session);
   const [changesInFilters,setChangesInFilters]=useState(false);
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
   const [showList, setShowList] = useState(false);
@@ -112,7 +115,7 @@ const MapView = ({session,onSearch}) => {
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} crl={crl}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase

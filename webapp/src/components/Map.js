@@ -28,13 +28,75 @@ const options = {
 export function handleRateChange(newRating, selected) { // ı made this export cause all ın other file
     selected.rate = newRating;
 }
+//TODO: Method fill a list with markers (UseEffect)
+function mockMarkerstoThePod(){
+    let ret = [];
+
+    //43.369610, -5.852584
+    ret.push({
+        lat: 43.369610,
+        lng: -5.852584,
+        time: new Date(),
+        name: 'Casa1',
+        category: 'Bar',
+        privacy: 'public',
+    });
+    //43.365905, -5.856349
+    ret.push({
+        lat: 43.365905,
+        lng: -5.856349,
+        time: new Date(),
+        name: 'Casa2',
+        category: 'shop',
+        privacy: 'private',
+    });
+    //43.366527, -5.854924
+    ret.push({
+        lat: 43.366527,
+        lng: -5.854924,
+        time: new Date(),
+        name: 'Casa3',
+        category: 'restaurant',
+        privacy: 'public',
+    });
+    //43.369875, -5.854823
+    ret.push({
+        lat: 43.369875,
+        lng: -5.854823,
+        time: new Date(),
+        name: 'Casa4',
+        category: 'park',
+        privacy: 'private',
+    });
+    //43.368946, -5.852785
+    ret.push({
+        lat: 43.368946,
+        lng: -5.852785,
+        time: new Date(),
+        name: 'Casa5',
+        category: 'monument',
+        privacy: 'public',
+    });
+    //43.360266, -5.852354
+    ret.push({
+        lat: 43.360266,
+        lng: -5.852354,
+        time: new Date(),
+        name: 'Casa6',
+        category: 'sight',
+        privacy: 'private',
+    });
+
+    return ret;
+}
 
 /*
   The main map function
 */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded, crl}) {
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
-    const [markers, setMarkers] = React.useState([]);
+    const [markers, setMarkers] = React.useState(mockMarkerstoThePod()); //TODO: Add markers from POD
+    //const [markers, setMarkers] = React.useState(crl.logIn().requestLocations()); //TODO: Add markers from POD
     const [selected, setSelected] = React.useState(null);
     const [canAddMarker, setCanAddMarker] = React.useState(false); // Add state to track whether we can add a marker or not
     const mapRef = React.useRef(null);
@@ -114,7 +176,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             let filteredSet =[];
             for (let  category = 0; category <selectedFilters.length ;category++) {
                 for (let i = 0; i < originalMarkers.length; i++) {
-                    if (selectedFilters[category] == originalMarkers[i].category && !filteredSet.find((element) => element === originalMarkers[i])) {
+                    if (selectedFilters[category] === originalMarkers[i].category && !filteredSet.find((element) => element === originalMarkers[i])) {
                         filteredSet.push(originalMarkers[i])
                     }
 
@@ -128,7 +190,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         }
 
     },changesInFilters)
-
 
     // Set canAddMarker to true when isInteractive changes to true
     React.useEffect(() => {
