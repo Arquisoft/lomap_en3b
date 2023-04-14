@@ -66,8 +66,8 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
 /**NOTICE HOW VALUES ARE IN LOWERCASE, THAT'S HOW THEY APPEAR IN THE FILE!*/
     return (
        <Container style={style}>
-
-           <Typography variant ="h3" style={{size:'1em'}}> Filter pins!</Typography> <IconButton aria-label="close filter dialog" onClick={onFilterLocations}><CloseIcon/></IconButton>
+           <IconButton style={{ marginLeft: '16.625rem', marginTop: '-1.25rem' }} aria-label="close filter dialog" onClick={onFilterLocations}><CloseIcon/></IconButton>
+           <Typography variant ="h3" style={{size:'1em'}}> Filter pins!</Typography>
 
            <FormControl style={{display:'flex',flexDirection:'column',flex:1}} value={categoryFilters}   >
                <InputLabel>Location type</InputLabel>
