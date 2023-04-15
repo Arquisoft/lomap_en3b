@@ -12,6 +12,7 @@ import FilterSidebar from "../components/Filters";
 
 const MapView = ({session,onSearch}) => {
   const [changesInFilters,setChangesInFilters]=useState(false);
+  const [changesInComments,setChangesInComments]=useState(false);
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
   const [showList, setShowList] = useState(false);
   const [showEditList, setShowEditList] = useState(false);
@@ -61,10 +62,30 @@ const MapView = ({session,onSearch}) => {
   const makeEditPanelDisapear = () => {
     setShowEditList(!showEditList);
   };
+
   const makeInfoPanelDisapear = (marker) => {
     setShowInfoList(!showInfoList);
+
     setSelected([marker]);
+
+    
+
+   
+    
   };
+
+
+  const makeComments = (marker) =>{
+
+    setMarkerData([marker]);
+
+    console.log(marker);
+    
+    
+    setChangesInComments(!changesInComments);
+
+  };
+
   const displayFilterSideBar = () =>{
 
     setFilterSideBar(!filterSideBar);
@@ -115,11 +136,11 @@ const MapView = ({session,onSearch}) => {
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
-        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected}/>
+        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)}/>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         <Grid item xs={12} md={8}>
-          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase

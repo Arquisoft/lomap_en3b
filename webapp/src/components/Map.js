@@ -32,7 +32,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
 /*
   The main map function
 */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments}) {
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
@@ -47,6 +47,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         setOriginalMarkers((current) => [
           ...current,
           {
+            key: markers.length,
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
             time: new Date(),
@@ -55,11 +56,11 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             category: '',
             privacy: '',
             rate: "",
-            comments:["so cool","great"],
+            comments:[],
           },
         ]);
            
-            console.log(markers);
+            
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
           },
@@ -124,6 +125,27 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
       });
     };
 
+    const updateComments = () => {
+    
+        setOriginalMarkers((current) => {
+            
+
+        const marker = markerData[0]; // Access the object inside the array
+
+        
+        
+          
+        const lastMarker = current[marker.key];
+
+        
+       
+       lastMarker.comments=marker.comments;
+  
+       
+        return [...current];
+      });
+    };
+
     const onMapLoad = async (map) => {
         mapRef.current = map;
        await getAndSetLocations();
@@ -131,7 +153,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
     React.useEffect(()=>{
 
-
+        
         if(selectedFilters.length>0){//If there are no filters selected i want the original, non filtered set of markers displayed.
             let filteredSet =[];
             for (let  category = 0; category <selectedFilters.length ;category++) {
@@ -143,10 +165,12 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                 }
 
                 setMarkers(filteredSet);
+                
 
             }}else{
 
             setMarkers( originalMarkers);
+            
         }
 
     },changesInFilters)
@@ -157,8 +181,19 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         if (canAddMarker) {
             setCanAddMarker(false);
            updateLastMarker(); // Call the updateLastMarker function
+          
         }
     }, [canAddMarker]);
+
+    React.useEffect(() => {
+        console.log(changesInComments);
+       if(changesInComments){
+       console.log("update la comenturi");
+       updateComments();
+       }
+       
+        
+    }, [changesInComments]);
 
     const iconUrls = {
         park: "/greenLocation.svg",
@@ -185,7 +220,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             >
                 {markers.map((marker, index) => (
                     <Marker
-                        key={marker.locId}
+                        key={index}
                         position={{ lat: marker.lat, lng: marker.lng }}
                         icon={{
 
@@ -197,6 +232,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                         onClick={() => {
                             setSelected(marker);
                             onInfoList(marker);
+                            console.log(marker.key);
                         }}
                     />
 

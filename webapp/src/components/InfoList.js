@@ -16,10 +16,14 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CloseIcon from "@mui/icons-material/Close";
 
-const InfoList = ({isInfoVisible, onInfoList,selected}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
 
 const[comment,setComment] = useState("");
 const[comments,setComments]=useState([]);
+const [name, setName] = useState('');
+const [type, setType] = useState('');
+const [privacy, setPrivacy] = useState('public');
+const [key, setKey] = useState('');
 
     const style = {
         display: isInfoVisible ? 'block' : 'none',
@@ -29,6 +33,18 @@ const[comments,setComments]=useState([]);
         maxWidth: '18.75rem',
         minWidth: '15.625rem',
     };
+
+    React.useEffect(() => {
+        if (isInfoVisible) {
+          setComments(selected[0].comments);
+          setName(selected[0].name);
+          setType(selected[0].type);
+          setPrivacy(selected[0].privacy);
+          setKey(selected[0].key);
+        } else {
+          setComments([]);
+        }
+      }, [selected]);
 
 const onClickHandler = () =>{
     setComments((comments) => [...comments, comment]);
@@ -40,7 +56,10 @@ setComment(e.target.value);
 
 ////////////////////////
     const handleAddButtonClick = () => {
+       
         onInfoList();
+        newComments( {key, comments });
+       
     };
 
 
@@ -54,17 +73,17 @@ setComment(e.target.value);
                 </IconButton>
                 <img src="https://picsum.photos/200" alt="Image" style={{ width: '90%', borderRadius: '0.3125rem' }} />
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
-                    <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{selected[0].name}</InputLabel>
+                    <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                     <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                         <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
                         <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                     </Box>
-                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{selected[0].type} • {selected[0].privacy}</Typography>
+                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{type} • {privacy}</Typography>
                 </Box>
                 <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                     <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
                     <List sx={{ overflowY: 'scroll',  maxHeight: '6.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
-                        {selected?.[0]?.comments?.map((text, index) => (
+                        {comments?.map((text, index) => (
                             <ListItem key={index} sx={{ bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                 <ListItemAvatar>
                                     <Avatar alt="Profile Picture" src="https://picsum.photos/id/446/50/50" />
