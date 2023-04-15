@@ -54,12 +54,12 @@ setComment(e.target.value);
                 </IconButton>
                 <img src="https://picsum.photos/200" alt="Image" style={{ width: '90%', borderRadius: '0.3125rem' }} />
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
-                    <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
+                    <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{selected[0].name}</InputLabel>
                     <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                         <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
                         <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                     </Box>
-                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>Park • Private</Typography>
+                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{selected[0].type} • {selected[0].privacy}</Typography>
                 </Box>
                 <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                     <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>

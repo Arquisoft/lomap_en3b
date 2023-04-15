@@ -44,7 +44,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
     const addMarker = React.useCallback(
       (event) => {
-        setMarkers((current) => [
+        setOriginalMarkers((current) => [
           ...current,
           {
             lat: event.latLng.lat(),
@@ -58,7 +58,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             comments:["so cool","great"],
           },
         ]);
-  
+           
+            console.log(markers);
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
           },
@@ -107,7 +108,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     
     const updateLastMarker = () => {
     
-      setMarkers((current) => {
+        setOriginalMarkers((current) => {
   
           
         const lastMarker = current[current.length - 1];
@@ -155,7 +156,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     React.useEffect(() => {
         if (canAddMarker) {
             setCanAddMarker(false);
-            updateLastMarker(); // Call the updateLastMarker function
+           updateLastMarker(); // Call the updateLastMarker function
         }
     }, [canAddMarker]);
 
