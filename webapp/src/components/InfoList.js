@@ -24,9 +24,10 @@ import ButtonBase from '@mui/material/ButtonBase';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 const InfoList = ({isInfoVisible, onInfoList}) => {
 
-    const[comment,setComment] = useState("");
+    const[comment,setComment] = useState([]);
+    const[commentpic,setCommentpic] = useState("");
     const[comments,setComments]=useState(['This is a great spot! ⭐ ', 'I love coming here. ⭐⭐ ','Hi! ⭐','Good Place... ⭐⭐⭐','perfect ⭐⭐⭐⭐⭐']);
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
 
 
@@ -47,8 +48,9 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
         } else {
             ratingStars = '⭐'.repeat(selectedRating);
         }
-        setComments((comments) => [...comments, `${comment}  ${ratingStars}`]);
+        setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
         setComment('');
+        setCommentpic('');
     };
 
     const onChangeHandler = (e) => {
@@ -91,7 +93,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     const resizedImageDataUrl = canvas.toDataURL(file.type);
-                    setComment(prevComment => prevComment + ` <img src="${resizedImageDataUrl}" alt="comment-image"/>`);
+                    setCommentpic(` <img src="${resizedImageDataUrl}" alt="comment-image"/>`);
                 };
             };
         };
@@ -99,6 +101,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
     };
     const handleAddButtonClick = () => {
         onInfoList();
+        setSelectedTab(1);
     };
 
     const handleTabChange = (event, newValue) => {
@@ -130,7 +133,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                 {selectedTab === 0 && <Typography variant="body1">
                     <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                         <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
-                        <List sx={{ overflowY: 'scroll', maxHeight: '26.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
+                        <List sx={{ overflowY: 'scroll', maxWidth:'17rem', maxHeight: '23.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
                             {comments.map((html, index) => (
                                 <ListItem key={index} sx={{ width: '100%', bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                     <ListItemText
@@ -139,14 +142,22 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                                                 <Avatar />
                                                 <Box sx={{ ml: '0.5rem' }}>Nate</Box>
                                             </Box>}
-                                    secondary={<div dangerouslySetInnerHTML={{__html: html}} />}
+                                        secondary={<div dangerouslySetInnerHTML={{__html: html}} />}
                                         primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 'bold', mb: '0.3125rem' }}
                                         secondaryTypographyProps={{ fontSize: '0.75rem' }}
                                     />
                                 </ListItem>
                             ))}
                         </List>
-
+                        <Box sx={{ display: 'flex', alignItems: 'center',  mt: '0.3125rem', width: '35%'  }}>
+                            <div> <Rating
+                                name="rating"
+                                value={selectedRating}
+                                onChange={handleRatingChange}
+                                size="small"
+                                sx={{ mr: '0.625rem' }}
+                            /></div>
+                        </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.625rem', width: '100%' }}>
                             <TextField
                                 label="Add a comment"
@@ -158,15 +169,6 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                                 sx={{ flexGrow: 1,  mr: '0.625rem', fontSize: '0.75rem' }}
                                 InputProps={{ sx: { borderRadius: '1.25rem', pl: '0.625rem' } }}
                             />
-                            <Box sx={{ display: 'flex', alignItems: 'center',  mt: '0.3125rem', width: '35%'  }}>
-                                <div> <Rating
-                                    name="rating"
-                                    value={selectedRating}
-                                    onChange={handleRatingChange}
-                                    size="small"
-                                    sx={{ mr: '0.625rem' }}
-                                /></div>
-                            </Box>
                             <IconButton onClick={handleImageUpload} size="small">
                                 <AddAPhotoIcon sx={{ fontSize: '1.125rem' }} />
                             </IconButton>
@@ -177,7 +179,6 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                             </IconButton>
                         </Box>
                     </Box></Typography>}
-
                 {selectedTab === 1 && <Typography variant="body1">
                     <img src="https://picsum.photos/id/17/200" alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
@@ -192,7 +193,6 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                             It's the perfect choice for those looking to get away from the hustle and bustle
                             of the city and enjoy the beauty of nature. </Typography>
                     </Box>
-
                 </Typography>}
             </Box>
         </Container>
