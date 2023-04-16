@@ -1,67 +1,50 @@
 import {SessionManager} from "./sessionManager";
-import {User} from "../models/user";
+import {convertDomainModelObjectsIntoViewObjects} from "../util/Convertor";
 
 class Controller{
     sessionMng;
-    constructor() {
-        this.sessionMng = new SessionManager();
-    }
-
-    /**
-     * This method handles the session
-     * @param isLoggedInValue
-     * @returns {Controller}
-     */
-    sessionHandler(){
-        this.sessionMng.sessionState();
-        return this;
-    }
-
-    getSessionState(){
-        return this.sessionMng.isLoggedIn;
+    setSession(session) {
+        this.sessionMng = new SessionManager(session);
     }
 
     getSession(){
         return this.sessionMng.session;
     }
 
-    logIn(){
-        //TODO: Modify sessionMng
-
+    async logIn() {
         //Get Data From POD
-        sessionMng.setUpSessionData();
+        await this.sessionMng.setUpSessionData();
+        return this;
     }
 
     logOut(){
         //save data into POD
-        sessionMng.saveSessionData();
-        //TODO: Modify sessionMng
-
+        this.sessionMng.saveSessionData();
     }
 
     requestLocations(){
         //Get sessionMng.get User's Locations
-        return sessionMng.requestLocations();
+        return convertDomainModelObjectsIntoViewObjects(this.sessionMng.requestLocations());
     }
 
     requestReviewToLocation(locId){
         //Get sessionMng.get User's Review to Location
-        return sessionMng.requestReviewToLocation(locId);
+        return this.sessionMng.requestReviewToLocation(locId);
     }
 
     addLocation(CoorLat, CoorLng, name, description, category, privacy){
         //sessionMng -> Set new Location in user
-        sessionMng.addLocation(CoorLat, CoorLng, name, description, category,privacy);
+        this.sessionMng.addLocation(CoorLat, CoorLng, name, description, category,privacy);
     }
 
     addCommentToLocation(locId, cmmt, privacy){
         //sessionMng -> Set comment in Review (in user's location)
-        sessionMng.addCommentToLocation(locId, cmmt, privacy);
+        this.sessionMng.addCommentToLocation(locId, cmmt, privacy);
     }
 
     addScoreToLocation(locId, scr, privacy){
         //sessionMng -> Set comment in Review (in user's location)
-        sessionMng.addScoreToLocation(locId, scr, privacy);
+        this.sessionMng.addScoreToLocation(locId, scr, privacy);
     }
 }
 

@@ -77,7 +77,7 @@ Scenarios make quality requirements concrete and allow to
 more easily measure or decide whether they are fulfilled.
 
 Especially when you want to assess your architecture using methods like
-ATAM you need to describe your quality goals (from section 1.2)
+ATAM you need to describe  your quality goals (from section 1.2)
 more precisely down to a level of scenarios that can be discussed and evaluated.
 
 .Form

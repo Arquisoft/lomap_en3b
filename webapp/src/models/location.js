@@ -44,6 +44,13 @@ class LocationLM {
         return this.privateReviews;
     }
 
+    privacyText(){
+        if(this.privacy){
+            return 'private'
+        } else {
+            return 'public'
+        }
+    }
     addPublicReview(Review) {
         //Check type
         this.publicReviews.push(Review);
