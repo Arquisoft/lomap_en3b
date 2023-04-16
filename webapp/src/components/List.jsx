@@ -22,17 +22,31 @@ import {Place as PlaceIcon} from "@mui/icons-material";
 import Map from  "../components/Map";
 import CloseIcon from "@mui/icons-material/Close";
 
+/**
+ * The add Marker List
+ * 
+ * The component takes two props: "isVisible" and "onAddMarker". "isVisible" is a boolean that determines whether the component should be visible or hidden. 
+ * "onAddMarker" is a callback function that will be called when the user finishes adding a marker.
 
+  *  The component defines three state variables using the "useState" hook: "name", "category", and "privacy". 
+  *  The "handleAddButtonClick" function is used to add a marker when the user clicks the "Finish" button. If both the "name" and "category" fields are not empty,
+    * The "onAddMarker" callback is called with an object containing the name, category, and privacy values, and the "name", "category", and "privacy" state variables are reset to their initial values.
+ * 
+ * @param isVisible
+ * @param onAddMarker
+ * 
+ */
 const List = ({ isVisible, onAddMarker}) => {
 
-
+     // Define three state variables using the useState hook. The new location properys
     const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [privacy, setPrivacy] = useState('public');
 
+ // Define a function to handle the "Finish" button click event
   const handleAddButtonClick = () => {
     if (name !== '' && category !== '') {
-      onAddMarker({ name, category, privacy });
+      onAddMarker({ name, category, privacy });//sends an object containing the new values to the Map component where we update the location
       setName('');
       setCategory('');
       setPrivacy('public');
@@ -42,8 +56,7 @@ const List = ({ isVisible, onAddMarker}) => {
   };
 
 
-    
-
+    // Define a style object based on the visibility prop passed to the component
     const style = {
         display: isVisible ? 'block' : 'none',
         width: '100%',
@@ -53,7 +66,7 @@ const List = ({ isVisible, onAddMarker}) => {
 
 
 
-
+     // Render the component
     return (
         <Container style={style}>
             <>
@@ -96,7 +109,7 @@ const List = ({ isVisible, onAddMarker}) => {
                     </FormControl>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
                         <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
-                            handleAddButtonClick(); // PANELİN AÇILIP KAPANMA İŞLEMİNİ YAPTIK
+                            handleAddButtonClick(); //event to know that the action is finoished
                     }}>
                         Finish
                     </Button>
