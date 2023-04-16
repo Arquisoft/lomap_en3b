@@ -21,7 +21,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
 const[comment,setComment] = useState("");
 const[comments,setComments]=useState([]);
 const [name, setName] = useState('');
-const [type, setType] = useState('');
+const [category, setCategory] = useState('');
 const [privacy, setPrivacy] = useState('public');
 const [key, setKey] = useState('');
 
@@ -38,7 +38,7 @@ const [key, setKey] = useState('');
         if (isInfoVisible) {
           setComments(selected[0].comments);
           setName(selected[0].name);
-          setType(selected[0].type);
+          setCategory(selected[0].category);
           setPrivacy(selected[0].privacy);
           setKey(selected[0].key);
         } else {
@@ -78,7 +78,7 @@ setComment(e.target.value);
                         <Rating name="rating" count={5} size="small" defaultValue={3} precision={0.5} readOnly />
                         <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                     </Box>
-                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{type} • {privacy}</Typography>
+                    <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
                 </Box>
                 <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                     <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>

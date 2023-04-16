@@ -51,7 +51,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
             time: new Date(),
-                      description:'',
+            description:'',
             name: '',
             category: '',
             privacy: '',
@@ -117,7 +117,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         const marker = markerData[0]; // Access the object inside the array
         
         lastMarker.name = marker.name;
-        lastMarker.type = marker.type;
+        lastMarker.category = marker.category;
         lastMarker.privacy = marker.privacy;
   
        
@@ -158,7 +158,9 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             let filteredSet =[];
             for (let  category = 0; category <selectedFilters.length ;category++) {
                 for (let i = 0; i < originalMarkers.length; i++) {
+                   
                     if (selectedFilters[category] == originalMarkers[i].category && !filteredSet.find((element) => element === originalMarkers[i])) {
+                        console.log(originalMarkers[i]);
                         filteredSet.push(originalMarkers[i])
                     }
 

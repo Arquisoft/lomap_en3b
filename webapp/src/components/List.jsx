@@ -27,14 +27,14 @@ const List = ({ isVisible, onAddMarker}) => {
 
 
     const [name, setName] = useState('');
-  const [type, setType] = useState('');
+  const [category, setCategory] = useState('');
   const [privacy, setPrivacy] = useState('public');
 
   const handleAddButtonClick = () => {
-    if (name !== '' && type !== '') {
-      onAddMarker({ name, type, privacy });
+    if (name !== '' && category !== '') {
+      onAddMarker({ name, category, privacy });
       setName('');
-      setType('');
+      setCategory('');
       setPrivacy('public');
       
       
@@ -70,7 +70,7 @@ const List = ({ isVisible, onAddMarker}) => {
                     </FormControl>
                     <FormControl style={{ width: '100%' }}>
                         <InputLabel>Type</InputLabel>
-                        <Select style={{ width: '100px' }} value={type} onChange={(e) => setType(e.target.value)}>
+                        <Select style={{ width: '100px' }} value={category} onChange={(e) => setCategory(e.target.value)}>
                             <MenuItem value="bar">Bar</MenuItem>
                             <MenuItem value="shop">Shop</MenuItem>
                             <MenuItem value="restaurant">Restaurant</MenuItem>
