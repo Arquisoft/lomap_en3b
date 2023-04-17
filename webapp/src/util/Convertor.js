@@ -11,21 +11,22 @@ export function convertViewObjectIntoDomainModelObject(viewobj){
         viewobj.description,
         viewobj.category,
         privacy,
-        viewobj.rate
+        viewobj.rate,
+        viewobj.key
     );
 }
 export function convertDomainModelObjectIntoViewObject(dmobj){
 return {
+    key: dmobj.locationID,
     lat: dmobj.lat,
     lng: dmobj.lat,
-    time: new Date(),
+    time: new Date().getTime(),
     description: dmobj.description,
     name: dmobj.name,
     category: dmobj.category,
     privacy: dmobj.privacyText(),
     rate: dmobj.rating,
-
-};
+    };
 }
 export function convertViewObjectsIntoDomainModelObjects(viewobjs){
     let ret = [];

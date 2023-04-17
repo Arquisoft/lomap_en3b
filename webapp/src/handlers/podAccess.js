@@ -22,16 +22,23 @@ import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
 import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
+import {convertViewObjectsIntoDomainModelObjects} from "../util/Convertor";
 
 /**
  * Save user's session changes into de POD.
  * @param {User} user
  * @returns {Promise<void>}
- */
+ *
 async function writeLocations(user, session) {
     //This can be parallel
     writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
     writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
+}
+ */
+async function writeLocations(resourceURLPublic, session, list) {
+    //This can be parallel
+
+    writeLocIntoPOD(resourceURLPublic, convertViewObjectsIntoDomainModelObjects(list), session);
 }
 
 async function writeReviews(user) {
