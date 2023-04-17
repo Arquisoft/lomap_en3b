@@ -4,13 +4,10 @@ import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps
 import { formatRelative } from "date-fns";
 import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
-import {readLocations} from "../handlers/podAccess";
+import {readLocations, writeLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
-
-
-
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -149,7 +146,14 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
        
         return [...current];
       });
+        //TRYING
+        saveLocations();
     };
+
+    const saveLocations=async () => {
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    }
 
     //function to update the comments
     const updateComments = () => {
