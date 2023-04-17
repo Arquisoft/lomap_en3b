@@ -65,7 +65,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
     // Function for adding a marker
     const addMarker = React.useCallback(
-      (event) => {
+      async (event) => {
         setOriginalMarkers((current) => [
           ...current,
           {
@@ -73,7 +73,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
             time: new Date(),
-            description:'',
+            description:'s',
             name: '',
             category: '',
             privacy: '',
@@ -85,6 +85,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
+              
+             
           },
           []
       );
@@ -94,20 +96,17 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
+
+    async function saveLocations2(){
+        console.log("juan");
+        await saveLocations();
+    }
+
     async function getAndSetLocations() {
         let locationSet = await retrieveLocations()
         setMarkers((current) => [...current, ...locationSet]);
         setOriginalMarkers(locationSet)
     }
-
-
-    // Set canAddMarker to true when isInteractive changes to true
-    React.useEffect(() => {
-        if (canAddMarker) {
-            setCanAddMarker(false);
-
-        }
-    }, [canAddMarker]);
 
 
 
@@ -136,22 +135,29 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
   
           
         const lastMarker = current[current.length - 1];
-        console.log(lastMarker);
+       
         const marker = markerData[0]; // Access the object inside the array
         
         lastMarker.name = marker.name;
         lastMarker.category = marker.category;
         lastMarker.privacy = marker.privacy;
+
+        
   
        
         return [...current];
+
+        
       });
-        //TRYING
-        saveLocations();
+        
+
+        
     };
 
-    const saveLocations=async () => {
+    const saveLocations= async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        console.log(markers);
+        console.log(originalMarkers);
         return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
@@ -211,10 +217,14 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
 
     // Set canAddMarker to true when isInteractive changes to true
-    React.useEffect(() => {
+    React.useEffect( () => {
         if (canAddMarker) {
             setCanAddMarker(false);
            updateLastMarker(); // Call the updateLastMarker function
+
+           saveLocations2();
+           
+        
           
         }
     }, [canAddMarker]);

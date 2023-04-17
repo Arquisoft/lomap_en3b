@@ -18,15 +18,15 @@ class LocationLM {
     privateReviews;
     constructor(CoorLat, CoorLng, name, description, category,privacy=false, locID = uuidv4(), rating=null) {
 
-        checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
+        //checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
-        checkCoordinatesInvalidFormat((CoorLng>= -180 && CoorLng<= 180), CoorLng, 'longitude');
+        //checkCoordinatesInvalidFormat((CoorLng>= -180 && CoorLng<= 180), CoorLng, 'longitude');
         this.lng = CoorLng;
-        checkStringInvalidFormat(name, 'name' );
+        //checkStringInvalidFormat(name, 'name' );
         this.name = name;
-        checkStringInvalidFormat(description, 'description' );
+        //checkStringInvalidFormat(description, 'description' );
         this.description = description;
-        checkStringInvalidFormat(category, 'category' );
+        //checkStringInvalidFormat(category, 'category' );
          this.locID = locID;
         this.privacy=privacy;
         this.category = category;
