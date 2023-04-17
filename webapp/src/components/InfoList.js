@@ -22,13 +22,35 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Rating from '@mui/material/Rating';
 import ButtonBase from '@mui/material/ButtonBase';
 import ReviewsIcon from '@mui/icons-material/Reviews';
-const InfoList = ({isInfoVisible, onInfoList}) => {
 
+/**
+ * This is the info list that displays the details about an added location and also lets you add comments and revies
+ * 
+ * 
+ * The component receives props such as isInfoVisible, onInfoList, selected, and newComments. 
+ * It renders the UI inside a container with the style attribute that depends on the isInfoVisible prop.
+ *  It defines a set of states using the useState hook, such as comment, comments, selectedTab, selectedRating, name, category, privacy, and key.
+
+    The component also includes various functions that handle events like onChangeHandler, onClickHandler, handleImageUpload, handleAddButtonClick, handleTabChange, and handleRatingChange.
+ These functions set the states of the component when events occur.
+ * @param isInfoVisible
+ * @param onInfoList
+ * @param selected
+ * @param newComments
+ */
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
+
+    // Define a set of states
     const[comment,setComment] = useState("");
     const[comments,setComments]=useState(['This is a great spot! ⭐ ', 'I love coming here. ⭐⭐ ','Hi! ⭐','Good Place... ⭐⭐⭐','perfect ⭐⭐⭐⭐⭐']);
     const [selectedTab, setSelectedTab] = useState(0);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
 
+
+    const [name, setName] = useState('');
+    const [category, setCategory] = useState('');
+    const [privacy, setPrivacy] = useState('public');
+    const [key, setKey] = useState('');
 
     const style = {
         display: isInfoVisible ? 'block' : 'none',
@@ -39,7 +61,28 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
         minWidth: '15.625rem',
     };
 
+    
+     // Define an event handler to update the list with the propertys from the selected component
+    React.useEffect(() => {
+        if (isInfoVisible) {
+          setComments(selected[0].comments);
+          setName(selected[0].name);
+          setCategory(selected[0].category); //setters for every field in the infoList
+          setPrivacy(selected[0].privacy);
+          setKey(selected[0].key);
+        } else {
+          setComments([]);
+        }
+      }, [selected]);
 
+      
+    // Define an event handler to update the comment state
+    const onChangeHandler = (e) => {
+    setComment(e.target.value);
+    };
+
+    // Define an event handler to add a new comment to the comments array
+    
     const onClickHandler = () => {
         let ratingStars = '';
         if (selectedRating === 1) {
@@ -51,10 +94,9 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
         setComment('');
     };
 
-    const onChangeHandler = (e) => {
-        setComment(e.target.value);
-    };
 
+
+    // Define an event handler to handle image upload
     const handleImageUpload = () => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -97,8 +139,14 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
         };
         input.click();
     };
+
+    //The close button handler
+    //When we close the infoList we send a new object to the map component with the new comment and the key of the location we need to update
     const handleAddButtonClick = () => {
+
         onInfoList();
+        newComments( {key, comments });
+
     };
 
     const handleTabChange = (event, newValue) => {
@@ -131,7 +179,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                     <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                         <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
                         <List sx={{ overflowY: 'scroll', maxHeight: '26.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
-                            {comments.map((html, index) => (
+                            {comments?.map((html, index) => (
                                 <ListItem key={index} sx={{ width: '100%', bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                     <ListItemText
                                         primary={
@@ -181,14 +229,14 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                 {selectedTab === 1 && <Typography variant="body1">
                     <img src="https://picsum.photos/id/17/200" alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
-                        <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
+                        <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                             <Rating name="size-small" defaultValue={3} size="extra-small" readOnly />
                             <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                         </Box>
-                        <Typography variant="caption" sx={{ mt: '0.3125rem' }}>Park • Private</Typography>
+                        <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
                         <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                            Helena's Spot is a private location nestled in a quiet and peaceful park.
+                           {name} is a private location nestled in a quiet and peaceful park.
                             It's the perfect choice for those looking to get away from the hustle and bustle
                             of the city and enjoy the beauty of nature. </Typography>
                     </Box>
