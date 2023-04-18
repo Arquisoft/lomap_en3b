@@ -35,10 +35,58 @@ async function writeLocations(user, session) {
     writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
 }
  */
-async function writeLocations(resourceURLPublic, session, list) {
-    //This can be parallel
+async function writeLocations(resourceURL, session, list) {
+    let dataset=await getDataset(resourceURL,session);
 
-    writeLocIntoPOD(resourceURLPublic, convertViewObjectsIntoDomainModelObjects(list), session);
+    //Parse list of Locations (View model) into POD Locations
+    list.forEach( (loc) =>
+    {
+        let locationThing = buildThing(createThing({name: loc.key}))
+            .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
+            .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
+            .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
+            .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
+            .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.key)
+            .addStringNoLocale("DateCreated", loc.time)//time
+            .addStringNoLocale("Shared", loc.privacy)//privacy
+            .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
+
+            // date (?) - We need to think if it's needed.
+            .addUrl(RDF.type, "https://schema.org/Place")
+            .build();
+        // Update the SolidDataset with New Things
+        dataset = setThing(dataset, locationThing);
+
+    } );
+
+    // Save the SolidDataset
+    await saveSolidDatasetAt(
+        resourceURL,
+        dataset,
+        {fetch:session.fetch}      // fetch from authenticated Session
+    );
+}
+async function getDataset(resourceURL,session){
+    let dataset,items;
+    try {
+        //Get DataSet
+        dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
+        //Get all the things from it
+        items=getThingAll(dataset);
+        // Clear the list to override the whole list
+        items.forEach((item) => {
+            dataset = removeThing(dataset, item);
+        });
+
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset
+            dataset = createSolidDataset();
+        } else {
+            console.error(error.message);
+        }
+    }
+    return dataset;
 }
 
 async function writeReviews(user) {

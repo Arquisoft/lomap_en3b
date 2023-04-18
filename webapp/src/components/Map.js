@@ -130,24 +130,24 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     }
 
     //function to update the propertys of a location
-    const updateLastMarker = () => {
-    
+    const updateLastMarker = async () => {
+
         setOriginalMarkers((current) => {
-  
-          
-        const lastMarker = current[current.length - 1];
-        console.log(lastMarker);
-        const marker = markerData[0]; // Access the object inside the array
-        
-        lastMarker.name = marker.name;
-        lastMarker.category = marker.category;
-        lastMarker.privacy = marker.privacy;
-  
-       
-        return [...current];
-      });
+
+
+            const lastMarker = current[current.length - 1];
+            console.log(lastMarker);
+            const marker = markerData[0]; // Access the object inside the array
+
+            lastMarker.name = marker.name;
+            lastMarker.category = marker.category;
+            lastMarker.privacy = marker.privacy;
+
+
+            return [...current];
+        });
         //TRYING
-        saveLocations();
+        await saveLocations();
     };
 
     const saveLocations=async () => {
