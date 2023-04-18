@@ -78,6 +78,7 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                <FormControlLabel control={<Checkbox  value="park" onChange={(e)=>updateFiltersSelected(e.target.checked,e.target.value )}/> } style={{flex: 1}} label="Park"  />
                <FormControlLabel control={<Checkbox  value="bar"  onChange={(e)=>updateFiltersSelected(e.target.checked,e.target.value )}/> } style={{flex: 1}}  label="Bar" />
                <FormControlLabel control={<Checkbox   value="shop" onChange={(e)=>updateFiltersSelected(e.target.checked,e.target.value )}/> }style={{flex: 1}}  label="Shop"/>
+
            </FormControl>
 
 

@@ -22,14 +22,33 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Rating from '@mui/material/Rating';
 import ButtonBase from '@mui/material/ButtonBase';
 import ReviewsIcon from '@mui/icons-material/Reviews';
+import EmojiEmotionsSharpIcon from '@mui/icons-material/EmojiEmotionsSharp';
+import Popover from '@mui/material/Popover';
+import Button from '@mui/material/Button';
+
 const InfoList = ({isInfoVisible, onInfoList}) => {
 
-    const[comment,setComment] = useState([]);
+    const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
     const[comments,setComments]=useState(['This is a great spot! ⭐ ', 'I love coming here. ⭐⭐ ','Hi! ⭐','Good Place... ⭐⭐⭐','perfect ⭐⭐⭐⭐⭐']);
     const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
+    const [selectedEmoji, setSelectedEmoji] = useState(null);
 
+        const [anchorEl, setAnchorEl] = React.useState(null);
+
+        const handleClick = (event) => {
+            setAnchorEl(event.currentTarget);
+        };
+
+        const handleClose = () => {
+            setAnchorEl(null);
+        };
+
+        const open = Boolean(anchorEl);
+        const id = open ? 'simple-popover' : undefined;
+
+    /////////////////////////////
 
     const style = {
         display: isInfoVisible ? 'block' : 'none',
@@ -156,7 +175,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                                 onChange={handleRatingChange}
                                 size="small"
                                 sx={{ mr: '0.625rem' }}
-                            /></div>
+                            />  </div>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.625rem', width: '100%' }}>
                             <TextField
@@ -169,6 +188,34 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                                 sx={{ flexGrow: 1,  mr: '0.625rem', fontSize: '0.75rem' }}
                                 InputProps={{ sx: { borderRadius: '1.25rem', pl: '0.625rem' } }}
                             />
+                            <IconButton aria-describedby={id} variant="contained" onClick={handleClick}>
+                                <EmojiEmotionsSharpIcon sx={{ fontSize: '1.125rem' }}/>
+                            </IconButton>
+                            <Popover
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'center',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'center',
+                                }}
+                                id={id}
+                                open={open}
+                                anchorEl={anchorEl}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                            >
+                                <Typography sx={{ p: 2 }}>
+                                    <IconButton  style={{ fontSize: '1rem' }} onClick={() => setComment(prevComment => prevComment + '❤️')}>❤️</IconButton>
+                                    <IconButton  style={{ fontSize: '1rem' }} onClick={() => setComment(prevComment => prevComment + '👍')}>👍</IconButton>
+                                    <IconButton  style={{ fontSize: '1rem' }} onClick={() => setComment(prevComment => prevComment + '👌')}>👌</IconButton>
+                                    <IconButton  style={{ fontSize: '1rem' }} onClick={() => setComment(prevComment => prevComment + '✨')}>✨</IconButton>
+                                </Typography>
+                            </Popover>
                             <IconButton onClick={handleImageUpload} size="small">
                                 <AddAPhotoIcon sx={{ fontSize: '1.125rem' }} />
                             </IconButton>
