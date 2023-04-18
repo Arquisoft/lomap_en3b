@@ -152,7 +152,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                 {selectedTab === 0 && <Typography variant="body1">
                     <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                         <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
-                        <List sx={{ overflowY: 'scroll', maxWidth:'17rem', maxHeight: '23.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
+                        <List sx={{ overflowY: 'scroll', maxWidth:'17rem', maxHeight: '22.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
                             {comments.map((html, index) => (
                                 <ListItem key={index} sx={{ width: '100%', bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                     <ListItemText
@@ -185,9 +185,13 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                                 onChange={onChangeHandler}
                                 variant="outlined"
                                 size="small"
+                                multiline
+                                rows={2} // how much rows show when ıts started
+                                maxRows={3} // max rows number
                                 sx={{ flexGrow: 1,  mr: '0.625rem', fontSize: '0.75rem' }}
                                 InputProps={{ sx: { borderRadius: '1.25rem', pl: '0.625rem' } }}
                             />
+
                             <IconButton aria-describedby={id} variant="contained" onClick={handleClick}>
                                 <EmojiEmotionsSharpIcon sx={{ fontSize: '1.125rem' }}/>
                             </IconButton>
