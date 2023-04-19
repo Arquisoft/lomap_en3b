@@ -8,6 +8,7 @@ import {readLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
+import {getFriendsWebIds} from "../handlers/podHandler";
 
 
 
@@ -64,9 +65,24 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         []
     );
     const retrieveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
-        return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        let friends = await getFriendsWebIds(session.info.webId);
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl");
+        // Code to get the friends locations
+        let locations = await readLocations(resource, session);
+        let friendsLocations = [];
+        for (let i = 0; i < friends.length; i++) {
+            try {
+                //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
+                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "lomap/locations.ttl",session));
+            } catch (err) {
+                //Friend does not have LoMap??
+                console.log(err);
+            }
+        }
+
+        return locations.concat(friendsLocations); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
+
     async function getAndSetLocations() {
         let locationSet = await retrieveLocations()
         setMarkers((current) => [...current, ...locationSet]);

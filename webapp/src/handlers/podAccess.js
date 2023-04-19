@@ -15,7 +15,7 @@ import {
     getThingAll,
     getSolidDataset,
     removeThing,
-    getStringNoLocale
+    getStringNoLocale, getThing
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
@@ -202,6 +202,7 @@ async function readLocations(resourceURL,session) {
     return locationsRetrieved;
 
 }
+
 async function readReviews(resourceURL,session) {
     let reviewThings = await getThingsFromDataset(resourceURL, session);
     let review, reviewThing;
