@@ -95,7 +95,6 @@ async function writeLocIntoPOD(resourceURL, list, session) {
 }
 
 async function writeUserReviews(resourceURL, list) {
-
     let myReviewSolidDataset;
     try {
         //Get existing dataSet
