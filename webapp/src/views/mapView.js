@@ -21,7 +21,7 @@ const MapView = ({session,onSearch}) => {
   const [filterSideBar,setFilterSideBar]=useState(false);
   const [selectedFilters,setSelectedFilters]=useState([]);
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: "AIzaSyCf6Br6Wnepk_ikicUrRCBoqqrFTJX7oKA",
     libraries: ["places"], // places library
   }); // hook to load the google script
   /**
@@ -32,6 +32,7 @@ const MapView = ({session,onSearch}) => {
    *This method is a way of using the set functionality of both states without passing the setters to both components.
    * @param filters
    */
+
   const updateFilterListInUse= (filters)=>{
 
             setSelectedFilters(filters);
