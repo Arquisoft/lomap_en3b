@@ -66,6 +66,7 @@ export async function checkForLomapInPod(pod,session) {
         return false;
     }
     console.log("Found lomap folder in pod.")
+    await giveFriendsAccess(session, true);
     return true;
 }
 
