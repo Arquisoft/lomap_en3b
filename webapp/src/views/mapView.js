@@ -9,6 +9,9 @@ import AccountPage from "../components/AccountPage";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
+import ErrorView from "./errorView"
+
+
 
 const MapView = ({session,onSearch}) => {
   const [changesInFilters,setChangesInFilters]=useState(false);
@@ -21,7 +24,7 @@ const MapView = ({session,onSearch}) => {
   const [filterSideBar,setFilterSideBar]=useState(false);
   const [selectedFilters,setSelectedFilters]=useState([]);
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCf6Br6Wnepk_ikicUrRCBoqqrFTJX7oKA",
+    googleMapsApiKey: "AtzaSyCf6Br6Wnepk_ikicUrRCBoqqrFTJX7oKA",
     libraries: ["places"], // places library
   }); // hook to load the google script
   /**
@@ -95,7 +98,7 @@ const MapView = ({session,onSearch}) => {
     });
   };
   if (loadError) return <div> Error Loading Maps </div>;
-  if (!isLoaded) return <div>Loading Maps</div>; //Checking if the map loaded
+
   return (
       <>
         <CssBaseline />
@@ -112,6 +115,8 @@ const MapView = ({session,onSearch}) => {
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
+        {!isLoaded || loadError? <ErrorView />:
+
         <Grid item xs={12} md={8}>
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
@@ -127,7 +132,7 @@ const MapView = ({session,onSearch}) => {
               </IconButton>
             </div>
           </form>
-        </Grid>
+        </Grid>}
       </Grid>
       </>
   );

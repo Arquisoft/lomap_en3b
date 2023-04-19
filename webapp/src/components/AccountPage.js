@@ -73,7 +73,7 @@ const AccountPage = ({ isAccountVisible, onAccountPage }) => {
     });
 
     return (
-        <Container style={style}>
+        <Container style={style} aria-label="Profile Container">
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
                 <IconButton style={{marginRight: '26.25rem'}} onClick={() => {
