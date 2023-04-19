@@ -136,7 +136,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
 
             const lastMarker = current[current.length - 1];
-            console.log(lastMarker);
+            //console.log(lastMarker);
             const marker = markerData[0]; // Access the object inside the array
 
             lastMarker.name = marker.name;
@@ -147,11 +147,16 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             return [...current];
         });
         //TRYING
+        console.log("1.- original");
+        console.log(originalMarkers);
+        console.log("2.- markers");
+        console.log(markers);
         await saveLocations();
     };
 
     const saveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        console.log(resource);
         return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
