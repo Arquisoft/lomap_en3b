@@ -4,10 +4,13 @@ import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps
 import { formatRelative } from "date-fns";
 import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
-import {readLocations, writeLocations} from "../handlers/podAccess";
+import {readLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
+
+
+
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -133,6 +136,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const updateLastMarker = async () => {
 
         setOriginalMarkers((current) => {
+<<<<<<< HEAD
 
 
             const lastMarker = current[current.length - 1];
@@ -160,6 +164,23 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
+=======
+  
+          
+        const lastMarker = current[current.length - 1];
+        console.log(lastMarker);
+        const marker = markerData[0]; // Access the object inside the array
+        
+        lastMarker.name = marker.name;
+        lastMarker.category = marker.category;
+        lastMarker.privacy = marker.privacy;
+  
+       
+        return [...current];
+      });
+    };
+
+>>>>>>> parent of ef8d602 (Try data access to the pod (Write))
     //function to update the comments
     const updateComments = () => {
     
