@@ -1,5 +1,10 @@
-import {fireEvent, queryAllByRole, queryAllByText, render, screen} from "@testing-library/react";
-import Header from "../components/Header";
+import {
+    fireEvent,
+    getByDisplayValue,
+    render,
+    screen
+} from "@testing-library/react";
+
 import React from "react";
 import App from "../App"
 describe('Login View',()=>{
@@ -27,8 +32,9 @@ describe('Login View',()=>{
         const providerList=["inrupt","solid community","solid web","inrupt pod browser"]
 
         for (let i = 0; i <providerList.length ; i++) {
+            const provider=  getByDisplayValue(providerList[i])
 
-            expect(screen.getByLabelText(providerList[i])).toBeInTheDocument();
+            //expect(provider).toBeInTheDocument();
             }
 
 

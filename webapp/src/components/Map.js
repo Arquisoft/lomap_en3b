@@ -35,18 +35,18 @@ export function handleRateChange(newRating, selected) { // ı made this export c
      * This method renders the map component and and contains all the state variables and functions for updateing it and adding marker.
      * Initialy the map is  not Intercavtive and becomes interactive when we press the add button in the header and then becomes non Interactive
      * again after you add a marker with a click on the map . This is done using the idInteractive prop passed from the header.
-     * 
+     *
      * When you click on the map the add marker function is executed. It adds propertys to a marker and adds it to the marker list.
-     * 
+     *
      * Inittialy the map function should load the marker from your pod using the retiriveLocation function
-     * 
+     *
      * When you click a marker we pass as a prop the poroperys of the marker to the InfoList component
-     * 
-     * 
-     * The props  changesInFilters,selectedFilters, onMarkerAdded,markerData,onInfoList,  changesInComments are props that are passed to the 
+     *
+     *
+     * The props  changesInFilters,selectedFilters, onMarkerAdded,markerData,onInfoList,  changesInComments are props that are passed to the
      * map component from the others components to know when we should update the locations
-     * 
-     
+     *
+
      * @param changesInFilters
      * @param selectedFilters
      * @param isInteractive
@@ -84,8 +84,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             comments:[],
           },
         ]);
-           
-            
+
+
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
           },
@@ -136,7 +136,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const updateLastMarker = async () => {
 
         setOriginalMarkers((current) => {
-<<<<<<< HEAD
+
 
 
             const lastMarker = current[current.length - 1];
@@ -164,41 +164,41 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
-=======
-  
-          
+
+
+
         const lastMarker = current[current.length - 1];
         console.log(lastMarker);
         const marker = markerData[0]; // Access the object inside the array
-        
+
         lastMarker.name = marker.name;
         lastMarker.category = marker.category;
         lastMarker.privacy = marker.privacy;
-  
-       
+
+
         return [...current];
       });
     };
 
->>>>>>> parent of ef8d602 (Try data access to the pod (Write))
+
     //function to update the comments
     const updateComments = () => {
-    
+
         setOriginalMarkers((current) => {
-            
+
 
         const marker = markerData[0]; // Access the object inside the array
 
-        
-        
-          
+
+
+
         const lastMarker = current[marker.key];
 
-        
-       
+
+
        lastMarker.comments=marker.comments;
-  
-       
+
+
         return [...current];
       });
     };
@@ -211,26 +211,22 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     //filter the map when a change in the filter component ocurs
     React.useEffect(()=>{
 
-        
+
         if(selectedFilters.length>0){//If there are no filters selected i want the original, non filtered set of markers displayed.
             let filteredSet =[];
             for (let  category = 0; category <selectedFilters.length ;category++) {
                 for (let i = 0; i < originalMarkers.length; i++) {
-                   
                     if (selectedFilters[category] == originalMarkers[i].category && !filteredSet.find((element) => element === originalMarkers[i])) {
-                       
                         filteredSet.push(originalMarkers[i])
                     }
 
                 }
 
                 setMarkers(filteredSet);
-                
 
             }}else{
 
             setMarkers( originalMarkers);
-            
         }
 
     },changesInFilters)
@@ -241,19 +237,19 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         if (canAddMarker) {
             setCanAddMarker(false);
            updateLastMarker(); // Call the updateLastMarker function
-          
+
         }
     }, [canAddMarker]);
 
     //update the comments after the comments in the info list are updated
     React.useEffect(() => {
-        
+
        if(changesInComments){
-       
+
        updateComments();
        }
-       
-        
+
+
     }, [changesInComments]);
 
     const iconUrls = {
@@ -279,6 +275,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                 options={options}
                 onClick={isInteractive ? addMarker : null} // Only allow adding markers when canAddMarker is true
                 onLoad={onMapLoad} //callback function called when the map is loaded
+                aria-label="Map render"
             >
                 {markers.map((marker, index) => ( // Loop through each marker and create a Marker component for each one
                     <Marker
@@ -294,12 +291,12 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                         onClick={() => { // Callback function called when a marker is clicked
                             setSelected(marker); // Set the selected marker
                             onInfoList(marker); // Callback function called to update an information list
-                            
+
                         }}
                     />
 
           ))}
-            
+
         </GoogleMap>
       </React.Fragment>
     );
