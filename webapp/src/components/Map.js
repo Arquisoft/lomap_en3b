@@ -4,7 +4,7 @@ import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps
 import { formatRelative } from "date-fns";
 import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
-import {readLocations} from "../handlers/podAccess";
+import {readLocations, writeLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
@@ -161,24 +161,13 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const saveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         console.log(resource);
-        return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        return await writeLocations(resource, session);
     }
 
 
 
 
-        const lastMarker = current[current.length - 1];
-        console.log(lastMarker);
-        const marker = markerData[0]; // Access the object inside the array
 
-        lastMarker.name = marker.name;
-        lastMarker.category = marker.category;
-        lastMarker.privacy = marker.privacy;
-
-
-        return [...current];
-      });
-    };
 
 
     //function to update the comments
@@ -301,11 +290,11 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
       </React.Fragment>
     );
 
-
-
-
-
-
 }
+
+
+
+
+
 
 export default Map;

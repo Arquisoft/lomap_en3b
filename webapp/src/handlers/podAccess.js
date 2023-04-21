@@ -33,56 +33,6 @@ async function writeLocations(user, session) {
     writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
     writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
 }
-<<<<<<< HEAD
- */
-async function writeLocations(resourceURL, session, list) {
-    let i = 0;
-    let dataset;
-
-    //Iterates the list
-    for (const loc of list) {
-        //GetDataSet - And remove the first time
-        if(i == 0){
-            //Get dataSet and Remove content
-            dataset= await getDatasetAndRemoveContent(resourceURL,session);
-        } else {
-            //Get dataSet
-            dataset= await getDataset(resourceURL,session);
-        }
-        //Create Thing
-        let locationThing = buildThing(createThing({ name: "title" + i }))
-            .addUrl(RDF.type, "https://schema.org/Place")
-            .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
-            .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
-            .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
-            .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
-            .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.key)
-            .addStringNoLocale(SCHEMA_INRUPT.dateModified, loc.time)//time
-            .addStringNoLocale(SCHEMA_INRUPT.accessCode, loc.privacy)//privacy
-            .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
-
-            // date (?) - We need to think if it's needed.
-            .build();
-        //Add Thing into DataSet
-        dataset = setThing(dataset, locationThing);
-
-        //Save dataSet into POD
-        try {
-            // Save the SolidDataset
-            await saveSolidDatasetAt(
-                resourceURL,
-                dataset,
-                {fetch: session.fetch}      // fetch from authenticated Session
-            );
-        } catch (error) {
-            console.log(error);
-        }
-
-        i++;
-    }
-    window.alert("Saved");
-
-}
 
 async function getDatasetAndRemoveContent(resourceURL,session){
     let dataset,items;
@@ -110,8 +60,7 @@ async function getDataset(resourceURL,session){
     }
     return dataset;
 }
-=======
->>>>>>> parent of ef8d602 (Try data access to the pod (Write))
+
 
 async function writeReviews(user) {
     user.getReviews();
