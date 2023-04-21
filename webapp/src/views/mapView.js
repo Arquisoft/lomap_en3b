@@ -6,6 +6,7 @@ import Map from "../components/Map";
 import InfoList from "../components/InfoList";
 import EditList from "../components/EditList";
 import AccountPage from "../components/AccountPage";
+import LogOut from "../components/LogOut";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
@@ -17,6 +18,7 @@ const MapView = ({session,onSearch}) => {
   const [showEditList, setShowEditList] = useState(false);
   const [showInfoList, setShowInfoList] = useState(false);
   const [showAccountPage, setShowAccountPage] = useState(false);
+  const [showLogOut, setShowLogOut] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [filterSideBar,setFilterSideBar]=useState(false);
   const [selectedFilters,setSelectedFilters]=useState([]);
@@ -68,6 +70,11 @@ const MapView = ({session,onSearch}) => {
 
   };
 
+  const makeLoOutDisapear = () => {
+    setShowLogOut(!showLogOut);
+
+  };
+
 //Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
@@ -104,6 +111,7 @@ const MapView = ({session,onSearch}) => {
             onEditMarker={() => makePanelDisapear()}
             onEditMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
+            onLogOut={() => makeLoOutDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={() => makePanelDisapear()} />
@@ -111,6 +119,7 @@ const MapView = ({session,onSearch}) => {
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()}/>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
+        <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
         <Grid item xs={12} md={8}>
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
