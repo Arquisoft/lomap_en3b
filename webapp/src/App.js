@@ -6,9 +6,6 @@ import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
 import MapView from "./views/mapView";
 
-
-
-
 export default  function App()
 {
 //We use this state variable
