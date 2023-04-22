@@ -22,19 +22,20 @@ import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
 import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
+import {convertViewObjectsIntoDomainModelObjects} from "../util/Convertor";
 
 /**
  * Save user's session changes into de POD.
  * @param {User} user
  * @returns {Promise<void>}
- */
+ *
 async function writeLocations(user, session) {
     //This can be parallel
     writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
     writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
 }
-<<<<<<< HEAD
  */
+
 async function writeLocations(resourceURL, session, list) {
     let i = 0;
     let dataset;
@@ -81,7 +82,6 @@ async function writeLocations(resourceURL, session, list) {
         i++;
     }
     window.alert("Saved");
-
 }
 
 async function getDatasetAndRemoveContent(resourceURL,session){
@@ -92,6 +92,10 @@ async function getDatasetAndRemoveContent(resourceURL,session){
     // Clear the list to override the whole list
     items.forEach((item) => {
         dataset = removeThing(dataset, item);
+        console.log("R1.-");
+        console.log(dataset);
+        console.log("R2.-");
+        console.log(item);
     });
     return dataset;
 }
@@ -104,14 +108,14 @@ async function getDataset(resourceURL,session){
         if (typeof error.statusCode === "number" && error.statusCode === 404) {
             // if not found, create a new SolidDataset
             dataset = createSolidDataset();
+            console.log("5.-");
+            console.log(dataset);
         } else {
             console.error(error.message);
         }
     }
     return dataset;
 }
-=======
->>>>>>> parent of ef8d602 (Try data access to the pod (Write))
 
 async function writeReviews(user) {
     user.getReviews();
