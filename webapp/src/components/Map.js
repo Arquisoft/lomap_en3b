@@ -9,9 +9,6 @@ import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 
-
-
-
 // setting the width and height of the <div> around the google map
 const containerStyle = {
     width: '100vw',
@@ -84,8 +81,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             comments:[],
           },
         ]);
-
-
+           
+            
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
           },
@@ -138,7 +135,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         setOriginalMarkers((current) => {
 
 
-
             const lastMarker = current[current.length - 1];
             //console.log(lastMarker);
             const marker = markerData[0]; // Access the object inside the array
@@ -161,33 +157,27 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const saveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         console.log(resource);
-        return await writeLocations(resource, session);
+        return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
-
-
-
-
-
-
 
     //function to update the comments
     const updateComments = () => {
-
+    
         setOriginalMarkers((current) => {
-
+            
 
         const marker = markerData[0]; // Access the object inside the array
 
-
-
-
+        
+        
+          
         const lastMarker = current[marker.key];
 
-
-
+        
+       
        lastMarker.comments=marker.comments;
-
-
+  
+       
         return [...current];
       });
     };
@@ -200,12 +190,14 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     //filter the map when a change in the filter component ocurs
     React.useEffect(()=>{
 
-
+        
         if(selectedFilters.length>0){//If there are no filters selected i want the original, non filtered set of markers displayed.
             let filteredSet =[];
             for (let  category = 0; category <selectedFilters.length ;category++) {
                 for (let i = 0; i < originalMarkers.length; i++) {
+
                     if (selectedFilters[category] == originalMarkers[i].category && !filteredSet.find((element) => element === originalMarkers[i])) {
+
                         filteredSet.push(originalMarkers[i])
                     }
 
@@ -213,9 +205,11 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
                 setMarkers(filteredSet);
 
+
             }}else{
 
             setMarkers( originalMarkers);
+
         }
 
     },changesInFilters)
@@ -226,19 +220,19 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         if (canAddMarker) {
             setCanAddMarker(false);
            updateLastMarker(); // Call the updateLastMarker function
-
+          
         }
     }, [canAddMarker]);
 
     //update the comments after the comments in the info list are updated
     React.useEffect(() => {
-
+        
        if(changesInComments){
-
+       
        updateComments();
        }
-
-
+       
+        
     }, [changesInComments]);
 
     const iconUrls = {
@@ -280,12 +274,12 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                         onClick={() => { // Callback function called when a marker is clicked
                             setSelected(marker); // Set the selected marker
                             onInfoList(marker); // Callback function called to update an information list
-
+                            
                         }}
                     />
 
           ))}
-
+            
         </GoogleMap>
       </React.Fragment>
     );
