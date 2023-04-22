@@ -92,10 +92,6 @@ async function getDatasetAndRemoveContent(resourceURL,session){
     // Clear the list to override the whole list
     items.forEach((item) => {
         dataset = removeThing(dataset, item);
-        console.log("R1.-");
-        console.log(dataset);
-        console.log("R2.-");
-        console.log(item);
     });
     return dataset;
 }
@@ -108,8 +104,6 @@ async function getDataset(resourceURL,session){
         if (typeof error.statusCode === "number" && error.statusCode === 404) {
             // if not found, create a new SolidDataset
             dataset = createSolidDataset();
-            console.log("5.-");
-            console.log(dataset);
         } else {
             console.error(error.message);
         }
