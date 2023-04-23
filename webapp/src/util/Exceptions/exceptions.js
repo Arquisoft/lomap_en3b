@@ -52,8 +52,4 @@ export class ReviewInvalidFormatException extends Error {
         super(`${obj} invalid value for string. It must be valid value, not empty.`);
     }
 }
-export class ReviewInvalidFormatForCommentException extends Error {
-    constructor(obj) {
-        super(`${obj} invalid value for string. It must not contain \\n, not empty.`);
-    }
-}
+

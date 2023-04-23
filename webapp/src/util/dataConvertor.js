@@ -111,17 +111,17 @@ export function convertDomainModelReviewsIntoViewReviews(dmobjs){
 //POD Access
 export function convertPODReviewIntoDomainModelReview (podObj){
     //Convert into Review
-    let review= new Review();
+
+    //Item_reviewed & Id
+    let review = new Review(
+        getStringNoLocale(podObj, util.REV_LOCAT),
+        getStringNoLocale(podObj, util.IDENT));
     //Comment
     review.comment = getStringNoLocale(podObj, util.REV_COMMENT);
     //Rate
     review.rate = getStringNoLocale(podObj, util.REV_RATE);
-    //Item_reviewed
-        //TODO getStringNoLocale(podObj, locThing);
     //Media
     review.media = getStringNoLocale(podObj, util.REV_MEDIA);
-    //Id
-    review.locID = getStringNoLocale(podObj, util.IDENT);
     //Owner
     review.user = getStringNoLocale(podObj, util.REV_REVIEWER);
     //Date
@@ -130,16 +130,16 @@ export function convertPODReviewIntoDomainModelReview (podObj){
     return review;
 }
 
-export function convertDomainModelReviewIntoPODReview(dmObjs, locThing){
+export function convertDomainModelReviewIntoPODReview(dmObjs, locThingID){
         //Create Thing
         return buildThing(createThing({ name: dmObjs.revID }))
-        .addUrl(RDF.type, util.REVIEW)                                  // Review
-        .addStringNoLocale(util.REV_COMMENT, dmObjs.comment)                   // Comment
-        .addStringNoLocale(util.REV_RATE, dmObjs.rate)                  // Rate
-        .addStringNoLocale(util.REV_LOCAT, locThing)            // Item_reviewed
-        .addStringNoLocale(util.REV_MEDIA, dmObjs.media)         // Media
-        .addStringNoLocale(util.IDENT, "".concat(dmObjs.revID))         // ID
-        .addStringNoLocale(util.REV_REVIEWER, dmObjs.user)     // Owner
-        .addStringNoLocale(util.REV_DATE, dmObjs.date)    // Date
+        .addUrl(RDF.type, util.REVIEW)                          // Review
+        .addStringNoLocale(util.REV_COMMENT, dmObjs.comment)    // Comment
+        .addStringNoLocale(util.REV_RATE, dmObjs.rate)          // Rate
+        .addStringNoLocale(util.REV_LOCAT, locThingID)          // Item_reviewed
+        .addStringNoLocale(util.REV_MEDIA, dmObjs.media)        // Media
+        .addStringNoLocale(util.IDENT, "".concat(dmObjs.revID)) // ID
+        .addStringNoLocale(util.REV_REVIEWER, dmObjs.user)      // Owner
+        .addStringNoLocale(util.REV_DATE, dmObjs.date)          // Date
         .build();
 }

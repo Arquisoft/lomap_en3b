@@ -3,130 +3,56 @@ import {LocationLM} from "./location";
  * User LoMap class
  */
 class User{
-    publicLocat = [];
-    privateLocat = [];
-    privateReviews = [];
-    publicReviews = [];
-    podURL;
+    /** User's name */
+    name;
+    /** List of public locations */
+    publicLocat = new Map();
+    /** List of private locations*/
+    privateLocat = new Map();
+    /** List of private reviews*/
+    privateReviews = new Map();
+    /** List of public reviews*/
+    publicReviews = new Map();
+    /** List of user's friends*/
     friendsLocat = [];
+
+    /**
+     * Constructor of User's class. Initialise the resource's URLs that will be used 
+     * to retrieve and save data from/to the user's solid pod.
+     */
     constructor() {
-        this.resourceURLPublic = "Public pod-url";
-        this.resourceURLPrivate = "Private pod-url";
+        this.resourceURLPublic = {
+            locat:  "public/lomap/locations.ttl",
+            rev:    "public/lomap/reviews.ttl",
+            imgs:   "public/lomap/images/",
+        };
+        this.resourceURLPrivate = {
+            locat:  "private/lomap/locations.ttl",
+            rev:    "private/lomap/reviews.ttl",
+            imgs:   "private/lomap/images/",
+        };
     }
 
     /**
-     *
-     * @param {LocationLM} l
+     * This method adds new locations to the user's list. 
+     * @param {Array} list of locations to add
+     * @returns a list with locations that need to be updated or added to the pod.
      */
-    removePublicLoc(l){
-        const index = this.publicLocat.indexOf(l);
-        if(index > -1){
-            let num = this.publicLocat.length;
-            this.publicLocat.splice(index, 1);
-            if(this.publicLocat.length !== (num - 1)){
-                //throw error
-            }
-        }
-    }
-    removePrivateLoc(l){
-        const index = this.privateLocat.indexOf(l);
-        if(index > -1){
-            let num = this.privateLocat.length;
-            this.privateLocat.splice(index, 1);
-            if(this.privateLocat.length !== (num - 1)){
-                //throw error
-            }
-        }
-    }
-
-    setPodURL(pod){
-        this.podURL = pod;
-    }
-
-    getReviews(){
-        this.publicLocat.forEach((loc) =>
-        {
-            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
-            this.publicReviews = this.publicReviews.concat(loc.getPublicReviews());
+    addLocations (list){
+        let ret = [];
+        list.forEach(element => {
+            
         });
-        this.privateLocat.forEach((loc) =>
-        {
-            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
-        });
+        return [];
     }
 
-    addScoreReviewToLoc(locId, scr, privacy){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1){
-            pos = lookForLocation(this.privateLocat, locId);
-            if(pos === -1){
-                //TODO: Error
-            }
-            this.privateLocat[pos].addScoreReview(locId, scr, privacy);
-
+    addLocation (priv, loc){
+        if(priv === 'public'){
+            this.publicLocat.set(loc.key, loc);
         } else {
-            this.publicLocat[pos].addScoreReview(locId, scr, privacy);
+            this.privateLocat.set(loc.key, loc);
         }
-    }
-    addCommentReviewToLoc(locId, cmmt, privacy){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1){
-            pos = lookForLocation(this.privateLocat, locId);
-            if(pos === -1){
-                //TODO: Error
-            }
-            this.privateLocat[pos].addCommentReview(locId, cmmt, privacy);
-
-        } else {
-            this.publicLocat[pos].addCommentReview(locId, cmmt, privacy);
-        }
-    }
-
-    addLocation(CoorLat, CoorLng, name, description, category, privacy){
-        if(privacy){
-            this.privateLocat.push(new LocationLM(CoorLat, CoorLng, name, description, category, privacy));
-        } else {
-            this.publicLocat.push(new LocationLM(CoorLat, CoorLng, name, description, category, privacy));
-        }
-    }
-
-    getReviewsForLoc(locId){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1) {
-            pos = lookForLocation(this.privateLocat, locId);
-            if (pos === -1) {
-                //TODO: Error
-            }
-            return this.privateLocat[pos].getAllReviews()
-        } else {
-            return this.publicLocat[pos].getAllReviews()
-        }
-    }
-
-    saveLocationsFromPOD(loc, privacy){
-        if(privacy){
-            this.privateLocat.push(loc);
-        } else{
-            this.publicLocat.push(loc);
-        }
-    }
-
-    getAllLoc(){
-        return []
-            .concat(this.publicReviews)
-            .concat(this.privateLocat);
     }
 }
 
-function lookForLocation(list, id){
-    let i = 0;
-    list.forEach((loc) =>
-    {
-        if(loc.locationID === id){
-            return i;
-        }
-        i++;
-    });
-    return -1;
-}
 export {User};

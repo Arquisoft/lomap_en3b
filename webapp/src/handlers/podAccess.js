@@ -9,7 +9,7 @@ import {
     convertDomainModelLocationIntoPODLocation,
     convertPODLocationIntoDomainModelLocation,
     convertDomainModelLocationIntoViewLocation
-} from "../util/Convertor";
+} from "../util/dataConvertor";
 
 // Import from "@inrupt/solid-client"
 import {
@@ -23,7 +23,7 @@ import {
     removeThing,
     getStringNoLocale, addUrl, addStringNoLocale
 } from "@inrupt/solid-client";
-import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
+import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/exceptions/exceptions";
 
 
 async function writeLocations(resourceURL, session, list) {

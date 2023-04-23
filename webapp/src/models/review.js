@@ -2,7 +2,9 @@
 import {
     v4 as uuidv4
 } from 'uuid';
-import {ReviewInvalidFormatException, ReviewInvalidFormatForCommentException} from "../util/Exceptions/exceptions";
+import {
+    ReviewInvalidFormatException
+} from "../util/exceptions/exceptions";
 
 function check(value, str) {
     if(!value){
@@ -10,47 +12,19 @@ function check(value, str) {
     }
 }
 
-function checkValidComment(str) {
-    if (/\n/.exec(str) || !str) {
-        throw new ReviewInvalidFormatForCommentException(String(str));
-    }
-}
-
 class Review{
-    locationID
-    revID
-    revScore
-    revComment = [];
-    revImg //Url
-    revAuthor //Author
-    constructor(locationID, reviewID=uuidv4(),) {
-        check(reviewID, "reviewID");
-        check(locationID, "locationID");
+    revID;
+    ItemReviewed;
+    comment;
+    rate;
+    media;
+    user;
+    date;
+
+    constructor(locatID, reviewID=uuidv4()) {
         this.revID = reviewID;
-        this.locationID = locationID;
-    }
-    addScore(score){
-        this.revScore = score;
-    }
-    addComment(comment){
-        checkValidComment(comment);
-        this.revComment.push(comment);
-    }
-    addImg(img){
-        this.revImg = img;
-    }
-
-    getCommentsToPOD(){
-        let output = "";
-        this.revComment.forEach( c => {
-            output += c + "\n";
-        })
-
-        return output;
-    }
-
-    addUser(name){
-        this.revAuthor = name;
+        //TODO: Check
+        this.ItemReviewed = locatID;
     }
 }
 export {Review};

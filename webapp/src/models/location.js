@@ -6,7 +6,7 @@ import {
 import {
     CoordinatesInvalidFormatException,
     StringInvalidFormatException
-} from '../util/Exceptions/exceptions.js';
+} from '../util/exceptions/exceptions';
 import {Review} from "./review";
 
 /**
