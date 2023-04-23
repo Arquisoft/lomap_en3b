@@ -51,7 +51,7 @@ async function writeLocations(resourceURL, session, list) {
             dataset= await getDataset(resourceURL,session);
         }
         //Create Thing
-        locationThing = buildThing(createThing({ name: "title" + i }))
+        locationThing = buildThing(createThing({ name: loc.key }))
             .addUrl(RDF.type, "https://schema.org/Place")
             .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
             .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
@@ -79,9 +79,10 @@ async function writeLocations(resourceURL, session, list) {
             console.log(error);
         }
         //TODO: Save Reviews
+        /*
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/reviews.ttl")
         await writeUserReviews(resource, session, loc.comments, locationThing);
-
+        */
         i++;
     }
     window.alert("Saved");
@@ -126,6 +127,13 @@ function convertList(list) {
     let ret = [];
 
     //TODO: Get values for: id, text, rate, user, date
+    /*
+    id: I can generate it
+    text... Maybe I can get it
+    rate... Maybe i can get it... (count icons...(?))
+    user... how(?)
+    date... Same as location (?)
+     */
 
     return ret;
 }
