@@ -9,16 +9,19 @@ import AccountPage from "../components/AccountPage";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
+import ErrorView from "./errorView"
+
+
 
 
 
 
 /**
- * 
- * This is the main Compomnent that renders a map view with various components like the header, list, map, info list, edit list, account page, and filter sidebar. 
+ *
+ * This is the main Compomnent that renders a map view with various components like the header, list, map, info list, edit list, account page, and filter sidebar.
  * The component is used to display markers on the map with additional information that can be edited by the user.
 
-  The component uses various hooks like useState and useLoadScript. 
+  The component uses various hooks like useState and useLoadScript.
   It defines several state variables to manage the interactive state of the map, display markers, and show/hide components like the list, edit list, info list, and filter sidebar.
   It also uses the Google Maps API to search for places and add markers to the map.
 
@@ -46,13 +49,12 @@ const MapView = ({session,onSearch}) => {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // load the places library
   }); // hook to load the google script
-
   /**
    * This function is responsible from passing the filters selected in the FilterSidebar component into the Map component.
    * For that i stablish a "common point" for both , here in their parent component, map view.
    * That common point is the array of filters and the state changesInFilters
    * (using the array of filters as a dependency for useEffect in map was not allowed, since it changed sizes between renders)
-   * This method is a way of using the set functionality of both states without passing the setters to both components.
+   *This method is a way of using the set functionality of both states without passing the setters to both components.
    * @param filters
    */
   const updateFilterListInUse = (filters) => {
@@ -68,6 +70,7 @@ const MapView = ({session,onSearch}) => {
   // toggle interactive state and show list
   const makeMapInteractive = () => {
     setIsInteractive(!isInteractive);
+  //  console.log(showList);
     setShowList(!showList);
   };
 
@@ -129,13 +132,13 @@ const MapView = ({session,onSearch}) => {
     });
   };
   if (loadError) return <div> Error Loading Maps </div>;
-  if (!isLoaded) return <div>Loading Maps</div>; //Checking if the map loaded
+
   return (
       <>
         <CssBaseline />
         <Header
             onAddMarker={() => makeMapInteractive()}
-            
+
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
@@ -146,7 +149,9 @@ const MapView = ({session,onSearch}) => {
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)}/>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
-        <Grid item xs={12} md={8}>
+        {!isLoaded || loadError? <ErrorView />:
+
+        <Grid item xs={12} md={8} aria-label="Map container">
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -161,7 +166,7 @@ const MapView = ({session,onSearch}) => {
               </IconButton>
             </div>
           </form>
-        </Grid>
+        </Grid>}
       </Grid>
       </>
   );

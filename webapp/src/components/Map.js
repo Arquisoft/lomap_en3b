@@ -9,6 +9,7 @@ import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 import {Controller} from "../handlers/controller"
+import {getFriendsWebIds} from "../handlers/podHandler";
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -90,18 +91,36 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
           []
       );
 
-//TO REMOVE 
-/*
+//TODO
     // Function to get and set the locations on the map
     const retrieveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
-    } 
-*/
+    }
+        let friends = await getFriendsWebIds(session.info.webId);
+        let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
+        // Code to get the friends locations
+        let locations = await readLocations(resource, session);
+        resource = session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl");
+        locations = locations.concat(await readLocations(resource, session));
+        let friendsLocations = [];
+        for (let i = 0; i < friends.length; i++) {
+            try {
+                //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
+                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "public/lomap/locations.ttl",session));
+            } catch (err) {
+                //Friend does not have LoMap??
+                console.log(err);
+            }
+        }
+
+        return locations.concat(friendsLocations); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    }
+
     async function getAndSetLocations() {
         //NEW
-        let locationSet = await SessionController.retrieveLocations(session);
-        //OLD        
+        //let locationSet = await SessionController.retrieveLocations(session);
+        //OLD
         //let locationSet = await retrieveLocations()
         setMarkers((current) => [...current, ...locationSet]);
         setOriginalMarkers(locationSet)
@@ -261,6 +280,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                 options={options}
                 onClick={isInteractive ? addMarker : null} // Only allow adding markers when canAddMarker is true
                 onLoad={onMapLoad} //callback function called when the map is loaded
+                aria-label="Map render"
             >
                 {markers.map((marker, index) => ( // Loop through each marker and create a Marker component for each one
                     <Marker
@@ -286,11 +306,11 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
       </React.Fragment>
     );
 
-
-
-
-
-
 }
+
+
+
+
+
 
 export default Map;

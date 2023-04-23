@@ -40,13 +40,13 @@ const Login = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                     <Typography variant="h3" sx={{ color: '#333333', fontWeight: 'bold', mb: 1 }}>LoMAP</Typography>
                     <Typography variant="subtitle1" sx={{ color: '#555555', mb: 2 }}>Welcome to LoMap</Typography>
-                    <FormControl style={{ width: '50%' }} >
+                    <FormControl aria-label="providerForm" for="providerList" style={{ width: '50%' }} >
                         <InputLabel>Select an Identity provider</InputLabel>
-                        <Select style={{ width: '100%' } } value="Inrupt.net" label="inrupt.net">
-                            <MenuItem  value="https://inrupt.net"  >Inrupt.net</MenuItem>
-                            <MenuItem value="https://solidcommunity.net/login" >Solid Community</MenuItem>
-                            <MenuItem value="https://solidcommunity.net/login" >Solid Web</MenuItem>
-                            <MenuItem value="https://podbrowser.inrupt.com/login"  >Pod spaces browser</MenuItem>
+                        <Select id="providerList" aria-label="providers" style={{ width: '100%' } } value="Inrupt.net" label="inrupt.net">
+                            <MenuItem  value="https://inrupt.net"   aria-label="inrupt">Inrupt.net</MenuItem>
+                            <MenuItem value="https://solidcommunity.net/login"    aria-label="solid community" >Solid Community</MenuItem>
+                            <MenuItem value="https://solidcommunity.net/login"    aria-label="solid web" >Solid Web</MenuItem>
+                            <MenuItem value="https://podbrowser.inrupt.com/login"    aria-label="inrupt pod browser"  >Pod spaces browser</MenuItem>
 
                         </Select>
                         <InputLabel>(Inrupt By default)</InputLabel>

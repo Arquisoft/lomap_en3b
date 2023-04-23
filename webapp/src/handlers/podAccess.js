@@ -21,10 +21,15 @@ import {
     getThingAll,
     getSolidDataset,
     removeThing,
-    getStringNoLocale, addUrl, addStringNoLocale
+    getStringNoLocale, getThing, addUrl, addStringNoLocale
 } from "@inrupt/solid-client";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/exceptions/exceptions";
 
+import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
+import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
+import {checkForLomap} from "./podHandler";
+import {LocationLM} from "../models/location";
+import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
 
 async function writeLocations(resourceURL, session, loc) {
     let i = 0;
@@ -33,7 +38,7 @@ async function writeLocations(resourceURL, session, loc) {
 
     //Get dataSet
     dataset= await getDataset(resourceURL,session);
-        
+
     //Create Thing
     locationThing = convertDomainModelLocationIntoPODLocation(loc);
 
@@ -52,15 +57,31 @@ async function writeLocations(resourceURL, session, loc) {
         console.log(error);
     }
     i++;
-    
+
     //window.alert("Saved");
+        //Save dataSet into POD
+        try {
+            // Save the SolidDataset
+            await saveSolidDatasetAt(
+                resourceURL,
+                dataset,
+                {fetch: session.fetch}      // fetch from authenticated Session
+            );
+        } catch (error) {
+            console.log(error);
+        }
+
+        i++;
+    }
+    window.alert("Saved");
+
 }
 
 /**
  * TODO: Needs to be changed
- * @param {*} resourceURL 
- * @param {*} session 
- * @returns 
+ * @param {*} resourceURL
+ * @param {*} session
+ * @returns
  */
 async function getDatasetAndRemoveContent(resourceURL,session){
     let dataset,items;
@@ -73,7 +94,6 @@ async function getDatasetAndRemoveContent(resourceURL,session){
     });
     return dataset;
 }
-
 async function getDataset(resourceURL,session){
     let dataset,items;
     try {
@@ -89,6 +109,120 @@ async function getDataset(resourceURL,session){
     }
     return dataset;
 }
+
+async function writeReviews(user) {
+    user.getReviews();
+    await writeUserReviews(user.resourceURLPublic, user.publicReviews);
+    await writeUserReviews(user.resourceURLPrivate, user.privateReviews);
+}
+
+/**
+ *  This method saves in a given path the user's locations
+ * @param {String} resourceURL user's POD path
+ * @param {Array.<LocationLM>} list list of locations to save
+ * @returns {null}
+ */
+async function writeLocIntoPOD(resourceURL, list, session) {
+    let mySolidDataset;
+    try {
+        //Get existing dataSet
+        let mySolidDataset = await getSolidDataset(resourceURL,
+            {fetch: session.fetch}
+            // { fetch: fetch } //Other way
+        );
+        // Clear the list to override the whole list
+        let items = getThingAll(mySolidDataset);
+        items.forEach((item) => {
+            mySolidDataset = removeThing(mySolidDataset, item);
+        });
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset (i.e., the reading list)
+            mySolidDataset = createSolidDataset();
+        } else {
+            console.error(error.message);
+        }
+    }
+    list.forEach(loc => {
+            // Create a New Thing to Add
+            let locationThing = buildThing(createThing({name: loc.locID}))
+                .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
+                .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
+                .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
+                .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
+                .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
+                .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
+
+                // date (?) - We need to think if it's needed.
+                .addUrl(RDF.type, "https://schema.org/Place")
+                .build();
+            // Update the SolidDataset with New Things
+            mySolidDataset = setThing(mySolidDataset, locationThing);
+        }
+    );
+    // Save the SolidDataset
+    /*    const savedSolidDataset = */
+    await saveSolidDatasetAt(
+        resourceURL,
+        mySolidDataset,
+        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
+        //{ fetch: fetch } //Other way
+    );
+    return null;
+}
+
+async function writeUserReviews(resourceURL, list) {
+
+    let myReviewSolidDataset;
+    try {
+        //Get existing dataSet
+        let myReviewSolidDataset = await getSolidDataset(resourceURL,
+            {fetch: getDefaultSession().fetch}
+            // { fetch: fetch } //Other way
+        );
+        // Clear the list to override the whole list
+        let items = getThingAll(myReviewSolidDataset);
+        items.forEach((item) => {
+            myReviewSolidDataset = removeThing(myReviewSolidDataset, item);
+        });
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset (i.e., the reading list)
+            myReviewSolidDataset = createSolidDataset();
+        } else {
+            console.error(error.message);
+        }
+    }
+
+    for (const rev of list) {
+        // Create a New Thing to Add
+        let locationThing = buildThing(createThing({name: rev.revID}))
+            // ->   | revID
+            .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.revID)
+            // Get Thing associated -> about  | locationID
+            .addStringNoLocale("https://schema.org/about", rev.locationID)
+            // -> (?)  | revScore
+            .addStringNoLocale(SCHEMA_INRUPT.value, rev.revScore)
+            // -> text  | revComment
+            .addStringNoLocale("https://schema.org/text", rev.getCommentsToPOD())
+            //This needs to be an url -> image  | revImg
+            .addStringNoLocale("https://schema.org/image", rev.revImg)
+            .addUrl(RDF.type, "https://schema.org/Review")
+            .build();
+        // Update the SolidDataset with New Things
+        myReviewSolidDataset = setThing(myReviewSolidDataset, locationThing);
+    }
+    // Save the SolidDataset
+    /*    const savedSolidDataset = */
+    await saveSolidDatasetAt(
+        resourceURL,
+        myReviewSolidDataset,
+        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
+        //{ fetch: fetch } //Other way
+    );
+    return null;
+}
+
 
 async function getThingsFromDataset(resourceURL,session){
     let dataset,allThings;
@@ -114,6 +248,7 @@ async function readLocations(resourceURL,session) {
             locationThing =locationThings[i];
 
             try {
+
                 //Convert into LocationLM object
                 let auxObj = convertPODLocationIntoDomainModelLocation(locationThing);
 
@@ -134,6 +269,25 @@ async function readLocations(resourceURL,session) {
     //Return list
     return locationsRetrieved;
 }
+
+async function readReviews(resourceURL,session) {
+    let reviewThings = await getThingsFromDataset(resourceURL, session);
+    let review, reviewThing;
+    let reviewsRetrieved = [];
+    if (reviewThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
+        //Convert into Review object
+        for (let i = 0; i < reviewThings.length; i++) {
+            //Get a Thing
+            reviewThing = reviewThings[i];
+            try {
+                //Convert into Review object
+                review = new Review(
+                    getStringNoLocale(reviewThing, "https://schema.org/about") , // CoorLng,
+                    getStringNoLocale(reviewThing, SCHEMA_INRUPT.identifier)   // CoorLat,
+                );
+                review.addComment(getStringNoLocale(reviewThing, "https://schema.org/text"));
+                review.addScore(getStringNoLocale(reviewThing,SCHEMA_INRUPT.value));
+                review.addImg(getStringNoLocale(reviewThing, "https://schema.org/image"));
 
 export {
     writeLocations,
