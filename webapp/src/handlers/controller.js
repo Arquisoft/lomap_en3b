@@ -1,12 +1,10 @@
 import {SessionManager} from "./sessionManager";
 import {convertDomainModelObjectsIntoViewObjects} from "../util/Convertor";
-
 class Controller{
     sessionMng;
     setSession(session) {
         this.sessionMng = new SessionManager(session);
     }
-
     getSession(){
         return this.sessionMng.session;
     }
