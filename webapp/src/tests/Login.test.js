@@ -20,7 +20,7 @@ describe('Login View',()=>{
         expect(title).toBeInTheDocument();
         const subtitle=screen.getByText('Welcome to LoMap')
         expect(subtitle).toBeInTheDocument();
-        const helper=screen.getByText('Select an identity provider')
+        const helper=screen.getByText('Select an Identity provider')
         expect(helper).toBeInTheDocument();
     })
 
