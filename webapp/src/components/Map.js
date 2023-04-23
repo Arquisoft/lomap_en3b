@@ -77,8 +77,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             name: '',
             category: '',
             privacy: '',
-            rate: "",
-            comments:[],
+            comments:[]
           },
         ]);
 
@@ -133,7 +132,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const updateLastMarker = async () => {
 
         setOriginalMarkers((current) => {
-
 
             const lastMarker = current[current.length - 1];
             //console.log(lastMarker);

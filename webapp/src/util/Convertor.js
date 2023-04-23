@@ -1,46 +1,145 @@
 import {LocationLM} from "../models/location";
-export function convertViewObjectIntoDomainModelObject(viewobj){
-    let privacy = true;
-    if(viewobj.privacy === 'public'){
-        privacy = false;
-    }
+import {Review} from "../models/review";
+import * as util from "./schemaStrings";
+import {
+    createThing,
+    buildThing,
+    getStringNoLocale
+} from "@inrupt/solid-client";
+import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
+
+
+export function convertViewLocationIntoDomainModelLocation(viewobj){
+    //Key has to be changed to be unique
     return new LocationLM(
         viewobj.lat,
         viewobj.lng,
         viewobj.name,
         viewobj.description,
         viewobj.category,
-        privacy,
-        viewobj.rate
-    );
+        viewobj.privacy,
+        viewobj.time
+        //viewobj.key
+    );    
 }
-export function convertDomainModelObjectIntoViewObject(dmobj){
-return {
-    lat: dmobj.lat,
-    lng: dmobj.lat,
-    time: new Date(),
-    description: dmobj.description,
-    name: dmobj.name,
-    category: dmobj.category,
-    privacy: dmobj.privacyText(),
-    rate: dmobj.rating,
-
-};
+export function convertDomainModelLocationIntoViewLocation(dmobj, pos){
+    //TODO: Change pos
+    return {
+        key: pos,
+        lat: dmobj.lat,
+        lng: dmobj.lng,
+        time: new Date(),
+        description: dmobj.description,
+        name: dmobj.name,
+        category: dmobj.category,
+        privacy: dmobj.privacy,
+        comments: []
+    };
 }
-export function convertViewObjectsIntoDomainModelObjects(viewobjs){
+export function convertViewLocationsIntoDomainModelLocations(viewobjs){
     let ret = [];
     viewobjs.forEach( (obj) =>
     {
-        ret.push(convertViewObjectIntoDomainModelObject(obj));
+        ret.push(convertViewLocationIntoDomainModelLocation(obj));
     });
     return ret;
 }
-export function convertDomainModelObjectsIntoViewObjects(dmobjs){
+export function convertDomainModelLocationsIntoViewLocations(dmobjs){
     let ret = [];
     dmobjs.forEach( (obj) =>
     {
-        ret.push(convertViewObjectIntoDomainModelObject(obj));
+        ret.push(convertDomainModelLocationIntoViewLocation(obj));
     });
     return ret;
+}
 
+//POD Access
+export function convertPODLocationIntoDomainModelLocation (podObj){
+    //Convert into LocationLM
+    return new LocationLM(
+        Number(getStringNoLocale(podObj, util.LATITUDE)),       // CoorLat,
+        Number(getStringNoLocale(podObj, util.LONGITUDE)),      // CoorLng,
+        getStringNoLocale(podObj, util.NAME),                   // name,
+        getStringNoLocale(podObj, util.DESCRIP),                // description,
+        getStringNoLocale(podObj, util.CAT),                    // category
+        getStringNoLocale(podObj, SCHEMA_INRUPT.accessCode),    // privacy
+        getStringNoLocale(podObj, SCHEMA_INRUPT.dateModified),  // date    
+        getStringNoLocale(podObj, util.IDENT),                  // id    
+        );
+}
+
+export function convertDomainModelLocationIntoPODLocation(dmObjs){
+        //Create Thing
+        return buildThing(createThing({ name: dmObjs.locID }))
+        .addUrl(RDF.type, util.PLACE)                                   // Place
+        .addStringNoLocale(util.NAME, dmObjs.name)                      // Nanme
+        .addStringNoLocale(util.LATITUDE, dmObjs.lat)                   // Latitude
+        .addStringNoLocale(util.LONGITUDE, dmObjs.lng)                  // Longitude
+        .addStringNoLocale(util.DESCRIP, dmObjs.description)            // Description
+        .addStringNoLocale(util.IDENT, "".concat(dmObjs.locID))         // ID
+        .addStringNoLocale(SCHEMA_INRUPT.dateModified, dmObjs.date)     // time
+        .addStringNoLocale(SCHEMA_INRUPT.accessCode, dmObjs.privacy)    // privacy
+        .addStringNoLocale(util.CAT, dmObjs.category)                   // category
+        .build();
+
+}
+
+
+export function convertViewReviewIntoDomainModelReview(viewobj){
+    //TODO:
+}
+export function convertDomainModelReviewIntoViewReview(dmobj, pos){
+    //TODO:
+}
+export function convertViewReviewsIntoDomainModelReviews(viewobjs){
+    let ret = [];
+    viewobjs.forEach( (obj) =>
+    {
+        ret.push(convertViewReviewIntoDomainModelReview(obj));
+    });
+    return ret;
+}
+export function convertDomainModelReviewsIntoViewReviews(dmobjs){
+    let ret = [];
+    dmobjs.forEach( (obj) =>
+    {
+        ret.push(convertDomainModelReviewIntoViewReview(obj));
+    });
+    return ret;
+}
+
+//POD Access
+export function convertPODReviewIntoDomainModelReview (podObj){
+    //Convert into Review
+    let review= new Review();
+    //Comment
+    review.comment = getStringNoLocale(podObj, util.REV_COMMENT);
+    //Rate
+    review.rate = getStringNoLocale(podObj, util.REV_RATE);
+    //Item_reviewed
+        //TODO getStringNoLocale(podObj, locThing);
+    //Media
+    review.media = getStringNoLocale(podObj, util.REV_MEDIA);
+    //Id
+    review.locID = getStringNoLocale(podObj, util.IDENT);
+    //Owner
+    review.user = getStringNoLocale(podObj, util.REV_REVIEWER);
+    //Date
+    review.date = getStringNoLocale(podObj, util.REV_DATE);
+    
+    return review;
+}
+
+export function convertDomainModelReviewIntoPODReview(dmObjs, locThing){
+        //Create Thing
+        return buildThing(createThing({ name: dmObjs.revID }))
+        .addUrl(RDF.type, util.REVIEW)                                  // Review
+        .addStringNoLocale(util.REV_COMMENT, dmObjs.comment)                   // Comment
+        .addStringNoLocale(util.REV_RATE, dmObjs.rate)                  // Rate
+        .addStringNoLocale(util.REV_LOCAT, locThing)            // Item_reviewed
+        .addStringNoLocale(util.REV_MEDIA, dmObjs.media)         // Media
+        .addStringNoLocale(util.IDENT, "".concat(dmObjs.revID))         // ID
+        .addStringNoLocale(util.REV_REVIEWER, dmObjs.user)     // Owner
+        .addStringNoLocale(util.REV_DATE, dmObjs.date)    // Date
+        .build();
 }

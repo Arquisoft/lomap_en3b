@@ -16,7 +16,7 @@ class LocationLM {
     //Attributes
     publicReviews;
     privateReviews;
-    constructor(CoorLat, CoorLng, name, description, category,privacy=false, locID = uuidv4(), rating=null) {
+    constructor(CoorLat, CoorLng, name, description, category, privacy, date, locID = uuidv4()) {
 
         //checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
@@ -30,10 +30,7 @@ class LocationLM {
         this.locID = locID;
         this.privacy=privacy;
         this.category = category;
-        if(rating){
-            this.rating=rating;
-        }
-
+        this.date = date;
     }
 
     getPublicReviews(){
