@@ -22,7 +22,5 @@ describe(("Filter menu functionality "),()=>{
         expect(filterContainer).toBeInTheDocument();
 
     })
-    //test('Filters selected are the ones being sent'){
-//jest.spyOn('updateFilterListInUse')
-   // }
+
 })
