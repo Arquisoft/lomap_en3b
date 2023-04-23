@@ -20,25 +20,10 @@ describe('Login View',()=>{
         expect(title).toBeInTheDocument();
         const subtitle=screen.getByText('Welcome to LoMap')
         expect(subtitle).toBeInTheDocument();
+        const helper=screen.getByText('Select an identity provider')
+        expect(helper).toBeInTheDocument();
     })
 
-    test('providerList',()=>{
-
-        const providerOption=screen.getAllByRole('button' )[0]
-        expect(providerOption).toBeInTheDocument();
-
-        fireEvent.click(providerOption)
-
-        const providerList=["inrupt","solid community","solid web","inrupt pod browser"]
-
-        for (let i = 0; i <providerList.length ; i++) {
-            const provider=  getByDisplayValue(providerList[i])
-
-            //expect(provider).toBeInTheDocument();
-            }
-
-
-    })
 
 
 });

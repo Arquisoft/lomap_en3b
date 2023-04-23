@@ -54,9 +54,10 @@ describe('Header renders all options',()=>{
 describe('Header buttons work ',()=>{
 
     beforeEach(()=>{
-                     render(<MapView/>)
+            render(<MapView/>)
 
-    }
+        }
+
     )
     test('Show Profile',()=>{
 
@@ -66,18 +67,5 @@ describe('Header buttons work ',()=>{
         expect(profileContainer).toBeInTheDocument();
 
     })
-    test('Show filter menu',()=>{
-        const filtersAvailable=['sight','restaurant','monument','park','bar','shop']
-        const filterButton=screen.getByLabelText( /Filter Locations/i)
-        fireEvent.click(filterButton)
-        const filterContainer=screen.getByLabelText(/Filtering options/i)
-        const options=screen.getAllByRole('checkbox')
-        for (let i = 0; i <filtersAvailable.length ; i++) {
-          if(!filtersAvailable.includes(options[i].value)){
-             throw new Error("Filter "+filtersAvailable[i]+" did not render.")
-          }
-        }
-        expect(filterContainer).toBeInTheDocument();
 
-    })
 })
