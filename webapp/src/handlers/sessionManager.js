@@ -1,6 +1,5 @@
 //import {useSession} from "@inrupt/solid-ui-react";
 //import * as sessionMetho from "@inrupt/solid-client-authn-browser";
-import {User} from "../models/user";
 import {readLocations, writeLocations} from "./podAccess";
 class SessionManager{
     //With this we can control the login status for solid

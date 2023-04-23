@@ -8,6 +8,7 @@ import {readLocations, writeLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
+import {Controller} from "../handlers/controller"
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -62,6 +63,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
+    const SessionController = new Controller();
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -88,13 +90,19 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
           []
       );
 
-      // Function to get and set the locations on the map
+//TO REMOVE 
+/*
+    // Function to get and set the locations on the map
     const retrieveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
-    }
+    } 
+*/
     async function getAndSetLocations() {
-        let locationSet = await retrieveLocations()
+        //NEW
+        let locationSet = await SessionController.retrieveLocations(session);
+        //OLD        
+        //let locationSet = await retrieveLocations()
         setMarkers((current) => [...current, ...locationSet]);
         setOriginalMarkers(locationSet)
     }
@@ -145,19 +153,16 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             return [...current];
         });
         //TRYING
-        console.log("1.- original");
-        console.log(originalMarkers);
-        console.log("2.- markers");
-        console.log(markers);
-        await saveLocations();
+        await SessionController.saveLocations();
     };
 
+    /*
     const saveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
         console.log(resource);
         return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
-
+    */
     //function to update the comments
     const updateComments = () => {
 

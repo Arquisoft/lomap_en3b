@@ -15,6 +15,8 @@ class User{
     publicReviews = new Map();
     /** List of user's friends*/
     friendsLocat = [];
+    /** List of all the locations */
+    locations = [];
 
     /**
      * Constructor of User's class. Initialise the resource's URLs that will be used 
@@ -34,25 +36,70 @@ class User{
     }
 
     /**
-     * This method adds new locations to the user's list. 
-     * @param {Array} list of locations to add
-     * @returns a list with locations that need to be updated or added to the pod.
+     * This method add location to the public map of locations
+     * @param {Array} list 
      */
-    addLocations (list){
-        let ret = [];
-        list.forEach(element => {
-            
+    addPublicLocations(list){
+        list.forEach( (loc) => 
+        {
+            this.addPublicLocation(loc);
         });
-        return [];
     }
 
-    addLocation (priv, loc){
-        if(priv === 'public'){
-            this.publicLocat.set(loc.key, loc);
-        } else {
-            this.privateLocat.set(loc.key, loc);
-        }
+    addPublicLocation(loc){
+        this.publicLocat.set(
+            loc.locID, 
+            loc
+        );
+        this.locations.push(loc);
     }
+
+    /**
+     * This method add location to the private map of locations
+     * @param {Array} list 
+     */
+    addPrivateLocations(list){
+        list.forEach( (loc) => 
+        {
+            this.addPrivateLocation(loc);
+        });
+
+    }
+
+    addPrivateLocation(loc){
+        this.privateLocat.set(
+            loc.locID, 
+            loc
+        );
+        this.locations.push(loc);
+    }
+
+    addLocations(list){
+        let ret = [];
+        list.forEach((loc) => {
+            if(loc.privacy === 'public'){
+                //check if already contained
+                if(this.publicLocat.has(loc.locID)){
+                    //check is anyting has been modified
+                    //TODO: decide how to check when a location has been changed
+                } else {
+                    this.addPublicLocation(loc);
+                    ret.push(loc);
+                }
+            } else {
+                if(this.privateLocat.has(loc.locID)){
+                    //check is anyting has been modified
+                    //TODO: decide how to check when a location has been changed
+                } else {
+                    this.addPrivateLocation(loc);
+                    ret.push(loc);
+                }                
+            }
+        });
+
+        return ret;
+    }
+
 }
 
 export {User};

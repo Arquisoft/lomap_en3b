@@ -26,41 +26,33 @@ import {
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/exceptions/exceptions";
 
 
-async function writeLocations(resourceURL, session, list) {
+async function writeLocations(resourceURL, session, loc) {
     let i = 0;
     let dataset;
     let locationThing;
-    //Iterates the list
-    for (const loc of list) {
-        //GetDataSet - And remove the first time
-        if(i === 0){
-            //Get dataSet and Remove content
-            dataset= await getDatasetAndRemoveContent(resourceURL,session);
-        } else {
-            //Get dataSet
-            dataset= await getDataset(resourceURL,session);
-        }
+
+    //Get dataSet
+    dataset= await getDataset(resourceURL,session);
         
-        //Create Thing
-        let auxLoc = convertViewLocationIntoDomainModelLocation(loc);
-        locationThing = convertDomainModelLocationIntoPODLocation(auxLoc);
+    //Create Thing
+    locationThing = convertDomainModelLocationIntoPODLocation(loc);
 
-        //Add Thing into DataSet
-        dataset = setThing(dataset, locationThing);
+    //Add Thing into DataSet
+    dataset = setThing(dataset, locationThing);
 
-        //Save dataSet into POD
-        try {
-            // Save the SolidDataset
-            await saveSolidDatasetAt(
-                resourceURL,
-                dataset,
-                {fetch: session.fetch}      // fetch from authenticated Session
-            );
-        } catch (error) {
-            console.log(error);
-        }
-        i++;
+    //Save dataSet into POD
+    try {
+        // Save the SolidDataset
+        await saveSolidDatasetAt(
+            resourceURL,
+            dataset,
+            {fetch: session.fetch}      // fetch from authenticated Session
+        );
+    } catch (error) {
+        console.log(error);
     }
+    i++;
+    
     //window.alert("Saved");
 }
 
@@ -124,7 +116,6 @@ async function readLocations(resourceURL,session) {
             try {
                 //Convert into LocationLM object
                 let auxObj = convertPODLocationIntoDomainModelLocation(locationThing);
-                location = convertDomainModelLocationIntoViewLocation(auxObj, i);
 
                 //Add locationLM into List
                 locationsRetrieved.push(location);

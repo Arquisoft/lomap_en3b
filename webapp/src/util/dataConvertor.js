@@ -22,7 +22,7 @@ export function convertViewLocationIntoDomainModelLocation(viewobj){
         //viewobj.key
     );    
 }
-export function convertDomainModelLocationIntoViewLocation(dmobj, pos){
+function convertDomainModelLocationIntoViewLocation(dmobj, pos){
     //TODO: Change pos
     return {
         key: pos,
@@ -44,12 +44,17 @@ export function convertViewLocationsIntoDomainModelLocations(viewobjs){
     });
     return ret;
 }
+/**
+ * This method converts Locations from our domain model (LocationLM)
+ * into locations for the view model.
+ * @param {Array} dmobjs array of LocationLm 
+ * @returns an array with view format
+ */
 export function convertDomainModelLocationsIntoViewLocations(dmobjs){
     let ret = [];
-    dmobjs.forEach( (obj) =>
-    {
-        ret.push(convertDomainModelLocationIntoViewLocation(obj));
-    });
+    for (let i = 0; i < dmobjs.length; i++) {
+        ret.push(convertDomainModelLocationIntoViewLocation(dmobjs[i], i));
+    }
     return ret;
 }
 
