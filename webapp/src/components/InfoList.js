@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import {
-    Container,
+    Container, FormControl,
 } from './styles/ListStyle.js';
 import {
     IconButton,
@@ -25,7 +25,12 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import EmojiEmotionsSharpIcon from '@mui/icons-material/EmojiEmotionsSharp';
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
-
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import EditIcon from '@mui/icons-material/Edit';
 const InfoList = ({isInfoVisible, onInfoList}) => {
 
     const[comment,setComment] = useState("");
@@ -34,7 +39,67 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
     const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
     const [selectedEmoji, setSelectedEmoji] = useState(null);
+    const [ınfo,setInfo] = useState(1);
+    const [edit,setEdit] = useState(3);
+    const onClickEdit = () => {
+        if (ınfo === 1 && edit === 3) {
+            setInfo(3);
+            setEdit(1);
+        } else {
+            setInfo(1);
+            setEdit(3);
+        }
+    };
+    /////
+    const [name, setName] = useState('');
+    const [category, setCategory] = useState('');
+    const [privacy, setPrivacy] = useState('public');
+    const[pic,setPic] = useState(""); //Picture
 
+    /////////////////////////////////picture
+    const handleImageUploadpic = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const imageDataUrl = reader.result;
+                const img = new Image();
+                img.src = imageDataUrl;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 200; // we give a width to the picture
+                    const MAX_HEIGHT = 200; // we give a height to the picture
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const resizedImageDataUrl = canvas.toDataURL(file.type);
+                    setPic( `${resizedImageDataUrl}` );
+
+                };
+            };
+        };
+        input.click();
+    };
+
+    /////
         const [anchorEl, setAnchorEl] = React.useState(null);
 
         const handleClick = (event) => {
@@ -230,7 +295,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                             </IconButton>
                         </Box>
                     </Box></Typography>}
-                {selectedTab === 1 && <Typography variant="body1">
+                {selectedTab === ınfo && <Typography variant="body1">
                     <img src="https://picsum.photos/id/17/200" alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
                         <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
@@ -243,8 +308,78 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                             Helena's Spot is a private location nestled in a quiet and peaceful park.
                             It's the perfect choice for those looking to get away from the hustle and bustle
                             of the city and enjoy the beauty of nature. </Typography>
+                        <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
                     </Box>
                 </Typography>}
+                {selectedTab === edit && <Typography variant="body1">
+                    <Container style={style}>
+                        <>
+
+                            <div style={{ display: 'flex', flexDirection: 'column'}} >
+                                <FormControl style={{ width: '100%' }}>
+                                    <InputLabel> Name </InputLabel>
+                                    <TextField style={{ width: '100%' }} value={name} onChange={(e) => setName(e.target.value)} />
+                                </FormControl>
+                                <FormControl style={{ width: '100%'}}>
+                                    <InputLabel>Type</InputLabel>
+                                    <Select style={{ width: '100%', minWidth: '100px' }} value={category} onChange={(e) => setCategory(e.target.value)}>
+                                        <MenuItem value="bar">Bar</MenuItem>
+                                        <MenuItem value="shop">Shop</MenuItem>
+                                        <MenuItem value="restaurant">Restaurant</MenuItem>
+                                        <MenuItem value="park">Park</MenuItem>
+                                        <MenuItem value="monument">Monument</MenuItem>
+                                        <MenuItem value="sight">Sight</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <FormControl style={{ width: '100%' }}>
+                                    <InputLabel>Privacy</InputLabel>
+                                    <RadioGroup row value={privacy} onChange={(e) => setPrivacy(e.target.value)}>
+                                        <FormControlLabel
+                                            value="public"
+                                            control={<Radio color="default" />}
+                                            label="Public"
+                                        />
+                                        <FormControlLabel
+                                            value="private"
+                                            control={<Radio color="default" />}
+                                            label="Private"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormControl style={{ display: 'flex', alignItems: 'center' }}>
+                                    <InputLabel style={{ flex: 1 }}>Picture</InputLabel>
+                                    <Button  onClick={handleImageUploadpic} size='small'>
+                                        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                            {pic ? (
+                                                <img src={pic} alt="uploaded image" style={{ width: '80px', height: '70px' }} />
+                                            ) : (
+                                                <div style={{ width: '80px', height: '70px', border: '1px solid #ccc', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'gainsboro', color: 'gray' }}>Add Picture</div>
+                                            )}
+                                        </div>
+                                    </Button>
+                                </FormControl>
+                                <FormControl style={{ display: 'flex', alignItems: 'center' }}>
+                                    <TextField
+                                        id="description"
+                                        label="Description"
+                                        multiline
+                                        rows={2}
+                                        style={{ width: '100%' }}
+                                    />
+                                </FormControl>
+                                <div style={{ display: 'flex', justifyContent: 'center'}}>
+                                    <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
+                                        handleAddButtonClick(); //event to know that the action is finoished
+                                    }}>
+                                        Finish
+                                    </Button>
+                                    <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
+                                </div>
+                            </div>
+                        </>
+                    </Container>
+                </Typography>}
+
             </Box>
         </Container>
     )};
