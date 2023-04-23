@@ -82,8 +82,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             comments:[],
           },
         ]);
-
-
+           
+            
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
           },
@@ -180,22 +180,22 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
     //function to update the comments
     const updateComments = () => {
-
+    
         setOriginalMarkers((current) => {
-
+            
 
         const marker = markerData[0]; // Access the object inside the array
 
-
-
-
+        
+        
+          
         const lastMarker = current[marker.key];
 
-
-
+        
+       
        lastMarker.comments=marker.comments;
-
-
+  
+       
         return [...current];
       });
     };
@@ -208,7 +208,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     //filter the map when a change in the filter component ocurs
     React.useEffect(()=>{
 
-
+        
         if(selectedFilters.length>0){//If there are no filters selected i want the original, non filtered set of markers displayed.
             let filteredSet =[];
             for (let  category = 0; category <selectedFilters.length ;category++) {
@@ -238,19 +238,19 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         if (canAddMarker) {
             setCanAddMarker(false);
            updateLastMarker(); // Call the updateLastMarker function
-
+          
         }
     }, [canAddMarker]);
 
     //update the comments after the comments in the info list are updated
     React.useEffect(() => {
-
+        
        if(changesInComments){
-
+       
        updateComments();
        }
-
-
+       
+        
     }, [changesInComments]);
 
     const iconUrls = {
@@ -276,6 +276,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                 options={options}
                 onClick={isInteractive ? addMarker : null} // Only allow adding markers when canAddMarker is true
                 onLoad={onMapLoad} //callback function called when the map is loaded
+                aria-label="Map render"
             >
                 {markers.map((marker, index) => ( // Loop through each marker and create a Marker component for each one
                     <Marker
@@ -291,21 +292,21 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                         onClick={() => { // Callback function called when a marker is clicked
                             setSelected(marker); // Set the selected marker
                             onInfoList(marker); // Callback function called to update an information list
-
+                            
                         }}
                     />
 
           ))}
-
+            
         </GoogleMap>
       </React.Fragment>
     );
 
-
-
-
-
-
 }
+
+
+
+
+
 
 export default Map;

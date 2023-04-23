@@ -116,15 +116,16 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
 
   return (
       <AppBar position="fixed" color="inherit">
-        <Toolbar >
+        <Toolbar aria-label="ToolBar">
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleInfoListClick}>
             <PlaceIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography  variant="h6" sx={{ flexGrow: 1 }}>
             LOMAP
             <Button color="inherit">Home</Button>
 
             <Button
+               aria-label="Friend Menu"
                 id="demo-customized-button"
                 aria-controls={open ? 'demo-customized-menu' : undefined}
                 aria-haspopup="true"
@@ -139,6 +140,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             </Button>
 
             <StyledMenu
+                aria-label='Friend menu'
                 id="demo-customized-menu"
                 MenuListProps={{
                   'aria-labelledby': 'demo-customized-button',
@@ -152,7 +154,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
 
               <div>
                 <TextField
-                    label="Search Friend"
+                    aria-label="Search Friend"
                     variant="outlined"
                     value={filter}
                     onChange={handleFilterChange}
@@ -184,19 +186,19 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             <Button color="inherit">Map</Button>
           </Typography>
           <div>
-            <IconButton color="inherit" onClick={handleFilterLocations} >
+            <IconButton   aria-label="Filter Locations" color="inherit" onClick={handleFilterLocations} >
               <TuneIcon />
             </IconButton>
-            <IconButton color="inherit" onClick={handleEditLocationButtonClick} >
+            <IconButton  aria-label="Edit Location"  color="inherit" onClick={handleEditLocationButtonClick} >
               <EditLocationIcon />
             </IconButton>
-            <IconButton color="inherit" onClick={handleAddButtonClick} >
+            <IconButton  aria-label="Add Location"  color="inherit" onClick={handleAddButtonClick} >
               <AddLocationAltIcon />
             </IconButton>
-            <IconButton color="inherit"  onClick={handleAccountPageClick} >
+            <IconButton  aria-label="Show Profile"  color="inherit"  onClick={handleAccountPageClick} >
               <AccountIcon />
             </IconButton>
-            <IconButton color="inherit" >
+            <IconButton   color="inherit" >
               <AddIcon />
             </IconButton>
           </div>

@@ -205,6 +205,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                                 size="small"
                                 sx={{ flexGrow: 1,  mr: '0.625rem', fontSize: '0.75rem' }}
                                 InputProps={{ sx: { borderRadius: '1.25rem', pl: '0.625rem' } }}
+                                multiline
+                                rows={4}
                             />
                             <Box sx={{ display: 'flex', alignItems: 'center',  mt: '0.3125rem', width: '35%'  }}>
                                 <div> <Rating
