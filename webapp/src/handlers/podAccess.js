@@ -33,8 +33,6 @@ async function writeLocations(user, session) {
     writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
     writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
 }
-
- */
 async function writeLocations(resourceURL, session, list) {
     let i = 0;
     let dataset;
