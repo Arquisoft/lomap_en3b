@@ -15,7 +15,7 @@ import {
     getThingAll,
     getSolidDataset,
     removeThing,
-    getStringNoLocale, addUrl, addStringNoLocale, getThing
+    getStringNoLocale, getThing, addUrl, addStringNoLocale
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
@@ -27,14 +27,14 @@ import {CoordinatesInvalidFormatException, StringInvalidFormatException} from ".
  * Save user's session changes into de POD.
  * @param {User} user
  * @returns {Promise<void>}
- *
+ */
 async function writeLocations(user, session) {
     //This can be parallel
     writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
     writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
 }
- */
 
+ */
 async function writeLocations(resourceURL, session, list) {
     let i = 0;
     let dataset;
@@ -81,6 +81,7 @@ async function writeLocations(resourceURL, session, list) {
         i++;
     }
     window.alert("Saved");
+
 }
 
 async function getDatasetAndRemoveContent(resourceURL,session){
@@ -109,7 +110,6 @@ async function getDataset(resourceURL,session){
     }
     return dataset;
 }
-
 async function writeReviews(user) {
     user.getReviews();
     await writeUserReviews(user.resourceURLPublic, user.publicReviews);
@@ -152,6 +152,7 @@ async function writeLocIntoPOD(resourceURL, list, session) {
                 .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
                 .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
                 .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
+
                 // date (?) - We need to think if it's needed.
                 .addUrl(RDF.type, "https://schema.org/Place")
                 .build();
