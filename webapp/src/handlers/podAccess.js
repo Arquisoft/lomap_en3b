@@ -39,7 +39,7 @@ async function writeLocations(user, session) {
 async function writeLocations(resourceURL, session, list) {
     let i = 0;
     let dataset;
-
+    let locationThing;
     //Iterates the list
     for (const loc of list) {
         //GetDataSet - And remove the first time
@@ -51,7 +51,7 @@ async function writeLocations(resourceURL, session, list) {
             dataset= await getDataset(resourceURL,session);
         }
         //Create Thing
-        let locationThing = buildThing(createThing({ name: "title" + i }))
+        locationThing = buildThing(createThing({ name: "title" + i }))
             .addUrl(RDF.type, "https://schema.org/Place")
             .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
             .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
@@ -78,6 +78,9 @@ async function writeLocations(resourceURL, session, list) {
         } catch (error) {
             console.log(error);
         }
+        //TODO: Save Reviews
+        let resource = session.info.webId.replace("/profile/card#me", "/lomap/reviews.ttl")
+        await writeUserReviews(resource, session, loc.comments, locationThing);
 
         i++;
     }
@@ -112,116 +115,56 @@ async function getDataset(resourceURL,session){
 }
 
 async function writeReviews(user) {
-    user.getReviews();
-    await writeUserReviews(user.resourceURLPublic, user.publicReviews);
-    await writeUserReviews(user.resourceURLPrivate, user.privateReviews);
+    //user.getReviews();
+    //await writeUserReviews(user.resourceURLPublic, user.publicReviews);
+    //await writeUserReviews(user.resourceURLPrivate, user.privateReviews);
+    //TODO: Change
+
 }
 
-/**
- *  This method saves in a given path the user's locations
- * @param {String} resourceURL user's POD path
- * @param {Array.<LocationLM>} list list of locations to save
- * @returns {null}
- */
-async function writeLocIntoPOD(resourceURL, list, session) {
-    let mySolidDataset;
-    try {
-        //Get existing dataSet
-        let mySolidDataset = await getSolidDataset(resourceURL,
-            {fetch: session.fetch}
-            // { fetch: fetch } //Other way
-        );
-        // Clear the list to override the whole list
-        let items = getThingAll(mySolidDataset);
-        items.forEach((item) => {
-            mySolidDataset = removeThing(mySolidDataset, item);
-        });
-    } catch (error) {
-        if (typeof error.statusCode === "number" && error.statusCode === 404) {
-            // if not found, create a new SolidDataset (i.e., the reading list)
-            mySolidDataset = createSolidDataset();
-        } else {
-            console.error(error.message);
-        }
-    }
-    list.forEach(loc => {
-            // Create a New Thing to Add
-            let locationThing = buildThing(createThing({name: loc.locID}))
-                .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
-                .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
-                .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
-                .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
-                .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
-                .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
+function convertList(list) {
+    let ret = [];
 
-                // date (?) - We need to think if it's needed.
-                .addUrl(RDF.type, "https://schema.org/Place")
-                .build();
-            // Update the SolidDataset with New Things
-            mySolidDataset = setThing(mySolidDataset, locationThing);
-        }
-    );
-    // Save the SolidDataset
-    /*    const savedSolidDataset = */
-    await saveSolidDatasetAt(
-        resourceURL,
-        mySolidDataset,
-        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
-        //{ fetch: fetch } //Other way
-    );
-    return null;
+    //TODO: Get values for: id, text, rate, user, date
+
+    return ret;
 }
 
-async function writeUserReviews(resourceURL, list) {
-
-    let myReviewSolidDataset;
-    try {
-        //Get existing dataSet
-        let myReviewSolidDataset = await getSolidDataset(resourceURL,
-            {fetch: getDefaultSession().fetch}
-            // { fetch: fetch } //Other way
-        );
-        // Clear the list to override the whole list
-        let items = getThingAll(myReviewSolidDataset);
-        items.forEach((item) => {
-            myReviewSolidDataset = removeThing(myReviewSolidDataset, item);
-        });
-    } catch (error) {
-        if (typeof error.statusCode === "number" && error.statusCode === 404) {
-            // if not found, create a new SolidDataset (i.e., the reading list)
-            myReviewSolidDataset = createSolidDataset();
-        } else {
-            console.error(error.message);
-        }
-    }
-
-    for (const rev of list) {
-        // Create a New Thing to Add
-        let locationThing = buildThing(createThing({name: rev.revID}))
-            // ->   | revID
-            .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.revID)
-            // Get Thing associated -> about  | locationID
-            .addStringNoLocale("https://schema.org/about", rev.locationID)
-            // -> (?)  | revScore
-            .addStringNoLocale(SCHEMA_INRUPT.value, rev.revScore)
-            // -> text  | revComment
-            .addStringNoLocale("https://schema.org/text", rev.getCommentsToPOD())
-            //This needs to be an url -> image  | revImg
-            .addStringNoLocale("https://schema.org/image", rev.revImg)
+async function writeUserReviews(resourceURL, session, list, locThing, user) {
+    let j = 0;
+    let dataset;
+    let reviewList = convertList(list);
+    //Iterates the list
+    for (const rev of reviewList) {
+        //GetDataSet - And remove the first time
+        dataset= await getDataset(resourceURL,session);
+        //Create Thing
+        let reviewThing = buildThing(createThing({ name: "title" + j }))
             .addUrl(RDF.type, "https://schema.org/Review")
+            .addStringNoLocale("https://schema.org/itemReviewed", locThing)
+            .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.key)
+            .addStringNoLocale("https://schema.org/reviewBody", rev.text)
+            .addStringNoLocale("https://schema.org/reviewRating", rev.rate)
+            //.addStringNoLocale("https://schema.org/associatedMedia", rev.media)
+            .addStringNoLocale("https://schema.org/accountablePerson", user)
+            .addStringNoLocale("https://schema.org/dateCreated", rev.date)
             .build();
-        // Update the SolidDataset with New Things
-        myReviewSolidDataset = setThing(myReviewSolidDataset, locationThing);
+        //Add Thing into DataSet
+        dataset = setThing(dataset, reviewThing);
+
+        //Save dataSet into POD
+        try {
+            // Save the SolidDataset
+            await saveSolidDatasetAt(
+                resourceURL,
+                dataset,
+                {fetch: session.fetch}      // fetch from authenticated Session
+            );
+        } catch (error) {
+            console.log(error);
+        }
+        j++;
     }
-    // Save the SolidDataset
-    /*    const savedSolidDataset = */
-    await saveSolidDatasetAt(
-        resourceURL,
-        myReviewSolidDataset,
-        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
-        //{ fetch: fetch } //Other way
-    );
-    return null;
 }
 
 
