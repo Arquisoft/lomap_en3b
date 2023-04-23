@@ -132,6 +132,7 @@ function convertList(list) {
 
 async function writeUserReviews(resourceURL, session, list, locThing, user) {
     let j = 0;
+
     let dataset;
     let reviewList = convertList(list);
     //Iterates the list
