@@ -53,7 +53,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
 
     const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
-    const[comments,setComments]=useState(['This is a great spot! ⭐ ', 'I love coming here. ⭐⭐ ','Hi! ⭐','Good Place... ⭐⭐⭐','perfect ⭐⭐⭐⭐⭐']);
+    const[comments,setComments]=useState([]);
+    const[review,setReview]=useState([]);
     const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
     const [selectedEmoji, setSelectedEmoji] = useState(null);
@@ -73,7 +74,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const [category, setCategory] = useState('');
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
-        const [key, setKey] = useState('');
+    const [key, setKey] = useState('');
 
     /////////////////////////////////picture
     const handleImageUploadpic = () => {
@@ -149,10 +150,13 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
      // Define an event handler to update the list with the propertys from the selected component
     React.useEffect(() => {
         if (isInfoVisible) {
-          setComments(selected[0].comments);
+            
+           upgradeComments();
+          
           setName(selected[0].name);
           setCategory(selected[0].category); //setters for every field in the infoList
           setPrivacy(selected[0].privacy);
+          console.log(selected[0].key);
           setKey(selected[0].key);
         } else {
           setComments([]);
@@ -171,10 +175,22 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
         } else {
             ratingStars = '⭐'.repeat(selectedRating);
         }
+
+        setReview((prevReview) => [...prevReview, {comment, commentpic, ratingStars}]);
+
         setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
         setComment('');
         setCommentpic('');
     };
+
+
+    const upgradeComments = () => {
+        const newComments = selected[0].comments.map((comment) => {
+          const { comment: text, commentPic, ratingStars } = comment;
+          return `<div style="margin-bottom: 5px;">${text}</div><div>${commentPic}</div><div>${ratingStars}</div>`;
+        });
+        setComments(newComments);
+      };
 
     const onChangeHandler = (e) => {
         setComment(e.target.value);
@@ -230,7 +246,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const handleAddButtonClick = () => {
         onInfoList();
         setSelectedTab(1);
-        newComments( {key, comments });
+        console.log(review);
+        console.log(key);
+        newComments( {key,review});
 
     };
 
@@ -351,7 +369,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                         </Box>
                         <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
                         <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                           {name} is a private location nestled in a quiet and peaceful park.
+                          {key} {name} is a private location nestled in a quiet and peaceful park.
                             It's the perfect choice for those looking to get away from the hustle and bustle
                             of the city and enjoy the beauty of nature. </Typography>
                         <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>

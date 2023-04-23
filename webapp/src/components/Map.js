@@ -69,7 +69,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         setOriginalMarkers((current) => [
           ...current,
           {
-            key: markers.length,
+            
+            key: current.length,
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
             time: new Date(),
@@ -97,7 +98,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     async function getAndSetLocations() {
         let locationSet = await retrieveLocations()
         setMarkers((current) => [...current, ...locationSet]);
-        setOriginalMarkers(locationSet)
+        setOriginalMarkers(locationSet);
+       
     }
 
 
@@ -169,15 +171,17 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         const marker = markerData[0]; // Access the object inside the array
 
 
-
+            console.log(marker);
 
         const lastMarker = current[marker.key];
 
+            console.log(lastMarker);
+       
 
+        lastMarker.comments=marker.review;
 
-       lastMarker.comments=marker.comments;
-
-
+        console.log(lastMarker.comments);
+        
         return [...current];
       });
     };
@@ -185,6 +189,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const onMapLoad = async (map) => {
         mapRef.current = map;
        await getAndSetLocations();
+      
     } ;
 
     //filter the map when a change in the filter component ocurs
