@@ -102,7 +102,7 @@ const MapView = ({session,onSearch}) => {
             onAddMarker={() => makeMapInteractive()}
             onInfoList={() => makeInfoPanelDisapear()}
             onEditMarker={() => makePanelDisapear()}
-            onEditMarker={() => makeEditPanelDisapear()}
+           
             onAccountPage={() => makeAccountPageDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>

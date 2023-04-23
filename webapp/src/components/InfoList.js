@@ -196,10 +196,10 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                                 <EmojiEmotionsSharpIcon sx={{ fontSize: '1.125rem' }}/>
                             </IconButton>
                             <Popover
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'center',
-                                }}
+                               // anchorOrigin={{
+                                   // vertical: 'top',
+                                    //horizontal: 'center',
+                               // }}
                                 transformOrigin={{
                                     vertical: 'bottom',
                                     horizontal: 'center',
