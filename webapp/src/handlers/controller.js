@@ -1,16 +1,17 @@
 import {User} from "../models/user";
 import {readLocations, writeLocations} from "../handlers/podAccess";
 import {
-    convertViewLocationIntoDomainModelLocation,
-    
     convertViewLocationsIntoDomainModelLocations,
     convertDomainModelLocationsIntoViewLocations
 } from "../util/dataConvertor";
+import {getFriendsWebIds} from "../handlers/podHandler";
 
 class Controller{
     
     constructor(session) {
-        this.user = new User();
+        this.user = new User(session);
+        this.user.friends = getFriendsWebIds();
+        console.log(this.user);
     }
 
     /**
@@ -20,11 +21,23 @@ class Controller{
      * @returns an array of locations 
      */
     async retrieveLocations(session){
+        //Get user's Locations
         await this.getLocationsFromPOD(session);
+
+        //Get user's friends' locations
+        this.retrieveFriendsLocations(session);
 
         //Convert them into ViewLocations
         return convertDomainModelLocationsIntoViewLocations(this.user.locations);
 
+    }
+
+    retrieveFriendsLocations(session){
+        this.user.friends.forEach((friend) => 
+        {
+            //For each friend, add location
+            this.getLocationsFromPOD(friend, session)
+        });;
     }
 
     /**
@@ -34,15 +47,15 @@ class Controller{
      */
     async saveLocations(session, markers){
         //Convert markers into LocationLM
-        let locations = convertViewLocationsIntoDomainModelLocations(markers);
+        let locations = convertViewLocationsIntoDomainModelLocations(
+            markers,
+            this.user.WebID);
 
         //Get list of locations to save in the POD
         let ret = this.user.addLocations(locations);
 
         //Save new locations in the pod
         await this.setLocationsFromPOD(session, ret);
-
-
     }
 
     /**
@@ -52,26 +65,22 @@ class Controller{
      * @param {*} session user's current session
      * @returns a list of locationLM (our domain model Location)
      */
-    async getLocationsFromPOD(session){
+    async getLocationsFromPOD(user, session){
         let retPublic = [];
         //Public
         retPublic =  await readLocations(
-            session.info.webId.replace(
-                "/profile/card#me", 
-                this.user.resourceURLPublic.locat), 
+            user.WebID.concat(user.resourceURLPublic.locat), 
             session
         ); 
-        this.user.addPublicLocations(retPublic);
+        this.user.addPublicLocations(retPublic, user);
 
         //Private
         let retPrivate = [];
         retPrivate =  await readLocations(
-            session.info.webId.replace(
-                "/profile/card#me", 
-                this.user.resourceURLPrivate.locat), 
+            user.WebID.concat(user.resourceURLPrivate.locat), 
             session
         ); 
-        this.user.addPrivateLocations(retPrivate);
+        this.user.addPrivateLocations(retPrivate, user);
     }
 
     /**
@@ -80,22 +89,26 @@ class Controller{
      * @param {*} list list of locations object from out domain model
      */
     async setLocationsFromPOD(session, list){
-        let retPublic = [];
-
         list.forEach(async (loc) => {
+            /*
+            console.log("Control - Locat");
+            console.log(loc);
+            */
             if(loc.privacy === 'public'){
+                /*
+                console.log("test");
+                console.log(loc.webId);
+                console.log(this.user.resourceURLPublic.locat);
+                console.log(loc.webId.concat(this.user.resourceURLPublic.locat));
+                */
                 await writeLocations(
-                    session.info.webId.replace(
-                        "/profile/card#me", 
-                        this.user.resourceURLPublic.locat), 
+                    loc.webId.concat(this.user.resourceURLPublic.locat), 
                     session,
                     loc
                 ); 
             } else {
                 await writeLocations(
-                    session.info.webId.replace(
-                        "/profile/card#me", 
-                        this.user.resourceURLPrivate.locat), 
+                    loc.webId.concat(this.user.resourceURLPrivate.locat), 
                     session,
                     loc
                 ); 

@@ -14,7 +14,7 @@ class User{
     /** List of public reviews*/
     publicReviews = new Map();
     /** List of user's friends*/
-    friendsLocat = [];
+    friends = [];
     /** List of all the locations */
     locations = [];
 
@@ -22,7 +22,8 @@ class User{
      * Constructor of User's class. Initialise the resource's URLs that will be used 
      * to retrieve and save data from/to the user's solid pod.
      */
-    constructor() {
+    constructor(session) {
+        this.WebID = session.info.webId.replace("/profile/card#me", "/");
         this.resourceURLPublic = {
             locat:  "public/lomap/locations.ttl",
             rev:    "public/lomap/reviews.ttl",
@@ -39,9 +40,10 @@ class User{
      * This method add location to the public map of locations
      * @param {Array} list 
      */
-    addPublicLocations(list){
+    addPublicLocations(list, user){
         list.forEach( (loc) => 
         {
+            loc.userID = user.WebID;
             this.addPublicLocation(loc);
         });
     }
@@ -58,9 +60,10 @@ class User{
      * This method add location to the private map of locations
      * @param {Array} list 
      */
-    addPrivateLocations(list){
+    addPrivateLocations(list, user){
         list.forEach( (loc) => 
         {
+            loc.userID = user.WebID;
             this.addPrivateLocation(loc);
         });
 

@@ -9,9 +9,10 @@ import {
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 
 
-export function convertViewLocationIntoDomainModelLocation(viewobj){
+export function convertViewLocationIntoDomainModelLocation(viewobj, userWebid){
     //Key has to be changed to be unique
-    return new LocationLM(
+
+    let loc = new LocationLM(
         viewobj.lat,
         viewobj.lng,
         viewobj.name,
@@ -20,7 +21,10 @@ export function convertViewLocationIntoDomainModelLocation(viewobj){
         viewobj.privacy,
         viewobj.time
         //viewobj.key
-    );    
+    ); 
+    console.log(loc);
+    loc.userID = userWebid;
+    return loc;
 }
 function convertDomainModelLocationIntoViewLocation(dmobj, pos){
     //TODO: Change pos
@@ -36,11 +40,12 @@ function convertDomainModelLocationIntoViewLocation(dmobj, pos){
         comments: []
     };
 }
-export function convertViewLocationsIntoDomainModelLocations(viewobjs){
+export function convertViewLocationsIntoDomainModelLocations(viewobjs, userWebid){
     let ret = [];
     viewobjs.forEach( (obj) =>
     {
-        ret.push(convertViewLocationIntoDomainModelLocation(obj));
+        console.log(obj);
+        ret.push(convertViewLocationIntoDomainModelLocation(obj, userWebid));
     });
     return ret;
 }

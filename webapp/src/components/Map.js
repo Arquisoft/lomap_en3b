@@ -63,7 +63,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const SessionController = new Controller();
+    const SessionController = new Controller(session);
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -153,7 +153,12 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             return [...current];
         });
         //TRYING
-        await SessionController.saveLocations();
+        console.log("Map - before saving");
+        console.log("Map - originalMarkers");
+        console.log(originalMarkers);
+        console.log("Map - markers");
+        console.log(markers);
+        await SessionController.saveLocations(session, originalMarkers);
     };
 
     /*
