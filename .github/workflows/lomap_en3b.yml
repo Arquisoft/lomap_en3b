@@ -18,7 +18,7 @@ jobs:
       - run: npm ci
       - run: npm test --coverage --watchAll
       - name: Analyze with SonarCloud
-        uses: sonarcloud-github-action@v1.8
+      - uses: sonarcloud-github-action@v1.8
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
