@@ -273,10 +273,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                                 open={open}
                                 anchorEl={anchorEl}
                                 onClose={handleClose}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
+
                             >
                                 <Typography sx={{ p: 2 }}>
                                     <IconButton  style={{ fontSize: '1rem' }} onClick={() => setComment(prevComment => prevComment + '❤️')}>❤️</IconButton>
@@ -304,11 +301,19 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                             <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                         </Box>
                         <Typography variant="caption" sx={{ mt: '0.3125rem' }}>Park • Private</Typography>
-                        <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                            Helena's Spot is a private location nestled in a quiet and peaceful park.
-                            It's the perfect choice for those looking to get away from the hustle and bustle
-                            of the city and enjoy the beauty of nature. </Typography>
-                        <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
+                        <Box sx={{ maxHeight: '6.375rem', overflowY: 'auto' }}>
+                            <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
+                                Helena's Spot is a private location nestled in a quiet and peaceful park.
+                                It's the perfect choice for those looking to get away from the hustle and bustle
+                                of the city and enjoy the beauty of nature.
+                            </Typography>
+                        </Box>
+
+                        <Box sx={{ mt: '0.3125rem', textAlign: 'center' }}>
+                            <IconButton onClick={onClickEdit} size="small" sx={{ display: 'inline-block' }}>
+                                <EditIcon/>
+                            </IconButton>
+                        </Box>
                     </Box>
                 </Typography>}
                 {selectedTab === edit && <Typography variant="body1">

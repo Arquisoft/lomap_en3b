@@ -11,7 +11,7 @@ import {FormControl} from "./styles/ListStyle";
 import InputLabel from "@mui/material/InputLabel";
 import {Container} from "./styles/ListStyle";
 import CloseIcon from '@mui/icons-material/Close';
-
+import FmdGoodIcon from '@mui/icons-material/FmdGood';
 
 export default function FilterSidebar({visible, onFilterLocations,onFilterSelected} ){
     const [categoryFilters, setCategoryFilters]=useState([]);
@@ -69,16 +69,68 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
            <IconButton style={{ marginLeft: '16.625rem', marginTop: '-1.25rem' }} aria-label="close filter dialog" onClick={onFilterLocations}><CloseIcon/></IconButton>
            <Typography variant ="h3" style={{size:'1em'}}> Filter pins!</Typography>
 
-           <FormControl style={{display:'flex',flexDirection:'column',flex:1}} value={categoryFilters}   >
+           <FormControl style={{ display: 'flex', flexDirection: 'column', flex: 1 }} value={categoryFilters}>
                <InputLabel>Location type</InputLabel>
-
-               <FormControlLabel control={<Checkbox  value="sight" onChange={(e)=>updateFiltersSelected(e.target.checked,e.target.value )}/> } style={{flex: 1}} label="Sight"  />
-               <FormControlLabel  control={<Checkbox  value="restaurant"  onChange={(e)=>updateFiltersSelected(e.target.checked, e.target.value)}/> }style={{flex: 1}} label="Restaurant" />
-               <FormControlLabel  control={<Checkbox  value="monument" onChange={(e)=>updateFiltersSelected(e.target.checked, e.target.value )}/> } style={{flex: 1}} label="Monument" />
-               <FormControlLabel control={<Checkbox  value="park" onChange={(e)=>updateFiltersSelected(e.target.checked,e.target.value )}/> } style={{flex: 1}} label="Park"  />
-               <FormControlLabel control={<Checkbox  value="bar"  onChange={(e)=>updateFiltersSelected(e.target.checked,e.target.value )}/> } style={{flex: 1}}  label="Bar" />
-               <FormControlLabel control={<Checkbox   value="shop" onChange={(e)=>updateFiltersSelected(e.target.checked,e.target.value )}/> }style={{flex: 1}}  label="Shop"/>
-
+               <FormControlLabel
+                   control={<Checkbox
+                       icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
+                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       value="sight"
+                       onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
+                   />}
+                   style={{ flex: 1 }}
+                   label="Sight"
+               />
+               <FormControlLabel
+                   control={<Checkbox
+                       icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
+                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       value="restaurant"
+                       onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
+                   />}
+                   style={{ flex: 1 }}
+                   label="Restaurant"
+               />
+               <FormControlLabel
+                   control={<Checkbox
+                       icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
+                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       value="monument"
+                       onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
+                   />}
+                   style={{ flex: 1 }}
+                   label="Monument"
+               />
+               <FormControlLabel
+                   control={<Checkbox
+                       icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
+                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       value="park"
+                       onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
+                   />}
+                   style={{ flex: 1 }}
+                   label="Park"
+               />
+               <FormControlLabel
+                   control={<Checkbox
+                       icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
+                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       value="bar"
+                       onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
+                   />}
+                   style={{ flex: 1 }}
+                   label="Bar"
+               />
+               <FormControlLabel
+                   control={<Checkbox
+                       icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
+                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       value="shop"
+                       onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
+                   />}
+                   style={{ flex: 1 }}
+                   label="Shop"
+               />
            </FormControl>
 
 
