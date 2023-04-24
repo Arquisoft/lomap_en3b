@@ -173,9 +173,21 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     };
 
     const saveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
-        console.log(resource);
-        return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        for (const loc of originalMarkers) {
+            let arr = []
+            if(loc.privacy === 'public'){
+                arr.push(loc);
+                let resource = session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl")
+                console.log(resource);
+                await writeLocations(resource, session, arr);
+            } else {
+
+                arr.push(loc);
+                let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl")
+                console.log(resource);
+                await writeLocations(resource, session, arr);
+            }
+        }
     }
 
     //function to update the comments
