@@ -9,6 +9,7 @@ import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 import {getFriendsWebIds} from "../handlers/podHandler";
+import {Controller} from "../handlers/controller"
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -26,6 +27,9 @@ const options = {
 export function handleRateChange(newRating, selected) { // ı made this export cause all ın other file
     selected.rate = newRating;
 }
+
+const SessionController = new Controller();
+
 
 /**
      * This method contains the main map compunent and all the operations that happen on the map
@@ -63,6 +67,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
+
+    SessionController.setUp(session);
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -169,15 +175,19 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         console.log(originalMarkers);
         console.log("2.- markers");
         console.log(markers);
-        await saveLocations();
+        //NEW
+        await SessionController.saveLocations(session, originalMarkers);
+        //OLD
+        //await saveLocations();
     };
-
+//OLD
+/*
     const saveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl")
         console.log(resource);
         return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
-
+*/
     //function to update the comments
     const updateComments = () => {
     

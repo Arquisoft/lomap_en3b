@@ -6,7 +6,7 @@ import {
 import {
     CoordinatesInvalidFormatException,
     StringInvalidFormatException
-} from '../util/Exceptions/exceptions.js';
+} from '../util/exceptions/exceptions';
 import {Review} from "./review";
 
 /**
@@ -16,8 +16,10 @@ class LocationLM {
     //Attributes
     publicReviews;
     privateReviews;
-    constructor(CoorLat, CoorLng, name, description, category,privacy=false, locID = uuidv4(), rating=null) {
+    userID;
 
+    constructor(CoorLat, CoorLng, name, description, category, privacy, date, locID = uuidv4()) {
+        console.log(CoorLat, CoorLng, name, description, category, privacy, date, locID);
         //checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
         this.lat = CoorLat;
         //checkCoordinatesInvalidFormat((CoorLng>= -180 && CoorLng<= 180), CoorLng, 'longitude');
@@ -30,10 +32,8 @@ class LocationLM {
         this.locID = locID;
         this.privacy=privacy;
         this.category = category;
-        if(rating){
-            this.rating=rating;
-        }
-
+        this.date = date;
+        console.log(this);
     }
 
     getPublicReviews(){

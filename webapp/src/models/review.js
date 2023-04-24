@@ -2,7 +2,7 @@
 import {
     v4 as uuidv4
 } from 'uuid';
-import {ReviewInvalidFormatException, ReviewInvalidFormatForCommentException} from "../util/Exceptions/exceptions";
+import {ReviewInvalidFormatException, ReviewInvalidFormatForCommentException} from "../util/exceptions/exceptions";
 
 function check(value, str) {
     if(!value){

@@ -3,130 +3,106 @@ import {LocationLM} from "./location";
  * User LoMap class
  */
 class User{
-    publicLocat = [];
-    privateLocat = [];
-    privateReviews = [];
-    publicReviews = [];
-    podURL;
-    friendsLocat = [];
-    constructor() {
-        this.resourceURLPublic = "Public pod-url";
-        this.resourceURLPrivate = "Private pod-url";
+    /** User's name */
+    name;
+    /** List of public locations */
+    publicLocat = new Map();
+    /** List of private locations*/
+    privateLocat = new Map();
+    /** List of private reviews*/
+    privateReviews = new Map();
+    /** List of public reviews*/
+    publicReviews = new Map();
+    /** List of user's friends*/
+    friends = [];
+    /** List of all the locations */
+    locations = [];
+
+    /**
+     * Constructor of User's class. Initialise the resource's URLs that will be used 
+     * to retrieve and save data from/to the user's solid pod.
+     */
+    constructor(session) {
+        this.WebID = session.info.webId.replace("/profile/card#me", "/");
+        this.resourceURLPublic = {
+            locat:  "public/lomap/locations.ttl",
+            rev:    "public/lomap/reviews.ttl",
+            imgs:   "public/lomap/images/",
+        };
+        this.resourceURLPrivate = {
+            locat:  "private/lomap/locations.ttl",
+            rev:    "private/lomap/reviews.ttl",
+            imgs:   "private/lomap/images/",
+        };
     }
 
     /**
-     *
-     * @param {LocationLM} l
+     * This method add location to the public map of locations
+     * @param {Array} list 
      */
-    removePublicLoc(l){
-        const index = this.publicLocat.indexOf(l);
-        if(index > -1){
-            let num = this.publicLocat.length;
-            this.publicLocat.splice(index, 1);
-            if(this.publicLocat.length !== (num - 1)){
-                //throw error
-            }
-        }
-    }
-    removePrivateLoc(l){
-        const index = this.privateLocat.indexOf(l);
-        if(index > -1){
-            let num = this.privateLocat.length;
-            this.privateLocat.splice(index, 1);
-            if(this.privateLocat.length !== (num - 1)){
-                //throw error
-            }
-        }
-    }
-
-    setPodURL(pod){
-        this.podURL = pod;
-    }
-
-    getReviews(){
-        this.publicLocat.forEach((loc) =>
+    addPublicLocations(list, user){
+        list.forEach( (loc) => 
         {
-            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
-            this.publicReviews = this.publicReviews.concat(loc.getPublicReviews());
-        });
-        this.privateLocat.forEach((loc) =>
-        {
-            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
+            loc.userID = user.WebID;
+            this.addPublicLocation(loc);
         });
     }
 
-    addScoreReviewToLoc(locId, scr, privacy){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1){
-            pos = lookForLocation(this.privateLocat, locId);
-            if(pos === -1){
-                //TODO: Error
+    addPublicLocation(loc){
+        this.publicLocat.set(
+            loc.locID, 
+            loc
+        );
+        this.locations.push(loc);
+    }
+
+    /**
+     * This method add location to the private map of locations
+     * @param {Array} list 
+     */
+    addPrivateLocations(list, user){
+        list.forEach( (loc) => 
+        {
+            loc.userID = user.WebID;
+            this.addPrivateLocation(loc);
+        });
+
+    }
+
+    addPrivateLocation(loc){
+        this.privateLocat.set(
+            loc.locID, 
+            loc
+        );
+        this.locations.push(loc);
+    }
+
+    addLocations(list){
+        let ret = [];
+        list.forEach((loc) => {
+            if(loc.privacy === 'public'){
+                //check if already contained
+                if(this.publicLocat.has(loc.locID)){
+                    //check is anyting has been modified
+                    //TODO: decide how to check when a location has been changed
+                } else {
+                    this.addPublicLocation(loc);
+                    ret.push(loc);
+                }
+            } else {
+                if(this.privateLocat.has(loc.locID)){
+                    //check is anyting has been modified
+                    //TODO: decide how to check when a location has been changed
+                } else {
+                    this.addPrivateLocation(loc);
+                    ret.push(loc);
+                }                
             }
-            this.privateLocat[pos].addScoreReview(locId, scr, privacy);
+        });
 
-        } else {
-            this.publicLocat[pos].addScoreReview(locId, scr, privacy);
-        }
-    }
-    addCommentReviewToLoc(locId, cmmt, privacy){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1){
-            pos = lookForLocation(this.privateLocat, locId);
-            if(pos === -1){
-                //TODO: Error
-            }
-            this.privateLocat[pos].addCommentReview(locId, cmmt, privacy);
-
-        } else {
-            this.publicLocat[pos].addCommentReview(locId, cmmt, privacy);
-        }
+        return ret;
     }
 
-    addLocation(CoorLat, CoorLng, name, description, category, privacy){
-        if(privacy){
-            this.privateLocat.push(new LocationLM(CoorLat, CoorLng, name, description, category, privacy));
-        } else {
-            this.publicLocat.push(new LocationLM(CoorLat, CoorLng, name, description, category, privacy));
-        }
-    }
-
-    getReviewsForLoc(locId){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1) {
-            pos = lookForLocation(this.privateLocat, locId);
-            if (pos === -1) {
-                //TODO: Error
-            }
-            return this.privateLocat[pos].getAllReviews()
-        } else {
-            return this.publicLocat[pos].getAllReviews()
-        }
-    }
-
-    saveLocationsFromPOD(loc, privacy){
-        if(privacy){
-            this.privateLocat.push(loc);
-        } else{
-            this.publicLocat.push(loc);
-        }
-    }
-
-    getAllLoc(){
-        return []
-            .concat(this.publicReviews)
-            .concat(this.privateLocat);
-    }
 }
 
-function lookForLocation(list, id){
-    let i = 0;
-    list.forEach((loc) =>
-    {
-        if(loc.locationID === id){
-            return i;
-        }
-        i++;
-    });
-    return -1;
-}
 export {User};
