@@ -83,12 +83,10 @@ export async function requestAccessToLomap( session){
 
         //Vc stands for Verifiable credential
         {
-
             "access":  { read: true , write:true},//the permissions to be asking
             "resources":session.info.webId,
             "resourceOwner": session.info.webId,
             "expirationDate": accessExpiration,
-
         },
 
         { fetch : session.fetch ,updateAcr:true}//update acr makes the request grant effective if given
@@ -112,8 +110,6 @@ async function mockFiles(session, resource) {
     let currentUserLomapLocation = resource;
     let mockDataset = createSolidDataset();
 
-
-
     try {
         await saveSolidDatasetAt(currentUserLomapLocation, mockDataset, {fetch: session.fetch});
     } catch (e) {
@@ -126,7 +122,7 @@ export async function createLomapContainer(pod,session) {
     // create the lomap containers
     await createContainerAt(pod + "public/lomap/",{fetch : session.fetch});
     await createContainerAt(pod + "private/lomap/",{fetch : session.fetch});
-    // create all the tl files used to store locations and reviews (all empty)
+    // create all the ttl files used to store locations and reviews (all empty)
     await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl"));
     await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl"));
     await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomap/reviews.ttl"));
