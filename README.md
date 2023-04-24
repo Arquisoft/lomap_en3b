@@ -3,6 +3,7 @@
 [![Actions Status](https://github.com/arquisoft/lomap_en3b/workflows/CI%20for%20LOMAP_EN3B/badge.svg)](https://github.com/arquisoft/lomap_en3b/actions)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_en3b&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_en3b)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_en3b&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_en3b)
+
 LoMap is an application designed for citizens in order to allow them to personalize their city map.
 
 For that matter , users of LoMap will be allowed to do such things as leaving reviews of establishments, monuments or any other place of the city; as well as pinning those places they want to visit or have visited already.
