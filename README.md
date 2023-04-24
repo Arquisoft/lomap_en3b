@@ -34,10 +34,9 @@ In brief, LoMap is more than a Map application , but a tool for cities to develo
 
 ## FAQ
 
-#### ¿Stack?
+#### How is LoMap implemented?
+LoMap is a react application that delegates data storage to SOLID pods.
+#### How is LoMap deployed?
+Check our [wiki](https://github.com/Arquisoft/lomap_en3b/wiki/Deployment-in-azure-virtual-machine) for information on how it was deployed using Azure.
 
-MERN(MongoDB, Express, React & Node.js)
-
-
-![image](https://i.pinimg.com/originals/36/da/48/36da48641304177e2ee3dc07f521418b.gif)
 
