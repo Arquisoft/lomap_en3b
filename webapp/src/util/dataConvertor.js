@@ -11,19 +11,37 @@ import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 
 export function convertViewLocationIntoDomainModelLocation(viewobj, userWebid){
     //Key has to be changed to be unique
+    console.log("Aquiii");
 
     let loc = new LocationLM(
         viewobj.lat,
         viewobj.lng,
         viewobj.name,
+//        "Not working",
         viewobj.description,
+//        "Not working",
         viewobj.category,
+//        "Not working",
         viewobj.privacy,
+//        "public",
         viewobj.time
         //viewobj.key
     ); 
-    console.log(loc);
     loc.userID = userWebid;
+    console.log(loc);
+    if(loc.name === ""){
+        loc.name = "Not working";
+    }
+    if(loc.category === ""){
+        loc.category = "Not working";
+    }
+    if(loc.privacy === ""){
+        loc.privacy = "public";
+    }
+    if(loc.description === ""){
+        loc.description = "Not working";
+    }
+    console.log(loc);
     return loc;
 }
 function convertDomainModelLocationIntoViewLocation(dmobj, pos){
@@ -44,7 +62,6 @@ export function convertViewLocationsIntoDomainModelLocations(viewobjs, userWebid
     let ret = [];
     viewobjs.forEach( (obj) =>
     {
-        console.log(obj);
         ret.push(convertViewLocationIntoDomainModelLocation(obj, userWebid));
     });
     return ret;

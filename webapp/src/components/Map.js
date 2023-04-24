@@ -191,6 +191,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     };
 
     const onMapLoad = async (map) => {
+        console.log("LOADING..");
+        console.log(SessionController);
         mapRef.current = map;
        await getAndSetLocations();
     } ;

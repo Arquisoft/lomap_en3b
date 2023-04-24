@@ -10,8 +10,7 @@ class Controller{
     
     constructor(session) {
         this.user = new User(session);
-        this.user.friends = getFriendsWebIds();
-        console.log(this.user);
+        this.user.friends = getFriendsWebIds().then()[0];
     }
 
     /**
@@ -67,9 +66,10 @@ class Controller{
      */
     async getLocationsFromPOD(user, session){
         let retPublic = [];
+
         //Public
         retPublic =  await readLocations(
-            user.WebID.concat(user.resourceURLPublic.locat), 
+            this.user.WebID.concat(user.resourceURLPublic.locat), 
             session
         ); 
         this.user.addPublicLocations(retPublic, user);
@@ -77,7 +77,7 @@ class Controller{
         //Private
         let retPrivate = [];
         retPrivate =  await readLocations(
-            user.WebID.concat(user.resourceURLPrivate.locat), 
+            this.user.WebID.concat(user.resourceURLPrivate.locat), 
             session
         ); 
         this.user.addPrivateLocations(retPrivate, user);
@@ -90,25 +90,17 @@ class Controller{
      */
     async setLocationsFromPOD(session, list){
         list.forEach(async (loc) => {
-            /*
-            console.log("Control - Locat");
-            console.log(loc);
-            */
+            
             if(loc.privacy === 'public'){
-                /*
-                console.log("test");
-                console.log(loc.webId);
-                console.log(this.user.resourceURLPublic.locat);
-                console.log(loc.webId.concat(this.user.resourceURLPublic.locat));
-                */
+                
                 await writeLocations(
-                    loc.webId.concat(this.user.resourceURLPublic.locat), 
+                    loc.userID.concat(this.user.resourceURLPublic.locat), 
                     session,
                     loc
                 ); 
             } else {
                 await writeLocations(
-                    loc.webId.concat(this.user.resourceURLPrivate.locat), 
+                    loc.userID.concat(this.user.resourceURLPrivate.locat), 
                     session,
                     loc
                 ); 

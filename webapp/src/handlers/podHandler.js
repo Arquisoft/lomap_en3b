@@ -143,9 +143,14 @@ export async function createLomapContainer(pod,session) {
  * @returns {Promise<*[]>} Containing a List of the webIds of the friends
  */
 export async function getFriendsWebIds(webId) {
-    let profile = await getProfile(webId);
-    let ids = getUrlAll(profile, FOAF.knows);
+    let ids = [];
+    try {
+        let profile = await getProfile(webId);
+        ids = getUrlAll(profile, FOAF.knows);
 
+    } catch (error){
+        console.log(error)// catch any error
+    }    
     let list = [];
 
     ids.forEach(friend => list.push(friend.split("#")[0])); //remove the right side of the "#"
