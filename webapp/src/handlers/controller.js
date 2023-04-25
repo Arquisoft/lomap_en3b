@@ -1,53 +1,27 @@
-import {SessionManager} from "./sessionManager";
-import {convertDomainModelObjectsIntoViewObjects} from "../util/Convertor";
+import {User} from "../models/user";
+import {LocationLM} from "../models/location";
 
-class Controller{
-    sessionMng;
-    setSession(session) {
-        this.sessionMng = new SessionManager(session);
+/**
+ * Class to handle business logic
+ */
+export class Controller {
+    /**
+     * Constructor of the class. It initialises the object and sets the user's data
+     * to start working with it. Also, it saves the current session to be used in
+     * some methods.
+     * @param sessionGiven
+     */
+    constructor(sessionGiven){
+        this.session = sessionGiven;
+        this.user = new User(sessionGiven);
     }
 
-    getSession(){
-        return this.sessionMng.session;
+    /**
+     * This method assigns a list of locations to the current user.
+     * @param {LocationLM[]} list list of locations of type LocationLM
+     * @param {User} user POD's owner where the locations come from
+     */
+    saveLocationsFromPOD(list, user=this.user){
+        this.user.addLocationsFromPOD(list, user.userWebId);
     }
-
-    async logIn() {
-        //Get Data From POD
-        await this.sessionMng.setUpSessionData();
-        return this;
-    }
-
-    logOut(){
-        //save data into POD
-        this.sessionMng.saveSessionData();
-    }
-
-    requestLocations(){
-        //Get sessionMng.get User's Locations
-        return convertDomainModelObjectsIntoViewObjects(this.sessionMng.requestLocations());
-    }
-
-    requestReviewToLocation(locId){
-        //Get sessionMng.get User's Review to Location
-        return this.sessionMng.requestReviewToLocation(locId);
-    }
-
-    addLocation(CoorLat, CoorLng, name, description, category, privacy){
-        //sessionMng -> Set new Location in user
-        this.sessionMng.addLocation(CoorLat, CoorLng, name, description, category,privacy);
-    }
-
-    addCommentToLocation(locId, cmmt, privacy){
-        //sessionMng -> Set comment in Review (in user's location)
-        this.sessionMng.addCommentToLocation(locId, cmmt, privacy);
-    }
-
-    addScoreToLocation(locId, scr, privacy){
-        //sessionMng -> Set comment in Review (in user's location)
-        this.sessionMng.addScoreToLocation(locId, scr, privacy);
-    }
-}
-
-export{
-    Controller,
 }

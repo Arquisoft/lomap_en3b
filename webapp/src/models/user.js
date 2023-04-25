@@ -1,132 +1,38 @@
 import {LocationLM} from "./location";
+
 /**
- * User LoMap class
+ * This class represents de current user that uses the app.
+ * The user will have a set of locations (public or private)
+ * a resource URL where the data will be stored and received (this resource is a partial path)
+ * it will be used for:
+ *      - Location
+ *      - Reviews
+ *      - Images
+ * and a webID.
  */
-class User{
-    publicLocat = [];
-    privateLocat = [];
-    privateReviews = [];
-    publicReviews = [];
-    podURL;
-    friendsLocat = [];
-    constructor() {
-        this.resourceURLPublic = "Public pod-url";
-        this.resourceURLPrivate = "Private pod-url";
+export class User{
+    locations = new Map();
+    userWebId;
+    locResourceURL = "/lomap/locations.ttl";
+    revResourceURL = "/lomap/reviews.ttl";
+    imgResourceURL = "/lomap/images";
+    constructor(sessionGiven) {
+        this.userWebId = sessionGiven.info.webId.replace("/profile/card#me", "/");
     }
 
     /**
-     *
-     * @param {LocationLM} l
+     * This method add the locations given in a list to the user's locations.
+     * If the location is already contained, it is skipped.
+     * It also fills the locOwner field from the Location to the one given
+     * @param {LocationLM[]} listLocs list of locations
+     * @param {string} webID owner of the locations
      */
-    removePublicLoc(l){
-        const index = this.publicLocat.indexOf(l);
-        if(index > -1){
-            let num = this.publicLocat.length;
-            this.publicLocat.splice(index, 1);
-            if(this.publicLocat.length !== (num - 1)){
-                //throw error
+    addLocationsFromPOD(listLocs, webID) {
+        listLocs.forEach( (loc) => {
+            if (! this.locations.has(loc.locID)) {
+                loc.locOwner = webID;
+                this.locations.set(loc.locID, loc);
             }
-        }
-    }
-    removePrivateLoc(l){
-        const index = this.privateLocat.indexOf(l);
-        if(index > -1){
-            let num = this.privateLocat.length;
-            this.privateLocat.splice(index, 1);
-            if(this.privateLocat.length !== (num - 1)){
-                //throw error
-            }
-        }
-    }
-
-    setPodURL(pod){
-        this.podURL = pod;
-    }
-
-    getReviews(){
-        this.publicLocat.forEach((loc) =>
-        {
-            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
-            this.publicReviews = this.publicReviews.concat(loc.getPublicReviews());
-        });
-        this.privateLocat.forEach((loc) =>
-        {
-            this.privateReviews = this.privateReviews.concat(loc.getPrivateReviews());
         });
     }
-
-    addScoreReviewToLoc(locId, scr, privacy){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1){
-            pos = lookForLocation(this.privateLocat, locId);
-            if(pos === -1){
-                //TODO: Error
-            }
-            this.privateLocat[pos].addScoreReview(locId, scr, privacy);
-
-        } else {
-            this.publicLocat[pos].addScoreReview(locId, scr, privacy);
-        }
-    }
-    addCommentReviewToLoc(locId, cmmt, privacy){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1){
-            pos = lookForLocation(this.privateLocat, locId);
-            if(pos === -1){
-                //TODO: Error
-            }
-            this.privateLocat[pos].addCommentReview(locId, cmmt, privacy);
-
-        } else {
-            this.publicLocat[pos].addCommentReview(locId, cmmt, privacy);
-        }
-    }
-
-    addLocation(CoorLat, CoorLng, name, description, category, privacy){
-        if(privacy){
-            this.privateLocat.push(new LocationLM(CoorLat, CoorLng, name, description, category, privacy));
-        } else {
-            this.publicLocat.push(new LocationLM(CoorLat, CoorLng, name, description, category, privacy));
-        }
-    }
-
-    getReviewsForLoc(locId){
-        let pos = lookForLocation(this.publicLocat, locId);
-        if(pos === -1) {
-            pos = lookForLocation(this.privateLocat, locId);
-            if (pos === -1) {
-                //TODO: Error
-            }
-            return this.privateLocat[pos].getAllReviews()
-        } else {
-            return this.publicLocat[pos].getAllReviews()
-        }
-    }
-
-    saveLocationsFromPOD(loc, privacy){
-        if(privacy){
-            this.privateLocat.push(loc);
-        } else{
-            this.publicLocat.push(loc);
-        }
-    }
-
-    getAllLoc(){
-        return []
-            .concat(this.publicReviews)
-            .concat(this.privateLocat);
-    }
 }
-
-function lookForLocation(list, id){
-    let i = 0;
-    list.forEach((loc) =>
-    {
-        if(loc.locationID === id){
-            return i;
-        }
-        i++;
-    });
-    return -1;
-}
-export {User};
