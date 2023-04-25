@@ -54,6 +54,15 @@ export async function writeLocationsNew(resourceURL, session, loc) {
     //Get dataSet
     let dataset = await getDatasetNew(resourceURL, session);
 
+    //check if exists
+    let opt = getThing(
+        dataset,
+        resourceURL.concat('#').concat(loc.locID)
+    );
+    if(opt !== null){
+        return;
+    }
+
     //Create Thing
     let locationThing = convertDomainModelLocationIntoPODLocation(loc);
 
