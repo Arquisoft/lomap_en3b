@@ -1,6 +1,7 @@
 import {User} from "../models/user";
 import {LocationLM} from "../models/location";
 import {writeLocationsNew} from "./podAccess";
+import {convertViewLocationsIntoDomainModelLocations} from "../util/Convertor";
 
 /**
  * Class to handle business logic
@@ -39,5 +40,24 @@ export class Controller {
             await writeLocationsNew(resourceURL, this.session, loc);
         }
         window.alert("Saved");
+    }
+
+    /**
+     * This method updates the locations of the user
+     * @param {Object[]} list list of locations from the View layer
+     * @returns {Object[]} a list of markers with the id of the domain layer
+     */
+    updateUserLocations(list){
+        console.log(list);
+        let ret = convertViewLocationsIntoDomainModelLocations(list);
+        console.log(ret);
+
+        let auxList = ret[0];
+
+        if(Array.isArray(auxList)) {
+            this.user.addLocations(auxList, this.user.userWebId)
+        }
+        let auxret = ret[1];
+        return auxret;
     }
 }

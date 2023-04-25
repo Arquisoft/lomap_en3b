@@ -9,6 +9,7 @@ import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 import {getFriendsWebIds} from "../handlers/podHandler";
+import {Controller} from "../handlers/controller";
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -63,6 +64,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
+    const [controlMng, setControlMng] = useState(new Controller(session));
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -78,7 +80,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             name: '',
             category: '',
             privacy: '',
-            rate: "",
+            domainID: "",
             comments:[],
           },
         ]);
@@ -109,7 +111,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             }
         }
 
-        return locations.concat(friendsLocations); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        return locations.concat(friendsLocations);
     }
 
     async function getAndSetLocations() {
@@ -165,17 +167,14 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             return [...current];
         });
         //TRYING
-        console.log("1.- original");
-        console.log(originalMarkers);
-        console.log("2.- markers");
-        console.log(markers);
         await saveLocations();
     };
 
     const saveLocations=async () => {
         let resource = session.info.webId.replace("/profile/card#me", "/")
-        console.log(resource);
-        return await writeLocations(resource, "/lomap/locations.ttl", session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+
+        //TODO: OLD
+        return await writeLocations(resource, "/lomap/locations.ttl", session, originalMarkers);
     }
 
     //function to update the comments
@@ -238,8 +237,13 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         if (canAddMarker) {
             setCanAddMarker(false);
            updateLastMarker(); // Call the updateLastMarker function
-          
         }
+
+        //TODO: Better position
+        console.log(controlMng);
+        controlMng.updateUserLocations(originalMarkers);
+        console.log(controlMng);
+
     }, [canAddMarker]);
 
     //update the comments after the comments in the info list are updated

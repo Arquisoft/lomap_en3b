@@ -22,7 +22,7 @@ import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
 import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
-import {convertDomainModelLocationIntoPODLocation} from "../util/Convertor";
+import {convertDomainModelLocationIntoPODLocation, convertPODLocationIntoDomainModelLocation} from "../util/Convertor";
 
 
 /**
@@ -329,13 +329,7 @@ async function readLocations(resourceURL,session) {
             try {
 
                 //Convert into LocationLM object
-                location= new LocationLM(
-                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),   // CoorLat,
-                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),  // CoorLng,
-                    getStringNoLocale(locationThing,SCHEMA_INRUPT.name),                // name,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.description),        // description,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.alternateName),      // category
-                );
+                location= convertPODLocationIntoDomainModelLocation(locationThing)
 
                 //Add locationLM into List
                 locationsRetrieved.push(location);

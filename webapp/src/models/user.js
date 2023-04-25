@@ -44,6 +44,27 @@ export class User{
      * @param {string} webID owner of the locations
      */
     addLocations(listLocs, webID){
+        //NEW -> Solve problem with duplicates
+        listLocs.forEach( (newLoc) => {
+//      for (let myLoc of this.locations.values()) {        //TODO: Remove if it works
+            let added = false;
+            for (let myLoc of this.locations.values()) {
+//            listLocs.forEach( (newLoc) => {               //TODO: Remove if it works
+                //Check if a locations has been added
+                if((newLoc.lat === myLoc.lat) && (newLoc.lng === myLoc.lng) && (newLoc.name === myLoc.name)){
+                    //it has been added
+                    added = true;
+                }
+            }
+            if(! added){
+                newLoc.locOwner = this.userWebId;
+                this.locations.set(newLoc.locID, newLoc);
+                this.newLocations.push(newLoc);
+            }
+        });
+
+        //OLD
+        /*
         listLocs.forEach( (loc) => {
             if (! this.locations.has(loc.locID)) {
                 loc.locOwner = webID;
@@ -54,6 +75,7 @@ export class User{
                 this.newLocations.push(loc);
             }
         });
+         */
     }
 
     /**
