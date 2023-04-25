@@ -41,10 +41,11 @@ class CoordinatesInvalidFormatException extends Error {
 /**
  * StringInvalidFormatException class to manage error while setting string values.
  */
-export class StringInvalidFormatException extends Error {
-    constructor(obj) {
-        super(`${obj} invalid value for string. It must be valid value, not empty.`);
-    }
+export function StringInvalidFormatException(obj) {
+    throw {
+        name: 'StringInvalidFormat',
+        message: '${obj} invalid value for string. It must be valid value, not empty.'
+    };
 }
 
 export class ReviewInvalidFormatException extends Error {
