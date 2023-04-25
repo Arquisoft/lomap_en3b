@@ -8,10 +8,11 @@ import {LocationLM} from "./location";
  *      - Location
  *      - Reviews
  *      - Images
- * and a webID.
+ * , a list of new locations (to insert in the pod) and a webID.
  */
 export class User{
     locations = new Map();
+    newLocations = [];
     userWebId;
     locResourceURL = "/lomap/locations.ttl";
     revResourceURL = "/lomap/reviews.ttl";
@@ -34,5 +35,36 @@ export class User{
                 this.locations.set(loc.locID, loc);
             }
         });
+    }
+
+    /**
+     * It checks is the locations are already contained. All will be added but
+     * the newLocations array will be fill with the new ones
+     * @param {LocationLM[]} listLocs list of locations
+     * @param {string} webID owner of the locations
+     */
+    addLocations(listLocs, webID){
+        listLocs.forEach( (loc) => {
+            if (! this.locations.has(loc.locID)) {
+                loc.locOwner = webID;
+                this.locations.set(loc.locID, loc);
+            } else {
+                loc.locOwner = webID;
+                this.locations.set(loc.locID, loc);
+                this.newLocations.push(loc);
+            }
+        });
+    }
+
+    /**
+     * This method returns the list of new locations, and it resets the
+     * list to empty.
+     * @returns {*[]}
+     */
+    getNewLocations(){
+        let ret = [];
+        ret = this.newLocations;
+        this.newLocations = [];
+        return ret;
     }
 }

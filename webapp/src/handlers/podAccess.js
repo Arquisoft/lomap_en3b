@@ -22,7 +22,80 @@ import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
 import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
+import {convertDomainModelLocationIntoPODLocation} from "../util/Convertor";
 
+
+/**
+ * NEW
+ */
+
+async function removeContentOfDataSet(resourceURL,session){
+    try {
+        let dataset, items;
+        //Get DataSet
+        dataset = await getDataset(resourceURL, {fetch: session.fetch})
+        items = getThingAll(dataset);
+        // Clear the list to override the whole list
+        items.forEach((item) => {
+            dataset = removeThing(dataset, item);
+        });
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            //Do nothing
+        } else {
+            console.error(error.message);
+        }
+    }
+}
+
+
+export async function writeLocationsNew(resourceURL, session, loc) {
+
+    //Get dataSet
+    let dataset = await getDatasetNew(resourceURL, session);
+
+    //Create Thing
+    let locationThing = convertDomainModelLocationIntoPODLocation(loc);
+
+    //Add Thing into DataSet
+    dataset = setThing(dataset, locationThing);
+
+    //Save dataSet into POD
+    await saveNew(resourceURL, dataset, session)
+}
+
+async function saveNew(resourceURL, dataset, session){
+    try {
+        // Save the SolidDataset
+        await saveSolidDatasetAt(
+            resourceURL,
+            dataset,
+            {fetch: session.fetch}
+        );
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+async function getDatasetNew(resourceURL,session){
+    let dataset,items;
+    try {
+        //Get DataSet
+        dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset
+            dataset = createSolidDataset();
+        } else {
+            console.error(error.message);
+        }
+    }
+    return dataset;
+}
+
+/**
+ * OLD
+ */
 async function writeLocations(resourceURL1,resourceURL2, session, list) {
     let i1 = 0;
     let i2 = 0;

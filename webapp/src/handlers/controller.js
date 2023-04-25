@@ -1,5 +1,6 @@
 import {User} from "../models/user";
 import {LocationLM} from "../models/location";
+import {writeLocationsNew} from "./podAccess";
 
 /**
  * Class to handle business logic
@@ -23,5 +24,20 @@ export class Controller {
      */
     saveLocationsFromPOD(list, user=this.user){
         this.user.addLocationsFromPOD(list, user.userWebId);
+    }
+
+    async saveLocationsToPOD() {
+        //Get list of locations
+        let locats = this.user.getNewLocations();
+
+        //Iterate over the list saving the locations
+        for (const loc of locats) {
+            let owner = loc.locOwner;
+            let resourceURL = owner.concat(loc.privacy).concat(this.user.locResourceURL);
+
+            //Insert in POD
+            await writeLocationsNew(resourceURL, this.session, loc);
+        }
+        window.alert("Saved");
     }
 }
