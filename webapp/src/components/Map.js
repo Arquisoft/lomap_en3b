@@ -173,9 +173,9 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     };
 
     const saveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
+        let resource = session.info.webId.replace("/profile/card#me", "/")
         console.log(resource);
-        return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        return await writeLocations(resource, "/lomap/locations.ttl", session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
     //function to update the comments

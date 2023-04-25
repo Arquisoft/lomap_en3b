@@ -23,22 +23,40 @@ import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
 
-async function writeLocations(resourceURL, session, list) {
-    let i = 0;
+async function writeLocations(resourceURL1,resourceURL2, session, list) {
+    let i1 = 0;
+    let i2 = 0;
     let dataset;
 
     //Iterates the list
     for (const loc of list) {
+        let resourceURL
+        if(loc.privacy !== "") {
+            resourceURL = resourceURL1.concat(loc.privacy).concat(resourceURL2);
+        } else {
+            resourceURL = resourceURL1.concat("public").concat(resourceURL2);
+        }
+        console.log(resourceURL);
         //GetDataSet - And remove the first time
-        if(i == 0){
+        if(i1 === 0 && loc.privacy === 'public') {
+            console.log("Remove public");
+
             //Get dataSet and Remove content
             dataset= await getDatasetAndRemoveContent(resourceURL,session);
+            i1 ++;
+        } else if(i2 === 0 && loc.privacy === 'private') {
+            console.log("Remove private");
+
+            dataset= await getDatasetAndRemoveContent(resourceURL,session);
+            i2 ++;
         } else {
+            console.log("Get DataSet");
+
             //Get dataSet
             dataset= await getDataset(resourceURL,session);
         }
         //Create Thing
-        let locationThing = buildThing(createThing({ name: "title" + i }))
+        let locationThing = buildThing(createThing({ name: loc.key }))
             .addUrl(RDF.type, "https://schema.org/Place")
             .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
             .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
@@ -65,8 +83,6 @@ async function writeLocations(resourceURL, session, list) {
         } catch (error) {
             console.log(error);
         }
-
-        i++;
     }
     window.alert("Saved");
 
