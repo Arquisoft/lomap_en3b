@@ -168,13 +168,21 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         });
         //TRYING
         await saveLocations();
+
     };
 
     const saveLocations=async () => {
+        if (controlMng.canAdd()) {
+            await controlMng.saveLocationsToPOD();
+        }
+
+        //OLD
+        /*
         let resource = session.info.webId.replace("/profile/card#me", "/")
 
         //TODO: OLD
         return await writeLocations(resource, "/lomap/locations.ttl", session, originalMarkers);
+         */
     }
 
     //function to update the comments
@@ -233,18 +241,22 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
 
     // Set canAddMarker to true when isInteractive changes to true
-    React.useEffect(() => {
+    React.useEffect( () => {
         if (canAddMarker) {
             setCanAddMarker(false);
-           updateLastMarker(); // Call the updateLastMarker function
+            updateLastMarker(); // Call the updateLastMarker function
         }
 
         //TODO: Better position
+        handleDataChanges();
+
+    }, [canAddMarker]);
+
+    function handleDataChanges() {
         console.log(controlMng);
         controlMng.updateUserLocations(originalMarkers);
         console.log(controlMng);
-
-    }, [canAddMarker]);
+    }
 
     //update the comments after the comments in the info list are updated
     React.useEffect(() => {

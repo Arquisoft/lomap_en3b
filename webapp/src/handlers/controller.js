@@ -27,19 +27,26 @@ export class Controller {
         this.user.addLocationsFromPOD(list, user.userWebId);
     }
 
+    /**
+     * This method saves location from the user session
+     * into the Solid PODs
+     * @returns {Promise<void>}
+     */
     async saveLocationsToPOD() {
         //Get list of locations
         let locats = this.user.getNewLocations();
 
-        //Iterate over the list saving the locations
-        for (const loc of locats) {
-            let owner = loc.locOwner;
-            let resourceURL = owner.concat(loc.privacy).concat(this.user.locResourceURL);
+        if (locats.length !== 0) {
+            //Iterate over the list saving the locations
+            for (const loc of locats) {
+                let owner = loc.locOwner;
+                let resourceURL = owner.concat(loc.privacy).concat(this.user.locResourceURL);
 
-            //Insert in POD
-            await writeLocationsNew(resourceURL, this.session, loc);
+                //Insert in POD
+                await writeLocationsNew(resourceURL, this.session, loc);
+            }
+            window.alert("Saved");
         }
-        window.alert("Saved");
     }
 
     /**
@@ -57,7 +64,15 @@ export class Controller {
         if(Array.isArray(auxList)) {
             this.user.addLocations(auxList, this.user.userWebId)
         }
-        let auxret = ret[1];
-        return auxret;
+        return ret[1];
+    }
+
+    /**
+     * This method helps the view layer to know were an insertion to the pod can be performed
+     * @returns {boolean} If nothing new return false, false otherwise
+     */
+    canAdd(){
+        let aucx = this.user.newLocations;
+        return aucx.length !== 0;
     }
 }
