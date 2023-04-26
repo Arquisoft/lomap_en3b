@@ -158,10 +158,10 @@ const MapView = ({session,onSearch}) => {
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)}/>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
-        {!isLoaded || loadError? <ErrorView />:
+
 
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
-        <Grid item xs={12} md={8} aria-label="Map container">
+        { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
