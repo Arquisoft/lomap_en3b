@@ -6,6 +6,7 @@ import Map from "../components/Map";
 import InfoList from "../components/InfoList";
 import EditList from "../components/EditList";
 import AccountPage from "../components/AccountPage";
+import LogOut from "../components/LogOut";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
@@ -44,11 +45,13 @@ const MapView = ({session,onSearch}) => {
   const [selectedFilters, setSelectedFilters] = useState([]); // track which filters are selected
   const [markerData, setMarkerData] = useState([]); // track marker data for the list and comments
   const [selected, setSelected] = React.useState(['']); // track selected markers for the info list
+  const [showLogOut, setShowLogOut] = useState(false);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // load the places library
   }); // hook to load the google script
+
   /**
    * This function is responsible from passing the filters selected in the FilterSidebar component into the Map component.
    * For that i stablish a "common point" for both , here in their parent component, map view.
@@ -70,7 +73,6 @@ const MapView = ({session,onSearch}) => {
   // toggle interactive state and show list
   const makeMapInteractive = () => {
     setIsInteractive(!isInteractive);
-  //  console.log(showList);
     setShowList(!showList);
   };
 
@@ -100,9 +102,15 @@ const MapView = ({session,onSearch}) => {
   // display filter sidebar
   const displayFilterSideBar = () => {
     setFilterSideBar(!filterSideBar);
-  };
+
+  }
   const makeAccountPageDisapear = () => {
     setShowAccountPage(!showAccountPage);
+
+  };
+
+  const makeLoOutDisapear = () => {
+    setShowLogOut(!showLogOut);
 
   };
 
@@ -142,6 +150,7 @@ const MapView = ({session,onSearch}) => {
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
+            onLogOut={() => makeLoOutDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
@@ -151,6 +160,7 @@ const MapView = ({session,onSearch}) => {
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
         {!isLoaded || loadError? <ErrorView />:
 
+        <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
         <Grid item xs={12} md={8} aria-label="Map container">
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>

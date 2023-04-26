@@ -23,6 +23,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -65,7 +66,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterLocations}) => {
+const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterLocations,onLogOut}) => {
 
 
   const handleAddButtonClick = () => {
@@ -86,6 +87,11 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
   const handleAccountPageClick = () => {
     onAccountPage();
   };
+
+  const handleLogOutClick = () => {
+    onLogOut();
+  };
+
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -198,8 +204,8 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             <IconButton  aria-label="Show Profile"  color="inherit"  onClick={handleAccountPageClick} >
               <AccountIcon />
             </IconButton>
-            <IconButton   color="inherit" >
-              <AddIcon />
+            <IconButton color="inherit" onClick={handleLogOutClick} >
+              <LogoutIcon />
             </IconButton>
           </div>
         </Toolbar>
