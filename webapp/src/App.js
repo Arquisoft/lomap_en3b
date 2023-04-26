@@ -4,7 +4,7 @@ import { useState} from "react";
 import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
-import AuthenticatedUserView from "./views/mapView";
+import MapView from "./views/mapView";
 
 export default  function App()
 {
@@ -30,7 +30,7 @@ export default  function App()
     return (
         <SessionProvider sessionId="log-in-example"  restorePreviousSession='true' >
 
-            {(!isLoggedIn) ?  <LoginForm/> : <AuthenticatedUserView session={session} />}
+            {(!isLoggedIn) ?  <LoginForm/> : <MapView session={session} />}
 
         </SessionProvider>
     )

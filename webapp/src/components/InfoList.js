@@ -294,6 +294,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                                 maxRows={3} // max rows number
                                 sx={{ flexGrow: 1,  mr: '0.625rem', fontSize: '0.75rem' }}
                                 InputProps={{ sx: { borderRadius: '1.25rem', pl: '0.625rem' } }}
+                                multiline
+                                rows={4}
                             />
 
                             <IconButton aria-describedby={id} variant="contained" onClick={handleClick}>

@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@googlemaps/jest-mocks": "^2.18.0",
     "@inrupt/solid-client": "^1.25.2",
     "@inrupt/solid-client-access-grants": "^2.1.2",
     "@inrupt/solid-client-authn-browser": "^1.13.4",
@@ -16,7 +17,6 @@
     "@mui/system": "^5.11.16",
     "@react-google-maps/api": "^2.18.1",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "date-fns": "^2.29.3",
     "react": "^18.2.0",
@@ -29,7 +29,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    “start”: “HTTPS=true react-scripts start”,
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -51,5 +51,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "jest-google-maps-mock": "^1.0.7"
   }
 }
