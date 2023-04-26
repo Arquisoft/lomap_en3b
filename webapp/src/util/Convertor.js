@@ -5,6 +5,7 @@ import {
     getStringNoLocale
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
+import {Review} from "../models/review";
 //Constants
 const PLACE =  "https://schema.org/Place";
 const LATITUDE = "https://schema.org/latitude";
