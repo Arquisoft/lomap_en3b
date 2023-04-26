@@ -23,6 +23,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -65,7 +66,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterLocations}) => {
+const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterLocations,onLogOut}) => {
 
 
   const handleAddButtonClick = () => {
@@ -86,6 +87,11 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
   const handleAccountPageClick = () => {
     onAccountPage();
   };
+
+  const handleLogOutClick = () => {
+    onLogOut();
+  };
+
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -116,16 +122,15 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
 
   return (
       <AppBar position="fixed" color="inherit">
-        <Toolbar aria-label="ToolBar">
+        <Toolbar >
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleInfoListClick}>
             <PlaceIcon />
           </IconButton>
-          <Typography  variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
             LOMAP
             <Button color="inherit">Home</Button>
 
             <Button
-               aria-label="Friend Menu"
                 id="demo-customized-button"
                 aria-controls={open ? 'demo-customized-menu' : undefined}
                 aria-haspopup="true"
@@ -140,7 +145,6 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             </Button>
 
             <StyledMenu
-                aria-label='Friend menu'
                 id="demo-customized-menu"
                 MenuListProps={{
                   'aria-labelledby': 'demo-customized-button',
@@ -154,7 +158,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
 
               <div>
                 <TextField
-                    aria-label="Search Friend"
+                    label="Search Friend"
                     variant="outlined"
                     value={filter}
                     onChange={handleFilterChange}
@@ -186,19 +190,19 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             <Button color="inherit">Map</Button>
           </Typography>
           <div>
-            <IconButton   aria-label="Filter Locations" color="inherit" onClick={handleFilterLocations} >
+            <IconButton color="inherit" onClick={handleFilterLocations} >
               <TuneIcon />
             </IconButton>
-            <IconButton  aria-label="Edit Location"  color="inherit" onClick={handleEditLocationButtonClick} >
+            <IconButton color="inherit" onClick={handleEditLocationButtonClick} >
               <EditLocationIcon />
             </IconButton>
-            <IconButton  aria-label="Add Location"  color="inherit" onClick={handleAddButtonClick} >
+            <IconButton color="inherit" onClick={handleAddButtonClick} >
               <AddLocationAltIcon />
             </IconButton>
-            <IconButton  aria-label="Show Profile"  color="inherit"  onClick={handleAccountPageClick} >
+            <IconButton color="inherit"  onClick={handleAccountPageClick} >
               <AccountIcon />
             </IconButton>
-            <IconButton   color="inherit" >
+            <IconButton color="inherit" >
               <AddIcon />
             </IconButton>
           </div>
