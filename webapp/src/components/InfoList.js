@@ -186,8 +186,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
 
     const upgradeComments = () => {
         const newComments = selected[0].comments.map((comment) => {
-          const { comment: text, commentPic, ratingStars } = comment;
-          return `<div style="margin-bottom: 5px;">${text}</div><div>${commentPic}</div><div>${ratingStars}</div>`;
+          const { comment: text, commentpic, ratingStars } = comment;
+          
+          return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
         });
         setComments(newComments);
       };
