@@ -1,5 +1,4 @@
 import {User} from "../models/user";
-import {LocationLM} from "../models/location";
 import {writeLocationsNew} from "./podAccess";
 import {convertViewLocationsIntoDomainModelLocations} from "../util/Convertor";
 
@@ -55,9 +54,7 @@ export class Controller {
      * @returns {Object[]} a list of markers with the id of the domain layer
      */
     updateUserLocations(list){
-        console.log(list);
         let ret = convertViewLocationsIntoDomainModelLocations(list);
-        console.log(ret);
 
         let auxList = ret[0];
 

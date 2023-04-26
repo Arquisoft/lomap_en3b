@@ -59,6 +59,8 @@ export async function writeLocationsNew(resourceURL, session, loc) {
         dataset,
         resourceURL.concat('#').concat(loc.locID)
     );
+    console.log("Duplicates");
+    console.log(opt)
     if(opt !== null){
         return;
     }

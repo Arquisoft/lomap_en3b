@@ -5,7 +5,6 @@ import {
     getStringNoLocale
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
-import {StringInvalidFormatException} from "./Exceptions/exceptions";
 //Constants
 const PLACE =  "https://schema.org/Place";
 const LATITUDE = "https://schema.org/latitude";
@@ -14,6 +13,14 @@ const NAME = "https://schema.org/name";
 const IDENT = "https://schema.org/identifier";
 const CAT = "https://schema.org/alternateName";
 const DESCRIP = "https://schema.org/description";
+
+const REVIEW = "https://schema.org/Review";
+const REV_COMMENT = "https://schema.org/reviewBody";
+const REV_RATE = "https://schema.org/reviewRating";
+const REV_MEDIA = "https://schema.org/associatedMedia";
+const REV_REVIEWER = "https://schema.org/accountablePerson";
+const REV_DATE = "https://schema.org/dateCreated";
+const REV_LOCAT = "https://schema.org/contentLocation";
 
 
 /**
@@ -44,14 +51,14 @@ export function convertDomainModelLocationIntoPODLocation(dmObjs){
 export function convertPODLocationIntoDomainModelLocation (podObj){
     //Convert into LocationLM
     return new LocationLM(
-        Number(getStringNoLocale(podObj, LATITUDE)),       // CoorLat,
-        Number(getStringNoLocale(podObj, LONGITUDE)),      // CoorLng,
-        getStringNoLocale(podObj, NAME),                   // name,
-        getStringNoLocale(podObj, DESCRIP),                // description,
-        getStringNoLocale(podObj, CAT),                    // category
+        Number(getStringNoLocale(podObj, LATITUDE)),            // CoorLat,
+        Number(getStringNoLocale(podObj, LONGITUDE)),           // CoorLng,
+        getStringNoLocale(podObj, NAME),                        // name,
+        getStringNoLocale(podObj, DESCRIP),                     // description,
+        getStringNoLocale(podObj, CAT),                         // category
         getStringNoLocale(podObj, SCHEMA_INRUPT.accessCode),    // privacy
         getStringNoLocale(podObj, SCHEMA_INRUPT.dateModified),  // date
-        getStringNoLocale(podObj, IDENT),                  // id
+        getStringNoLocale(podObj, IDENT),                       // id
     );
 }
 
@@ -61,7 +68,7 @@ export function convertPODLocationIntoDomainModelLocation (podObj){
  * @returns {Object[]}
  */
 export function convertViewLocationsIntoDomainModelLocations(viewobjs){
-    console.log(viewobjs);
+
 
     let ret = [];
     let listMyObjs = [];
@@ -70,8 +77,8 @@ export function convertViewLocationsIntoDomainModelLocations(viewobjs){
     viewobjs.forEach( (obj) =>
     {
         let ret1 = convertViewLocationIntoDomainModelLocation(obj);
-        if(ret1[0].length != 0) {
-            console.log(ret1);
+        if(ret1[0].length !== 0) {
+
             listMyObjs.push(ret1[0]);
             listViewObjs.push(ret1[1]);
         }
@@ -88,7 +95,6 @@ export function convertViewLocationsIntoDomainModelLocations(viewobjs){
  * @returns {Object[]}
  */
 function convertViewLocationIntoDomainModelLocation(viewobj){
-    console.log(viewobj);
     let ret = [];
 
     try {
@@ -101,15 +107,16 @@ function convertViewLocationIntoDomainModelLocation(viewobj){
             viewobj.privacy,
             viewobj.time
         );
-        console.log(loc);
 
         ret.push(loc);
 
         //Set domain model id
         viewobj.domainID = loc.locID;
+        //TODO: //Set owner
+        viewobj.owner = "";
         ret.push(viewobj);
     } catch (e){
-        if (e.name == 'StringInvalidFormat'){
+        if (e.name === 'StringInvalidFormat'){
             return [[],[]];
         }else {
             throw e; // let others bubble up
@@ -119,4 +126,62 @@ function convertViewLocationIntoDomainModelLocation(viewobj){
     return ret;
 }
 
+export function convertViewReviewIntoDomainModelReview(viewobj){
+    //TODO:
+}
+export function convertDomainModelReviewIntoViewReview(dmobj, pos){
+    //TODO:
+}
+export function convertViewReviewsIntoDomainModelReviews(viewobjs){
+    let ret = [];
+    viewobjs.forEach( (obj) =>
+    {
+        ret.push(convertViewReviewIntoDomainModelReview(obj));
+    });
+    return ret;
+}
+export function convertDomainModelReviewsIntoViewReviews(dmobjs){
+    let ret = [];
+    dmobjs.forEach( (obj) =>
+    {
+        ret.push(convertDomainModelReviewIntoViewReview(obj));
+    });
+    return ret;
+}
+
+//POD Access
+export function convertPODReviewIntoDomainModelReview (podObj){
+    //Convert into Review
+
+    //Item_reviewed & Id
+    let review = new Review(
+        getStringNoLocale(podObj, REV_LOCAT),
+        getStringNoLocale(podObj, IDENT));
+    //Comment
+    review.comment = getStringNoLocale(podObj, REV_COMMENT);
+    //Rate
+    review.rate = getStringNoLocale(podObj, REV_RATE);
+    //Media
+    review.media = getStringNoLocale(podObj, REV_MEDIA);
+    //Owner
+    review.user = getStringNoLocale(podObj, REV_REVIEWER);
+    //Date
+    review.date = getStringNoLocale(podObj, REV_DATE);
+
+    return review;
+}
+
+export function convertDomainModelReviewIntoPODReview(dmObjs, locThingID){
+    //Create Thing
+    return buildThing(createThing({ name: dmObjs.revID }))
+        .addUrl(RDF.type, REVIEW)                          // Review
+        .addStringNoLocale(REV_COMMENT, dmObjs.comment)    // Comment
+        .addStringNoLocale(REV_RATE, dmObjs.rate)          // Rate
+        .addStringNoLocale(REV_LOCAT, locThingID)          // Item_reviewed
+        .addStringNoLocale(REV_MEDIA, dmObjs.media)        // Media
+        .addStringNoLocale(IDENT, "".concat(dmObjs.revID)) // ID
+        .addStringNoLocale(REV_REVIEWER, dmObjs.user)      // Owner
+        .addStringNoLocale(REV_DATE, dmObjs.date)          // Date
+        .build();
+}
 
