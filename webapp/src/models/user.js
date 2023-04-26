@@ -1,5 +1,3 @@
-import {LocationLM} from "./location";
-
 /**
  * This class represents de current user that uses the app.
  * The user will have a set of locations (public or private)
@@ -28,13 +26,25 @@ export class User{
      * @param {LocationLM[]} listLocs list of locations
      * @param {string} webID owner of the locations
      */
-    addLocationsFromPOD(listLocs, webID) {
-        listLocs.forEach( (loc) => {
-            if (! this.locations.has(loc.locID)) {
-                loc.locOwner = webID;
-                this.locations.set(loc.locID, loc);
+    addLocationsFromPOD(listLocs) {
+        if (listLocs.length !== 0) {
+            listLocs.forEach((loc) => {
+                if (!this.locations.has(loc.locID) || this.notThesame(loc)) {
+                    this.locations.set(loc.locID, loc);
+                }
+            });
+        }
+    }
+
+    notThesame(loc){
+        for(let value of this.locations.values()){
+            if(loc.name === value.name &&
+                loc.lat === value.lat &&
+                loc.lng === value.lng){
+                return false;
             }
-        });
+        }
+        return true;
     }
 
     /**
@@ -87,6 +97,16 @@ export class User{
         let ret = [];
         ret = this.newLocations;
         this.newLocations = [];
+        return ret;
+    }
+
+    getAllLocations(){
+        let ret = [];
+        for (let myLoc of this.locations.values()) {
+            ret.push(myLoc)
+        }
+        ret.concat(this.newLocations);
+
         return ret;
     }
 }

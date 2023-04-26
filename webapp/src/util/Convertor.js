@@ -69,7 +69,7 @@ export function convertPODLocationIntoDomainModelLocation (podObj){
  * @returns {Object[]}
  */
 export function convertViewLocationsIntoDomainModelLocations(viewobjs){
-
+//TODO Rename method
 
     let ret = [];
     let listMyObjs = [];
@@ -92,35 +92,75 @@ export function convertViewLocationsIntoDomainModelLocations(viewobjs){
 
 /**
  *
+ * @param {LocationLM} loc
+ * @returns {*}
+ */
+function convertDomainModelLocationViewLocation(loc, pos) {
+    return {
+        key: pos,
+        lat: loc.lat,
+        lng: loc.lng,
+        time: loc.dateTime,
+        description: loc.description,
+        name: loc.name,
+        category: loc.category,
+        privacy: loc.privacy,
+        domainID: loc.locID,
+        owner: loc.locOwner,
+        comments: []
+    }
+}
+
+/**
+ *
+ * @param {LocationLM[]} list
+ */
+export function convertDomainModelLocationsIntoViewLocations (list){
+    let ret = [];
+    let i =  0;
+    list.forEach( (loc) =>
+    {
+        //Call
+        ret.push(convertDomainModelLocationViewLocation(loc, i));
+        i++;
+    })
+
+    return ret;
+}
+
+
+/**
+ *
  * @param viewobj
  * @returns {Object[]}
  */
 function convertViewLocationIntoDomainModelLocation(viewobj){
     let ret = [];
+    if(viewobj.domainID){
+        return [[], []];
+    } else {
+        try {
+            let loc = new LocationLM(
+                viewobj.lat,
+                viewobj.lng,
+                viewobj.name,
+                viewobj.description,
+                viewobj.category,
+                viewobj.privacy,
+                viewobj.time
+            );
 
-    try {
-        let loc = new LocationLM(
-            viewobj.lat,
-            viewobj.lng,
-            viewobj.name,
-            viewobj.description,
-            viewobj.category,
-            viewobj.privacy,
-            viewobj.time
-        );
+            ret.push(loc);
 
-        ret.push(loc);
-
-        //Set domain model id
-        viewobj.domainID = loc.locID;
-        //TODO: //Set owner
-        viewobj.owner = "";
-        ret.push(viewobj);
-    } catch (e){
-        if (e.name === 'StringInvalidFormat'){
-            return [[],[]];
-        }else {
-            throw e; // let others bubble up
+            //Set domain model id
+            viewobj.domainID = loc.locID;
+            ret.push(viewobj);
+        } catch (e) {
+            if (e.name === 'StringInvalidFormat') {
+                return [[], []];
+            } else {
+                throw e; // let others bubble up
+            }
         }
     }
     //Return two values: viewobj updated and viewobj converted into Location LM

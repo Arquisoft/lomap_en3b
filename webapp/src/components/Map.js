@@ -84,15 +84,26 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             comments:[],
           },
         ]);
-           
-            
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
           },
           []
       );
+    //NEW
+    const retrieveLocations=async () => {
+        let ret =  controlMng.saveRetrievedLocations();
+        return ret;
+    }
 
-      // Function to get and set the locations on the map
+    const retrieveLocations1=async () => {
+        console.log("Aqui");
+        let aux = controlMng.getViewLocations();
+        console.log(aux);
+        return aux;
+    }
+/*
+        //OLD
+    // Function to get and set the locations on the map
     const retrieveLocations=async () => {
         let friends = await getFriendsWebIds(session.info.webId);
         let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
@@ -113,11 +124,23 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
         return locations.concat(friendsLocations);
     }
-
+*/
     async function getAndSetLocations() {
-        let locationSet = await retrieveLocations()
-        setMarkers((current) => [...current, ...locationSet]);
-        setOriginalMarkers(locationSet)
+        try {
+            let locationSet = await retrieveLocations()
+            setMarkers((current) => [...current, ...locationSet]);
+            //TODO: new
+            let locationSet1 = await retrieveLocations1()
+            setOriginalMarkers(locationSet1);
+            console.log("Marker");
+            console.log(originalMarkers);
+            console.log(markers);
+            //OLD
+            //setOriginalMarkers(locationSet)
+        } catch (error) {
+            console.error(error);
+            // handle the error in whatever way is appropriate for your code
+        }
     }
 
 

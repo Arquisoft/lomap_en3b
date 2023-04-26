@@ -27,7 +27,11 @@ export class LocationLM {
         this.lng = coorLng;
         checkStringInvalidFormat(name, 'name' );
         this.name = name;
-        this.description = descrip;
+        if(descrip) {
+            this.description = descrip;
+        } else {
+            this.description = "";
+        }
         checkStringInvalidFormat(cat, 'cat' );
         this.category = cat;
         checkStringInvalidFormat(priv, 'priv' );
