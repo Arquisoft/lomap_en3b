@@ -46,7 +46,7 @@ const MapView = ({session,onSearch}) => {
   const [selected, setSelected] = React.useState(['']); // track selected markers for the info list
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: "AIzaSyCDPdrk7KdHDrahDEQRMNL8sMUdXkY83SQ",
     libraries: ["places"], // load the places library
   }); // hook to load the google script
   /**

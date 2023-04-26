@@ -56,11 +56,9 @@ export class LocationLM {
 
     getAllReviews(){
         let ret = [];
-
         for (let value of this.reviews.values()){
             ret.push(value);
         }
-
         return ret;
     }
 }
