@@ -6,6 +6,7 @@ import Map from "../components/Map";
 import InfoList from "../components/InfoList";
 import EditList from "../components/EditList";
 import AccountPage from "../components/AccountPage";
+import LogOut from "../components/LogOut";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
@@ -26,7 +27,7 @@ const MapView = ({session,onSearch}) => {
   const [showLogOut, setShowLogOut] = useState(false);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCDPdrk7KdHDrahDEQRMNL8sMUdXkY83SQ",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"], // load the places library
   }); // hook to load the google script
 
@@ -51,6 +52,7 @@ const MapView = ({session,onSearch}) => {
   // toggle interactive state and show list
   const makeMapInteractive = () => {
     setIsInteractive(!isInteractive);
+    //  console.log(showList);
     setShowList(!showList);
   };
 
@@ -124,10 +126,11 @@ const MapView = ({session,onSearch}) => {
         <CssBaseline />
         <Header
             onAddMarker={() => makeMapInteractive()}
-            
+
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
+            onLogOut={() => makeLoOutDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
