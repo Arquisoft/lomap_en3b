@@ -75,6 +75,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lng: event.latLng.lng(),
             time: new Date(),
             description:'',
+            pic:'',
             name: '',
             category: '',
             privacy: '',
@@ -144,6 +145,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.name = marker.name;
             lastMarker.category = marker.category;
             lastMarker.privacy = marker.privacy;
+            lastMarker.pic=marker.pic;
+            lastMarker.description=marker.description;
 
 
             return [...current];

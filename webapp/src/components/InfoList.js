@@ -55,6 +55,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const[commentpic,setCommentpic] = useState("");
     const[comments,setComments]=useState([]);
     const[review,setReview]=useState([]);
+    const[image,setImage]=useState("");
+    const[description,setDescription]=useState("");
+
     const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
     const [selectedEmoji, setSelectedEmoji] = useState(null);
@@ -158,6 +161,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
           setPrivacy(selected[0].privacy);
           console.log(selected[0].key);
           setKey(selected[0].key);
+          setDescription(selected[0].description);
+          setImage(selected[0].pic);
         } else {
           setComments([]);
         }
@@ -361,18 +366,16 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                         </Box>
                     </Box></Typography>}
                 {selectedTab === ınfo && <Typography variant="body1">
-                    <img src="https://picsum.photos/id/17/200" alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
+                    <img src={image} alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
                         <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                             <Rating name="size-small" defaultValue={3} size="extra-small" readOnly />
-                            <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
+                           
                         </Box>
                         <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
                         <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                          {key} {name} is a private location nestled in a quiet and peaceful park.
-                            It's the perfect choice for those looking to get away from the hustle and bustle
-                            of the city and enjoy the beauty of nature. </Typography>
+                          {description} </Typography>
                         <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
                     </Box>
                 </Typography>}
