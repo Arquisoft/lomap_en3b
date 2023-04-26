@@ -31,7 +31,25 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import EditIcon from '@mui/icons-material/Edit';
-const InfoList = ({isInfoVisible, onInfoList}) => {
+
+
+/**
+ * This is the info list that displays the details about an added location and also lets you add comments and revies
+ *
+ *
+ * The component receives props such as isInfoVisible, onInfoList, selected, and newComments.
+ * It renders the UI inside a container with the style attribute that depends on the isInfoVisible prop.
+ *  It defines a set of states using the useState hook, such as comment, comments, selectedTab, selectedRating, name, category, privacy, and key.
+
+    The component also includes various functions that handle events like onChangeHandler, onClickHandler, handleImageUpload, handleAddButtonClick, handleTabChange, and handleRatingChange.
+ These functions set the states of the component when events occur.
+ * @param isInfoVisible
+ * @param onInfoList
+ * @param selected
+ * @param newComments
+ */
+
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
 
     const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
@@ -55,6 +73,7 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
     const [category, setCategory] = useState('');
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
+        const [key, setKey] = useState('');
 
     /////////////////////////////////picture
     const handleImageUploadpic = () => {
@@ -125,6 +144,24 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
     };
 
 
+     // Define an event handler to update the list with the propertys from the selected component
+    React.useEffect(() => {
+        if (isInfoVisible) {
+          setComments(selected[0].comments);
+          setName(selected[0].name);
+          setCategory(selected[0].category); //setters for every field in the infoList
+          setPrivacy(selected[0].privacy);
+          setKey(selected[0].key);
+        } else {
+          setComments([]);
+        }
+      }, [selected]);
+
+
+
+
+    // Define an event handler to add a new comment to the comments array
+
     const onClickHandler = () => {
         let ratingStars = '';
         if (selectedRating === 1) {
@@ -186,6 +223,8 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
     const handleAddButtonClick = () => {
         onInfoList();
         setSelectedTab(1);
+        newComments( {key, comments });
+
     };
 
     const handleTabChange = (event, newValue) => {
@@ -295,15 +334,15 @@ const InfoList = ({isInfoVisible, onInfoList}) => {
                 {selectedTab === ınfo && <Typography variant="body1">
                     <img src="https://picsum.photos/id/17/200" alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
-                        <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>Helena's Spot</InputLabel>
+                        <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                             <Rating name="size-small" defaultValue={3} size="extra-small" readOnly />
                             <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
                         </Box>
-                        <Typography variant="caption" sx={{ mt: '0.3125rem' }}>Park • Private</Typography>
+                        <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
                         <Box sx={{ maxHeight: '6.375rem', overflowY: 'auto' }}>
                             <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                                Helena's Spot is a private location nestled in a quiet and peaceful park.
+                                {name} is a private location nestled in a quiet and peaceful park.
                                 It's the perfect choice for those looking to get away from the hustle and bustle
                                 of the city and enjoy the beauty of nature.
                             </Typography>

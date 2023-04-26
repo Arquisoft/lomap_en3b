@@ -116,12 +116,12 @@ const List = ({ isVisible, onAddMarker}) => {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column'}}>
                     <FormControl style={{ width: '100%' }}>
-                        <InputLabel> Name </InputLabel>
+                        <InputLabel> Name: </InputLabel>
                         <TextField style={{ width: '100%' }} value={name} onChange={(e) => setName(e.target.value)} />
                     </FormControl>
                     <FormControl style={{ width: '100%'}}>
                         <InputLabel>Type</InputLabel>
-                        <Select style={{ width: '100%', minWidth: '100px' }} value={category} onChange={(e) => setCategory(e.target.value)}>
+                        <Select style={{ width: '100px' }} value={category} onChange={(e) => setCategory(e.target.value)}>
                             <MenuItem value="bar">Bar</MenuItem>
                             <MenuItem value="shop">Shop</MenuItem>
                             <MenuItem value="restaurant">Restaurant</MenuItem>
@@ -169,10 +169,10 @@ const List = ({ isVisible, onAddMarker}) => {
                     <div style={{ display: 'flex', justifyContent: 'center'}}>
                         <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
                             handleAddButtonClick(); //event to know that the action is finoished
-                        }}>
-                            Finish
-                        </Button>
-                    </div>
+                    }}>
+                        Finish
+                    </Button>
+                </div>
                 </div>
             </>
         </Container>
