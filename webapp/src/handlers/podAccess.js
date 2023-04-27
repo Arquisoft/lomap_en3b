@@ -327,7 +327,7 @@ async function getThingsFromDataset(resourceURL,session){
  * @param session
  * @returns a list of locations
  */
-async function readLocations(resourceURL,session) {
+async function readLocations(resourceURL,session, userIDWeb) {
     let locationThings=await getThingsFromDataset(resourceURL,session);
     let location,locationThing;
     let locationsRetrieved = [];
@@ -341,6 +341,7 @@ async function readLocations(resourceURL,session) {
 
                 //Convert into LocationLM object
                 location= convertPODLocationIntoDomainModelLocation(locationThing)
+                location.locOwner = userIDWeb;
 
                 //Add locationLM into List
                 locationsRetrieved.push(location);

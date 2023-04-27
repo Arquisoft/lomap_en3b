@@ -97,28 +97,20 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         let friends = await getFriendsWebIds(session.info.webId);
         let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
         // Code to get the friends locations
-        let locations = await readLocations(resource, session);
-        //TODO: new
-        console.log(resource);
-        console.log(locations);
+        let locations = await readLocations(resource, session, controlMng.user.userWebId);
 
         resource = session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl");
-        let aux = await readLocations(resource, session);
+        let aux = await readLocations(resource, session, controlMng.user.userWebId);
         locations = locations.concat(aux);
-        //TODO: new
-        console.log(resource);
-        console.log(aux);
 
         let friendsLocations = [];
         for (let i = 0; i < friends.length; i++) {
             try {
+                let nameF = friends[i].replace("/profile/card", "/")
                 //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
-                resource = friends[i].replace("/profile/card", "/") + "public/lomap/locations.ttl";
-                aux = await readLocations(resource,session);
+                resource = nameF + "public/lomap/locations.ttl";
+                aux = await readLocations(resource,session, nameF);
                 friendsLocations = friendsLocations.concat(aux);
-                //TODO: new
-                console.log(resource);
-                console.log(aux);
             } catch (err) {
                 //Friend does not have LoMap??
                 console.log(err);
