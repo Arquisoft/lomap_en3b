@@ -76,12 +76,24 @@ export function convertViewLocationsIntoDomainModelLocations(viewobjs){
 
     viewobjs.forEach( (obj) =>
     {
-        let ret1 = convertViewLocationIntoDomainModelLocation(obj);
-        if(ret1[0].length !== 0) {
+        console.log("Loop:")
+        console.log(obj)
+        if(obj instanceof LocationLM) {
+            listMyObjs.push(obj);
+            listViewObjs.push(obj);
+        } else {
+            let ret1 = convertViewLocationIntoDomainModelLocation(obj);
+            if (ret1[0].length !== 0) {
 
-            listMyObjs.push(ret1[0]);
-            listViewObjs.push(ret1[1]);
+                listMyObjs.push(ret1[0]);
+                listViewObjs.push(ret1[1]);
+            }
+
         }
+        console.log("Lists")
+        console.log(listViewObjs)
+        console.log(listMyObjs)
+
     });
     ret.push(listMyObjs);
     ret.push(listViewObjs);
@@ -95,6 +107,9 @@ export function convertViewLocationsIntoDomainModelLocations(viewobjs){
  * @returns {Object[]}
  */
 function convertViewLocationIntoDomainModelLocation(viewobj){
+    console.log("Converting...")
+    console.log(viewobj)
+
     let ret = [];
 
     try {
@@ -112,8 +127,6 @@ function convertViewLocationIntoDomainModelLocation(viewobj){
 
         //Set domain model id
         viewobj.domainID = loc.locID;
-        //TODO: //Set owner
-        viewobj.owner = "";
         ret.push(viewobj);
     } catch (e){
         if (e.name === 'StringInvalidFormat'){

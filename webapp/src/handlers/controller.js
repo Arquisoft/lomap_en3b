@@ -111,8 +111,14 @@ export class Controller {
      * @returns {Object[]} a list of markers with the id of the domain layer
      */
     updateUserLocations(list){
+        console.log("List")
+        console.log(list)
         let auxList = convertViewLocationsIntoDomainModelLocations(list);
+        console.log("auxList")
+        console.log(auxList)
 
+        console.log("cond")
+        console.log(Array.isArray(auxList))
         if(Array.isArray(auxList)) {
             this.user.addLocations(auxList, this.user.userWebId)
         }

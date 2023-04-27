@@ -23,6 +23,7 @@ export class LocationLM {
     reviews = new Map();
 
     constructor(coorLat, coorLng, name, descrip, cat, priv, date, id = uuidv4()) {
+        console.log(coorLat, coorLng, name, descrip, cat, priv, date, id)
         this.lat = coorLat;
         this.lng = coorLng;
         checkStringInvalidFormat(name, 'name' );

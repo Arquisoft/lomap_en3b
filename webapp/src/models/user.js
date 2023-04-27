@@ -1,4 +1,3 @@
-import {LocationLM} from "./location";
 import {Review} from "./review";
 
 /**
@@ -54,22 +53,30 @@ export class User{
      * @param {string} webID owner of the locations
      */
     addLocations(listLocs, webID){
+        console.log(this);
         //NEW -> Solve problem with duplicates
         listLocs.forEach( (newLoc) => {
+            console.log("newLoc")
+            console.log(newLoc);
             let added = false;
             for (let myLoc of this.locations.values()) {
                 //Check if a locations has been added
+                console.log("myLoc")
+                console.log(myLoc)
                 if((newLoc.lat === myLoc.lat) && (newLoc.lng === myLoc.lng) && (newLoc.name === myLoc.name)){
                     //it has been added
                     added = true;
                 }
             }
+            console.log("Added")
+            console.log(added)
             if(! added){
                 newLoc.locOwner = this.userWebId;
                 this.locations.set(newLoc.locID, newLoc);
                 this.newLocations.push(newLoc);
             }
         });
+        console.log(this)
     }
     addReviews(listRevs, webID, locationId){
         listRevs.forEach( (rev) => {

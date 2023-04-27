@@ -266,6 +266,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
     function handleDataChanges() {
         console.log(controlMng);
+        console.log("originalMarkers")
+        console.log(originalMarkers)
         controlMng.updateUserLocations(originalMarkers);
         console.log(controlMng);
     }
