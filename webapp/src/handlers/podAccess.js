@@ -22,7 +22,11 @@ import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
 import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
-import {convertDomainModelLocationIntoPODLocation, convertPODLocationIntoDomainModelLocation} from "../util/Convertor";
+import {
+    convertDomainModelLocationIntoPODLocation,
+    convertDomainModelReviewIntoPODReview,
+    convertPODLocationIntoDomainModelLocation
+} from "../util/Convertor";
 
 
 /**
@@ -47,7 +51,31 @@ async function removeContentOfDataSet(resourceURL,session){
         }
     }
 }
+export async function writeReviewsNew(resourceURL, session, rev) {
 
+    //Get dataSet
+    let dataset = await getDatasetNew(resourceURL, session);
+
+    //check if exists
+    let opt = getThing(
+        dataset,
+        resourceURL.concat('#').concat(rev.revID)
+    );
+    console.log("Duplicates");
+    console.log(opt)
+    if(opt !== null){
+        return;
+    }
+
+    //Create Thing
+    let reviewThing = convertDomainModelReviewIntoPODReview(rev);
+
+    //Add Thing into DataSet
+    dataset = setThing(dataset, reviewThing);
+
+    //Save dataSet into POD
+    await saveNew(resourceURL, dataset, session);
+}
 
 export async function writeLocationsNew(resourceURL, session, loc) {
 
@@ -338,7 +366,6 @@ async function readLocations(resourceURL,session, userIDWeb) {
             locationThing =locationThings[i];
 
             try {
-
                 //Convert into LocationLM object
                 location= convertPODLocationIntoDomainModelLocation(locationThing)
                 location.locOwner = userIDWeb;

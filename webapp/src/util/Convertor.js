@@ -70,7 +70,6 @@ export function convertPODLocationIntoDomainModelLocation (podObj){
  */
 export function convertViewLocationsIntoDomainModelLocations(viewobjs){
 
-
     let ret = [];
     let listMyObjs = [];
     let listViewObjs = [];

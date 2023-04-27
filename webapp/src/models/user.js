@@ -15,6 +15,7 @@ export class User{
     locations = new Map();
     reviews = new Map();
     newLocations = [];
+    newReviews = [];
     userWebId;
     locResourceURL = "/lomap/locations.ttl";
     revResourceURL = "/lomap/reviews.ttl";
@@ -38,6 +39,14 @@ export class User{
         });
     }
 
+    addReviewsFromPOD(listRevs) {
+        listRevs.forEach( (rev) => {
+             if (! this.reviews.has(rev.ItemReviewed)) {
+                 this.reviews.set(rev.ItemReviewed, rev);
+             }
+         });
+    }
+
     /**
      * It checks is the locations are already contained. All will be added but
      * the newLocations array will be fill with the new ones
@@ -47,10 +56,8 @@ export class User{
     addLocations(listLocs, webID){
         //NEW -> Solve problem with duplicates
         listLocs.forEach( (newLoc) => {
-//      for (let myLoc of this.locations.values()) {        //TODO: Remove if it works
             let added = false;
             for (let myLoc of this.locations.values()) {
-//            listLocs.forEach( (newLoc) => {               //TODO: Remove if it works
                 //Check if a locations has been added
                 if((newLoc.lat === myLoc.lat) && (newLoc.lng === myLoc.lng) && (newLoc.name === myLoc.name)){
                     //it has been added
@@ -63,20 +70,25 @@ export class User{
                 this.newLocations.push(newLoc);
             }
         });
-
-        //OLD
-        /*
-        listLocs.forEach( (loc) => {
-            if (! this.locations.has(loc.locID)) {
-                loc.locOwner = webID;
-                this.locations.set(loc.locID, loc);
-            } else {
-                loc.locOwner = webID;
-                this.locations.set(loc.locID, loc);
-                this.newLocations.push(loc);
+    }
+    addReviews(listRevs, webID, locationId){
+        listRevs.forEach( (rev) => {
+            if (!this.reviews.has(rev.revID)) {
+                rev.user = webID;
+                this.reviews.set(rev.revID, rev);
+                this.newReviews.push(rev);
             }
+            /**
+            if (! this.reviews.has(rev.revID)) {
+                rev.user = webID;
+                this.reviews.set(rev.revID, rev);
+            } else {
+                rev.user = webID;
+                this.reviews.set(rev.revID, rev);
+                this.newReviews.push(rev);
+            }
+             */
         });
-         */
     }
 
     /**
@@ -89,6 +101,23 @@ export class User{
         ret = this.newLocations;
         this.newLocations = [];
         return ret;
+    }
+
+    getNewReviews(){
+        let ret = [];
+        ret = this.newReviews;
+        this.newReviews = [];
+        return ret;
+    }
+
+
+    getAllLocations(){
+        let ret = [];
+        for (let loc in this.locations.values()){
+            ret.push(loc);
+        }
+        return ret;
+
     }
 
     /**

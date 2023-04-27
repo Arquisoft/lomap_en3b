@@ -94,6 +94,11 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
+        /*
+        await controlMng.retrieveLocationsFromPOD();
+        return controlMng.getLocations();
+        */
+        
         let friends = await getFriendsWebIds(session.info.webId);
         let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
         // Code to get the friends locations
