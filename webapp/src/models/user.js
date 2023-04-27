@@ -1,4 +1,5 @@
 import {LocationLM} from "./location";
+import {Review} from "./review";
 
 /**
  * This class represents de current user that uses the app.
@@ -12,6 +13,7 @@ import {LocationLM} from "./location";
  */
 export class User{
     locations = new Map();
+    reviews = new Map();
     newLocations = [];
     userWebId;
     locResourceURL = "/lomap/locations.ttl";
@@ -28,10 +30,9 @@ export class User{
      * @param {LocationLM[]} listLocs list of locations
      * @param {string} webID owner of the locations
      */
-    addLocationsFromPOD(listLocs, webID) {
+    addLocationsFromPOD(listLocs) {
         listLocs.forEach( (loc) => {
             if (! this.locations.has(loc.locID)) {
-                loc.locOwner = webID;
                 this.locations.set(loc.locID, loc);
             }
         });
@@ -88,5 +89,17 @@ export class User{
         ret = this.newLocations;
         this.newLocations = [];
         return ret;
+    }
+
+    /**
+     * This method adds a new review to the list of reviews.
+     * It returns the new review ID to handle the insertion os content directly to it.
+     * @param revLocID
+     * @returns {*}
+     */
+    addReview(revLocID){
+        let ret = new Review(revLocID);
+        this.reviews.set(ret.revID, ret);
+        return ret.revID;
     }
 }

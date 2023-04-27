@@ -113,16 +113,16 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                 friendsLocations = friendsLocations.concat(aux);
             } catch (err) {
                 //Friend does not have LoMap??
-                console.log(err);
+                console.error(err);
             }
         }
         aux = locations.concat(friendsLocations)
-        console.log(aux);
+        controlMng.saveLocationsFromPOD(aux);
         return aux;
     }
 
     async function getAndSetLocations() {
-        let locationSet = await retrieveLocations()
+        let locationSet = await retrieveLocations();
         setMarkers((current) => [...current, ...locationSet]);
         setOriginalMarkers(locationSet)
     }
