@@ -1,4 +1,3 @@
-import {LocationLM} from "./location";
 import {Review} from "./review";
 
 /**
