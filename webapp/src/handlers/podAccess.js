@@ -15,7 +15,7 @@ import {
     getThingAll,
     getSolidDataset,
     removeThing,
-    getStringNoLocale, getThing, addUrl, addStringNoLocale
+    getStringNoLocale, getThing, addUrl, addStringNoLocale, saveFileInContainer
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
@@ -302,6 +302,25 @@ async function readReviews(resourceURL,session) {
     return reviewsRetrieved;
 
 }
+
+export async function placeImageInContainer(session, image, isPrivate) {
+    let containerURL = session.info.webId.replace("/profile/card#me", "/");
+    if (isPrivate)
+        containerURL += "private/lomapen3b/images"
+    else
+        containerURL += "public/lomapen3b/images"
+
+    try {
+        const savedImage = await saveFileInContainer(containerURL, image, {
+            slug: image.toString(),
+            contentType: "jpg",
+            fetch: session.fetch
+        })
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export {
     writeLocations,
     readLocations

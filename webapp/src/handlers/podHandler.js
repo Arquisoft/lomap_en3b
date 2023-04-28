@@ -59,8 +59,8 @@ export async function checkForLomap(session) {
 export async function checkForLomapInPod(pod,session) {
     try {
 
-     let aux= await getSolidDataset(pod+"public/lomap",{fetch : session.fetch});
-     let aux2= await getSolidDataset(pod+"private/lomap",{fetch : session.fetch});
+     let aux= await getSolidDataset(pod+"public/lomapen3b",{fetch : session.fetch});
+     let aux2= await getSolidDataset(pod+"private/lomapen3b",{fetch : session.fetch});
 
     } catch (error) {
         console.log("Not found lomap folder in pod, we'll try creating one...")
@@ -123,19 +123,18 @@ async function mockFiles(session, resource) {
     }
 }
 
-
 export async function createLomapContainer(pod,session) {
     // create the lomap containers
-    await createContainerAt(pod + "public/lomap/",{fetch : session.fetch});
-    await createContainerAt(pod + "private/lomap/",{fetch : session.fetch});
+    await createContainerAt(pod + "public/lomapen3b/",{fetch : session.fetch});
+    await createContainerAt(pod + "private/lomapen3b/",{fetch : session.fetch});
     // create all the tl files used to store locations and reviews (all empty)
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl"));
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl"));
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomap/reviews.ttl"));
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomap/reviews.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomapen3b/locations.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomapen3b/locations.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomapen3b/reviews.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomapen3b/reviews.ttl"));
     // create the containers that are going to store the images
-    await createContainerAt(session.info.webId.replace("/profile/card#me", "/public/lomap/images/"), {fetch: session.fetch});
-    await createContainerAt(session.info.webId.replace("/profile/card#me", "/private/lomap/images/"), {fetch: session.fetch});
+    await createContainerAt(session.info.webId.replace("/profile/card#me", "/public/lomapen3b/images/"), {fetch: session.fetch});
+    await createContainerAt(session.info.webId.replace("/profile/card#me", "/private/lomapen3b/images/"), {fetch: session.fetch});
     await giveFriendsAccess(session, true);
 }
 
@@ -162,7 +161,7 @@ export async function getFriendsWebIds(webId) {
 async function giveFriendsAccess(session, access) {
     let currentUser = session.info.webId
     let friends = await getFriendsWebIds(currentUser);
-    let resourceURL = currentUser.replace("/profile/card#me", "/") + "public/lomap/";
+    let resourceURL = currentUser.replace("/profile/card#me", "/") + "public/lomapen3b/";
 
     for (let i = 0; i < friends.length; i++) { //Set access to  public (friends only) locations
         await setAccessToFriend(friends[i].replace("/profile/card","/")+"profile/card#me", resourceURL, access, session);
