@@ -51,7 +51,7 @@ jobs:
           registry: ghcr.io
           workdir: webapp
           env:
-            REACT_APP_GOOGLE_MAPS_API_KEY: {{secrets.MAPS_KEY}}
+            REACT_APP_GOOGLE_MAPS_API_KEY: ${{secrets.MAPS_KEY}}
  deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
