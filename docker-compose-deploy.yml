@@ -4,4 +4,4 @@ services:
   webapp:
     image: ghcr.io/arquisoft/lomap_en3b/webapp:latest
     ports:
-      - "3000:3000"
+      - "443:443"
