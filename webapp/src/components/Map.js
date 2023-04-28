@@ -54,7 +54,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
      * @param onInfoList
      * @param changesInComments
      */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview, updateLocation,editLocation}) {
     // Defining the state variables
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
     const [markers, setMarkers] = React.useState([]);
@@ -177,6 +177,32 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         await saveLocations();
     };
 
+
+
+    const updateMarker = async () => {
+
+        setOriginalMarkers((current) => {
+
+
+            
+            //console.log(lastMarker);
+            const marker = markerData[0]; // Access the object inside the array
+
+            const lastMarker = current[marker.key];
+
+            lastMarker.name = marker.name;
+            lastMarker.category = marker.category;
+            lastMarker.privacy = marker.privacy;
+            lastMarker.pic=marker.pic;
+            lastMarker.description=marker.description;
+
+
+            return [...current];
+        });
+       
+    };
+
+
     const saveLocations=async () => {
         let resourceFirst = session.info.webId.replace("/profile/card#me", "/")
         return await writeLocations(resourceFirst, "/lomap/locations.ttl", session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
@@ -265,6 +291,19 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         
         
       }, [changesInComments]);
+
+      //edit location effect
+      React.useEffect(() => {
+
+        if (updateLocation) {
+          updateMarker();
+          editLocation();
+          
+          
+        }
+        
+        
+      }, [updateLocation]);
       
 
     const iconUrls = {

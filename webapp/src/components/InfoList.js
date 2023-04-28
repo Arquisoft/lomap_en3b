@@ -49,7 +49,7 @@ import EditIcon from '@mui/icons-material/Edit';
  * @param newComments
  */
 
-const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}) => {
 
     const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
@@ -57,6 +57,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const[review,setReview]=useState([]);
     const[image,setImage]=useState("");
     const[description,setDescription]=useState("");
+
+
+    
 
     const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
@@ -78,6 +81,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
     const [key, setKey] = useState('');
+    
 
     /////////////////////////////////picture
     const handleImageUploadpic = () => {
@@ -250,9 +254,18 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const handleAddButtonClick = () => {
         onInfoList();
         setSelectedTab(1);
-        console.log(review);
-        console.log(key);
+        
         newComments( {key,review});
+
+    };
+
+    const handleButtonEdit = () =>{
+
+        onInfoList();
+        setSelectedTab(1);
+        setInfo(1);
+        setEdit(3);
+        onEditMarker({ key,name, category, privacy,pic,description });//sends an object containing the new values to the Map component where we update the location
 
     };
 
@@ -361,7 +374,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                         </Box>
                     </Box></Typography>}
                 {selectedTab === ınfo && <Typography variant="body1">
-                    <img src={image} alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
+                {image && <img src={image} alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} onError={() => setImage(null)} />}
+
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
                         <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
@@ -428,11 +442,13 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                                         multiline
                                         rows={2}
                                         style={{ width: '100%' }}
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
                                     />
                                 </FormControl>
                                 <div style={{ display: 'flex', justifyContent: 'center'}}>
                                     <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
-                                        handleAddButtonClick(); //event to know that the action is finoished
+                                        handleButtonEdit(); //event to know that the action is finoished
                                     }}>
                                         Finish
                                     </Button>

@@ -46,6 +46,7 @@ const MapView = ({session,onSearch}) => {
   const [markerData, setMarkerData] = useState([]); // track marker data for the list and comments
   const [selected, setSelected] = React.useState(['']); // track selected markers for the info list
   const [showLogOut, setShowLogOut] = useState(false);
+  const [updateLocation, setupdateLocation] = useState(false);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -72,12 +73,13 @@ const MapView = ({session,onSearch}) => {
 
   // toggle interactive state and show list
   const makeMapInteractive = () => {
-    setIsInteractive(!isInteractive);
+    //setIsInteractive(!isInteractive);
     setShowList(!showList);
   };
 
   // hide list and show marker in the list
   const makePanelDisapear = (marker) => {
+    setIsInteractive(!isInteractive);
     setShowList(!showList);
     setMarkerData([marker]);
   };
@@ -91,6 +93,18 @@ const MapView = ({session,onSearch}) => {
   const makeInfoPanelDisapear = (marker) => {
     setShowInfoList(!showInfoList);
     setSelected([marker]);
+  };
+
+  const makeEdit = (marker) => {
+    setShowInfoList(!showInfoList);
+    setMarkerData([marker]);
+    setupdateLocation(!updateLocation);
+  };
+
+
+  const updateDone =() =>{
+    setupdateLocation(!updateLocation);
+
   };
 
   // set marker data for comments and show comment panel
@@ -160,14 +174,14 @@ const MapView = ({session,onSearch}) => {
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
-        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)}/>
+        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} />
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
 
 
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
         { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
-          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
