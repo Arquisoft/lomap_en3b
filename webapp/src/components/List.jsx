@@ -42,14 +42,17 @@ const List = ({ isVisible, onAddMarker}) => {
     const [category, setCategory] = useState('');
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
+    const[description,setDescription] = useState(""); //Picture
 
     // Define a function to handle the "Finish" button click event
     const handleAddButtonClick = () => {
         if (name !== '' && category !== '') {
-            onAddMarker({ name, category, privacy });//sends an object containing the new values to the Map component where we update the location
+            onAddMarker({ name, category, privacy,pic,description });//sends an object containing the new values to the Map component where we update the location
             setName('');
             setCategory('');
             setPrivacy('public');
+            setPic("");
+            setDescription("");
 
 
         }
@@ -164,6 +167,10 @@ const List = ({ isVisible, onAddMarker}) => {
                         multiline
                         rows={2}
                         style={{ width: '100%' }}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                       
+                       
                     />
                      </FormControl>
                     <div style={{ display: 'flex', justifyContent: 'center'}}>

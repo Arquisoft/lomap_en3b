@@ -76,9 +76,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
 
     onFilterLocations();
   };
-  const handleEditLocationButtonClick = () => {
-    onEditMarker();
-  };
+ 
 
   const handleInfoListClick = () => {
     onInfoList();
@@ -189,15 +187,13 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             </StyledMenu>
 
 
-            <Button color="inherit">Map</Button>
+            
           </Typography>
           <div>
             <IconButton   aria-label="Filter Locations" color="inherit" onClick={handleFilterLocations} >
               <TuneIcon />
             </IconButton>
-            <IconButton  aria-label="Edit Location"  color="inherit" onClick={handleEditLocationButtonClick} >
-              <EditLocationIcon />
-            </IconButton>
+           
             <IconButton  aria-label="Add Location"  color="inherit" onClick={handleAddButtonClick} >
               <AddLocationAltIcon />
             </IconButton>
