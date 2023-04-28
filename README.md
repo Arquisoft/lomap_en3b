@@ -12,7 +12,7 @@ LoMap will also be a tool for establishment owners to boost their businesses dig
 
 In brief, LoMap is more than a Map application , but a tool for cities to develop and offer their best to anybody that is interested in visiting them. Powered by its own inhabitants honest opinions, the city will open itself to outlanders allowing them to know places they probably would have never reached.
 ##  See it for yourself! 
-Access LoMap on [http://lomapen3b.francecentral.cloudapp.azure.com](http://lomapen3b.francecentral.cloudapp.azure.com:3000/)
+Access LoMap on https://lomapen3b.francecentral.cloudapp.azure.com/
 
 
 ## ARC42
