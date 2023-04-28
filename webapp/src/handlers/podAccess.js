@@ -15,43 +15,38 @@ import {
     getThingAll,
     getSolidDataset,
     removeThing,
-    getStringNoLocale, addUrl, addStringNoLocale
+    getStringNoLocale, getThing, addUrl, addStringNoLocale
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
 import {checkForLomap} from "./podHandler";
 import {LocationLM} from "../models/location";
 import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
-import {convertViewObjectsIntoDomainModelObjects} from "../util/Convertor";
 
-/**
- * Save user's session changes into de POD.
- * @param {User} user
- * @returns {Promise<void>}
- *
-async function writeLocations(user, session) {
-    //This can be parallel
-    writeLocIntoPOD(user.resourceURLPublic, user.publicLocat, session);
-    writeLocIntoPOD(user.resourceURLPrivate, user.privateLocat, session);
-}
- */
-
-async function writeLocations(resourceURL, session, list) {
-    let i = 0;
+async function writeLocations(resourceFirst, resourcePath, session, list) {
+    let publicUsed = false;
+    let privateUsed = false;
     let dataset;
 
     //Iterates the list
     for (const loc of list) {
+        let resourceURL = resourceFirst.concat(loc.privacy).concat(resourcePath);
         //GetDataSet - And remove the first time
-        if(i == 0){
+        if((loc.privacy === 'public' && !publicUsed) || (loc.privacy === 'private' && !privateUsed)){
             //Get dataSet and Remove content
             dataset= await getDatasetAndRemoveContent(resourceURL,session);
+
+            if((loc.privacy === 'public' && !publicUsed)){
+                publicUsed = true;
+            } else{
+                privateUsed = true;
+            }
         } else {
             //Get dataSet
             dataset= await getDataset(resourceURL,session);
         }
         //Create Thing
-        let locationThing = buildThing(createThing({ name: "title" + i }))
+        let locationThing = buildThing(createThing({ name: loc.name }))
             .addUrl(RDF.type, "https://schema.org/Place")
             .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
             .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
@@ -78,10 +73,9 @@ async function writeLocations(resourceURL, session, list) {
         } catch (error) {
             console.log(error);
         }
-
-        i++;
     }
     window.alert("Saved");
+
 }
 
 async function getDatasetAndRemoveContent(resourceURL,session){
@@ -110,7 +104,6 @@ async function getDataset(resourceURL,session){
     }
     return dataset;
 }
-
 async function writeReviews(user) {
     user.getReviews();
     await writeUserReviews(user.resourceURLPublic, user.publicReviews);
@@ -280,6 +273,7 @@ async function readLocations(resourceURL,session) {
     return locationsRetrieved;
 
 }
+
 async function readReviews(resourceURL,session) {
     let reviewThings = await getThingsFromDataset(resourceURL, session);
     let review, reviewThing;

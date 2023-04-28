@@ -10,7 +10,28 @@ import LogOut from "../components/LogOut";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
+import ErrorView from "./errorView"
 
+
+
+
+
+
+/**
+ *
+ * This is the main Compomnent that renders a map view with various components like the header, list, map, info list, edit list, account page, and filter sidebar.
+ * The component is used to display markers on the map with additional information that can be edited by the user.
+
+  The component uses various hooks like useState and useLoadScript.
+  It defines several state variables to manage the interactive state of the map, display markers, and show/hide components like the list, edit list, info list, and filter sidebar.
+  It also uses the Google Maps API to search for places and add markers to the map.
+
+  The component defines several functions to handle user interactions like adding and editing markers, displaying the filter sidebar, making the account page disappear
+  , and showing/hiding the list, edit list, and info list components. It also defines two functions to handle changes in the filter list and search box input.
+
+  *@param session
+  *@param onSearch
+ */
 const MapView = ({session,onSearch}) => {
   const [changesInFilters, setChangesInFilters] = useState(false); // track changes in filter state
   const [changesInComments, setChangesInComments] = useState(false); // track changes in comments state
@@ -36,7 +57,7 @@ const MapView = ({session,onSearch}) => {
    * For that i stablish a "common point" for both , here in their parent component, map view.
    * That common point is the array of filters and the state changesInFilters
    * (using the array of filters as a dependency for useEffect in map was not allowed, since it changed sizes between renders)
-   * This method is a way of using the set functionality of both states without passing the setters to both components.
+   *This method is a way of using the set functionality of both states without passing the setters to both components.
    * @param filters
    */
   const updateFilterListInUse = (filters) => {
@@ -52,7 +73,6 @@ const MapView = ({session,onSearch}) => {
   // toggle interactive state and show list
   const makeMapInteractive = () => {
     setIsInteractive(!isInteractive);
-  //  console.log(showList);
     setShowList(!showList);
   };
 
@@ -76,6 +96,11 @@ const MapView = ({session,onSearch}) => {
   // set marker data for comments and show comment panel
   const makeComments = (marker) => {
     setMarkerData([marker]);
+    setChangesInComments(!changesInComments);
+  };
+
+  const updateComments = ( ) =>{
+
     setChangesInComments(!changesInComments);
   };
 
@@ -120,7 +145,7 @@ const MapView = ({session,onSearch}) => {
     });
   };
   if (loadError) return <div> Error Loading Maps </div>;
-  if (!isLoaded) return <div>Loading Maps</div>; //Checking if the map loaded
+
   return (
       <>
         <CssBaseline />
@@ -138,9 +163,11 @@ const MapView = ({session,onSearch}) => {
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)}/>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
+
+
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
-        <Grid item xs={12} md={8}>
-          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments}/>
+        { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments}/>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
@@ -154,7 +181,7 @@ const MapView = ({session,onSearch}) => {
               </IconButton>
             </div>
           </form>
-        </Grid>
+        </Grid>}
       </Grid>
       </>
   );

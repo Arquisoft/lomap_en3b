@@ -8,6 +8,7 @@ import {readLocations, writeLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
+import {getFriendsWebIds} from "../handlers/podHandler";
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -53,7 +54,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
      * @param onInfoList
      * @param changesInComments
      */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview}) {
     // Defining the state variables
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
     const [markers, setMarkers] = React.useState([]);
@@ -62,6 +63,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
+    
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -69,7 +71,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         setOriginalMarkers((current) => [
           ...current,
           {
-            
             key: current.length,
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
@@ -93,14 +94,31 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
-        return await readLocations(resource, session); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        let friends = await getFriendsWebIds(session.info.webId);
+        let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
+        // Code to get the friends locations
+        let locations = await readLocations(resource, session);
+        resource = session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl");
+        locations = locations.concat(await readLocations(resource, session));
+        let friendsLocations = [];
+        for (let i = 0; i < friends.length; i++) {
+            try {
+                //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
+                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "public/lomap/locations.ttl",session));
+            } catch (err) {
+                //Friend does not have LoMap??
+                console.log(err);
+            }
+        }
+
+        return locations.concat(friendsLocations); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
+
     async function getAndSetLocations() {
         let locationSet = await retrieveLocations()
         setMarkers((current) => [...current, ...locationSet]);
         setOriginalMarkers(locationSet);
-       
+
     }
 
 
@@ -160,9 +178,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     };
 
     const saveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
-        console.log(resource);
-        return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        let resourceFirst = session.info.webId.replace("/profile/card#me", "/")
+        return await writeLocations(resourceFirst, "/lomap/locations.ttl", session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
     //function to update the comments
@@ -174,17 +191,22 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         const marker = markerData[0]; // Access the object inside the array
 
 
-            console.log(marker);
+
 
         const lastMarker = current[marker.key];
 
+
+
+       lastMarker.comments=marker.comments;
+
+
             console.log(lastMarker);
-       
+
 
         lastMarker.comments=marker.review;
 
         console.log(lastMarker.comments);
-        
+
         return [...current];
       });
     };
@@ -192,7 +214,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const onMapLoad = async (map) => {
         mapRef.current = map;
        await getAndSetLocations();
-      
+
     } ;
 
     //filter the map when a change in the filter component ocurs
@@ -235,13 +257,15 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     //update the comments after the comments in the info list are updated
     React.useEffect(() => {
 
-       if(changesInComments){
-
-       updateComments();
-       }
-
-
-    }, [changesInComments]);
+        if (changesInComments) {
+          updateComments();
+          updatedReview();
+          
+        }
+        
+        
+      }, [changesInComments]);
+      
 
     const iconUrls = {
         park: "/greenLocation.svg",
@@ -266,6 +290,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                 options={options}
                 onClick={isInteractive ? addMarker : null} // Only allow adding markers when canAddMarker is true
                 onLoad={onMapLoad} //callback function called when the map is loaded
+                aria-label="Map render"
             >
                 {markers.map((marker, index) => ( // Loop through each marker and create a Marker component for each one
                     <Marker

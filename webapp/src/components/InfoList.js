@@ -153,9 +153,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
      // Define an event handler to update the list with the propertys from the selected component
     React.useEffect(() => {
         if (isInfoVisible) {
-            
+
            upgradeComments();
-          
+
           setName(selected[0].name);
           setCategory(selected[0].category); //setters for every field in the infoList
           setPrivacy(selected[0].privacy);
@@ -192,7 +192,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const upgradeComments = () => {
         const newComments = selected[0].comments.map((comment) => {
           const { comment: text, commentpic, ratingStars } = comment;
-          
+
           return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
         });
         setComments(newComments);
@@ -202,8 +202,6 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
         setComment(e.target.value);
     };
 
-
-    // Define an event handler to handle image upload
     const handleImageUpload = () => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -331,10 +329,10 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                                 <EmojiEmotionsSharpIcon sx={{ fontSize: '1.125rem' }}/>
                             </IconButton>
                             <Popover
-                               // anchorOrigin={{
-                                   // vertical: 'top',
-                                    //horizontal: 'center',
-                               // }}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'center',
+                                }}
                                 transformOrigin={{
                                     vertical: 'bottom',
                                     horizontal: 'center',
@@ -343,10 +341,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                                 open={open}
                                 anchorEl={anchorEl}
                                 onClose={handleClose}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
+
                             >
                                 <Typography sx={{ p: 2 }}>
                                     <IconButton  style={{ fontSize: '1rem' }} onClick={() => setComment(prevComment => prevComment + '❤️')}>❤️</IconButton>
@@ -371,7 +366,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                         <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                             <Rating name="size-small" defaultValue={3} size="extra-small" readOnly />
-                           
+
                         </Box>
                         <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
                         <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
