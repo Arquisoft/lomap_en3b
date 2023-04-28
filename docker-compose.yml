@@ -5,4 +5,4 @@ services:
   webapp:
     build: ./webapp
     ports:
-      - "3000:3000"
+      - "443:443"
