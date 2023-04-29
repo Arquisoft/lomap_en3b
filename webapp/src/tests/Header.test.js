@@ -49,7 +49,12 @@ describe('Header renders all options',()=>{
 
     })
 
+    test('Log Out',()=>{
 
+        const filterButton=screen.getByLabelText( /Filter Locations/i)
+        expect(filterButton).toBeInTheDocument();
+
+    })
 });
 describe('Header buttons work ',()=>{
 

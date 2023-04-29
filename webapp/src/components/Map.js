@@ -258,7 +258,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         bar: "/redLocation.svg",
         restaurant: "/orangeLocation.svg",
         shop: "/blueLocation.svg",
-        sight:"/trasnparentLocation.svg",
+        sight:"/yellow1Location.svg",
         monument:"/purpleLocation.svg",
         other:  "/blackLocation.svg",
         // u can Adding more types and URLs as needed
