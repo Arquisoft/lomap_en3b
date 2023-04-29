@@ -26,16 +26,17 @@ const LogOut = ({ isLogOutVisible, onLogOut }) => {
     };
 
     return (
-        <Container name={"LogOutContainer"} style={style}>
+        <Container aria-label="Log out dialogue"name={"LogOutContainer"} style={style}>
 
             <Typography variant="h5">Are you sure you want to leave?</Typography>
          <Box name={'buttonsContainer'}  >
          <LogoutButton>
-            <Button name="logOutBtn" variant="contained" color="primary" style={{ backgroundColor: 'purple' }} onClick={handleLogOut}>
+            <Button aria-label="Log out button" name="logOutBtn"  variant="contained" color="primary" style={{ backgroundColor: 'purple' }} onClick={handleLogOut}>
                 Log out
             </Button>
              </LogoutButton>
             <Button
+                aria-label="Go back button"
                 name="back"
                 onClick={handleAddButtonClick}
                 variant="contained"

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'deployment-And-Tests'
 
 jobs:
  unit-test-webapp:
