@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
-import {Box, Container, IconButton} from "@mui/material";
+import {Box, Container, IconButton, Tab, Typography} from "@mui/material";
 import Button from '@mui/material/Button';
 import {LogoutButton} from "@inrupt/solid-ui-react";
 import CloseIcon from "@mui/icons-material/Close";
+import ButtonBase from "@mui/material/ButtonBase";
+import  "../components/styles/LogOut.css"
 const LogOut = ({ isLogOutVisible, onLogOut }) => {
 
     const style = {
-        display: isLogOutVisible ? 'block' : 'none',
-        backgroundColor: '#fff',
-        borderRadius: '1rem', // kenar yuvarlatma
-        width: '20%', // panel genişliği %30
-        height: '16vh', // biraz boşluk bırakmak için %10 boşluk
-        margin: '10vh 2vh 10vh 10vh', // üstünden ve altından boşluk bırak
-        padding: '0',
-        zIndex: '999',
+        display: isLogOutVisible ? 'grid' : 'none',
+
         position: 'fixed',
+        zIndex: '999',
         top: '0',
-        right: '0', // sağ tarafta
+        right: '0',
+
 
     }
 
@@ -28,17 +26,24 @@ const LogOut = ({ isLogOutVisible, onLogOut }) => {
     };
 
     return (
-        <Container style={style}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%' }}>
-                <p>Are you sure you want to log out? </p>
-                <Box sx={{ mb: 2 }}>
+        <Container name={"LogOutContainer"} style={style}>
+
+            <Typography variant="h5">Are you sure you want to leave?</Typography>
                  <LogoutButton>
-                    <Button variant="contained" color="primary" style={{ backgroundColor: 'grey' }} onClick={handleLogOut}>
+                    <Button name="logOutBtn" variant="contained" color="primary" style={{ backgroundColor: 'purple' }} onClick={handleLogOut}>
                         Log out
                     </Button>
-                 </LogoutButton>
-                </Box>
-            </Box>
+                     </LogoutButton>
+            <Button
+                name="back"
+                onClick={handleAddButtonClick}
+                variant="contained"
+                color="primary"
+                style={{ backgroundColor: 'grey' }}
+            >
+                Go back
+            </Button>
+
         </Container>
 
     )
