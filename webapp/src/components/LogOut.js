@@ -29,11 +29,12 @@ const LogOut = ({ isLogOutVisible, onLogOut }) => {
         <Container name={"LogOutContainer"} style={style}>
 
             <Typography variant="h5">Are you sure you want to leave?</Typography>
-                 <LogoutButton>
-                    <Button name="logOutBtn" variant="contained" color="primary" style={{ backgroundColor: 'purple' }} onClick={handleLogOut}>
-                        Log out
-                    </Button>
-                     </LogoutButton>
+         <Box name={'buttonsContainer'}  >
+         <LogoutButton>
+            <Button name="logOutBtn" variant="contained" color="primary" style={{ backgroundColor: 'purple' }} onClick={handleLogOut}>
+                Log out
+            </Button>
+             </LogoutButton>
             <Button
                 name="back"
                 onClick={handleAddButtonClick}
@@ -43,7 +44,7 @@ const LogOut = ({ isLogOutVisible, onLogOut }) => {
             >
                 Go back
             </Button>
-
+         </Box>
         </Container>
 
     )
