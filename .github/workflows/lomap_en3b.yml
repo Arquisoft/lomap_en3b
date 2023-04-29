@@ -3,7 +3,7 @@ name: CI for LOMAP_EN3B
 on:
   push:
     branches:
-      - 'deployment-And-Tests'
+      - 'master'
 
 jobs:
  unit-test-webapp:
