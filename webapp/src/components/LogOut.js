@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {Box, Container, IconButton} from "@mui/material";
 import Button from '@mui/material/Button';
+import {LogoutButton} from "@inrupt/solid-ui-react";
 import CloseIcon from "@mui/icons-material/Close";
 const LogOut = ({ isLogOutVisible, onLogOut }) => {
 
@@ -31,9 +32,11 @@ const LogOut = ({ isLogOutVisible, onLogOut }) => {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%' }}>
                 <p>Are you sure you want to log out? </p>
                 <Box sx={{ mb: 2 }}>
+                 <LogoutButton>
                     <Button variant="contained" color="primary" style={{ backgroundColor: 'grey' }} onClick={handleLogOut}>
                         Log out
                     </Button>
+                 </LogoutButton>
                 </Box>
             </Box>
         </Container>
