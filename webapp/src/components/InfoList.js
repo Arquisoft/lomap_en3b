@@ -49,11 +49,18 @@ import EditIcon from '@mui/icons-material/Edit';
  * @param newComments
  */
 
-const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}) => {
 
     const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
-    const[comments,setComments]=useState(['This is a great spot! ⭐ ', 'I love coming here. ⭐⭐ ','Hi! ⭐','Good Place... ⭐⭐⭐','perfect ⭐⭐⭐⭐⭐']);
+    const[comments,setComments]=useState([]);
+    const[review,setReview]=useState([]);
+    const[image,setImage]=useState("");
+    const[description,setDescription]=useState("");
+
+
+    
+
     const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
     const [selectedEmoji, setSelectedEmoji] = useState(null);
@@ -73,7 +80,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
     const [category, setCategory] = useState('');
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
-        const [key, setKey] = useState('');
+    const [key, setKey] = useState('');
+    
 
     /////////////////////////////////picture
     const handleImageUploadpic = () => {
@@ -134,6 +142,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
 
     /////////////////////////////
 
+
+
     const style = {
         display: isInfoVisible ? 'block' : 'none',
         backgroundColor: '#fff',
@@ -147,11 +157,16 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
      // Define an event handler to update the list with the propertys from the selected component
     React.useEffect(() => {
         if (isInfoVisible) {
-          setComments(selected[0].comments);
+
+           upgradeComments();
+
           setName(selected[0].name);
           setCategory(selected[0].category); //setters for every field in the infoList
           setPrivacy(selected[0].privacy);
+          console.log(selected[0].key);
           setKey(selected[0].key);
+          setDescription(selected[0].description);
+          setImage(selected[0].pic);
         } else {
           setComments([]);
         }
@@ -169,10 +184,23 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
         } else {
             ratingStars = '⭐'.repeat(selectedRating);
         }
+
+        setReview((prevReview) => [...prevReview, {comment, commentpic, ratingStars}]);
+
         setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
         setComment('');
         setCommentpic('');
     };
+
+
+    const upgradeComments = () => {
+        const newComments = selected[0].comments.map((comment) => {
+          const { comment: text, commentpic, ratingStars } = comment;
+
+          return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
+        });
+        setComments(newComments);
+      };
 
     const onChangeHandler = (e) => {
         setComment(e.target.value);
@@ -220,10 +248,24 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
         };
         input.click();
     };
+
+    //The close button handler
+    //When we close the infoList we send a new object to the map component with the new comment and the key of the location we need to update
     const handleAddButtonClick = () => {
         onInfoList();
         setSelectedTab(1);
-        newComments( {key, comments });
+        
+        newComments( {key,review});
+
+    };
+
+    const handleButtonEdit = () =>{
+
+        onInfoList();
+        setSelectedTab(1);
+        setInfo(1);
+        setEdit(3);
+        onEditMarker({ key,name, category, privacy,pic,description });//sends an object containing the new values to the Map component where we update the location
 
     };
 
@@ -294,8 +336,6 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                                 maxRows={3} // max rows number
                                 sx={{ flexGrow: 1,  mr: '0.625rem', fontSize: '0.75rem' }}
                                 InputProps={{ sx: { borderRadius: '1.25rem', pl: '0.625rem' } }}
-                                multiline
-                                rows={4}
                             />
 
                             <IconButton aria-describedby={id} variant="contained" onClick={handleClick}>
@@ -334,27 +374,18 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                         </Box>
                     </Box></Typography>}
                 {selectedTab === ınfo && <Typography variant="body1">
-                    <img src="https://picsum.photos/id/17/200" alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} />
+                {image && <img src={image} alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} onError={() => setImage(null)} />}
+
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
                         <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                             <Rating name="size-small" defaultValue={3} size="extra-small" readOnly />
-                            <Typography variant="caption" sx={{  ml: '0.3125rem' }}>3.0</Typography>
+
                         </Box>
                         <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
-                        <Box sx={{ maxHeight: '6.375rem', overflowY: 'auto' }}>
-                            <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                                {name} is a private location nestled in a quiet and peaceful park.
-                                It's the perfect choice for those looking to get away from the hustle and bustle
-                                of the city and enjoy the beauty of nature.
-                            </Typography>
-                        </Box>
-
-                        <Box sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                            <IconButton onClick={onClickEdit} size="small" sx={{ display: 'inline-block' }}>
-                                <EditIcon/>
-                            </IconButton>
-                        </Box>
+                        <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
+                          {description} </Typography>
+                        <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
                     </Box>
                 </Typography>}
                 {selectedTab === edit && <Typography variant="body1">
@@ -411,11 +442,13 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments}) => {
                                         multiline
                                         rows={2}
                                         style={{ width: '100%' }}
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
                                     />
                                 </FormControl>
                                 <div style={{ display: 'flex', justifyContent: 'center'}}>
                                     <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
-                                        handleAddButtonClick(); //event to know that the action is finoished
+                                        handleButtonEdit(); //event to know that the action is finoished
                                     }}>
                                         Finish
                                     </Button>

@@ -54,7 +54,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
      * @param onInfoList
      * @param changesInComments
      */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview, updateLocation,editLocation}) {
     // Defining the state variables
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
     const [markers, setMarkers] = React.useState([]);
@@ -63,6 +63,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
+    
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -70,11 +71,12 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         setOriginalMarkers((current) => [
           ...current,
           {
-            key: markers.length,
+            key: current.length,
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
             time: new Date(),
             description:'',
+            pic:'',
             name: '',
             category: '',
             privacy: '',
@@ -82,8 +84,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             comments:[],
           },
         ]);
-           
-            
+
+
               onMarkerAdded(); // Call the onMarkerAdded callback
               setCanAddMarker(true); // Set canAddMarker to false after adding a marker
           },
@@ -115,7 +117,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     async function getAndSetLocations() {
         let locationSet = await retrieveLocations()
         setMarkers((current) => [...current, ...locationSet]);
-        setOriginalMarkers(locationSet)
+        setOriginalMarkers(locationSet);
+
     }
 
 
@@ -160,6 +163,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.name = marker.name;
             lastMarker.category = marker.category;
             lastMarker.privacy = marker.privacy;
+            lastMarker.pic=marker.pic;
+            lastMarker.description=marker.description;
 
 
             return [...current];
@@ -172,30 +177,62 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         await saveLocations();
     };
 
+
+
+    const updateMarker = async () => {
+
+        setOriginalMarkers((current) => {
+
+
+            
+            //console.log(lastMarker);
+            const marker = markerData[0]; // Access the object inside the array
+
+            const lastMarker = current[marker.key];
+
+            lastMarker.name = marker.name;
+            lastMarker.category = marker.category;
+            lastMarker.privacy = marker.privacy;
+            lastMarker.pic=marker.pic;
+            lastMarker.description=marker.description;
+
+
+            return [...current];
+        });
+       
+    };
+
+
     const saveLocations=async () => {
-        let resource = session.info.webId.replace("/profile/card#me", "/lomap/locations.ttl")
-        console.log(resource);
-        return await writeLocations(resource, session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        let resourceFirst = session.info.webId.replace("/profile/card#me", "/")
+        return await writeLocations(resourceFirst, "/lomap/locations.ttl", session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
     }
 
     //function to update the comments
     const updateComments = () => {
-    
+
         setOriginalMarkers((current) => {
-            
+
 
         const marker = markerData[0]; // Access the object inside the array
 
-        
-        
-          
+
+
+
         const lastMarker = current[marker.key];
 
-        
-       
+
+
        lastMarker.comments=marker.comments;
-  
-       
+
+
+            console.log(lastMarker);
+
+
+        lastMarker.comments=marker.review;
+
+        console.log(lastMarker.comments);
+
         return [...current];
       });
     };
@@ -203,12 +240,13 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const onMapLoad = async (map) => {
         mapRef.current = map;
        await getAndSetLocations();
+
     } ;
 
     //filter the map when a change in the filter component ocurs
     React.useEffect(()=>{
 
-        
+
         if(selectedFilters.length>0){//If there are no filters selected i want the original, non filtered set of markers displayed.
             let filteredSet =[];
             for (let  category = 0; category <selectedFilters.length ;category++) {
@@ -238,20 +276,35 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         if (canAddMarker) {
             setCanAddMarker(false);
            updateLastMarker(); // Call the updateLastMarker function
-          
+
         }
     }, [canAddMarker]);
 
     //update the comments after the comments in the info list are updated
     React.useEffect(() => {
+
+        if (changesInComments) {
+          updateComments();
+          updatedReview();
+          
+        }
         
-       if(changesInComments){
-       
-       updateComments();
-       }
-       
         
-    }, [changesInComments]);
+      }, [changesInComments]);
+
+      //edit location effect
+      React.useEffect(() => {
+
+        if (updateLocation) {
+          updateMarker();
+          editLocation();
+          
+          
+        }
+        
+        
+      }, [updateLocation]);
+      
 
     const iconUrls = {
         park: "/greenLocation.svg",
@@ -292,21 +345,21 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
                         onClick={() => { // Callback function called when a marker is clicked
                             setSelected(marker); // Set the selected marker
                             onInfoList(marker); // Callback function called to update an information list
-                            
+
                         }}
                     />
 
           ))}
-            
+
         </GoogleMap>
       </React.Fragment>
     );
 
+
+
+
+
+
 }
-
-
-
-
-
 
 export default Map;
