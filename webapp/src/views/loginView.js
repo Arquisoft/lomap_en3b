@@ -13,8 +13,14 @@ const Login = () => {
     const [provider,setProvider]= useState("https://inrupt.net");
     const authOptions={
         clientName:"LoMap",
-    };
+        oidcIssuer:provider,
 
+    };
+    const handleSelection = (event) =>{
+        setProvider(event.target.value);
+
+
+    }
     const handleLogin = () => {
         setRedirectUrl(window.location.href);
     };
@@ -42,11 +48,11 @@ const Login = () => {
                     <Typography variant="subtitle1" sx={{ color: '#555555', mb: 2 }}>Welcome to LoMap</Typography>
                     <FormControl aria-label="providerForm" for="providerList" style={{ width: '50%' }} >
                         <InputLabel>Select an Identity provider</InputLabel>
-                        <Select id="providerList" aria-label="providers" style={{ width: '100%' } } value="Inrupt.net" label="inrupt.net" >
+                        <Select id="providerList" aria-label="providers" style={{ width: '100%' } } value={provider} label="inrupt.net" onChange={handleSelection}>
                             <MenuItem  value={"https://inrupt.net"} aria-label="inrupt">Inrupt.net</MenuItem>
-                            <MenuItem value={"https://solidcommunity.net/login"}    aria-label="solid community" >Solid Community</MenuItem>
-                            <MenuItem value={"https://solidcommunity.net/login"}    aria-label="solid web" >Solid Web</MenuItem>
-                            <MenuItem value={"https://podbrowser.inrupt.com/login"}    aria-label="inrupt pod browser"  >Pod spaces browser</MenuItem>
+                            <MenuItem value={"https://solidcommunity.net/"}    aria-label="solid community" >Solid Community</MenuItem>
+                            <MenuItem value={"https://solidweb.org/login/"}    aria-label="solid web" >Solid Web</MenuItem>
+                            <MenuItem value={"https://login.inrupt.com"}    aria-label="inrupt pod browser"  >Pod spaces browser</MenuItem>
 
                         </Select>
                         <InputLabel>(Inrupt By default)</InputLabel>
@@ -59,5 +65,6 @@ const Login = () => {
         </Grid>
     );
 };
+
 
 export default Login;
