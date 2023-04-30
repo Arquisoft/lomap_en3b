@@ -21,12 +21,12 @@ const LogOut = ({ isLogOutVisible, onLogOut }) => {
     const handleAddButtonClick = () => {
         onLogOut();
     };
-    const handleLogOut = () => {
+   const handleLogOut = () => {
         onLogOut();
     };
 
     return (
-        <Container aria-label="Log out dialogue"name={"LogOutContainer"} style={style}>
+        <Container aria-label="Log out dialogue" name={"LogOutContainer"} style={style}>
 
             <Typography variant="h5">Are you sure you want to leave?</Typography>
          <Box name={'buttonsContainer'}  >

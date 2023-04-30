@@ -79,7 +79,8 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Sight"
+                   aria-label="Sight"
+                    label="Sight"
                />
                <FormControlLabel
                    control={<Checkbox
@@ -89,6 +90,7 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
+                   aria-label="Restaurant"
                    label="Restaurant"
                />
                <FormControlLabel
@@ -99,7 +101,8 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Monument"
+                   aria-label="Monument"
+                    label="Monument"
                />
                <FormControlLabel
                    control={<Checkbox
@@ -109,7 +112,8 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Park"
+                   aria-label="Park"
+                    label="Park"
                />
                <FormControlLabel
                    control={<Checkbox
@@ -119,8 +123,10 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
+                   aria-label="Bar"
                    label="Bar"
                />
+
                <FormControlLabel
                    control={<Checkbox
                        icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
@@ -129,7 +135,8 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Shop"
+                   aria-label="Shop"
+                    label="Shop"
                />
            </FormControl>
 
