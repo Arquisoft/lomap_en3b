@@ -11,6 +11,7 @@ import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
 import ErrorView from "./errorView"
+import MapErrorBoundary from "../components/MapErrorBoundry";
 
 
 
@@ -174,14 +175,18 @@ const MapView = ({session,onSearch}) => {
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
-        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} />
+        <MapErrorBoundary>
+          <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} />
+        </MapErrorBoundary>
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
 
 
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
         { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
+        <MapErrorBoundary>
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
+        </MapErrorBoundary>
           <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <InputBase
