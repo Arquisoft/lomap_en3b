@@ -41,7 +41,7 @@ const MapView = ({session,onSearch}) => {
   const [showEditList, setShowEditList] = useState(false); // track whether the edit list is being shown
   const [showInfoList, setShowInfoList] = useState(false); // track whether the info list is being shown
   const [showAccountPage, setShowAccountPage] = useState(false); // track whether the account page is being shown
-  const [searchValue, setSearchValue] = useState(''); // track the value of the search bar
+
   const [filterSideBar, setFilterSideBar] = useState(false); // track whether the filter sidebar is being shown
   const [selectedFilters, setSelectedFilters] = useState([]); // track which filters are selected
   const [markerData, setMarkerData] = useState([]); // track marker data for the list and comments
@@ -134,31 +134,9 @@ const MapView = ({session,onSearch}) => {
 
   };
 
-//Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-  }
 
-  //Arama kutusuna "Searrch Icon" tuşuna basıldığında tetiklenen fonksiyon
-  const handleSearchSubmit = (event) => {
-    event.preventDefault(); // Sayfanın yenilenmesini önlemek için varsayılan işlemi durduruyoruz.
-    const request = {
-      query: searchValue,
-      fields: ["name","geometry"],
-    };
-    const service = new window.google.maps.places.PlacesService(
-        document.createElement("div")
-    );
-    service.findPlaceFromQuery(request, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        const firstResult = results[0];
-        const { lat, lng } = firstResult.geometry.location;
-        onSearch(lat, lng);
-      } else {
-        console.log("Error Searching for Place");
-      }
-    });
-  };
+
+
   if (loadError) return <div> Error Loading Maps </div>;
 
   return (
@@ -187,19 +165,7 @@ const MapView = ({session,onSearch}) => {
         <MapErrorBoundary>
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
         </MapErrorBoundary>
-          <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <InputBase
-                  placeholder="Search Location"
-                  value={searchValue}
-                  onChange={handleSearchChange} // handleSearchChange fonksiyonunun çalışmasını sağlıyoruz
-                  style={{ marginRight: '1rem' }}
-              />
-              <IconButton type="submit" aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </div>
-          </form>
+          
         </Grid>}
       </Grid>
       </>
