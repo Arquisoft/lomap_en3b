@@ -43,20 +43,36 @@ const List = ({ isVisible, onAddMarker}) => {
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
     const[description,setDescription] = useState(""); //Picture
+    const [isValid,setIsValid] = useState(false);
+    const validationError = document.getElementById("validation-error");
+
 
     // Define a function to handle the "Finish" button click event
     const handleAddButtonClick = () => {
-        if (name !== '' && category !== '') {
+        if (isValid) {
             onAddMarker({ name, category, privacy,pic,description });//sends an object containing the new values to the Map component where we update the location
             setName('');
             setCategory('');
             setPrivacy('public');
             setPic("");
             setDescription("");
+            validationError.style.display = "none";
+            setIsValid(false);
 
 
+        }else{
+            validationError.style.display = "block";
         }
     };
+
+    React.useEffect(() => {
+        console.log(name);
+        if (name !== '' && category !== '') {
+            setIsValid(true);
+        } else {
+            setIsValid(false);
+        }
+    }, [name, category]);
 
 
     // Define a style object based on the visibility prop passed to the component
@@ -173,6 +189,9 @@ const List = ({ isVisible, onAddMarker}) => {
                        
                     />
                      </FormControl>
+                    <div id="validation-error" style={{ display: 'none',color: 'red' }}>
+                        Please complete name and type .
+                    </div>
                     <div style={{ display: 'flex', justifyContent: 'center'}}>
                         <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
                             handleAddButtonClick(); //event to know that the action is finoished
