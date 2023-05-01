@@ -21,7 +21,6 @@ export default  function App()
          await checkForLomap(session);
          //Todo if no folder, give the option to create it or to logout
         setIsLoggedIn(true);
-        await placeImageInContainer(session, "C:\\Users\\X421FA\\Documents\\tercero\\lomapen3b\\test.jpg", true);
     });
 //We have logged out
     session.onLogout(() => {

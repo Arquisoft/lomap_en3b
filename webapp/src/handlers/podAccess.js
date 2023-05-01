@@ -303,24 +303,6 @@ async function readReviews(resourceURL,session) {
 
 }
 
-export async function placeImageInContainer(session, image, isPrivate) {
-    let containerURL = session.info.webId.replace("/profile/card#me", "/");
-    if (isPrivate)
-        containerURL += "private/lomapen3b/images"
-    else
-        containerURL += "public/lomapen3b/images"
-
-    try {
-        const savedImage = await saveFileInContainer(containerURL, image, {
-            slug: image.toString(),
-            contentType: "jpg",
-            fetch: session.fetch
-        })
-    } catch (e) {
-        console.log(e);
-    }
-}
-
 export {
     writeLocations,
     readLocations

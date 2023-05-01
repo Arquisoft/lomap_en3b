@@ -14,7 +14,7 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt,
+    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess,
 
 
 } from "@inrupt/solid-client";
@@ -180,7 +180,13 @@ async function giveFriendsAccess(session, access) {
  async function setAccessToFriend(friend, location, access, session){
     let locationsURL = location + "locations.ttl";
     let reviewsURL = location + "reviews.ttl";
+    let imagesURL = location + "images/";
+
     await giveAccessToFile(locationsURL, friend, session);
+    await giveAccessToFile(reviewsURL, friend, session);
+    await giveAccessToFile(imagesURL, friend, session);
+    await giveDefaultAccessToFile(imagesURL, friend, session);
+
     // Fetch the SolidDataset and its associated ACL, if available:
     let myDatasetWithAcl;
     try {
@@ -226,6 +232,50 @@ async function giveFriendsAccess(session, access) {
     }
     catch (error){
         console.log(error)// catch any error
+    }
+}
+
+/**
+ * Sets the default access to a folder (the children of such folder inherit this access)
+ * @param resource folder to edit
+ * @param friend is given access
+ * @param session containing the current authenticated session
+ */
+async function giveDefaultAccessToFile(resource, friend, session) {
+    let myDatasetWithAcl;
+    try {
+        myDatasetWithAcl = await getSolidDatasetWithAcl(resource, {fetch: session.fetch}); // inventory
+        // Obtain the SolidDataset's own ACL, if available, or initialise a new one, if possible:
+        let resourceAcl;
+        if (!hasResourceAcl(myDatasetWithAcl)) {
+            if (!hasAccessibleAcl(myDatasetWithAcl)) {
+                //  "The current user does not have permission to change access rights to this Resource."
+            }
+            if (!hasFallbackAcl(myDatasetWithAcl)) {
+                // create new access control list
+                resourceAcl = createAcl(myDatasetWithAcl);
+            }
+            else{
+                // create access control list from fallback
+                resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
+            }
+        } else {
+            // get the access control list of the dataset
+            resourceAcl = getResourceAcl(myDatasetWithAcl);
+        }
+
+        let updatedAcl;
+        // grant permissions
+        updatedAcl = setAgentDefaultAccess(
+            resourceAcl,
+            friend,
+            { read: true, append: true, write: false, control: false }
+        );
+        // save the access control list
+        await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
+    }
+    catch (error){ // catch any possible thrown errors
+        console.log(error)
     }
 }
 
