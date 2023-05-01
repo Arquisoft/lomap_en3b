@@ -1,0 +1,29 @@
+div [name='LogOutContainer'] {
+    display: grid;
+    grid-template-columns: auto  ;
+    grid-template-rows:2em 2em;
+    grid-row-gap: 2rem;
+    grid-column-gap: 1em;
+    background-color:  #ffffff;
+    border-radius: 1rem;
+    width:auto;
+    height: auto;
+    margin: 10vh 4vw 4vw 4vh ;
+    padding: 4vh 1.5vw 1.5vw 4vh;
+
+}
+h5{
+    grid-row:1;
+    grid-column: 1/5;
+}
+div[name='buttonsContainer'] {
+    grid-row: 2;
+    display:flex;
+    flexDirection:row;
+
+}
+button[name="logOutBtn"] {
+    margin-left:2vw;
+    margin-right:2vw;
+
+}

@@ -1,8 +1,9 @@
 name: CI for LOMAP_EN3B
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - 'master'
 
 jobs:
  unit-test-webapp:
@@ -44,12 +45,15 @@ jobs:
       - uses: actions/checkout@v3
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@v5
+        env:
+          REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.MAPS_KEY }}
         with:
           name: arquisoft/lomap_en3b/webapp
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
           workdir: webapp
+
  deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
