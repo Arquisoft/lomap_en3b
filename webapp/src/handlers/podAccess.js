@@ -13,7 +13,7 @@ import {
 } from "@inrupt/solid-client";
 import {SCHEMA_LOMAP} from "../util/schema";
 import {LocationLM} from "../models/location";
-import {ReviewLM} from "../models/new/review";
+import {ReviewLM} from "../models/review";
 import {
     convertDomainModelLocationIntoPODLocation, convertDomainModelReviewIntoPODReview,
     convertPODLocationIntoDomainModelLocation,
@@ -68,6 +68,23 @@ export async function readLocations(resourceURL,session, userIDWeb) {
 
 }
 
+export async function writeLocationWithImg(resourceURL, session, loc, imgResourceURL) {
+    writeLocation(resourceURL, session, loc)
+        .then(() => {
+            window.alert("Location saved");
+
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    return saveImageToPod(imgResourceURL, session, loc.img, loc.locID.concat(".png"))
+}
+
+export async function writeLocationWithoutImg(resourceURL, session, loc) {
+    return writeLocation(resourceURL, session, loc);
+}
+
+
 /**
  * This method save a Location into the user's pod inside a given URL
  * @param {String} resourceURL The URL of the SolidDataset where to store the Location
@@ -75,7 +92,7 @@ export async function readLocations(resourceURL,session, userIDWeb) {
  * @param {LocationLM} loc - The location with the data to store
  * @returns {Promise<void>}
  */
-export async function writeLocation(resourceURL, session, loc) {
+async function writeLocation(resourceURL, session, loc) {
     //Get dataSet
     let dataset = await getDataset(resourceURL, session);
 

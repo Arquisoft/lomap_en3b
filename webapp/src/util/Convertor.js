@@ -4,7 +4,7 @@ import {SCHEMA_LOMAP} from "./schema";
 import {ReviewLM} from "../models/review";
 
 //Convert from view to domain (1)
-function convertViewLocationIntoDomainModelLocation(viewobj, userID) {
+export function convertViewLocationIntoDomainModelLocation(viewobj, userID) {
     return new LocationLM(
         viewobj.lat,            // CoorLat,
         viewobj.lng,            // CoorLng,
@@ -17,7 +17,7 @@ function convertViewLocationIntoDomainModelLocation(viewobj, userID) {
     );
 }
 //Convert from domain to view (1)
-function convertDomainModelLocationIntoViewLocation(dmObj, pos) {
+export function convertDomainModelLocationIntoViewLocation(dmObj, pos) {
     return {
         key: pos,
         lat: dmObj.lat,
@@ -74,11 +74,11 @@ export function convertPODLocationIntoDomainModelLocation (podObj, userID) {
 }
 
 //Convert from view to domain (1)
-function convertViewReviewIntoDomainModelReview(viewobj, userID) {
+export function convertViewReviewIntoDomainModelReview(viewobj, userID) {
     //TODO:
 }
 //Convert from domain to view (1)
-function convertDomainModelReviewIntoViewReview(dmObj, pos) {
+export function convertDomainModelReviewIntoViewReview(dmObj, pos) {
     //TODO:
 }
 //Convert from domain to POD (1)

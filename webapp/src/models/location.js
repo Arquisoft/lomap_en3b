@@ -1,7 +1,9 @@
 import {v4 as uuidv4} from "uuid";
-import {checkCoordinates, checkStringInvalidFormat, is_in_city} from "../../util/utilMethods";
+import {checkCoordinates, checkStringInvalidFormat, is_in_city} from "../util/utilMethods";
 
 export class LocationLM {
+    locOwner;
+    img;
     /**
      * Creates a new LocationLM object with the specified parameters.
      *
@@ -27,7 +29,7 @@ export class LocationLM {
         this.category = cat;
         checkStringInvalidFormat(priv, 'privacy' );
         this.privacy = priv;
-        this.dateTime = date;
+        this.dateTime = new Date(date);
         this.locOwner = owner;
         this.locID = id;
     }

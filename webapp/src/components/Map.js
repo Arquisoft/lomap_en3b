@@ -9,15 +9,9 @@ import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 import {getFriendsWebIds} from "../handlers/podHandler";
-import {
-    createSolidDataset,
-    createThing,
-    setThing,
-    addUrl,
-    saveSolidDatasetAt,
-    saveFileInContainer
-} from '@inrupt/solid-client';
-import { VCARD } from '@inrupt/vocab-common-rdf';
+import {Controller} from "../handlers/controller";
+import {convertViewLocationIntoDomainModelLocation} from "../util/Convertor";
+
 // setting the width and height of the <div> around the google map
 const containerStyle = {
     width: '100vw',
@@ -71,7 +65,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
-    
+    const controlMng = new Controller(session);
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -166,7 +160,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
 
             const lastMarker = current[current.length - 1];
-            //console.log(lastMarker);
+            console.log(lastMarker);
+
             const marker = markerData[0]; // Access the object inside the array
 
             lastMarker.name = marker.name;
@@ -175,8 +170,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.pic=marker.pic;
             lastMarker.description=marker.description;
 
-            //We are only adding one, the last one
-            saveLocations(lastMarker);
+            //TODO : It works here !
+            saveLocations(lastMarker.lat, lastMarker.lng, lastMarker.name, lastMarker.description, lastMarker.category, lastMarker.privacy);
 
             return [...current];
         });
@@ -200,21 +195,29 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.privacy = marker.privacy;
             lastMarker.pic=marker.pic;
             lastMarker.description=marker.description;
-
-
             return [...current];
         });
-       
+        //We are only adding one, the last one
+        //saveLocations(originalMarkers[originalMarkers.length -1]);
+
     };
 
 
-    const saveLocations = (viewLocat) => {
-        //Create locationLM with marker data
-
-        //Update Controller
-
-        //Save into the POD (async)
-
+    const saveLocations = (lat, lng, name, description, category, privacy) => {
+        console.log("I get: ");
+        console.log(lat, lng, name, description, category, privacy)
+        //TODO: Add check bc it is call two times.
+        /*
+        if(viewLocat) {
+            //Create locationLM with marker data
+            let loc = convertViewLocationIntoDomainModelLocation(viewLocat);
+            loc.img = viewLocat.pic;
+            //Update Controller
+            controlMng.addLocation(loc);
+            //Save into the POD (async)
+            controlMng.saveToPODLocation(loc);
+        }
+         */
     }
 
     //function to update the comments

@@ -1,4 +1,4 @@
-import {checkStringInvalidFormat} from "../../util/utilMethods";
+import {checkStringInvalidFormat} from "../util/utilMethods";
 
 export class User {
     locations = new Map(); // a map to store the user's locations

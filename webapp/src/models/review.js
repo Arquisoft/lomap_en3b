@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-import {checkStringInvalidFormat} from "../../util/utilMethods";
+import {checkStringInvalidFormat} from "../util/utilMethods";
 
 export class ReviewLM{
     revID;
@@ -21,6 +21,6 @@ export class ReviewLM{
         this.ItemReviewed = locatID;
         checkStringInvalidFormat(user, 'user' );
         this.user = user;
-        this.time = date;
+        this.time = new Date(date);
     }
 }

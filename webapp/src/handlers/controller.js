@@ -1,4 +1,5 @@
-import {User} from "../models/new/user";
+import {User} from "../models/user";
+import {writeLocationWithImg, writeLocationWithoutImg} from "./podAccess";
 
 export class Controller {
     /**
@@ -15,7 +16,7 @@ export class Controller {
      * list of locations nothing is added
      * @param {LocationLM} loc - The location to add.
      */
-    newAddLocation (loc){
+    addLocation (loc){
         this.user.addLocation(loc)
     }
 
@@ -38,7 +39,7 @@ export class Controller {
      * Adds a new review to the user's list of reviews.
      * @param {ReviewLM} rev - The review to add.
      */
-    newAddReview (rev){
+    addReview (rev){
         this.user.addReview(rev)
     }
 
@@ -59,7 +60,35 @@ export class Controller {
         listLocs.forEach( (loc) => {
             //Add location
             console.log(loc);
-            this.newAddLocation(loc);
+            this.addLocation(loc);
         });
+    }
+
+    /**
+     * This method saves the image inside the user pod. When saved, it wil display a message.
+     * @param {LocationLM} loc location to save inside the user's pod
+     */
+    saveToPODLocation(loc) {
+        if(loc.img) {
+            let resourceURL = this.user.userWebId.concat(loc.privacy).concat(this.user.locResourceURL);
+            let resourceIMGURL = this.user.userWebId.concat(loc.privacy).concat(this.user.imgResourceURL);
+            writeLocationWithImg(resourceURL, this.session, loc, resourceIMGURL)
+                .then(() => {
+                    window.alert("Image saved");
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        } else {
+            let resourceURL = this.user.userWebId.concat(loc.privacy).concat(this.user.locResourceURL);
+            writeLocationWithoutImg(resourceURL, this.session, loc)
+                .then(() => {
+                    window.alert("Location saved");
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+        }
     }
 }
