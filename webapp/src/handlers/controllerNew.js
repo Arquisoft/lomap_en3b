@@ -51,5 +51,16 @@ export class Controller {
         //TODO: How can be this be done?
     }
 
+    /**
+     * This method add a list of location retrived from the pod to the user's list of locations
+     * @param {LocationLM[]} listLocs list of locations from the pod
+     */
+    saveLocationsFromPOD(listLocs){
+        listLocs.forEach( (loc) => {
+            //Add location
+            console.log(loc);
+            this.newAddLocation(loc);
+        });
+    }
 
 }
