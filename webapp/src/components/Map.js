@@ -160,7 +160,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
 
             const lastMarker = current[current.length - 1];
-            console.log(lastMarker);
+            //console.log(lastMarker);
 
             const marker = markerData[0]; // Access the object inside the array
 
@@ -204,9 +204,25 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
 
     const saveLocations = (lat, lng, name, description, category, privacy) => {
+        /*
         console.log("I get: ");
         console.log(lat, lng, name, description, category, privacy)
+        let market = originalMarkers[originalMarkers.length - 1]
+        controlMng.tryMethd(lat, lng, name, description, category, privacy, market);
+         */
         //TODO: Add check bc it is call two times.
+        let market = originalMarkers[originalMarkers.length - 1]
+        //console.log("I get: ");
+        //console.log(market);
+        if (market){
+            //Create locationLM with marker data
+            let loc = convertViewLocationIntoDomainModelLocation(market, controlMng.user.userWebId);
+            loc.img = market.pic;
+            if (controlMng.canBeLocationAdded(loc)){
+                controlMng.addLocation(loc);
+                controlMng.saveToPODLocation(loc);
+            }
+        }
         /*
         if(viewLocat) {
             //Create locationLM with marker data

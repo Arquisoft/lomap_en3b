@@ -69,19 +69,12 @@ export async function readLocations(resourceURL,session, userIDWeb) {
 }
 
 export async function writeLocationWithImg(resourceURL, session, loc, imgResourceURL) {
-    writeLocation(resourceURL, session, loc)
-        .then(() => {
-            window.alert("Location saved");
-
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    return saveImageToPod(imgResourceURL, session, loc.img, loc.locID.concat(".png"))
+    //TODO: Redo to make the image refer in the location thing
+    return writeLocation(resourceURL, session, loc, true, imgResourceURL)
 }
 
 export async function writeLocationWithoutImg(resourceURL, session, loc) {
-    return writeLocation(resourceURL, session, loc);
+    return writeLocation(resourceURL, session, loc, false);
 }
 
 
@@ -92,12 +85,24 @@ export async function writeLocationWithoutImg(resourceURL, session, loc) {
  * @param {LocationLM} loc - The location with the data to store
  * @returns {Promise<void>}
  */
-async function writeLocation(resourceURL, session, loc) {
+async function writeLocation(resourceURL, session, loc, cond, imgResourceURL = '') {
     //Get dataSet
     let dataset = await getDataset(resourceURL, session);
 
     //Create Thing
     let locationThing = convertDomainModelLocationIntoPODLocation(loc);
+
+    if(cond) {
+        let name = loc.locID.concat(".png")
+        //Save image file into POD and get URL
+        await saveImageToPod(imgResourceURL, session, loc.img, name);
+
+        //URL where it saved //TODO: CHECK if it's like this
+        let imageUrl = imgResourceURL.concat("/").concat(name);
+
+        locationThing = addUrl(locationThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
+    }
+
 
     //Add Thing into DataSet
     dataset = setThing(dataset, locationThing);

@@ -69,6 +69,7 @@ export class Controller {
      * @param {LocationLM} loc location to save inside the user's pod
      */
     saveToPODLocation(loc) {
+        console.log(loc);
         if(loc.img) {
             let resourceURL = this.user.userWebId.concat(loc.privacy).concat(this.user.locResourceURL);
             let resourceIMGURL = this.user.userWebId.concat(loc.privacy).concat(this.user.imgResourceURL);
@@ -80,6 +81,7 @@ export class Controller {
                     console.error(error);
                 });
         } else {
+            console.log("Esta");
             let resourceURL = this.user.userWebId.concat(loc.privacy).concat(this.user.locResourceURL);
             writeLocationWithoutImg(resourceURL, this.session, loc)
                 .then(() => {
@@ -90,5 +92,12 @@ export class Controller {
                 });
 
         }
+    }
+
+
+    tryMethd(lat, lng, name, description, category, privacy, loc){
+        console.log("I get: ");
+        console.log(lat, lng, name, description, category, privacy)
+        console.log(loc);
     }
 }
