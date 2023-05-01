@@ -1,46 +1,129 @@
+import {buildThing, createThing, getStringNoLocale} from "@inrupt/solid-client";
 import {LocationLM} from "../models/location";
-export function convertViewObjectIntoDomainModelObject(viewobj){
-    let privacy = true;
-    if(viewobj.privacy === 'public'){
-        privacy = false;
-    }
+import {SCHEMA_LOMAP} from "./schema";
+import {ReviewLM} from "../models/review";
+
+//Convert from view to domain (1)
+function convertViewLocationIntoDomainModelLocation(viewobj, userID) {
     return new LocationLM(
-        viewobj.lat,
-        viewobj.lng,
-        viewobj.name,
-        viewobj.description,
-        viewobj.category,
-        privacy,
-        viewobj.rate
+        viewobj.lat,            // CoorLat,
+        viewobj.lng,            // CoorLng,
+        viewobj.name,           // name,
+        viewobj.description,    // description,
+        viewobj.category,       // category
+        viewobj.privacy,        // privacy
+        viewobj.time,            // date
+        userID
     );
 }
-export function convertDomainModelObjectIntoViewObject(dmobj){
-return {
-    lat: dmobj.lat,
-    lng: dmobj.lat,
-    time: new Date(),
-    description: dmobj.description,
-    name: dmobj.name,
-    category: dmobj.category,
-    privacy: dmobj.privacyText(),
-    rate: dmobj.rating,
-
-};
+//Convert from domain to view (1)
+function convertDomainModelLocationIntoViewLocation(dmObj, pos) {
+    return {
+        key: pos,
+        lat: dmObj.lat,
+        lng: dmObj.lng,
+        time: dmObj.dateTime,
+        description: dmObj.description,
+        pic: dmObj.pic,
+        name: dmObj.name,
+        category: dmObj.category,
+        privacy: dmObj.privacy,
+        locOwner: dmObj.owner,
+        rate: '',
+        comments: []
+    };
 }
-export function convertViewObjectsIntoDomainModelObjects(viewobjs){
+//Convert from domain to POD (1)
+export function convertDomainModelLocationIntoPODLocation(dmObj){
+    return buildThing(createThing({ name: dmObj.locID }))
+        .addStringNoLocale(SCHEMA_LOMAP.name, dmObj.name)
+        .addStringNoLocale(SCHEMA_LOMAP.loc_latitude, dmObj.lat)
+        .addStringNoLocale(SCHEMA_LOMAP.loc_longitude, dmObj.lng)
+        .addStringNoLocale(SCHEMA_LOMAP.descrip, dmObj.description)
+        .addStringNoLocale(SCHEMA_LOMAP.ident, "".concat(dmObj.locID))
+        .addStringNoLocale(SCHEMA_LOMAP.category, dmObj.category)
+        .addStringNoLocale(SCHEMA_LOMAP.dateModified, dmObj.dateTime)     // time
+        .addStringNoLocale(SCHEMA_LOMAP.accessCode, dmObj.privacy)    // privacy
+        .addUrl(SCHEMA_LOMAP.type, SCHEMA_LOMAP.place)
+        .build();
+}
+
+//Convert from domain to POD (n)
+export function convertDomainModelLocationsIntoPODLocations(dmObjs) {
     let ret = [];
-    viewobjs.forEach( (obj) =>
+    dmObjs.forEach( (loc) =>
     {
-        ret.push(convertViewObjectIntoDomainModelObject(obj));
+        ret.push(convertDomainModelLocationIntoPODLocation(loc));
     });
+
     return ret;
 }
-export function convertDomainModelObjectsIntoViewObjects(dmobjs){
-    let ret = [];
-    dmobjs.forEach( (obj) =>
-    {
-        ret.push(convertViewObjectIntoDomainModelObject(obj));
-    });
-    return ret;
+//Convert from POD to domain (n)
+export function convertPODLocationIntoDomainModelLocation (podObj, userID) {
+    return new LocationLM(
+        Number(getStringNoLocale(podObj, SCHEMA_LOMAP.loc_latitude)),       // CoorLat,
+        Number(getStringNoLocale(podObj, SCHEMA_LOMAP.loc_longitude)),      // CoorLng,
+        getStringNoLocale(podObj, SCHEMA_LOMAP.name),                       // name,
+        getStringNoLocale(podObj, SCHEMA_LOMAP.descrip),                    // description,
+        getStringNoLocale(podObj, SCHEMA_LOMAP.category),                   // category
+        getStringNoLocale(podObj, SCHEMA_LOMAP.accessCode),                 // privacy
+        getStringNoLocale(podObj, SCHEMA_LOMAP.dateModified),               // date
+        userID,                                                             // owner
+        getStringNoLocale(podObj, SCHEMA_LOMAP.ident)                      // id
+    );
+}
 
+//Convert from view to domain (1)
+function convertViewReviewIntoDomainModelReview(viewobj, userID) {
+    //TODO:
+}
+//Convert from domain to view (1)
+function convertDomainModelReviewIntoViewReview(dmObj, pos) {
+    //TODO:
+}
+//Convert from domain to POD (1)
+export function convertDomainModelReviewIntoPODReview(dmObj, user, locId, privacy){
+    return buildThing(createThing({ name: dmObj.revID }))
+        .addStringNoLocale(SCHEMA_LOMAP.rev_comment, dmObj.comment)
+        .addStringNoLocale(SCHEMA_LOMAP.rev_rate, dmObj.rate)
+        .addStringNoLocale(SCHEMA_LOMAP.rev_reviewer, user)
+        .addStringNoLocale(SCHEMA_LOMAP.ident, "".concat(dmObj.revID))
+        .addStringNoLocale(SCHEMA_LOMAP.rev_date, dmObj.time)     //time
+        .addStringNoLocale(SCHEMA_LOMAP.rev_locat, locId)
+        .addStringNoLocale(SCHEMA_LOMAP.accessCode, privacy)    // privacy
+        .addUrl(SCHEMA_LOMAP.type, SCHEMA_LOMAP.review)
+        .build();
+}
+
+//Convert from domain to POD (n)
+export function convertDomainModelReviewsIntoPODReviews(dmObjs) {
+    let ret = [];
+    dmObjs.forEach( (loc) =>
+    {
+        ret.push(convertDomainModelReviewIntoPODReview(loc));
+    });
+
+    return ret;
+}
+//Convert from POD to domain (n)
+export function convertPODReviewIntoDomainModelReview (podObj) {
+    let review = new ReviewLM(
+        getStringNoLocale(podObj, SCHEMA_LOMAP.rev_locat),          // locatID
+        getStringNoLocale(podObj, SCHEMA_LOMAP.rev_reviewer),       // user
+        getStringNoLocale(podObj, SCHEMA_LOMAP.dateModified),       // date
+        getStringNoLocale(podObj, SCHEMA_LOMAP.ident)               // reviewID
+
+    );
+    // comment
+    let com = getStringNoLocale(podObj, SCHEMA_LOMAP.rev_comment);
+    if(com){
+        review.comment = com;
+    }
+    // rate
+    let rate = getStringNoLocale(podObj, SCHEMA_LOMAP.rev_rate);
+    if(rate){
+        review.rate = Number(rate);
+    }
+
+    return review;
 }

@@ -1,53 +1,65 @@
-import {SessionManager} from "./sessionManager";
-import {convertDomainModelObjectsIntoViewObjects} from "../util/Convertor";
+import {User} from "../models/new/user";
 
-class Controller{
-    sessionMng;
-    setSession(session) {
-        this.sessionMng = new SessionManager(session);
+export class Controller {
+    /**
+     * Creates a new Controller instance.
+     * @param {*} sessionGiven - The session object.
+     */
+    constructor(sessionGiven){
+        this.session = sessionGiven;
+        this.user = new User(sessionGiven);
     }
 
-    getSession(){
-        return this.sessionMng.session;
+    /**
+     * Adds a new location to the user's list of locations. If the location already exists in the user's
+     * list of locations nothing is added
+     * @param {LocationLM} loc - The location to add.
+     */
+    newAddLocation (loc){
+        this.user.addLocation(loc)
     }
 
-    async logIn() {
-        //Get Data From POD
-        await this.sessionMng.setUpSessionData();
-        return this;
+    /**
+     * Checks if a location can be added to the user's list of locations.
+     * @param {LocationLM} loc - The location to check.
+     * @returns {boolean} - True if the location can be added, false otherwise.
+     */
+    canBeLocationAdded(loc){
+        for (let value of this.user.locations.values()){
+            if(value.name === loc.name && value.lat === loc.lat
+                && value.lng === loc.lng && value.privacy === loc.privacy){
+                return false;
+            }
+        }
+        return true;
     }
 
-    logOut(){
-        //save data into POD
-        this.sessionMng.saveSessionData();
+    /**
+     * Adds a new review to the user's list of reviews.
+     * @param {ReviewLM} rev - The review to add.
+     */
+    newAddReview (rev){
+        this.user.addReview(rev)
     }
 
-    requestLocations(){
-        //Get sessionMng.get User's Locations
-        return convertDomainModelObjectsIntoViewObjects(this.sessionMng.requestLocations());
+    /**
+     * Checks if a review can be added to the user's list of reviews.
+     * @param {ReviewLM} rev - The review to check.
+     * @returns {boolean} - True if the review can be added, false otherwise.
+     */
+    canBeReviewAdded(rev){
+        //TODO: How can be this be done?
     }
 
-    requestReviewToLocation(locId){
-        //Get sessionMng.get User's Review to Location
-        return this.sessionMng.requestReviewToLocation(locId);
+    /**
+     * This method add a list of location retrived from the pod to the user's list of locations
+     * @param {LocationLM[]} listLocs list of locations from the pod
+     */
+    saveLocationsFromPOD(listLocs){
+        listLocs.forEach( (loc) => {
+            //Add location
+            console.log(loc);
+            this.newAddLocation(loc);
+        });
     }
-
-    addLocation(CoorLat, CoorLng, name, description, category, privacy){
-        //sessionMng -> Set new Location in user
-        this.sessionMng.addLocation(CoorLat, CoorLng, name, description, category,privacy);
-    }
-
-    addCommentToLocation(locId, cmmt, privacy){
-        //sessionMng -> Set comment in Review (in user's location)
-        this.sessionMng.addCommentToLocation(locId, cmmt, privacy);
-    }
-
-    addScoreToLocation(locId, scr, privacy){
-        //sessionMng -> Set comment in Review (in user's location)
-        this.sessionMng.addScoreToLocation(locId, scr, privacy);
-    }
-}
-
-export{
-    Controller,
 }

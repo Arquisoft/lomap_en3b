@@ -1,239 +1,34 @@
-import{
-    User
-} from "../models/user";
-import{
-    Review
-} from "../models/review";
-
-// Import from "@inrupt/solid-client"
+import {v4 as uuidv4} from "uuid";
 import {
-    createThing,
-    saveSolidDatasetAt,
-    setThing,
     buildThing,
     createSolidDataset,
-    getThingAll,
+    getFile,
     getSolidDataset,
-    removeThing,
-    getStringNoLocale, getThing, addUrl, addStringNoLocale
+    saveSolidDatasetAt,
+    setThing,
+    saveFileInContainer,
+    addUrl,
+    getThingAll,
+    getUrl
 } from "@inrupt/solid-client";
-import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
-import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
-import {checkForLomap} from "./podHandler";
+import {SCHEMA_LOMAP} from "../util/schema";
 import {LocationLM} from "../models/location";
-import {CoordinatesInvalidFormatException, StringInvalidFormatException} from "../util/Exceptions/exceptions";
+import {ReviewLM} from "../models/new/review";
+import {
+    convertDomainModelLocationIntoPODLocation, convertDomainModelReviewIntoPODReview,
+    convertPODLocationIntoDomainModelLocation,
+    convertPODReviewIntoDomainModelReview
+} from "../util/Convertor";
 
-async function writeLocations(resourceFirst, resourcePath, session, list) {
-    let publicUsed = false;
-    let privateUsed = false;
-    let dataset;
-
-    //Iterates the list
-    for (const loc of list) {
-        let resourceURL = resourceFirst.concat(loc.privacy).concat(resourcePath);
-        //GetDataSet - And remove the first time
-        if((loc.privacy === 'public' && !publicUsed) || (loc.privacy === 'private' && !privateUsed)){
-            //Get dataSet and Remove content
-            dataset= await getDatasetAndRemoveContent(resourceURL,session);
-
-            if((loc.privacy === 'public' && !publicUsed)){
-                publicUsed = true;
-            } else{
-                privateUsed = true;
-            }
-        } else {
-            //Get dataSet
-            dataset= await getDataset(resourceURL,session);
-        }
-        //Create Thing
-        let locationThing = buildThing(createThing({ name: loc.name }))
-            .addUrl(RDF.type, "https://schema.org/Place")
-            .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
-            .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
-            .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
-            .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
-            .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.key)
-            .addStringNoLocale(SCHEMA_INRUPT.dateModified, loc.time)//time
-            .addStringNoLocale(SCHEMA_INRUPT.accessCode, loc.privacy)//privacy
-            .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
-
-            // date (?) - We need to think if it's needed.
-            .build();
-        //Add Thing into DataSet
-        dataset = setThing(dataset, locationThing);
-
-        //Save dataSet into POD
-        try {
-            // Save the SolidDataset
-            await saveSolidDatasetAt(
-                resourceURL,
-                dataset,
-                {fetch: session.fetch}      // fetch from authenticated Session
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    window.alert("Saved");
-
-}
-
-async function getDatasetAndRemoveContent(resourceURL,session){
-    let dataset,items;
-    //Get DataSet
-    dataset = await getDataset(resourceURL,{fetch:session.fetch})
-    items = getThingAll(dataset);
-    // Clear the list to override the whole list
-    items.forEach((item) => {
-        dataset = removeThing(dataset, item);
-    });
-    return dataset;
-}
-async function getDataset(resourceURL,session){
-    let dataset,items;
-    try {
-        //Get DataSet
-        dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
-    } catch (error) {
-        if (typeof error.statusCode === "number" && error.statusCode === 404) {
-            // if not found, create a new SolidDataset
-            dataset = createSolidDataset();
-        } else {
-            console.error(error.message);
-        }
-    }
-    return dataset;
-}
-async function writeReviews(user) {
-    user.getReviews();
-    await writeUserReviews(user.resourceURLPublic, user.publicReviews);
-    await writeUserReviews(user.resourceURLPrivate, user.privateReviews);
-}
-
+/* ------------------- LOCATION ------------------- */
 /**
- *  This method saves in a given path the user's locations
- * @param {String} resourceURL user's POD path
- * @param {Array.<LocationLM>} list list of locations to save
- * @returns {null}
+ * This method returns a list od LocationLM locations that are read from the user's pod
+ * @param {String} resourceURL The URL of the SolidDataset from where to retrieve the locations
+ * @param {*} session - The authentication session used to access the user's pod.
+ * @param {String} userIDWeb - Owner of the locations
+ * @returns {Promise<*[]>}
  */
-async function writeLocIntoPOD(resourceURL, list, session) {
-    let mySolidDataset;
-    try {
-        //Get existing dataSet
-        let mySolidDataset = await getSolidDataset(resourceURL,
-            {fetch: session.fetch}
-            // { fetch: fetch } //Other way
-        );
-        // Clear the list to override the whole list
-        let items = getThingAll(mySolidDataset);
-        items.forEach((item) => {
-            mySolidDataset = removeThing(mySolidDataset, item);
-        });
-    } catch (error) {
-        if (typeof error.statusCode === "number" && error.statusCode === 404) {
-            // if not found, create a new SolidDataset (i.e., the reading list)
-            mySolidDataset = createSolidDataset();
-        } else {
-            console.error(error.message);
-        }
-    }
-    list.forEach(loc => {
-            // Create a New Thing to Add
-            let locationThing = buildThing(createThing({name: loc.locID}))
-                .addStringNoLocale(SCHEMA_INRUPT.name, loc.name)
-                .addStringNoLocale(SCHEMA_INRUPT.latitude, loc.lat)
-                .addStringNoLocale(SCHEMA_INRUPT.longitude, loc.lng)
-                .addStringNoLocale(SCHEMA_INRUPT.description, loc.description)
-                .addStringNoLocale(SCHEMA_INRUPT.identifier, loc.locID)
-                .addStringNoLocale(SCHEMA_INRUPT.alternateName, loc.category)
-
-                // date (?) - We need to think if it's needed.
-                .addUrl(RDF.type, "https://schema.org/Place")
-                .build();
-            // Update the SolidDataset with New Things
-            mySolidDataset = setThing(mySolidDataset, locationThing);
-        }
-    );
-    // Save the SolidDataset
-    /*    const savedSolidDataset = */
-    await saveSolidDatasetAt(
-        resourceURL,
-        mySolidDataset,
-        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
-        //{ fetch: fetch } //Other way
-    );
-    return null;
-}
-
-async function writeUserReviews(resourceURL, list) {
-
-    let myReviewSolidDataset;
-    try {
-        //Get existing dataSet
-        let myReviewSolidDataset = await getSolidDataset(resourceURL,
-            {fetch: getDefaultSession().fetch}
-            // { fetch: fetch } //Other way
-        );
-        // Clear the list to override the whole list
-        let items = getThingAll(myReviewSolidDataset);
-        items.forEach((item) => {
-            myReviewSolidDataset = removeThing(myReviewSolidDataset, item);
-        });
-    } catch (error) {
-        if (typeof error.statusCode === "number" && error.statusCode === 404) {
-            // if not found, create a new SolidDataset (i.e., the reading list)
-            myReviewSolidDataset = createSolidDataset();
-        } else {
-            console.error(error.message);
-        }
-    }
-
-    for (const rev of list) {
-        // Create a New Thing to Add
-        let locationThing = buildThing(createThing({name: rev.revID}))
-            // ->   | revID
-            .addStringNoLocale(SCHEMA_INRUPT.identifier, rev.revID)
-            // Get Thing associated -> about  | locationID
-            .addStringNoLocale("https://schema.org/about", rev.locationID)
-            // -> (?)  | revScore
-            .addStringNoLocale(SCHEMA_INRUPT.value, rev.revScore)
-            // -> text  | revComment
-            .addStringNoLocale("https://schema.org/text", rev.getCommentsToPOD())
-            //This needs to be an url -> image  | revImg
-            .addStringNoLocale("https://schema.org/image", rev.revImg)
-            .addUrl(RDF.type, "https://schema.org/Review")
-            .build();
-        // Update the SolidDataset with New Things
-        myReviewSolidDataset = setThing(myReviewSolidDataset, locationThing);
-    }
-    // Save the SolidDataset
-    /*    const savedSolidDataset = */
-    await saveSolidDatasetAt(
-        resourceURL,
-        myReviewSolidDataset,
-        {fetch: getDefaultSession().fetch}      // fetch from authenticated Session
-        //{ fetch: fetch } //Other way
-    );
-    return null;
-}
-
-
-async function getThingsFromDataset(resourceURL,session){
-    let dataset,allThings;
-     dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
-    allThings=getThingAll(dataset);
-    return allThings;
-
-
-
-}
-/**
- * This method reads from the user's Solid POD.
- * @param {string} resourceURL is the path within the pod where to write. It must be like: path/fileName
- * @param session
- * @returns a list of locations
- */
-async function readLocations(resourceURL,session) {
+export async function readLocations(resourceURL,session, userIDWeb) {
     let locationThings=await getThingsFromDataset(resourceURL,session);
     let location,locationThing;
     let locationsRetrieved = [];
@@ -244,27 +39,26 @@ async function readLocations(resourceURL,session) {
             locationThing =locationThings[i];
 
             try {
-
                 //Convert into LocationLM object
-                location= new LocationLM(
-                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.latitude)),   // CoorLat,
-                    Number(getStringNoLocale(locationThing, SCHEMA_INRUPT.longitude)),  // CoorLng,
-                    getStringNoLocale(locationThing,SCHEMA_INRUPT.name),                // name,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.description),        // description,
-                    getStringNoLocale(locationThing, SCHEMA_INRUPT.alternateName),      // category
-                );
+                location= convertPODLocationIntoDomainModelLocation(locationThing, userIDWeb)
+                location.locOwner = userIDWeb;
 
                 //Add locationLM into List
                 locationsRetrieved.push(location);
 
             } catch (error) {
-                if (error instanceof CoordinatesInvalidFormatException || error instanceof StringInvalidFormatException) {
-                    console.error(error.message);
-                    //Todo :handle?
-
-                } else {
-                    console.error(error.message);
+                //TODO:
+                /*
+                if (error instanceof StringInvalidFormatException ) {
+                    //TODO: Some argument where not valid
+                    console.error('StringInvalidFormatException:', error.message);
+                } else if (error instanceof CoordinateNotInDomain){
+                    //TODO: Some argument where not valid
+                    console.error('CoordinateNotInDomain:', error.message);
+                }else{
+                    console.error(error);
                 }
+                 */
             }
         }
     }
@@ -274,41 +68,272 @@ async function readLocations(resourceURL,session) {
 
 }
 
-async function readReviews(resourceURL,session) {
-    let reviewThings = await getThingsFromDataset(resourceURL, session);
-    let review, reviewThing;
+/**
+ * This method save a Location into the user's pod inside a given URL
+ * @param {String} resourceURL The URL of the SolidDataset where to store the Location
+ * @param {*} session - The authentication session used to access the user's pod.
+ * @param {LocationLM} loc - The location with the data to store
+ * @returns {Promise<void>}
+ */
+export async function writeLocation(resourceURL, session, loc) {
+    //Get dataSet
+    let dataset = await getDataset(resourceURL, session);
+
+    //Create Thing
+    let locationThing = convertDomainModelLocationIntoPODLocation(loc);
+
+    //Add Thing into DataSet
+    dataset = setThing(dataset, locationThing);
+
+    //Save dataSet into POD
+    await saveNew(resourceURL, dataset, session);
+}
+
+/* ------------------- REVIEW ------------------- */
+/**
+ * This function reads a list of reviews from the user's POD and returns them as a list ReviewLM
+ * @param {String} resourceURL The URL of the SolidDataset from where to retrieve the reviews
+ * @param {*} session - The authentication session used to access the user's pod.
+ * @returns {Promise<ReviewLM[]>}
+ */
+export async function readReviews(resourceURL,session) {
+    let reviewThings=await getThingsFromDataset(resourceURL,session);
+    let review,reviewThing;
     let reviewsRetrieved = [];
-    if (reviewThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
-        //Convert into Review object
+    if(reviewThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
+        //Convert into LocationLM object
         for (let i = 0; i < reviewThings.length; i++) {
             //Get a Thing
             reviewThing = reviewThings[i];
-            try {
-                //Convert into Review object
-                review = new Review(
-                    getStringNoLocale(reviewThing, "https://schema.org/about") , // CoorLng,
-                    getStringNoLocale(reviewThing, SCHEMA_INRUPT.identifier)   // CoorLat,
-                );
-                review.addComment(getStringNoLocale(reviewThing, "https://schema.org/text"));
-                review.addScore(getStringNoLocale(reviewThing,SCHEMA_INRUPT.value));
-                review.addImg(getStringNoLocale(reviewThing, "https://schema.org/image"));
 
-                //Add locationLM into List
+            try {
+                //Convert into LocationLM object
+                review = convertPODReviewIntoDomainModelReview(reviewThing)
+
+                // media
+                let mediaURL = getUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart);
+                if(mediaURL){
+                    //IMG url
+                    let mediaThingURL = mediaURL.toString();
+                    review.media = getImageFromPod(mediaThingURL, session);
+                }
+
+                //Add review into List
                 reviewsRetrieved.push(review);
 
             } catch (error) {
-                if (error instanceof CoordinatesInvalidFormatException || error instanceof StringInvalidFormatException) {
-                    console.error(error.message);
+                //TODO:
+                /*
+                if (error instanceof StringInvalidFormatException) {
+                    //TODO: Some argument where not valid
+                    console.error('StringInvalidFormatException:', error.message);
+                } else{
+                    console.error(error);
                 }
+                 */
             }
         }
     }
-
     //Return list
     return reviewsRetrieved;
-
 }
-export {
-    writeLocations,
-    readLocations
+
+/**
+ * This JavaScript function writes a new review by creating a new Thing with the review data and adding it
+ *  to a SolidDataset located at the specified resourceURL.
+ * @param resourceURL - The URL of the SolidDataset to save the review
+ * @param {*} session - The authentication session used to access the user's pod.
+ * @param {ReviewLM} rev - review object to convert into a Review Thing
+ * @param {string} user - User id to identify who wrote the review
+ * @param {string} locId - locationID to identify the location to where the review is referring
+ * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
+ * @returns {Promise<string|*>} */
+export function writeReviewWithoutIMG(resourceURL, session, rev, user, locId,
+                                      privacy) {
+    return writeReview(resourceURL, session, rev, user, locId, privacy, false);
+}
+
+//Associate image
+/**
+ * This JavaScript function writes a new review by creating a new Thing with the review data and adding it
+ *  to a SolidDataset located at the specified resourceURL. This reviews has an image associated
+ * @param resourceURL - The URL of the SolidDataset to save the review
+ * @param {*} session - The authentication session used to access the user's pod.
+ * @param {ReviewLM} rev - review object to convert into a Review Thing
+ * @param {string} user - User id to identify who wrote the review
+ * @param {string} locId - locationID to identify the location to where the review is referring
+ * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
+ * @param {string} imageContainerUrl - The URL of the SolidDataset where the image should be store
+ * @param imageFile - The image file
+ * @returns {Promise<string|*>} */
+export function writeReviewWithIMG(resourceURL, session, rev, user, locId,
+                                   privacy, imageContainerUrl, imageFile) {
+    return writeReview(resourceURL, session, rev, user, locId, privacy, true, imageContainerUrl, imageFile);
+}
+
+/**
+ * This JavaScript function writes a new review by creating a new Thing with the review data and adding it
+ *  to a SolidDataset located at the specified resourceURL.
+ * @param resourceURL - The URL of the SolidDataset to save the review
+ * @param {*} session - The authentication session used to access the user's pod.
+ * @param {ReviewLM} rev - review object to convert into a Review Thing
+ * @param {string} user - User id to identify who wrote the review
+ * @param {string} locId - locationID to identify the location to where the review is referring
+ * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
+ * @param {boolean} cond - if the review has an image
+ * @param {string} imageContainerUrl - The URL of the SolidDataset where the image should be store
+ * @param {*} imageFile - The image file
+ * @returns {Promise<string|*>}
+ */
+async function writeReview(resourceURL, session, rev, user, locId, privacy, cond, imageContainerUrl="", imageFile="") {
+    //Get dataSet
+    let dataset = await getDataset(resourceURL, session);
+
+    //Create Thing
+    let reviewThing = convertDomainModelReviewIntoPODReview(rev, user, locId, privacy);
+
+    if(cond) {
+        //Save image file into POD and get URL
+        await saveImageToPod(imageContainerUrl, session, imageFile, rev.revID);
+
+        //URL where it saved //TODO: CHECK if it's like this
+        let imageUrl = imageContainerUrl.concat("/").concat(rev.revID);
+
+        reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
+    }
+
+    //Add Thing into DataSet
+    dataset = setThing(dataset, reviewThing);
+
+    //Save dataSet into POD
+    await saveNew(resourceURL, dataset, session);
+
+    return rev.revID;
+}
+
+/* ------------------- IMG ------------------- */
+/**
+ * This method reads the file with the FileReader API and returns a Promise that resolves with the base64-encoded
+ *  string when the file is read.
+ * @param {string} fileUrl - The URL of the image file to retrieve from the user's pod.
+ * @param {*} session - The authentication session used to access the user's pod.
+ * @returns {Promise<unknown>} - A promise that resolves to a Blob object containing the image file data.
+ */
+async function getImageFromPod(fileUrl, session) {
+    try {
+        // Get the file from the container
+        const imageBlob = await getFile(fileUrl, { fetch: session.fetch });
+
+        // Convert the Blob object to a base64-encoded string
+        const base64String = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(imageBlob);
+        });
+
+        // Do something with the base64-encoded image data
+        return base64String;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+/**
+ * The code takes a base64-encoded image, converts it to a Blob object, and saves it to a Solid pod using the
+ *  saveFileInContainer method provided by Inrupt's Inputs library.
+ * @param {string} containerUrl - The URL of the container in the user's Pod to save the file to
+ * @param {*} session - The user's Solid session object containing the authentication credentials
+ * @param {string} file - The image file to be saved
+ * @param {*} fileName - The name to be used for the saved image file
+ * @returns {Promise<void>}
+ */
+async function saveImageToPod(containerUrl, session, file, fileName) {
+    try {
+        // Remove the prefix data:image/xxx;base64, from the base64-encoded image string
+        const base64Data = file.replace(/^data:image\/\w+;base64,/, '');
+        // Decode the remaining base64-encoded string into a binary format
+        const binaryData = atob(base64Data);
+        const arrayBuffer = new ArrayBuffer(binaryData.length);
+
+        // Populate a new Uint8Array with the binary data
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryData.length; i++) {
+            uint8Array[i] = binaryData.charCodeAt(i);
+        }
+
+        // Create a new Blob from the Uint8Array
+        const blob = new Blob([uint8Array], { type: 'image/png' });
+
+        // Save the image in the container
+        const mimetype = "image/png";
+        const options = { slug: fileName, contentType: mimetype, fetch: session.fetch };
+        await saveFileInContainer(containerUrl, blob, options);
+
+        console.log(`Image ${fileName} saved to ${containerUrl}`);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+/* ------------------- UTIL ------------------- */
+/**
+ * Retrieves all Things from a SolidDataset at the specified resource URL using the provided session's fetch function.
+ * @param {string} resourceURL - The URL of the SolidDataset to retrieve the Things from.
+ * @param {Session} session - The session containing the authorization credentials and fetch function to use for
+ *      the request.
+ * @returns {Promise<Thing[]>} - A Promise that resolves with an array of all Things in the retrieved SolidDataset.
+ * */
+async function getThingsFromDataset(resourceURL,session){
+    let dataset,allThings;
+    dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
+    allThings=getThingAll(dataset);
+    return allThings;
+}
+
+
+/**
+ * This asynchronous function retrieves a Solid dataset from a specified resource URL using the provided session's fetch
+ *  function. If the resource is not found, it creates a new Solid dataset and returns it.
+ * @param {string} resourceURL - The URL of the resource from which to retrieve the Solid dataset.
+ * @param {Session} session - The session containing the fetch function to use for retrieving the dataset.
+ * @returns Promise<{readonly type: "Dataset", readonly graphs: Readonly<Record<IriString, Graph> & {default: Graph}>}>}
+ *      - A promise that resolves to the retrieved or newly created Solid dataset.
+ */
+async function getDataset(resourceURL,session){
+    let dataset;
+    try {
+        //Get DataSet
+        dataset=await getSolidDataset(resourceURL,{fetch:session.fetch})
+    } catch (error) {
+        if (typeof error.statusCode === "number" && error.statusCode === 404) {
+            // if not found, create a new SolidDataset
+            dataset = createSolidDataset();
+        } else {
+            console.error(error);
+        }
+    }
+    return dataset;
+}
+
+/**
+ * The function attempts to save the dataset at the specified resourceURL using the saveSolidDatasetAt function.
+ * If the save is successful, nothing happens. If an error occurs during the save operation, the error is logged
+ * to the console using console.log().
+ * @param resourceURL - The URL of the resource to save the dataset to.
+ * @param dataset - The SolidDataset to be saved.
+ * @param session - The Session object containing authentication details.
+ * @returns {Promise<void>}
+ */
+async function saveNew(resourceURL, dataset, session){
+    try {
+        // Save the SolidDataset
+        await saveSolidDatasetAt(
+            resourceURL,
+            dataset,
+            {fetch: session.fetch}
+        );
+    } catch (error) {
+        console.error(error);
+    }
 }

@@ -9,7 +9,15 @@ import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 import {getFriendsWebIds} from "../handlers/podHandler";
-
+import {
+    createSolidDataset,
+    createThing,
+    setThing,
+    addUrl,
+    saveSolidDatasetAt,
+    saveFileInContainer
+} from '@inrupt/solid-client';
+import { VCARD } from '@inrupt/vocab-common-rdf';
 // setting the width and height of the <div> around the google map
 const containerStyle = {
     width: '100vw',
@@ -80,6 +88,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             name: '',
             category: '',
             privacy: '',
+            locOwner: '',
             rate: "",
             comments:[],
           },
@@ -166,20 +175,16 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.pic=marker.pic;
             lastMarker.description=marker.description;
 
+            //We are only adding one, the last one
+            saveLocations(lastMarker);
 
             return [...current];
         });
-        //TRYING
-        console.log("1.- original");
-        console.log(originalMarkers);
-        console.log("2.- markers");
-        console.log(markers);
-        await saveLocations();
     };
 
 
 
-    const updateMarker = async () => {
+    const updateMarker = () => {
 
         setOriginalMarkers((current) => {
 
@@ -203,9 +208,13 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     };
 
 
-    const saveLocations=async () => {
-        let resourceFirst = session.info.webId.replace("/profile/card#me", "/")
-        return await writeLocations(resourceFirst, "/lomap/locations.ttl", session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    const saveLocations = (viewLocat) => {
+        //Create locationLM with marker data
+
+        //Update Controller
+
+        //Save into the POD (async)
+
     }
 
     //function to update the comments

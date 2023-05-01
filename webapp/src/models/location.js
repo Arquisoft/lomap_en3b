@@ -1,116 +1,35 @@
-// Import uuid for generating id
-import { 
-    v4 as uuidv4 
-} from 'uuid';
-// Import exception 
-import {
-    CoordinatesInvalidFormatException,
-    StringInvalidFormatException
-} from '../util/Exceptions/exceptions.js';
-import {Review} from "./review";
+import {v4 as uuidv4} from "uuid";
+import {checkCoordinates, checkStringInvalidFormat, is_in_city} from "../../util/utilMethods";
 
-/**
- * Location LoMap class
- */
-class LocationLM {
-    //Attributes
-    publicReviews;
-    privateReviews;
-    constructor(CoorLat, CoorLng, name, description, category,privacy=false, locID = uuidv4(), rating=null) {
-
-        //checkCoordinatesInvalidFormat((CoorLat>= -90 && CoorLat<= 90), CoorLat, 'latitude');
-        this.lat = CoorLat;
-        //checkCoordinatesInvalidFormat((CoorLng>= -180 && CoorLng<= 180), CoorLng, 'longitude');
-        this.lng = CoorLng;
-        //checkStringInvalidFormat(name, 'name' );
+export class LocationLM {
+    /**
+     * Creates a new LocationLM object with the specified parameters.
+     *
+     * @param {number} coorLat - The latitude coordinate of the location.
+     * @param {number} coorLng - The longitude coordinate of the location.
+     * @param {string} name - The name of the location.
+     * @param {string} descrip - The description of the location.
+     * @param {string} cat - The category of the location.
+     * @param {string} priv - The privacy setting of the location.
+     * @param date - The date and time the location was created.
+     * @param {string} owner - The username of the user who created the location.
+     * @param {string} [id] - The ID of the location (optional).
+     */
+    constructor(coorLat, coorLng, name, descrip, cat, priv, date,
+                owner, id = uuidv4()) {
+        checkCoordinates(!is_in_city(coorLat, coorLng));
+        this.lat = coorLat;
+        this.lng = coorLng;
+        checkStringInvalidFormat(name, 'name' );
         this.name = name;
-        //checkStringInvalidFormat(description, 'description' );
-        this.description = description;
-        //checkStringInvalidFormat(category, 'category' );
-        this.locID = locID;
-        this.privacy=privacy;
-        this.category = category;
-        if(rating){
-            this.rating=rating;
-        }
-
-    }
-
-    getPublicReviews(){
-        return this.publicReviews;
-    }
-
-    getPrivateReviews(){
-        return this.privateReviews;
-    }
-
-    privacyText(){
-        if(this.privacy){
-            return 'private'
-        } else {
-            return 'public'
-        }
-    }
-    addPublicReview(Review) {
-        //Check type
-        this.publicReviews.push(Review);
-    }
-    addPrivateReview(Review) {
-        //Check type
-        this.privateReviews.push(Review);
-    }
-
-    addScoreReview(locId, scr, privacy){
-        if(privacy){
-            if(this.privateReviews == null){
-                this.privateReviews = new Review(locId);
-            }
-            this.privateReviews.addScoreReview(scr);
-        } else {
-            if(this.publicReviews == null){
-                this.publicReviews = new Review(locId);
-            }
-            this.publicReviews.addScoreReview(scr);
-
-        }
-    }
-
-    addCommentReview(locId, cmmt, privacy){
-        if(privacy){
-            if(this.privateReviews == null){
-                this.privateReviews = new Review(locId);
-            }
-            this.privateReviews.addCommentReview(cmmt);
-        } else {
-            if(this.publicReviews == null){
-                this.publicReviews = new Review(locId);
-            }
-            this.publicReviews.addCommentReview(cmmt);
-
-        }
-
-    }
-
-    getAllReviews() {
-        let ret = [];
-
-        return ret
-                .concat(this.publicReviews)
-                .concat(this.privateReviews);
+        this.description = descrip;
+        checkStringInvalidFormat(cat, 'category' );
+        this.category = cat;
+        checkStringInvalidFormat(priv, 'privacy' );
+        this.privacy = priv;
+        this.dateTime = date;
+        this.locOwner = owner;
+        this.locID = id;
     }
 }
 
-function checkCoordinatesInvalidFormat (cond, value, str){
-    if(!cond){
-        throw new CoordinatesInvalidFormatException( String(str + '=' + value));
-    }
-}
-function checkStringInvalidFormat (value, str){
-    if(!value){
-        throw new StringInvalidFormatException( String(str + '=' + value));
-    }
-}
-
-export { 
-    LocationLM
-};
