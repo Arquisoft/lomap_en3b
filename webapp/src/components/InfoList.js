@@ -197,13 +197,23 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
 
     const upgradeComments = () => {
-        const newComments = selected[0].comments.map((comment) => {
-          const { comment: text, commentpic, ratingStars } = comment;
-
-          return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
-        });
-        setComments(newComments);
+        try {
+          if (!selected || !selected[0] || !selected[0].comments) {
+            throw new Error("Comments are not available.");
+          }
+          const newComments = selected[0].comments.map((comment) => {
+            const { comment: text, commentpic, ratingStars } = comment;
+      
+            return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
+          });
+          setComments(newComments);
+        } catch (error) {
+          console.error(error);
+          // handle the error here, for example:
+          // setComments(["No comments available."]);
+        }
       };
+      
 
     const onChangeHandler = (e) => {
         setComment(e.target.value);
