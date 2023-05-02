@@ -15,7 +15,7 @@ import {
     getThingAll,
     getSolidDataset,
     removeThing,
-    getStringNoLocale, getThing, addUrl, addStringNoLocale, saveFileInContainer
+    getStringNoLocale, getThing, addUrl, addStringNoLocale
 } from "@inrupt/solid-client";
 import { SCHEMA_INRUPT, RDF} from "@inrupt/vocab-common-rdf";
 import {getDefaultSession} from "@inrupt/solid-client-authn-browser";
