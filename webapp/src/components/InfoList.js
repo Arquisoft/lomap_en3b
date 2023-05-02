@@ -405,10 +405,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
                         <InputLabel sx={{ fontSize: '2rem', fontWeight: 'bold', maxWidth: '15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</InputLabel>
-
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
                             <Rating name="size-small" defaultValue={3} size="extra-small" readOnly />
-
                         </Box>
                         <Typography variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
 
