@@ -74,12 +74,31 @@ export function convertPODLocationIntoDomainModelLocation (podObj, userID) {
 }
 
 //Convert from view to domain (1)
-export function convertViewReviewIntoDomainModelReview(viewobj, userID) {
+export function convertViewReviewIntoDomainModelReview(viewobj, locatID, userID) {
     //TODO:
+    /* ViewReview looks like:
+    
+    {comment, commentpic, ratingStars}
+    
+    */
+    return new ReviewLM(
+        locatID,        //locatID 
+        userID,         //user 
+        new Date()     //date 
+    );
 }
 //Convert from domain to view (1)
-export function convertDomainModelReviewIntoViewReview(dmObj, pos) {
+export function convertDomainModelReviewIntoViewReview(dmObj) {
     //TODO:
+    /* DomainModelReview looks like:
+            ItemReviewed, user, time, revID (opt)
+            comment, rate, media
+    */
+    return {
+        comment: dmObj.comment, 
+        commentpic: dmObj.media, 
+        ratingStars: dmObj.getStars()
+    };
 }
 //Convert from domain to POD (1)
 export function convertDomainModelReviewIntoPODReview(dmObj, user, locId, privacy){
