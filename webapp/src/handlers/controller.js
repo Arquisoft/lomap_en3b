@@ -126,9 +126,9 @@ export class Controller {
      * This method add a list of reviews retrived from the pod to the user's list of reviews
      * @param {ReviewLM[]} listRevs list of reviews from the pod
      */
-    saveLocationsFromPOD(listRevs){
+    saveReviewsFromPOD(listRevs){
         listRevs.forEach( (rev) => {
-            //Add location
+            //Add review
             console.log(rev);
             this.addReview(rev);
         });
