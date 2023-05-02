@@ -1,13 +1,14 @@
 import {User} from "../models/user";
 import {
-    readLocations,
+    readLocations, readReviews,
     writeLocationWithImg,
     writeLocationWithoutImg,
     writeReviewWithIMG,
     writeReviewWithoutIMG
 } from "./podAccess";
 import {getFriendsWebIds} from "./podHandler";
-import {convertDomainModelLocationIntoViewLocation} from "../util/convertor";
+import {convertDomainModelLocationIntoViewLocation, convertDomainModelReviewIntoViewReview} from "../util/convertor";
+import {extractBase64Image, getRate} from "../util/utilMethods";
 
 export class Controller {
     /**
@@ -50,6 +51,32 @@ export class Controller {
     addReview (rev){
         this.user.addReview(rev)
     }
+    /**
+     * Completes the review's data from what the user has entered.
+     * @param {ReviewLM} rev - The review to compete.
+     * @param {string} comment - The comment text of the review
+     * @param {string} rating - The rating of the review
+     * @param {string} img - The images of the review
+     * @returns {ReviewLM} review with all the data
+     */
+    completeReviewData(rev, comment, rating, img){
+        if(comment){
+            rev.comment= comment;
+        }
+        if(rating){
+            rev.rate= getRate(rating);
+        }
+        if(img){
+            rev.media = extractBase64Image(img);
+            console.log("AUX:::");
+            console.log(rev.media);
+            console.log(typeof rev.media);
+
+        } else {
+            rev.media = "";
+        }
+        return rev;
+    }
 
     /**
      * Checks if a review can be added to the user's list of reviews.
@@ -57,7 +84,17 @@ export class Controller {
      * @returns {boolean} - True if the review can be added, false otherwise.
      */
     canBeReviewAdded(rev){
-        //TODO: How can be this be done?
+        if(this.user.reviews.get(rev.ItemReviewed)) {
+            let listReviews = this.user.reviews.get(rev.ItemReviewed);
+            for(let i = 0; i < listReviews.length; i++){
+                let review = listReviews[i];
+                if(review.user === rev.user && review.ItemReviewed === rev.ItemReviewed && review.comment === rev.comment &&
+                    review.rate === rev.rate && review.media === rev.media){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -65,11 +102,28 @@ export class Controller {
      * @param {LocationLM[]} listLocs list of locations from the pod
      */
     saveLocationsFromPOD(listLocs){
-        listLocs.forEach( (loc) => {
-            //Add location
-            this.addLocation(loc);
-        });
+        if(listLocs) {
+            for (let i = 0; i < listLocs.length; i++) {
+                let loc = listLocs[i];
+                this.addLocation(loc);
+            }
+        }
     }
+
+    /**
+     * This method add a list of reviews retrieved from the pod to the user's list of reviews
+     * @param {ReviewLM[]} listRevs list of review from the pod
+     */
+    saveReviewsFromPOD(listRevs){
+        if(listRevs) {
+            for (let i = 0; i < listRevs.length; i++) {
+                if(this.canBeReviewAdded(listRevs[i])){
+                    this.addReview(listRevs[i]);
+                }
+            }
+        }
+    }
+
 
     /**
      * This method saves a location inside the user's pod.
@@ -104,13 +158,26 @@ export class Controller {
     //TODO: Comment method.
     async retrievePrivateLocations() {
         let resource = this.user.userWebId.concat("private").concat(this.user.locResourceURL);
-        console.log(resource);
         let locats = await readLocations(resource, this.session, this.user.userWebId);
+
+        let resourceR = this.user.userWebId.concat("private").concat(this.user.revResourceURL);
+        let reviews = await readReviews(resourceR, this.session);
+        this.saveReviewsFromPOD(reviews);
+        console.log(reviews);
+        console.log(this);
+
         return locats;
     }
     async retrievePublicLocations() {
         let resource = this.user.userWebId.concat("public").concat(this.user.locResourceURL);
         let locats = await readLocations(resource, this.session, this.user.userWebId);
+
+        let resourceR = this.user.userWebId.concat("public").concat(this.user.revResourceURL);
+        let reviews = await readReviews(resourceR, this.session);
+        this.saveReviewsFromPOD(reviews);
+        console.log(reviews);
+        console.log(this);  //Duplicates
+
         return locats;
     }
 
@@ -118,44 +185,41 @@ export class Controller {
         let friends = await getFriendsWebIds(this.user.userWebId);
 
         let friendsLocations = [];
+        let reviews = [];
         for (let i = 0; i < friends.length; i++) {
             try {
                 //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
                 let friendID = friends[i].replace("/profile/card", "/");
                 let resource = friendID.concat("public").concat(this.user.locResourceURL);
+
+                let resourceR = friendID.concat("public").concat(this.user.revResourceURL);
+                reviews = reviews.concat(await readReviews(resourceR, this.session));
                 friendsLocations = friendsLocations.concat( await readLocations(resource, this.session, friendID));
             } catch (err) {
                 //Friend does not have LoMap??
                 console.log(err);
             }
         }
+        //Add Reviews
+        this.saveReviewsFromPOD(reviews);
+        console.log(reviews);
+        console.log(this);
+
         return friendsLocations;
     }
 
-
-    /**
-     * This method add a list of reviews retrieved from the pod to the user's list of reviews
-     * @param {ReviewLM[]} listRevs list of reviews from the pod
-     */
-    saveReviewsFromPOD(listRevs){
-        listRevs.forEach( (rev) => {
-            //Add review
-            console.log(rev);
-            this.addReview(rev);
-        });
-    }
-    
     /**
      * This method saves a review inside the user's pod.
      * @param {ReviewLM} rev review to save inside the user's pod
-     * @param {LocationLM} loc location that has the review
+     * @param {string} locOwner location owner that has the review
+     * @param {string} privacy
      */
-    saveToPODReview(rev, loc) {
+    saveToPODReview(rev, locOwner, privacy) {
         console.log(rev);
-        let resourceURL = loc.locOwner.concat(loc.privacy).concat(this.user.revResourceURL);
+        let resourceURL = locOwner.concat(privacy).concat(this.user.revResourceURL);
         if(rev.media) {
-            let resourceIMGURL = loc.locOwner.concat(loc.privacy).concat(this.user.imgResourceURL);
-            writeReviewWithIMG(resourceURL, this.session, rev, loc.locID, loc.privacy, resourceIMGURL)
+            let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
+            writeReviewWithIMG(resourceURL, this.session, rev, privacy, resourceIMGURL)
                 .then(() => {
                     window.alert("Review saved");
                 })
@@ -163,8 +227,7 @@ export class Controller {
                     console.error(error);
                 });
         } else {
-            console.log("Esta");
-            writeReviewWithoutIMG(resourceURL, this.session, rev, loc.locID, loc.privacy)
+            writeReviewWithoutIMG(resourceURL, this.session, rev, privacy)
                 .then(() => {
                     window.alert("Review saved");
                 })
@@ -178,7 +241,16 @@ export class Controller {
         let ret = []
         let aux = [...this.user.locations.values()];
         for (let i = 0; i < aux.length; i++) {
-            ret.push(convertDomainModelLocationIntoViewLocation(aux[i], i));
+            let comments = [];
+            if(this.user.reviews.has(aux[i].locID)){
+                let reviews = this.user.reviews.get(aux[i].locID);
+                console.log(reviews);
+                for(let j = 0; j < reviews.length; j++){
+                    console.log(reviews[j]);
+                    comments.push(convertDomainModelReviewIntoViewReview(reviews[j]));
+                }
+            }
+            ret.push(convertDomainModelLocationIntoViewLocation(aux[i], i, comments));
         }
         return ret;
     }

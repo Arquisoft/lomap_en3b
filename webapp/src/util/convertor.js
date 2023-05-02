@@ -2,6 +2,7 @@ import {buildThing, createThing, getStringNoLocale} from "@inrupt/solid-client";
 import {LocationLM} from "../models/location";
 import {SCHEMA_LOMAP} from "./schema";
 import {ReviewLM} from "../models/review";
+import {base64ToImg, getStars} from "./utilMethods";
 
 //Convert from view to domain (1)
 export function convertViewLocationIntoDomainModelLocation(viewobj, userID) {
@@ -17,20 +18,28 @@ export function convertViewLocationIntoDomainModelLocation(viewobj, userID) {
     );
 }
 //Convert from domain to view (1)
-export function convertDomainModelLocationIntoViewLocation(dmObj, pos) {
+/**
+ *
+ * @param {LocationLM} dmObj
+ * @param pos
+ * @param revs
+ * @returns {{locOwner: string, comments: *[], lng, description, privacy: (string|*), pic: (string|*), domainID: string, rate: string, name, time, category, key, lat}}
+ */
+export function convertDomainModelLocationIntoViewLocation(dmObj, pos, revs) {
     return {
         key: pos,
         lat: dmObj.lat,
         lng: dmObj.lng,
         time: dmObj.dateTime,
         description: dmObj.description,
-        pic: dmObj.pic,
+        pic: dmObj.img,
         name: dmObj.name,
         category: dmObj.category,
         privacy: dmObj.privacy,
-        locOwner: dmObj.owner,
+        locOwner: dmObj.locOwner,
         rate: '',
-        comments: []
+        comments: revs,
+        domainID: dmObj.locID
     };
 }
 //Convert from domain to POD (1)
@@ -48,16 +57,6 @@ export function convertDomainModelLocationIntoPODLocation(dmObj){
         .build();
 }
 
-//Convert from domain to POD (n)
-export function convertDomainModelLocationsIntoPODLocations(dmObjs) {
-    let ret = [];
-    dmObjs.forEach( (loc) =>
-    {
-        ret.push(convertDomainModelLocationIntoPODLocation(loc));
-    });
-
-    return ret;
-}
 //Convert from POD to domain (n)
 export function convertPODLocationIntoDomainModelLocation (podObj, userID) {
     return new LocationLM(
@@ -74,13 +73,7 @@ export function convertPODLocationIntoDomainModelLocation (podObj, userID) {
 }
 
 //Convert from view to domain (1)
-export function convertViewReviewIntoDomainModelReview(viewobj, locatID, userID) {
-    //TODO:
-    /* ViewReview looks like:
-    
-    {comment, commentpic, ratingStars}
-    
-    */
+export function convertViewReviewIntoDomainModelReview(locatID, userID) {
     return new ReviewLM(
         locatID,        //locatID 
         userID,         //user 
@@ -96,34 +89,24 @@ export function convertDomainModelReviewIntoViewReview(dmObj) {
     */
     return {
         comment: dmObj.comment, 
-        commentpic: dmObj.media, 
-        ratingStars: dmObj.getStars()
+        commentpic: base64ToImg(dmObj.media),
+        ratingStars: getStars(dmObj.rate)
     };
 }
 //Convert from domain to POD (1)
-export function convertDomainModelReviewIntoPODReview(dmObj, locId, privacy){
+export function convertDomainModelReviewIntoPODReview(dmObj, privacy){
     return buildThing(createThing({ name: dmObj.revID }))
         .addStringNoLocale(SCHEMA_LOMAP.rev_comment, dmObj.comment)
         .addStringNoLocale(SCHEMA_LOMAP.rev_rate, dmObj.rate)
         .addStringNoLocale(SCHEMA_LOMAP.rev_reviewer, dmObj.user)
         .addStringNoLocale(SCHEMA_LOMAP.ident, "".concat(dmObj.revID))
         .addStringNoLocale(SCHEMA_LOMAP.rev_date, dmObj.time)     //time
-        .addStringNoLocale(SCHEMA_LOMAP.rev_locat, locId)
+        .addStringNoLocale(SCHEMA_LOMAP.rev_locat, dmObj.ItemReviewed)
         .addStringNoLocale(SCHEMA_LOMAP.accessCode, privacy)    // privacy
         .addUrl(SCHEMA_LOMAP.type, SCHEMA_LOMAP.review)
         .build();
 }
 
-//Convert from domain to POD (n)
-export function convertDomainModelReviewsIntoPODReviews(dmObjs) {
-    let ret = [];
-    dmObjs.forEach( (loc) =>
-    {
-        ret.push(convertDomainModelReviewIntoPODReview(loc));
-    });
-
-    return ret;
-}
 //Convert from POD to domain (n)
 export function convertPODReviewIntoDomainModelReview (podObj) {
     let review = new ReviewLM(

@@ -1,11 +1,6 @@
 import {CoordinateNotInDomain, StringInvalidFormatException} from "./Exceptions/exceptions";
 
-const RESOURCES_URLS = {
-    forLocation: '',
-    forReview: '',
-    forImages: ''
-}
-
+/* ----------- Util for Location Coordinates ----------- */
 const OVIEDO = {
     oviedo_lat: 43.3603,
     oviedo_lon: -5.8448,
@@ -60,6 +55,8 @@ export function is_in_city(lat, lon, city_lat = OVIEDO.oviedo_lat,
     return distance_km <= distance;
 }
 
+/* ----------- Argument checkers ----------- */
+
 // Helper function to convert degrees to radians
 function toRadians(degrees) {
     return degrees * Math.PI / 180;
@@ -76,4 +73,43 @@ export function checkStringInvalidFormat (value, name){
     if(!value){
         throw new StringInvalidFormatException(`${name} must be defined`);
     }
+}
+/* ----------- Util for review rating ----------- */
+export function getStars(rate, symbol = '⭐'){
+    if (rate === 0) {
+        return '';
+    } else {
+        return symbol.repeat(rate);
+    }
+}
+
+/**
+ *
+ * @param {string} str
+ * @returns {number}
+ */
+export function getRate(str){
+    return str.length;
+    //return 3;
+}
+
+/* ----------- Util for review img ----------- */
+export function extractBase64Image(str) {
+    const regex = /<img[^>]+src="([^">]+)"/g;
+    const matches = regex.exec(str);
+    if (matches && matches.length > 1) {
+        const base64Image = matches[1];
+        return base64Image;
+    }
+    return '';
+}
+
+export function base64ToImg(base64Image) {
+    if(base64Image) {
+        const img = document.createElement("img");
+        img.src = base64Image;
+        img.alt = "comment-image";
+        return img.outerHTML;
+    }
+    return '';
 }

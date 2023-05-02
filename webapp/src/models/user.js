@@ -27,18 +27,16 @@ export class User {
         }
     }
 
+
     /**
      * Adds a review to the user's reviews Map object.
      * @param {ReviewLM} rev - The review to be added.
      */
     addReview(rev){
-        let aux;
-        if(!this.reviews.has(rev.ItemReviewed)) {
-            aux = this.reviews.get(rev.ItemReviewed);
-        } else{
-            aux = [];
+        if (this.reviews.has(rev.ItemReviewed)) {
+            this.reviews.get(rev.ItemReviewed).push(rev);
+        } else {
+            this.reviews.set(rev.ItemReviewed, [rev]);
         }
-        aux = aux.push(rev);
-        this.reviews.set(rev.ItemReviewed, aux);
     }
 }

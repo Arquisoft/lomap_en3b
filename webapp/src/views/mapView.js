@@ -12,6 +12,7 @@ import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/
 import FilterSidebar from "../components/Filters";
 import ErrorView from "./errorView"
 import MapErrorBoundary from "../components/MapErrorBoundry";
+import {Controller} from "../handlers/controller";
 
 
 
@@ -33,7 +34,7 @@ import MapErrorBoundary from "../components/MapErrorBoundry";
   *@param session
   *@param onSearch
  */
-const MapView = ({session,onSearch}) => {
+const MapView = ({session}) => {
   const [changesInFilters, setChangesInFilters] = useState(false); // track changes in filter state
   const [changesInComments, setChangesInComments] = useState(false); // track changes in comments state
   const [isInteractive, setIsInteractive] = useState(false); // track the interactive state of the map
@@ -48,6 +49,8 @@ const MapView = ({session,onSearch}) => {
   const [selected, setSelected] = React.useState(['']); // track selected markers for the info list
   const [showLogOut, setShowLogOut] = useState(false);
   const [updateLocation, setupdateLocation] = useState(false);
+
+  const controlMng = new Controller(session);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -163,7 +166,7 @@ const MapView = ({session,onSearch}) => {
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
         { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
         <MapErrorBoundary>
-          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} controlMng={controlMng} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
         </MapErrorBoundary>
           
         </Grid>}
