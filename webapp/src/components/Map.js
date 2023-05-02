@@ -99,7 +99,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
 
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
-        //TODO: Check how it works
         let locations = await controlMng.retrievePrivateLocations();
         controlMng.saveLocationsFromPOD(locations);
 
@@ -165,7 +164,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
             lastMarker.pic=marker.pic;
             lastMarker.description=marker.description;
 
-            //TODO : It works here !
             saveLocations(lastMarker.lat, lastMarker.lng, lastMarker.name, lastMarker.description, lastMarker.category, lastMarker.privacy);
 
             return [...current];
@@ -198,7 +196,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
 
 
     const saveLocations = () => {
-        //TODO: Add check bc it is call two times.
         let market = originalMarkers[originalMarkers.length - 1]
         if (market){
             //Create locationLM with marker data
@@ -259,7 +256,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
 
         lastMarker.comments=marker.review;
 
-        //TODO: Get comments
         saveCommentsFromLocation(lastMarker);
         return [...current];
       });
