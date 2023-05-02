@@ -4,13 +4,14 @@ import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps
 import { formatRelative } from "date-fns";
 import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
-import {readLocations, writeLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
-import {getFriendsWebIds} from "../handlers/podHandler";
+import {
+    convertDomainModelLocationIntoViewLocation,
+    convertViewLocationIntoDomainModelLocation
+} from "../util/convertor";
 import {Controller} from "../handlers/controller";
-import {convertViewLocationIntoDomainModelLocation} from "../util/Convertor";
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -98,7 +99,18 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
         //TODO: Check how it works
-        return controlMng.retrieveLocations();
+        let locations = await controlMng.retrievePrivateLocations();
+        console.log(locations);
+        controlMng.saveLocationsFromPOD(locations);
+
+        locations = await controlMng.retrievePublicLocations();
+        controlMng.saveLocationsFromPOD(locations);
+
+        locations = await controlMng.retrieveFriendsPublicLocations();
+        controlMng.saveLocationsFromPOD(locations);
+
+        //Convert into View
+        return controlMng.getViewLocations();
         //OLD
         /*
         let friends = await getFriendsWebIds(session.info.webId);

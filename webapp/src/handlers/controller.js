@@ -1,5 +1,13 @@
 import {User} from "../models/user";
-import {writeLocationWithImg, writeLocationWithoutImg} from "./podAccess";
+import {
+    readLocations,
+    writeLocationWithImg,
+    writeLocationWithoutImg,
+    writeReviewWithIMG,
+    writeReviewWithoutIMG
+} from "./podAccess";
+import {getFriendsWebIds} from "./podHandler";
+import {convertDomainModelLocationIntoViewLocation} from "../util/convertor";
 
 export class Controller {
     /**
@@ -53,13 +61,12 @@ export class Controller {
     }
 
     /**
-     * This method add a list of location retrived from the pod to the user's list of locations
+     * This method add a list of location retrieved from the pod to the user's list of locations
      * @param {LocationLM[]} listLocs list of locations from the pod
      */
     saveLocationsFromPOD(listLocs){
         listLocs.forEach( (loc) => {
             //Add location
-            console.log(loc);
             this.addLocation(loc);
         });
     }
@@ -95,35 +102,39 @@ export class Controller {
 
 
     //TODO: Comment method.
-    retrieveLocations(){
-        let friends = await getFriendsWebIds(this.user.userWebId);
-        
+    async retrievePrivateLocations() {
         let resource = this.user.userWebId.concat("private").concat(this.user.locResourceURL);
-        let locations = await readLocations(resource, session, this.user.userWebId);
-        
-        resource = this.user.userWebId.concat("public").concat(this.user.locResourceURL);
-        locations = locations.concat(await readLocations(resource, session, this.user.userWebId));
-        
+        console.log(resource);
+        let locats = await readLocations(resource, this.session, this.user.userWebId);
+        return locats;
+    }
+    async retrievePublicLocations() {
+        let resource = this.user.userWebId.concat("public").concat(this.user.locResourceURL);
+        let locats = await readLocations(resource, this.session, this.user.userWebId);
+        return locats;
+    }
+
+    async retrieveFriendsPublicLocations() {
+        let friends = await getFriendsWebIds(this.user.userWebId);
+
         let friendsLocations = [];
         for (let i = 0; i < friends.length; i++) {
             try {
                 //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
                 let friendID = friends[i].replace("/profile/card", "/");
-                resource = friendID.concat("public").concat(this.user.locResourceURL);
-                friendsLocations = friendsLocations.concat(await readLocations(resource, session, friendID));
+                let resource = friendID.concat("public").concat(this.user.locResourceURL);
+                friendsLocations = friendsLocations.concat( await readLocations(resource, this.session, friendID));
             } catch (err) {
                 //Friend does not have LoMap??
                 console.log(err);
             }
         }
-        let aux = locations.concat(friendsLocations);
-        this.saveLocationsFromPOD();
-        return aux;
-
+        return friendsLocations;
     }
-    
+
+
     /**
-     * This method add a list of reviews retrived from the pod to the user's list of reviews
+     * This method add a list of reviews retrieved from the pod to the user's list of reviews
      * @param {ReviewLM[]} listRevs list of reviews from the pod
      */
     saveReviewsFromPOD(listRevs){
@@ -162,5 +173,14 @@ export class Controller {
                 });
         }
     }
-    
+
+    getViewLocations() {
+        let ret = []
+        let aux = [...this.user.locations.values()];
+        for (let i = 0; i < aux.length; i++) {
+            ret.push(convertDomainModelLocationIntoViewLocation(aux[i], i));
+        }
+        return ret;
+    }
+
 }

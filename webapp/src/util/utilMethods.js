@@ -1,10 +1,17 @@
 import {CoordinateNotInDomain, StringInvalidFormatException} from "./Exceptions/exceptions";
 
+const RESOURCES_URLS = {
+    forLocation: '',
+    forReview: '',
+    forImages: ''
+}
+
 const OVIEDO = {
     oviedo_lat: 43.3603,
     oviedo_lon: -5.8448,
     distance: 15
 };
+
 //Other cities
 /*
 const GIJON = {

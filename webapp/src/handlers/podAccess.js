@@ -1,24 +1,21 @@
-import {v4 as uuidv4} from "uuid";
 import {
-    buildThing,
+    addUrl,
     createSolidDataset,
     getFile,
     getSolidDataset,
-    saveSolidDatasetAt,
-    setThing,
-    saveFileInContainer,
-    addUrl,
     getThingAll,
-    getUrl
+    getUrl,
+    saveFileInContainer,
+    saveSolidDatasetAt,
+    setThing
 } from "@inrupt/solid-client";
 import {SCHEMA_LOMAP} from "../util/schema";
-import {LocationLM} from "../models/location";
-import {ReviewLM} from "../models/review";
 import {
-    convertDomainModelLocationIntoPODLocation, convertDomainModelReviewIntoPODReview,
+    convertDomainModelLocationIntoPODLocation,
+    convertDomainModelReviewIntoPODReview,
     convertPODLocationIntoDomainModelLocation,
     convertPODReviewIntoDomainModelReview
-} from "../util/Convertor";
+} from "../util/convertor";
 
 /* ------------------- LOCATION ------------------- */
 /**
@@ -47,10 +44,16 @@ export async function readLocations(resourceURL,session, userIDWeb) {
                 let mediaURL = getUrl(locationThing, SCHEMA_LOMAP.rev_hasPart);
                 if(mediaURL){
                     //IMG url
-                    let mediaThingURL = mediaURL.toString();
-                    location.img = getImageFromPod(mediaThingURL, session);
+                    //console.log(mediaURL);
+                    //console.log(typeof mediaURL);
+                    //let mediaThingURL = mediaURL.toString();
+                    //console.log(typeof mediaThingURL);
+                    //console.log(mediaThingURL);
+                    let aux = await getImageFromPod(mediaURL, session);
+                    console.log(aux);
+                    location.img = "data:image/png;base64,".concat(aux);
                 }
-                
+                console.log(location);
                 //Add locationLM into List
                 locationsRetrieved.push(location);
 
@@ -77,7 +80,6 @@ export async function readLocations(resourceURL,session, userIDWeb) {
 }
 
 export async function writeLocationWithImg(resourceURL, session, loc, imgResourceURL) {
-    //TODO: Redo to make the image refer in the location thing
     return writeLocation(resourceURL, session, loc, true, imgResourceURL)
 }
 
@@ -90,6 +92,9 @@ export async function writeLocationWithoutImg(resourceURL, session, loc) {
  * This method save a Location into the user's pod inside a given URL
  * @param {String} resourceURL The URL of the SolidDataset where to store the Location
  * @param {*} session - The authentication session used to access the user's pod.
+ * @param {LocationLM} loc - The location related to the comment
+ * @param {boolean} cond - The condition the handle if a review has a picture associated or not
+ * @param {string} imgResourceURL - The URL of the SolidDataset where the image should be store
  * @param {LocationLM} loc - The location with the data to store
  * @returns {Promise<void>}
  */
@@ -103,6 +108,7 @@ async function writeLocation(resourceURL, session, loc, cond, imgResourceURL = '
     if(cond) {
         let name = loc.locID.concat(".png")
         //Save image file into POD and get URL
+        console.log(loc.img);
         await saveImageToPod(imgResourceURL, session, loc.img, name);
 
         //URL where it saved
@@ -174,7 +180,6 @@ export async function readReviews(resourceURL,session) {
  * @param resourceURL - The URL of the SolidDataset to save the review
  * @param {*} session - The authentication session used to access the user's pod.
  * @param {ReviewLM} rev - review object to convert into a Review Thing
- * @param {string} user - User id to identify who wrote the review
  * @param {string} locId - locationID to identify the location to where the review is referring
  * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
  * @returns {Promise<string|*>} */
@@ -190,11 +195,9 @@ export function writeReviewWithoutIMG(resourceURL, session, rev, locId,
  * @param resourceURL - The URL of the SolidDataset to save the review
  * @param {*} session - The authentication session used to access the user's pod.
  * @param {ReviewLM} rev - review object to convert into a Review Thing
- * @param {string} user - User id to identify who wrote the review
  * @param {string} locId - locationID to identify the location to where the review is referring
  * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
  * @param {string} imageContainerUrl - The URL of the SolidDataset where the image should be store
- * @param imageFile - The image file
  * @returns {Promise<string|*>} */
 export function writeReviewWithIMG(resourceURL, session, rev, locId,
                                    privacy, imageContainerUrl) {
@@ -207,12 +210,10 @@ export function writeReviewWithIMG(resourceURL, session, rev, locId,
  * @param resourceURL - The URL of the SolidDataset to save the review
  * @param {*} session - The authentication session used to access the user's pod.
  * @param {ReviewLM} rev - review object to convert into a Review Thing
- * @param {string} user - User id to identify who wrote the review
  * @param {string} locId - locationID to identify the location to where the review is referring
  * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
  * @param {boolean} cond - if the review has an image
  * @param {string} imageContainerUrl - The URL of the SolidDataset where the image should be store
- * @param {*} imageFile - The image file
  * @returns {Promise<string|*>}
  */
 async function writeReview(resourceURL, session, rev, locId, privacy, cond, imageContainerUrl="") {
@@ -232,17 +233,6 @@ async function writeReview(resourceURL, session, rev, locId, privacy, cond, imag
 
         reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
     }
-    /* OLD
-    if(cond) {
-        //Save image file into POD and get URL
-        await saveImageToPod(imageContainerUrl, session, imageFile, );
-
-        //URL where it saved //TODO: CHECK if it's like this
-        let imageUrl = imageContainerUrl.concat("/").concat(rev.revID);
-
-        reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
-    } 
-    */
 
     //Add Thing into DataSet
     dataset = setThing(dataset, reviewThing);
@@ -265,17 +255,17 @@ async function getImageFromPod(fileUrl, session) {
     try {
         // Get the file from the container
         const imageBlob = await getFile(fileUrl, { fetch: session.fetch });
+        console.log(imageBlob);
 
         // Convert the Blob object to a base64-encoded string
-        const base64String = await new Promise((resolve, reject) => {
+        // Do something with the base64-encoded image data
+        return await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = reject;
             reader.readAsDataURL(imageBlob);
         });
 
-        // Do something with the base64-encoded image data
-        return base64String;
     } catch (error) {
         console.error(error);
     }
@@ -283,7 +273,7 @@ async function getImageFromPod(fileUrl, session) {
 
 /**
  * The code takes a base64-encoded image, converts it to a Blob object, and saves it to a Solid pod using the
- *  saveFileInContainer method provided by Inrupt's Inputs library.
+ *  saveFileInContainer method provided by Inrupt's library.
  * @param {string} containerUrl - The URL of the container in the user's Pod to save the file to
  * @param {*} session - The user's Solid session object containing the authentication credentials
  * @param {string} file - The image file to be saved
@@ -306,6 +296,7 @@ async function saveImageToPod(containerUrl, session, file, fileName) {
 
         // Create a new Blob from the Uint8Array
         const blob = new Blob([uint8Array], { type: 'image/png' });
+        console.log(blob);
 
         // Save the image in the container
         const mimetype = "image/png";

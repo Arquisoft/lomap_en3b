@@ -2,7 +2,7 @@ import {v4 as uuidv4} from 'uuid';
 import {checkStringInvalidFormat} from "../util/utilMethods";
 
 export class ReviewLM{
-    const icon = '⭐';
+    icon = '⭐';
     revID;
     ItemReviewed;
     comment = '';
@@ -13,7 +13,7 @@ export class ReviewLM{
      * Creates a new Review object with the specified properties.
      * @param {string} locatID - The ID of the location being reviewed.
      * @param {string} user - The name of the user who wrote the review.
-     * @param {string} date - The date the review was written.
+     * @param {*} date - The date the review was written.
      * @param {string} reviewID - The ID of the review. If not provided, a new UUID will be generated.
      */
     constructor(locatID, user, date, reviewID=uuidv4()) {
@@ -30,7 +30,7 @@ export class ReviewLM{
         if (this.rate === 0) {
             ret = '';
         } else {
-            ret = icon.repeat(this.rate);
+            ret = this.icon.repeat(this.rate);
         }
         return ret;
     }
