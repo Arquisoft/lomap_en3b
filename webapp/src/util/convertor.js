@@ -101,11 +101,11 @@ export function convertDomainModelReviewIntoViewReview(dmObj) {
     };
 }
 //Convert from domain to POD (1)
-export function convertDomainModelReviewIntoPODReview(dmObj, user, locId, privacy){
+export function convertDomainModelReviewIntoPODReview(dmObj, locId, privacy){
     return buildThing(createThing({ name: dmObj.revID }))
         .addStringNoLocale(SCHEMA_LOMAP.rev_comment, dmObj.comment)
         .addStringNoLocale(SCHEMA_LOMAP.rev_rate, dmObj.rate)
-        .addStringNoLocale(SCHEMA_LOMAP.rev_reviewer, user)
+        .addStringNoLocale(SCHEMA_LOMAP.rev_reviewer, dmObj.user)
         .addStringNoLocale(SCHEMA_LOMAP.ident, "".concat(dmObj.revID))
         .addStringNoLocale(SCHEMA_LOMAP.rev_date, dmObj.time)     //time
         .addStringNoLocale(SCHEMA_LOMAP.rev_locat, locId)
