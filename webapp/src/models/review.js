@@ -2,11 +2,12 @@ import {v4 as uuidv4} from 'uuid';
 import {checkStringInvalidFormat} from "../util/utilMethods";
 
 export class ReviewLM{
+    const icon = '⭐';
     revID;
     ItemReviewed;
-    comment;
-    rate;
-    media;
+    comment = '';
+    rate = 0;
+    media = '';
 
     /**
      * Creates a new Review object with the specified properties.
@@ -22,5 +23,15 @@ export class ReviewLM{
         checkStringInvalidFormat(user, 'user' );
         this.user = user;
         this.time = new Date(date);
+    }
+    
+    getStars(){
+        let ret;
+        if (this.rate === 0) {
+            ret = '';
+        } else {
+            ret = icon.repeat(this.rate);
+        }
+        return ret;
     }
 }
