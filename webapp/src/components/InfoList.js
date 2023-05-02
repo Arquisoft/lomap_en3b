@@ -57,6 +57,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const[review,setReview]=useState([]);
     const[image,setImage]=useState("");
     const[description,setDescription]=useState("");
+    const [isValid,setIsValid] = useState(false);
+    const validationError = document.getElementById("validation-error");
+    const validationErrorRef = React.useRef(null);
 
 
     
@@ -194,13 +197,23 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
 
     const upgradeComments = () => {
-        const newComments = selected[0].comments.map((comment) => {
-          const { comment: text, commentpic, ratingStars } = comment;
-
-          return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
-        });
-        setComments(newComments);
+        try {
+          if (!selected || !selected[0] || !selected[0].comments) {
+            throw new Error("Comments are not available.");
+          }
+          const newComments = selected[0].comments.map((comment) => {
+            const { comment: text, commentpic, ratingStars } = comment;
+      
+            return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
+          });
+          setComments(newComments);
+        } catch (error) {
+          console.error(error);
+          // handle the error here, for example:
+          // setComments(["No comments available."]);
+        }
       };
+      
 
     const onChangeHandler = (e) => {
         setComment(e.target.value);
@@ -260,14 +273,28 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     };
 
     const handleButtonEdit = () =>{
-
-        onInfoList();
-        setSelectedTab(1);
-        setInfo(1);
-        setEdit(3);
-        onEditMarker({ key,name, category, privacy,pic,description });//sends an object containing the new values to the Map component where we update the location
+        if(isValid){
+            onInfoList();
+            setSelectedTab(1);
+            setInfo(1);
+            setEdit(3);
+            onEditMarker({ key,name, category, privacy,pic,description });//sends an object containing the new values to the Map component where we update the location
+            validationErrorRef.current.style.display = "none";
+            setIsValid(false);
+        }else{
+            validationErrorRef.current.style.display = "block";
+        }
 
     };
+
+    React.useEffect(() => {
+        
+        if (name !== '' && category !== '') {
+            setIsValid(true);
+        } else {
+            setIsValid(false);
+        }
+    }, [name, category]);
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -305,7 +332,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                                         primary={
                                             <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '70%' }}>
                                                 <Avatar />
-                                                <Box sx={{ ml: '0.5rem' }}>Nate</Box>
+                                                <Box sx={{ ml: '0.5rem' }}>Batu</Box>
                                             </Box>}
                                         secondary={<div dangerouslySetInnerHTML={{__html: html}} />}
                                         primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 'bold', mb: '0.3125rem' }}
@@ -446,6 +473,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                                         onChange={(e) => setDescription(e.target.value)}
                                     />
                                 </FormControl>
+                                <div id="validation-error" ref={validationErrorRef} style={{ display: 'none', color: 'red', marginTop: '0.5rem' }}>
+                                     Please complete name and type .
+                                </div>
                                 <div style={{ display: 'flex', justifyContent: 'center'}}>
                                     <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
                                         handleButtonEdit(); //event to know that the action is finoished
