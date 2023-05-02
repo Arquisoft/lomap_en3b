@@ -41,7 +41,7 @@ import EditIcon from '@mui/icons-material/Edit';
  * It renders the UI inside a container with the style attribute that depends on the isInfoVisible prop.
  *  It defines a set of states using the useState hook, such as comment, comments, selectedTab, selectedRating, name, category, privacy, and key.
 
-    The component also includes various functions that handle events like onChangeHandler, onClickHandler, handleImageUpload, handleAddButtonClick, handleTabChange, and handleRatingChange.
+ The component also includes various functions that handle events like onChangeHandler, onClickHandler, handleImageUpload, handleAddButtonClick, handleTabChange, and handleRatingChange.
  These functions set the states of the component when events occur.
  * @param isInfoVisible
  * @param onInfoList
@@ -65,7 +65,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const validationErrorRef = React.useRef(null);
 
 
-    
+
 
     const [selectedTab, setSelectedTab] = useState(1);
     const [selectedRating, setSelectedRating] = useState(2); // default rating is 2
@@ -87,7 +87,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
     const [key, setKey] = useState('');
-    
+
 
     /////////////////////////////////picture
     const handleImageUploadpic = () => {
@@ -133,18 +133,18 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     };
 
     /////
-        const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
-        const handleClick = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-        const handleClose = () => {
-            setAnchorEl(null);
-        };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
-        const open = Boolean(anchorEl);
-        const id = open ? 'simple-popover' : undefined;
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
 
     /////////////////////////////
 
@@ -160,11 +160,12 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     };
 
 
-     // Define an event handler to update the list with the propertys from the selected component
+    // Define an event handler to update the list with the propertys from the selected component
     React.useEffect(() => {
         if (isInfoVisible) {
 
-           upgradeComments();
+            upgradeComments();
+
 
           setName(selected[0].name);
           setCategory(selected[0].category); //setters for every field in the infoList
@@ -174,10 +175,11 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
           setDescription(selected[0].description);
           setImage(selected[0].pic);
           countStars(selected[0].comments);
+
         } else {
-          setComments([]);
+            setComments([]);
         }
-      }, [selected]);
+    }, [selected]);
 
 
       const countStars = (reviews) => {
@@ -219,22 +221,22 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
     const upgradeComments = () => {
         try {
-          if (!selected || !selected[0] || !selected[0].comments) {
-            throw new Error("Comments are not available.");
-          }
-          const newComments = selected[0].comments.map((comment) => {
-            const { comment: text, commentpic, ratingStars } = comment;
-      
-            return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
-          });
-          setComments(newComments);
+            if (!selected || !selected[0] || !selected[0].comments) {
+                throw new Error("Comments are not available.");
+            }
+            const newComments = selected[0].comments.map((comment) => {
+                const { comment: text, commentpic, ratingStars } = comment;
+
+                return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
+            });
+            setComments(newComments);
         } catch (error) {
-          console.error(error);
-          // handle the error here, for example:
-          // setComments(["No comments available."]);
+            console.error(error);
+            // handle the error here, for example:
+            // setComments(["No comments available."]);
         }
-      };
-      
+    };
+
 
     const onChangeHandler = (e) => {
         setComment(e.target.value);
@@ -288,7 +290,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const handleAddButtonClick = () => {
         onInfoList();
         setSelectedTab(1);
-        
+
         newComments( {key,review});
 
     };
@@ -309,7 +311,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     };
 
     React.useEffect(() => {
-        
+
         if (name !== '' && category !== '') {
             setIsValid(true);
         } else {
@@ -422,22 +424,26 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                         </Box>
                     </Box></Typography>}
                 {selectedTab === ınfo && <Typography variant="body1">
-                {image && <img src={image} alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} onError={() => setImage(null)} />}
+                    {image && <img src={image} alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} onError={() => setImage(null)} />}
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
-                        <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
+                        <InputLabel sx={{ fontSize: '2rem', fontWeight: 'bold', maxWidth: '15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
+
                             <Rating name="size-small" value={stars} size="extra-small" readOnly />
 
+
                         </Box>
-                        <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
-                        <Typography variant="body2" sx={{ mt: '0.3125rem', textAlign: 'center' }}>
-                          {description} </Typography>
+                        <Typography variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
+
+                        <Typography variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
+                            {description}
+                        </Typography>
                         <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
                     </Box>
                 </Typography>}
                 {selectedTab === edit && <Typography variant="body1">
-                    <Container style={style}>
+                    <Container style={{ height: '33rem', width: '18.5rem', overflow: 'auto' }}>
                         <>
 
                             <div style={{ display: 'flex', flexDirection: 'column'}} >
@@ -495,7 +501,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                                     />
                                 </FormControl>
                                 <div id="validation-error" ref={validationErrorRef} style={{ display: 'none', color: 'red', marginTop: '0.5rem' }}>
-                                     Please complete name and type .
+                                    Please complete name and type .
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'center'}}>
                                     <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
