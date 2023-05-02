@@ -95,9 +95,29 @@ export class Controller {
     }
 
 
-    tryMethd(lat, lng, name, description, category, privacy, loc){
-        console.log("I get: ");
-        console.log(lat, lng, name, description, category, privacy)
-        console.log(loc);
+    //TODO: Comment method.
+    retrieveLocations(){
+        let friends = await getFriendsWebIds(this.user.userWebId);
+        
+        let resource = this.user.userWebId.concat("private").concat(this.user.locResourceURL);
+        let locations = await readLocations(resource, session);
+        
+        resource = this.user.userWebId.concat("public").concat(this.user.locResourceURL);
+        locations = locations.concat(await readLocations(resource, session));
+        
+        let friendsLocations = [];
+        for (let i = 0; i < friends.length; i++) {
+            try {
+                //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
+                resource = friends[i].replace("/profile/card", "/").concat("public").concat(this.user.locResourceURL);
+                friendsLocations = friendsLocations.concat(await readLocations(resource ,session));
+            } catch (err) {
+                //Friend does not have LoMap??
+                console.log(err);
+            }
+        }
+
+        return locations.concat(friendsLocations);
+
     }
 }
