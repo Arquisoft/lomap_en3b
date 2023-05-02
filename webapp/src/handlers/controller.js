@@ -65,7 +65,7 @@ export class Controller {
     }
 
     /**
-     * This method saves the image inside the user pod. When saved, it wil display a message.
+     * This method saves a location inside the user's pod.
      * @param {LocationLM} loc location to save inside the user's pod
      */
     saveToPODLocation(loc) {
@@ -75,7 +75,7 @@ export class Controller {
             let resourceIMGURL = this.user.userWebId.concat(loc.privacy).concat(this.user.imgResourceURL);
             writeLocationWithImg(resourceURL, this.session, loc, resourceIMGURL)
                 .then(() => {
-                    window.alert("Image saved");
+                    window.alert("Location saved");
                 })
                 .catch(error => {
                     console.error(error);
@@ -90,7 +90,6 @@ export class Controller {
                 .catch(error => {
                     console.error(error);
                 });
-
         }
     }
 
@@ -122,4 +121,46 @@ export class Controller {
         return aux;
 
     }
+    
+    /**
+     * This method add a list of reviews retrived from the pod to the user's list of reviews
+     * @param {ReviewLM[]} listRevs list of reviews from the pod
+     */
+    saveLocationsFromPOD(listRevs){
+        listRevs.forEach( (rev) => {
+            //Add location
+            console.log(rev);
+            this.addReview(rev);
+        });
+    }
+    
+    /**
+     * This method saves a review inside the user's pod.
+     * @param {ReviewLM} rev review to save inside the user's pod
+     * @param {LocationLM} loc location that has the review
+     */
+    saveToPODReview(rev, loc) {
+        console.log(rev);
+        let resourceURL = loc.locOwner.concat(loc.privacy).concat(this.user.revResourceURL);
+        if(rev.media) {
+            let resourceIMGURL = loc.locOwner.concat(loc.privacy).concat(this.user.imgResourceURL);
+            writeReviewWithIMG(resourceURL, this.session, rev, loc.locID, loc.privacy, resourceIMGURL)
+                .then(() => {
+                    window.alert("Review saved");
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        } else {
+            console.log("Esta");
+            writeReviewWithoutIMG(resourceURL, this.session, rev, loc.locID, loc.privacy)
+                .then(() => {
+                    window.alert("Review saved");
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+    
 }
