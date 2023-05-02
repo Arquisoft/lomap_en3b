@@ -4,9 +4,9 @@ export class User {
     locations = new Map(); // a map to store the user's locations
     reviews = new Map(); // a map to store the user's reviews
     userWebId; // the user's WebID
-    locResourceURL = "/lomap/locations.ttl"; // the URL for the user's location resource
-    revResourceURL = "/lomap/reviews.ttl"; // the URL for the user's review resource
-    imgResourceURL = "/lomap/images"; // the URL for the user's image resource
+    locResourceURL = "/lomapen3b/locations.ttl"; // the URL for the user's location resource
+    revResourceURL = "/lomapen3b/reviews.ttl"; // the URL for the user's review resource
+    imgResourceURL = "/lomapen3b/images"; // the URL for the user's image resource
 
     /**
      * Constructor for the User class.
