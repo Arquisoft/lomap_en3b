@@ -115,7 +115,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
 
     async function getAndSetLocations() {
         let locationSet = await retrieveLocations()
-        console.log(locationSet);
         setMarkers((current) => [...current, ...locationSet]);
         setOriginalMarkers(locationSet);
 
@@ -157,7 +156,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
 
 
             const lastMarker = current[current.length - 1];
-            //console.log(lastMarker);
 
             const marker = markerData[0]; // Access the object inside the array
 
@@ -182,7 +180,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
 
 
             
-            //console.log(lastMarker);
             const marker = markerData[0]; // Access the object inside the array
 
             const lastMarker = current[marker.key];
