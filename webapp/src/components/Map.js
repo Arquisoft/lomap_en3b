@@ -97,6 +97,10 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
+        //TODO: Check how it works
+        return controlMng.retrieveLocations();
+        //OLD
+        /*
         let friends = await getFriendsWebIds(session.info.webId);
         let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
         // Code to get the friends locations
@@ -115,6 +119,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         }
 
         return locations.concat(friendsLocations); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        */
     }
 
     async function getAndSetLocations() {
