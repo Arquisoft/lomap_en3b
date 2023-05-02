@@ -43,6 +43,14 @@ export async function readLocations(resourceURL,session, userIDWeb) {
                 location= convertPODLocationIntoDomainModelLocation(locationThing, userIDWeb)
                 location.locOwner = userIDWeb;
 
+                // media
+                let mediaURL = getUrl(locationThing, SCHEMA_LOMAP.rev_hasPart);
+                if(mediaURL){
+                    //IMG url
+                    let mediaThingURL = mediaURL.toString();
+                    location.img = getImageFromPod(mediaThingURL, session);
+                }
+                
                 //Add locationLM into List
                 locationsRetrieved.push(location);
 
@@ -217,7 +225,7 @@ async function writeReview(resourceURL, session, rev, user, locId, privacy, cond
     if(cond) {
         let name = rev.revID.concat(".png")
         //Save image file into POD and get URL
-        await saveImageToPod(imageContainerUrl, session, rev.img, name);
+        await saveImageToPod(imageContainerUrl, session, rev.media, name);
 
         //URL where it saved 
         let imageUrl = imageContainerUrl.concat("/").concat(name);
