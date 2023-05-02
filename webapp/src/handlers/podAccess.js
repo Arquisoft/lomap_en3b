@@ -178,9 +178,9 @@ export async function readReviews(resourceURL,session) {
  * @param {string} locId - locationID to identify the location to where the review is referring
  * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
  * @returns {Promise<string|*>} */
-export function writeReviewWithoutIMG(resourceURL, session, rev, user, locId,
+export function writeReviewWithoutIMG(resourceURL, session, rev, locId,
                                       privacy) {
-    return writeReview(resourceURL, session, rev, user, locId, privacy, false);
+    return writeReview(resourceURL, session, rev, locId, privacy, false);
 }
 
 //Associate image
@@ -196,9 +196,9 @@ export function writeReviewWithoutIMG(resourceURL, session, rev, user, locId,
  * @param {string} imageContainerUrl - The URL of the SolidDataset where the image should be store
  * @param imageFile - The image file
  * @returns {Promise<string|*>} */
-export function writeReviewWithIMG(resourceURL, session, rev, user, locId,
+export function writeReviewWithIMG(resourceURL, session, rev, locId,
                                    privacy, imageContainerUrl) {
-    return writeReview(resourceURL, session, rev, user, locId, privacy, true, imageContainerUrl);
+    return writeReview(resourceURL, session, rev, locId, privacy, true, imageContainerUrl);
 }
 
 /**
@@ -215,12 +215,12 @@ export function writeReviewWithIMG(resourceURL, session, rev, user, locId,
  * @param {*} imageFile - The image file
  * @returns {Promise<string|*>}
  */
-async function writeReview(resourceURL, session, rev, user, locId, privacy, cond, imageContainerUrl="") {
+async function writeReview(resourceURL, session, rev, locId, privacy, cond, imageContainerUrl="") {
     //Get dataSet
     let dataset = await getDataset(resourceURL, session);
 
     //Create Thing
-    let reviewThing = convertDomainModelReviewIntoPODReview(rev, user, locId, privacy);
+    let reviewThing = convertDomainModelReviewIntoPODReview(rev, locId, privacy);
 
     if(cond) {
         let name = rev.revID.concat(".png")
