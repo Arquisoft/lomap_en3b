@@ -100,24 +100,26 @@ export class Controller {
         let friends = await getFriendsWebIds(this.user.userWebId);
         
         let resource = this.user.userWebId.concat("private").concat(this.user.locResourceURL);
-        let locations = await readLocations(resource, session);
+        let locations = await readLocations(resource, session, this.user.userWebId);
         
         resource = this.user.userWebId.concat("public").concat(this.user.locResourceURL);
-        locations = locations.concat(await readLocations(resource, session));
+        locations = locations.concat(await readLocations(resource, session, this.user.userWebId));
         
         let friendsLocations = [];
         for (let i = 0; i < friends.length; i++) {
             try {
                 //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
-                resource = friends[i].replace("/profile/card", "/").concat("public").concat(this.user.locResourceURL);
-                friendsLocations = friendsLocations.concat(await readLocations(resource ,session));
+                let friendID = friends[i].replace("/profile/card", "/");
+                resource = friendID.concat("public").concat(this.user.locResourceURL);
+                friendsLocations = friendsLocations.concat(await readLocations(resource, session, friendID));
             } catch (err) {
                 //Friend does not have LoMap??
                 console.log(err);
             }
         }
-
-        return locations.concat(friendsLocations);
+        let aux = locations.concat(friendsLocations);
+        this.saveLocationsFromPOD();
+        return aux;
 
     }
 }
