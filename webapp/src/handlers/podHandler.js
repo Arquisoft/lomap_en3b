@@ -14,7 +14,7 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt,
+    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess,
 
 
 } from "@inrupt/solid-client";
@@ -59,8 +59,8 @@ export async function checkForLomap(session) {
 export async function checkForLomapInPod(pod,session) {
     try {
 
-     let aux= await getSolidDataset(pod+"public/lomap",{fetch : session.fetch});
-     let aux2= await getSolidDataset(pod+"private/lomap",{fetch : session.fetch});
+     let aux= await getSolidDataset(pod+"public/lomapen3b",{fetch : session.fetch});
+     let aux2= await getSolidDataset(pod+"private/lomapen3b",{fetch : session.fetch});
 
     } catch (error) {
         console.log("Not found lomap folder in pod, we'll try creating one...")
@@ -123,19 +123,18 @@ async function mockFiles(session, resource) {
     }
 }
 
-
 export async function createLomapContainer(pod,session) {
     // create the lomap containers
-    await createContainerAt(pod + "public/lomap/",{fetch : session.fetch});
-    await createContainerAt(pod + "private/lomap/",{fetch : session.fetch});
+    await createContainerAt(pod + "public/lomapen3b/",{fetch : session.fetch});
+    await createContainerAt(pod + "private/lomapen3b/",{fetch : session.fetch});
     // create all the tl files used to store locations and reviews (all empty)
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl"));
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl"));
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomap/reviews.ttl"));
-    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomap/reviews.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomapen3b/locations.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomapen3b/locations.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomapen3b/reviews.ttl"));
+    await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomapen3b/reviews.ttl"));
     // create the containers that are going to store the images
-    await createContainerAt(session.info.webId.replace("/profile/card#me", "/public/lomap/images/"), {fetch: session.fetch});
-    await createContainerAt(session.info.webId.replace("/profile/card#me", "/private/lomap/images/"), {fetch: session.fetch});
+    await createContainerAt(session.info.webId.replace("/profile/card#me", "/public/lomapen3b/images/"), {fetch: session.fetch});
+    await createContainerAt(session.info.webId.replace("/profile/card#me", "/private/lomapen3b/images/"), {fetch: session.fetch});
     await giveFriendsAccess(session, true);
 }
 
@@ -162,7 +161,7 @@ export async function getFriendsWebIds(webId) {
 async function giveFriendsAccess(session, access) {
     let currentUser = session.info.webId
     let friends = await getFriendsWebIds(currentUser);
-    let resourceURL = currentUser.replace("/profile/card#me", "/") + "public/lomap/";
+    let resourceURL = currentUser.replace("/profile/card#me", "/") + "public/lomapen3b/";
 
     for (let i = 0; i < friends.length; i++) { //Set access to  public (friends only) locations
         await setAccessToFriend(friends[i].replace("/profile/card","/")+"profile/card#me", resourceURL, access, session);
@@ -181,7 +180,13 @@ async function giveFriendsAccess(session, access) {
  async function setAccessToFriend(friend, location, access, session){
     let locationsURL = location + "locations.ttl";
     let reviewsURL = location + "reviews.ttl";
+    let imagesURL = location + "images/";
+
     await giveAccessToFile(locationsURL, friend, session);
+    await giveAccessToFile(reviewsURL, friend, session);
+    await giveAccessToFile(imagesURL, friend, session);
+    await giveDefaultAccessToFile(imagesURL, friend, session);
+
     // Fetch the SolidDataset and its associated ACL, if available:
     let myDatasetWithAcl;
     try {
@@ -227,6 +232,50 @@ async function giveFriendsAccess(session, access) {
     }
     catch (error){
         console.log(error)// catch any error
+    }
+}
+
+/**
+ * Sets the default access to a folder (the children of such folder inherit this access)
+ * @param resource folder to edit
+ * @param friend is given access
+ * @param session containing the current authenticated session
+ */
+async function giveDefaultAccessToFile(resource, friend, session) {
+    let myDatasetWithAcl;
+    try {
+        myDatasetWithAcl = await getSolidDatasetWithAcl(resource, {fetch: session.fetch}); // inventory
+        // Obtain the SolidDataset's own ACL, if available, or initialise a new one, if possible:
+        let resourceAcl;
+        if (!hasResourceAcl(myDatasetWithAcl)) {
+            if (!hasAccessibleAcl(myDatasetWithAcl)) {
+                //  "The current user does not have permission to change access rights to this Resource."
+            }
+            if (!hasFallbackAcl(myDatasetWithAcl)) {
+                // create new access control list
+                resourceAcl = createAcl(myDatasetWithAcl);
+            }
+            else{
+                // create access control list from fallback
+                resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
+            }
+        } else {
+            // get the access control list of the dataset
+            resourceAcl = getResourceAcl(myDatasetWithAcl);
+        }
+
+        let updatedAcl;
+        // grant permissions
+        updatedAcl = setAgentDefaultAccess(
+            resourceAcl,
+            friend,
+            { read: true, append: true, write: false, control: false }
+        );
+        // save the access control list
+        await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
+    }
+    catch (error){ // catch any possible thrown errors
+        console.log(error)
     }
 }
 
