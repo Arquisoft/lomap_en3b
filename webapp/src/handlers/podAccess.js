@@ -308,6 +308,7 @@ async function readReviews(resourceURL,session) {
     return reviewsRetrieved;
 
 }
+
 export {
     writeLocations,
     readLocations

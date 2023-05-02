@@ -95,16 +95,16 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
         let friends = await getFriendsWebIds(session.info.webId);
-        let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
+        let resource = session.info.webId.replace("/profile/card#me", "/private/lomapen3b/locations.ttl");
         // Code to get the friends locations
         let locations = await readLocations(resource, session);
-        resource = session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl");
+        resource = session.info.webId.replace("/profile/card#me", "/public/lomapen3b/locations.ttl");
         locations = locations.concat(await readLocations(resource, session));
         let friendsLocations = [];
         for (let i = 0; i < friends.length; i++) {
             try {
                 //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
-                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "public/lomap/locations.ttl",session));
+                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "public/lomapen3b/locations.ttl",session));
             } catch (err) {
                 //Friend does not have LoMap??
                 console.log(err);
