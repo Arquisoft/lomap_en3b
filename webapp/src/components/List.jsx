@@ -67,6 +67,7 @@ const List = ({ isVisible, onAddMarker}) => {
 
     React.useEffect(() => {
         //console.log(name);
+
         if (name !== '' && category !== '') {
             setIsValid(true);
         } else {
