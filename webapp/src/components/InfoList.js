@@ -57,7 +57,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const[review,setReview]=useState([]);
     const[image,setImage]=useState("");
     const[description,setDescription]=useState("");
+
     const[stars,setStars]=useState(0);
+
     const [isValid,setIsValid] = useState(false);
     const validationError = document.getElementById("validation-error");
     const validationErrorRef = React.useRef(null);
