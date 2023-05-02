@@ -68,10 +68,6 @@ export class Controller {
         }
         if(img){
             rev.media = extractBase64Image(img);
-            console.log("AUX:::");
-            console.log(rev.media);
-            console.log(typeof rev.media);
-
         } else {
             rev.media = "";
         }
@@ -130,7 +126,6 @@ export class Controller {
      * @param {LocationLM} loc location to save inside the user's pod
      */
     saveToPODLocation(loc) {
-        console.log(loc);
         if(loc.img) {
             let resourceURL = this.user.userWebId.concat(loc.privacy).concat(this.user.locResourceURL);
             let resourceIMGURL = this.user.userWebId.concat(loc.privacy).concat(this.user.imgResourceURL);
@@ -142,7 +137,6 @@ export class Controller {
                     console.error(error);
                 });
         } else {
-            console.log("Esta");
             let resourceURL = this.user.userWebId.concat(loc.privacy).concat(this.user.locResourceURL);
             writeLocationWithoutImg(resourceURL, this.session, loc)
                 .then(() => {
@@ -163,8 +157,6 @@ export class Controller {
         let resourceR = this.user.userWebId.concat("private").concat(this.user.revResourceURL);
         let reviews = await readReviews(resourceR, this.session);
         this.saveReviewsFromPOD(reviews);
-        console.log(reviews);
-        console.log(this);
 
         return locats;
     }
@@ -175,8 +167,6 @@ export class Controller {
         let resourceR = this.user.userWebId.concat("public").concat(this.user.revResourceURL);
         let reviews = await readReviews(resourceR, this.session);
         this.saveReviewsFromPOD(reviews);
-        console.log(reviews);
-        console.log(this);  //Duplicates
 
         return locats;
     }
@@ -202,8 +192,6 @@ export class Controller {
         }
         //Add Reviews
         this.saveReviewsFromPOD(reviews);
-        console.log(reviews);
-        console.log(this);
 
         return friendsLocations;
     }
@@ -215,7 +203,6 @@ export class Controller {
      * @param {string} privacy
      */
     saveToPODReview(rev, locOwner, privacy) {
-        console.log(rev);
         let resourceURL = locOwner.concat(privacy).concat(this.user.revResourceURL);
         if(rev.media) {
             let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
@@ -244,9 +231,7 @@ export class Controller {
             let comments = [];
             if(this.user.reviews.has(aux[i].locID)){
                 let reviews = this.user.reviews.get(aux[i].locID);
-                console.log(reviews);
                 for(let j = 0; j < reviews.length; j++){
-                    console.log(reviews[j]);
                     comments.push(convertDomainModelReviewIntoViewReview(reviews[j]));
                 }
             }

@@ -244,13 +244,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
                 )
             }
         });
-        /*
-        controlMng.addReview(
-            rev,
-            lastMarker.comments.comment,
-            lastMarker.comments.ratingStars,
-            lastMarker.comments.commentpic
-        ); */
     }
 
     //function to update the comments
