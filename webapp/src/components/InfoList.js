@@ -171,17 +171,17 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
           setKey(selected[0].key);
           setDescription(selected[0].description);
           setImage(selected[0].pic);
-          countStars();
+          countStars(selected[0].comments);
         } else {
           setComments([]);
         }
       }, [selected]);
 
 
-      const countStars = () => {
+      const countStars = (reviews) => {
         let totalStars = 0;
         let totalComments = 0;
-        review.forEach((comment) => {
+        reviews.forEach((comment) => {
           
             totalStars += comment.ratingStars.split('⭐').length - 1;
             totalComments += 1;
@@ -189,6 +189,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
         });
         const averageStars = totalComments > 0 ? totalStars / totalComments : 0;
         setStars(averageStars);
+        
       }
       
       
