@@ -97,7 +97,7 @@ async function writeLocation(resourceURL, session, loc, cond, imgResourceURL = '
         //Save image file into POD and get URL
         await saveImageToPod(imgResourceURL, session, loc.img, name);
 
-        //URL where it saved //TODO: CHECK if it's like this
+        //URL where it saved
         let imageUrl = imgResourceURL.concat("/").concat(name);
 
         locationThing = addUrl(locationThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
@@ -189,8 +189,8 @@ export function writeReviewWithoutIMG(resourceURL, session, rev, user, locId,
  * @param imageFile - The image file
  * @returns {Promise<string|*>} */
 export function writeReviewWithIMG(resourceURL, session, rev, user, locId,
-                                   privacy, imageContainerUrl, imageFile) {
-    return writeReview(resourceURL, session, rev, user, locId, privacy, true, imageContainerUrl, imageFile);
+                                   privacy, imageContainerUrl) {
+    return writeReview(resourceURL, session, rev, user, locId, privacy, true, imageContainerUrl);
 }
 
 /**
@@ -207,7 +207,7 @@ export function writeReviewWithIMG(resourceURL, session, rev, user, locId,
  * @param {*} imageFile - The image file
  * @returns {Promise<string|*>}
  */
-async function writeReview(resourceURL, session, rev, user, locId, privacy, cond, imageContainerUrl="", imageFile="") {
+async function writeReview(resourceURL, session, rev, user, locId, privacy, cond, imageContainerUrl="") {
     //Get dataSet
     let dataset = await getDataset(resourceURL, session);
 
@@ -215,14 +215,26 @@ async function writeReview(resourceURL, session, rev, user, locId, privacy, cond
     let reviewThing = convertDomainModelReviewIntoPODReview(rev, user, locId, privacy);
 
     if(cond) {
+        let name = rev.revID.concat(".png")
         //Save image file into POD and get URL
-        await saveImageToPod(imageContainerUrl, session, imageFile, rev.revID);
+        await saveImageToPod(imageContainerUrl, session, rev.img, name);
+
+        //URL where it saved 
+        let imageUrl = imageContainerUrl.concat("/").concat(name);
+
+        reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
+    }
+    /* OLD
+    if(cond) {
+        //Save image file into POD and get URL
+        await saveImageToPod(imageContainerUrl, session, imageFile, );
 
         //URL where it saved //TODO: CHECK if it's like this
         let imageUrl = imageContainerUrl.concat("/").concat(rev.revID);
 
         reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
-    }
+    } 
+    */
 
     //Add Thing into DataSet
     dataset = setThing(dataset, reviewThing);
