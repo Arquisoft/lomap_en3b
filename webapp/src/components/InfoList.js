@@ -57,6 +57,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const[review,setReview]=useState([]);
     const[image,setImage]=useState("");
     const[description,setDescription]=useState("");
+
+    const[stars,setStars]=useState(0);
+
     const [isValid,setIsValid] = useState(false);
     const validationError = document.getElementById("validation-error");
     const validationErrorRef = React.useRef(null);
@@ -166,14 +169,32 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
           setName(selected[0].name);
           setCategory(selected[0].category); //setters for every field in the infoList
           setPrivacy(selected[0].privacy);
-          console.log(selected[0].key);
+          
           setKey(selected[0].key);
           setDescription(selected[0].description);
           setImage(selected[0].pic);
+          countStars(selected[0].comments);
         } else {
           setComments([]);
         }
       }, [selected]);
+
+
+      const countStars = (reviews) => {
+        let totalStars = 0;
+        let totalComments = 0;
+        reviews.forEach((comment) => {
+          
+            totalStars += comment.ratingStars.split('⭐').length - 1;
+            totalComments += 1;
+          
+        });
+        const averageStars = totalComments > 0 ? totalStars / totalComments : 0;
+        setStars(averageStars);
+        
+      }
+      
+      
 
 
 
@@ -197,13 +218,23 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
 
     const upgradeComments = () => {
-        const newComments = selected[0].comments.map((comment) => {
-          const { comment: text, commentpic, ratingStars } = comment;
-
-          return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
-        });
-        setComments(newComments);
+        try {
+          if (!selected || !selected[0] || !selected[0].comments) {
+            throw new Error("Comments are not available.");
+          }
+          const newComments = selected[0].comments.map((comment) => {
+            const { comment: text, commentpic, ratingStars } = comment;
+      
+            return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
+          });
+          setComments(newComments);
+        } catch (error) {
+          console.error(error);
+          // handle the error here, for example:
+          // setComments(["No comments available."]);
+        }
       };
+      
 
     const onChangeHandler = (e) => {
         setComment(e.target.value);
@@ -396,7 +427,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
                         <InputLabel sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
-                            <Rating name="size-small" defaultValue={3} size="extra-small" readOnly />
+                            <Rating name="size-small" value={stars} size="extra-small" readOnly />
 
                         </Box>
                         <Typography variant="caption" sx={{ mt: '0.3125rem' }}>{category} • {privacy}</Typography>
