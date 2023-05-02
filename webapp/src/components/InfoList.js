@@ -49,7 +49,7 @@ import EditIcon from '@mui/icons-material/Edit';
  * @param newComments
  */
 
-const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,Array}) => {
 
     const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
@@ -164,7 +164,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     React.useEffect(() => {
         if (isInfoVisible) {
 
-            upgradeComments();
+           
 
 
           setName(selected[0].name);
@@ -174,6 +174,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
           setKey(selected[0].key);
           setDescription(selected[0].description);
           setImage(selected[0].pic);
+          upgradeComments();
           countStars(selected[0].comments);
 
         } else {
@@ -183,6 +184,10 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
 
       const countStars = (reviews) => {
+        try{
+        if (!selected || !selected[0] || !selected[0].comments) {
+                throw new Error("Comments are not available.");
+            }
         let totalStars = 0;
         let totalComments = 0;
         reviews.forEach((comment) => {
@@ -193,8 +198,11 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
         });
         const averageStars = totalComments > 0 ? totalStars / totalComments : 0;
         setStars(averageStars);
+        }catch(error){
+            setStars(0);
+        }
         
-      }
+      };
       
       
 
@@ -231,7 +239,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
             });
             setComments(newComments);
         } catch (error) {
-            console.error(error);
+           
+            Array(selected[0].key);
             // handle the error here, for example:
             // setComments(["No comments available."]);
         }

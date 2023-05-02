@@ -13,6 +13,7 @@ import FilterSidebar from "../components/Filters";
 import ErrorView from "./errorView"
 import MapErrorBoundary from "../components/MapErrorBoundry";
 import {Controller} from "../handlers/controller";
+import { tr } from "date-fns/locale";
 
 
 
@@ -49,6 +50,7 @@ const MapView = ({session}) => {
   const [selected, setSelected] = React.useState(['']); // track selected markers for the info list
   const [showLogOut, setShowLogOut] = useState(false);
   const [updateLocation, setupdateLocation] = useState(false);
+  const[createComment,setcreateComment]=useState([]);
 
   const controlMng = new Controller(session);
 
@@ -105,6 +107,10 @@ const MapView = ({session}) => {
     setupdateLocation(!updateLocation);
   };
 
+  const createComments =(key) =>{
+    
+    setcreateComment(key);
+  };
 
   const updateDone =() =>{
     setupdateLocation(!updateLocation);
@@ -157,7 +163,7 @@ const MapView = ({session}) => {
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
        
-        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} />
+        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} Array={(key) => createComments(key)}/>
         
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
@@ -166,7 +172,7 @@ const MapView = ({session}) => {
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
         { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
         <MapErrorBoundary>
-          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} controlMng={controlMng} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
+          <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} controlMng={controlMng} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone} createComment={createComment}/>
         </MapErrorBoundary>
           
         </Grid>}

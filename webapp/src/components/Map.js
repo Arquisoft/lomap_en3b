@@ -57,7 +57,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
      * @param onInfoList
      * @param changesInComments
      */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMng, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview, updateLocation,editLocation}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMng, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview, updateLocation,editLocation,createComment}) {
     // Defining the state variables
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
     const [markers, setMarkers] = React.useState([]);
@@ -130,23 +130,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
 
 
 
-    const handleMarkerClick = (marker) => {
-        setSelected(marker);
-    }
-
-    const handleNameChange = (event, marker) => {
-        marker.name = event.target.value;
-        setMarkers([...markers]);
-    }
-
-    const handleTypeChange = (event, marker) => {
-        marker.category= event.target.value;
-        setMarkers([...markers]);
-    }
-    const handlePrivacyChange = (event, marker) => {
-        marker.privacy = event.target.value;
-        setMarkers([...markers]);
-    }
+   
+    
 
     //function to update the propertys of a location
     const updateLastMarker = async () => {
@@ -241,6 +226,22 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
     }
 
     //function to update the comments
+    const AddComments = () => {
+
+        setOriginalMarkers((current) => {
+            const key = createComment;
+            const lastMarker = current[key];
+        
+            if (lastMarker.hasOwnProperty('comments')) {
+              lastMarker.comments = [];
+            } else {
+              lastMarker.comments = [];
+            }
+        
+            return [...current];
+          });
+    };
+
     const updateComments = () => {
 
         setOriginalMarkers((current) => {
@@ -328,6 +329,18 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
         
         
       }, [updateLocation]);
+
+      React.useEffect(() => {
+
+        if (createComment.length>0) {
+          
+            AddComments();
+          
+          
+        }
+        
+        
+      }, [createComment]);
       
 
     const iconUrls = {
