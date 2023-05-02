@@ -1,56 +1,37 @@
-// Import uuid for generating id
-import {
-    v4 as uuidv4
-} from 'uuid';
-import {ReviewInvalidFormatException, ReviewInvalidFormatForCommentException} from "../util/Exceptions/exceptions";
+import {v4 as uuidv4} from 'uuid';
+import {checkStringInvalidFormat} from "../util/utilMethods";
 
-function check(value, str) {
-    if(!value){
-        throw new ReviewInvalidFormatException(String(str  ));
-    }
-}
+export class ReviewLM{
+    icon = '⭐';
+    revID;
+    ItemReviewed;
+    comment = '';
+    rate = 0;
+    media = '';
 
-function checkValidComment(str) {
-    if (/\n/.exec(str) || !str) {
-        throw new ReviewInvalidFormatForCommentException(String(str));
-    }
-}
-
-class Review{
-    locationID
-    revID
-    revScore
-    revComment = [];
-    revImg //Url
-    revAuthor //Author
-    constructor(locationID, reviewID=uuidv4(),) {
-        check(reviewID, "reviewID");
-        check(locationID, "locationID");
+    /**
+     * Creates a new Review object with the specified properties.
+     * @param {string} locatID - The ID of the location being reviewed.
+     * @param {string} user - The name of the user who wrote the review.
+     * @param {*} date - The date the review was written.
+     * @param {string} reviewID - The ID of the review. If not provided, a new UUID will be generated.
+     */
+    constructor(locatID, user, date, reviewID=uuidv4()) {
         this.revID = reviewID;
-        this.locationID = locationID;
+        checkStringInvalidFormat(locatID, 'ItemReviewed' );
+        this.ItemReviewed = locatID;
+        checkStringInvalidFormat(user, 'user' );
+        this.user = user;
+        this.time = new Date(date);
     }
-    addScore(score){
-        this.revScore = score;
-    }
-    addComment(comment){
-        checkValidComment(comment);
-        this.revComment.push(comment);
-    }
-    addImg(img){
-        this.revImg = img;
-    }
-
-    getCommentsToPOD(){
-        let output = "";
-        this.revComment.forEach( c => {
-            output += c + "\n";
-        })
-
-        return output;
-    }
-
-    addUser(name){
-        this.revAuthor = name;
+    
+    getStars(){
+        let ret;
+        if (this.rate === 0) {
+            ret = '';
+        } else {
+            ret = this.icon.repeat(this.rate);
+        }
+        return ret;
     }
 }
-export {Review};
