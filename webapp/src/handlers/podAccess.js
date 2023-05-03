@@ -38,22 +38,15 @@ export async function readLocations(resourceURL,session, userIDWeb) {
             try {
                 //Convert into LocationLM object
                 location= convertPODLocationIntoDomainModelLocation(locationThing, userIDWeb)
-                location.locOwner = userIDWeb;
+                //location.locOwner = userIDWeb;
+                //console.log(location.locID);
 
                 // media
                 let mediaURL = getUrl(locationThing, SCHEMA_LOMAP.rev_hasPart);
                 if(mediaURL){
-                    //IMG url
-                    //console.log(mediaURL);
-                    //console.log(typeof mediaURL);
-                    //let mediaThingURL = mediaURL.toString();
-                    //console.log(typeof mediaThingURL);
-                    //console.log(mediaThingURL);
                     let aux = await getImageFromPod(mediaURL, session);
-                    console.log(aux);
                     location.img = "data:image/png;base64,".concat(aux);
                 }
-                console.log(location);
                 //Add locationLM into List
                 locationsRetrieved.push(location);
 
@@ -108,7 +101,6 @@ async function writeLocation(resourceURL, session, loc, cond, imgResourceURL = '
     if(cond) {
         let name = loc.locID.concat(".png")
         //Save image file into POD and get URL
-        console.log(loc.img);
         await saveImageToPod(imgResourceURL, session, loc.img, name);
 
         //URL where it saved
@@ -151,7 +143,9 @@ export async function readReviews(resourceURL,session) {
                 if(mediaURL){
                     //IMG url
                     let mediaThingURL = mediaURL.toString();
-                    review.media = getImageFromPod(mediaThingURL, session);
+                    //"data:image/png;base64,".concat(
+                    let aux = await getImageFromPod(mediaThingURL, session);
+                    review.media = "data:image/png;base64,".concat(aux);
                 }
 
                 //Add review into List
@@ -180,12 +174,10 @@ export async function readReviews(resourceURL,session) {
  * @param resourceURL - The URL of the SolidDataset to save the review
  * @param {*} session - The authentication session used to access the user's pod.
  * @param {ReviewLM} rev - review object to convert into a Review Thing
- * @param {string} locId - locationID to identify the location to where the review is referring
  * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
  * @returns {Promise<string|*>} */
-export function writeReviewWithoutIMG(resourceURL, session, rev, locId,
-                                      privacy) {
-    return writeReview(resourceURL, session, rev, locId, privacy, false);
+export function writeReviewWithoutIMG(resourceURL, session, rev, privacy) {
+    return writeReview(resourceURL, session, rev, privacy, false);
 }
 
 //Associate image
@@ -195,13 +187,11 @@ export function writeReviewWithoutIMG(resourceURL, session, rev, locId,
  * @param resourceURL - The URL of the SolidDataset to save the review
  * @param {*} session - The authentication session used to access the user's pod.
  * @param {ReviewLM} rev - review object to convert into a Review Thing
- * @param {string} locId - locationID to identify the location to where the review is referring
  * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
  * @param {string} imageContainerUrl - The URL of the SolidDataset where the image should be store
  * @returns {Promise<string|*>} */
-export function writeReviewWithIMG(resourceURL, session, rev, locId,
-                                   privacy, imageContainerUrl) {
-    return writeReview(resourceURL, session, rev, locId, privacy, true, imageContainerUrl);
+export function writeReviewWithIMG(resourceURL, session, rev, privacy, imageContainerUrl) {
+    return writeReview(resourceURL, session, rev, privacy, true, imageContainerUrl);
 }
 
 /**
@@ -210,25 +200,24 @@ export function writeReviewWithIMG(resourceURL, session, rev, locId,
  * @param resourceURL - The URL of the SolidDataset to save the review
  * @param {*} session - The authentication session used to access the user's pod.
  * @param {ReviewLM} rev - review object to convert into a Review Thing
- * @param {string} locId - locationID to identify the location to where the review is referring
  * @param {string} privacy - Privacy level of the review, used to identify where it is going to be share with
  * @param {boolean} cond - if the review has an image
  * @param {string} imageContainerUrl - The URL of the SolidDataset where the image should be store
  * @returns {Promise<string|*>}
  */
-async function writeReview(resourceURL, session, rev, locId, privacy, cond, imageContainerUrl="") {
+async function writeReview(resourceURL, session, rev, privacy, cond, imageContainerUrl="") {
     //Get dataSet
     let dataset = await getDataset(resourceURL, session);
 
     //Create Thing
-    let reviewThing = convertDomainModelReviewIntoPODReview(rev, locId, privacy);
+    let reviewThing = convertDomainModelReviewIntoPODReview(rev, privacy);
 
-    if(cond) {
+    if (cond) {
         let name = rev.revID.concat(".png")
         //Save image file into POD and get URL
         await saveImageToPod(imageContainerUrl, session, rev.media, name);
 
-        //URL where it saved 
+        //URL where it saved
         let imageUrl = imageContainerUrl.concat("/").concat(name);
 
         reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
@@ -255,7 +244,6 @@ async function getImageFromPod(fileUrl, session) {
     try {
         // Get the file from the container
         const imageBlob = await getFile(fileUrl, { fetch: session.fetch });
-        console.log(imageBlob);
 
         // Convert the Blob object to a base64-encoded string
         // Do something with the base64-encoded image data
@@ -296,7 +284,6 @@ async function saveImageToPod(containerUrl, session, file, fileName) {
 
         // Create a new Blob from the Uint8Array
         const blob = new Blob([uint8Array], { type: 'image/png' });
-        console.log(blob);
 
         // Save the image in the container
         const mimetype = "image/png";

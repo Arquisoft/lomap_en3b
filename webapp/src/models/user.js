@@ -1,6 +1,8 @@
 import {checkStringInvalidFormat} from "../util/utilMethods";
+import {getProfilePicture} from "../handlers/podHandler";
 
 export class User {
+    profilePicture;
     locations = new Map(); // a map to store the user's locations
     reviews = new Map(); // a map to store the user's reviews
     userWebId; // the user's WebID
@@ -13,8 +15,16 @@ export class User {
      * @param {*} sessionGiven - An object containing information about the user's session.
      */
     constructor(sessionGiven) {
-        checkStringInvalidFormat(sessionGiven, 'userWebId' );
+        checkStringInvalidFormat(sessionGiven, 'userWebId');
         this.userWebId = sessionGiven.info.webId.replace("/profile/card#me", "/");
+        this.profilePicture = getProfilePicture(sessionGiven.info.webId)
+            .then( (pic) =>
+            {
+                return pic;
+            })
+            .catch( () => {
+                console.error("Something went wrong while getting the user's picture! ");
+            });
     }
 
     /**
@@ -27,18 +37,16 @@ export class User {
         }
     }
 
+
     /**
      * Adds a review to the user's reviews Map object.
      * @param {ReviewLM} rev - The review to be added.
      */
     addReview(rev){
-        let aux;
-        if(!this.reviews.has(rev.ItemReviewed)) {
-            aux = this.reviews.get(rev.ItemReviewed);
-        } else{
-            aux = [];
+        if (this.reviews.has(rev.ItemReviewed)) {
+            this.reviews.get(rev.ItemReviewed).push(rev);
+        } else {
+            this.reviews.set(rev.ItemReviewed, [rev]);
         }
-        aux = aux.push(rev);
-        this.reviews.set(rev.ItemReviewed, aux);
     }
 }
