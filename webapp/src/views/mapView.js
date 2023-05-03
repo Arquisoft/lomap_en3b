@@ -124,10 +124,7 @@ const MapView = ({session,onSearch}) => {
     setFilterSideBar(!filterSideBar);
 
   }
-  const makeAccountPageDisapear = () => {
-    setShowAccountPage(!showAccountPage);
 
-  };
 
   const makeLogOutDisapear = () => {
     setShowLogOut(!showLogOut);
@@ -147,7 +144,7 @@ const MapView = ({session,onSearch}) => {
 
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
-            onAccountPage={() => makeAccountPageDisapear()}
+
             onLogOut={() => makeLogOutDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
@@ -157,7 +154,7 @@ const MapView = ({session,onSearch}) => {
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} />
         
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
-        <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
+
 
 
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLogOutDisapear()}/>
