@@ -6,8 +6,9 @@ import React from "react";
 const mockImpl=()=>{}
 
 describe("Container renders properly",()=>{
+    const selectedLoc=  Array(new LocationLM(43.39635189868037,-5.831536216796875,"Lavander Haze","I love this flower field",'park','private','',"https://fdezariassara.inrupt.net/"))
     beforeEach(()=>
-        render(<InfoList isInfoVisible={mockImpl()} onInfoList={mockImpl()} selected={  new LocationLM(43.39635189868037,-5.831536216796875,"Lavander Haze","I love this flower field",'park','public','',"https://fdezariassara.inrupt.net/")} newComments={mockImpl()}  onEditMarker={mockImpl()} />)
+        render(<InfoList isInfoVisible={mockImpl()} onInfoList={mockImpl()} selected={selectedLoc} newComments={mockImpl()}  onEditMarker={mockImpl()} />)
     )
 
     test('Container renders',()=>{
