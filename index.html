@@ -449,15 +449,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_stakeholders">1.3. Stakeholders</a></li>
 </ul>
 </li>
-<li><a href="#section-architecture-constraints">2. Architecture Constraints</a></li>
+<li><a href="#section-architecture-constraints">2. Architecture Constraints</a>
+<ul class="sectlevel2">
+<li><a href="#_2_1_technical_constraints">2.1. 2.1 Technical constraints</a></li>
+<li><a href="#_2_2_organizational_constraints">2.2. 2.2 Organizational constraints</a></li>
+<li><a href="#_2_3_conventional_constraints">2.3. 2.3 Conventional constraints</a></li>
+</ul>
+</li>
 <li><a href="#section-system-scope-and-context">3. System Scope and Context</a>
 <ul class="sectlevel2">
 <li><a href="#_business_context">3.1. Business Context</a></li>
 <li><a href="#_technical_context">3.2. Technical Context</a></li>
 <li><a href="#section-solution-strategy">3.3. Technology decisions</a></li>
-<li><a href="#_decisions_about_the_top_level_decomposotion_of_the_system">3.4. Decisions about the top-level decomposotion of the system</a></li>
+<li><a href="#_decisions_about_the_top_level_decomposition_of_the_system">3.4. Decisions about the top-level decomposition of the system</a></li>
 <li><a href="#_decisions_on_how_to_achieve_key_quality_goals">3.5. Decisions on how to achieve key quality goals</a></li>
-<li><a href="#_decisions_on_how_to_achieve_key_quality_goals_2">3.6. Decisions on how to achieve key quality goals</a></li>
+<li><a href="#_relevant_organizational_decisions">3.6. Relevant organizational decisions</a></li>
 </ul>
 </li>
 <li><a href="#section-building-block-view">4. Building Block View</a>
@@ -793,54 +799,83 @@ Irene Cid Rico , Cristian Augusto Alonso</p></td>
 <div class="sect1">
 <h2 id="section-architecture-constraints">2. Architecture Constraints</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_2_1_technical_constraints">2.1. 2.1 Technical constraints</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Constraint</th>
-<th class="tableblock halign-left valign-top">Explanation</th>
-<th class="tableblock halign-left valign-top">Type</th>
-</tr>
-</thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Constraint</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Explanation</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Maps should be under full control of the users</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>One of the main focuses of the application is the user, therefore all the maps created and personalized by them should be under their full control.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Technical</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Use of pods</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Following with the users' focus, all the shared information by them should be stored in their corresponding personal pods according to the SOLID project, guaranteeing their real ownership of such information.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Technical</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Web application</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>LoMap is a Full Stack web application, therefore should be composed of both a front-end and a back-end layer, making it easy for most if not all users to use the application.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Technical</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>LoMap is mainly a web application, making it easy for most if not all users to use and access the application.</em></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Generic software solution</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>The idea is to develop a generic solution that could be deployed in any city needed, not just an exclusive solution to one city.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Technical</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>GitHub</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Use of a repository regarding version control.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Technical</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_2_2_organizational_constraints">2.2. 2.2 Organizational constraints</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Constraint</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Explanation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Budget</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>The team is not getting any budget whatsoever, so if there is a need to pay for something, it will run on the members of the team.</em></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Delivery deadlines</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>There are 4 deliverables every 3 weeks that should be followed accordingly before the deployment of the application.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Organizational</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_2_3_conventional_constraints">2.3. 2.3 Conventional constraints</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Constraint</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Explanation</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>ARC42</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Documentation format must follow the ARC42 standards.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Conventional</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>English</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>The project must be developed in such language.</em></p></td>
 </tr>
 </tbody>
 </table>
@@ -865,6 +900,7 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 </div>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1047,17 +1083,28 @@ together with a mapping table showing the relationships between channels and inp
 <div class="ulist">
 <ul>
 <li>
-<p>LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.</p>
+<p>Implement LoMap in mainly a React framework with a Express server. React is a really suitable framework for the use of pods and also for the developing of one page applications.</p>
+</li>
+<li>
+<p>Javascript: The programming language we chose was Javascript as none of us had any experience with neither Javascript or Typescript and we thought the learning curve of the first one could be a bit easier to deal with.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_decisions_about_the_top_level_decomposotion_of_the_system">3.4. Decisions about the top-level decomposotion of the system</h3>
+<h3 id="_decisions_about_the_top_level_decomposition_of_the_system">3.4. Decisions about the top-level decomposition of the system</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Apply a modular monolithic architecture (client-modular server-database and pods). Although we are not having just a source of data due to the use of pods.</p>
+<p>Do not have a database: During the development process we found ourselves not needing a centralised database.
+This is mainly because our top quality goal was privacy and to get such goal the use of the pods to store every piece of information of the user was the best approach in our eyes.
+It keeps the information of the user decentralised and at their disposal at all times.</p>
+</li>
+<li>
+<p>This makes our application mainly client-side, with a server using just express.</p>
+</li>
+<li>
+<p>No REST API needed.</p>
 </li>
 </ul>
 </div>
@@ -1066,9 +1113,6 @@ together with a mapping table showing the relationships between channels and inp
 <h3 id="_decisions_on_how_to_achieve_key_quality_goals">3.5. Decisions on how to achieve key quality goals</h3>
 <div class="ulist">
 <ul>
-<li>
-<p>Private information stored in pods. Key aspect regarding the individual data of the users.</p>
-</li>
 <li>
 <p>Use Google Maps API regarding the maps of the application. Brings us a nice infrastructure regarding every location aspect of the application we could need.</p>
 </li>
@@ -1079,7 +1123,7 @@ together with a mapping table showing the relationships between channels and inp
 </div>
 </div>
 <div class="sect2">
-<h3 id="_decisions_on_how_to_achieve_key_quality_goals_2">3.6. Decisions on how to achieve key quality goals</h3>
+<h3 id="_relevant_organizational_decisions">3.6. Relevant organizational decisions</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1089,7 +1133,7 @@ together with a mapping table showing the relationships between channels and inp
 <p>Constant review and update of the projects documentation in order to develop an easy to understand application for other developers (not only potential users).</p>
 </li>
 <li>
-<p>Forget about using a centralised DataBase and a RestAPI. This will help to keep user&#8217;s data private since it will only use the SOLID POD.</p>
+<p>Delegate in the solid provider all the possible actions related to the pods, such as login, management of the adding and removing of friends or the users' own profile.</p>
 </li>
 </ul>
 </div>
