@@ -253,7 +253,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
         const lastMarker = current[marker.key];
 
 
-       lastMarker.comments=marker.comments;
+       
 
         lastMarker.comments=marker.review;
 
