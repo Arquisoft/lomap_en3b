@@ -454,57 +454,53 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_business_context">3.1. Business Context</a></li>
 <li><a href="#_technical_context">3.2. Technical Context</a></li>
+<li><a href="#section-solution-strategy">3.3. Technology decisions</a></li>
+<li><a href="#_decisions_about_the_top_level_decomposotion_of_the_system">3.4. Decisions about the top-level decomposotion of the system</a></li>
+<li><a href="#_decisions_on_how_to_achieve_key_quality_goals">3.5. Decisions on how to achieve key quality goals</a></li>
+<li><a href="#_decisions_on_how_to_achieve_key_quality_goals_2">3.6. Decisions on how to achieve key quality goals</a></li>
 </ul>
 </li>
-<li><a href="#section-solution-strategy">4. Solution Strategy</a>
+<li><a href="#section-building-block-view">4. Building Block View</a>
 <ul class="sectlevel2">
-<li><a href="#_technology_decisions">4.1. Technology decisions</a></li>
-<li><a href="#_decisions_about_the_top_level_decomposotion_of_the_system">4.2. Decisions about the top-level decomposotion of the system</a></li>
-<li><a href="#_decisions_on_how_to_achieve_key_quality_goals">4.3. Decisions on how to achieve key quality goals</a></li>
-<li><a href="#_decisions_on_how_to_achieve_key_quality_goals_2">4.4. Decisions on how to achieve key quality goals</a></li>
+<li><a href="#_whitebox_overall_system">4.1. Whitebox Overall System</a></li>
+<li><a href="#_level_2">4.2. Level 2</a></li>
 </ul>
 </li>
-<li><a href="#section-building-block-view">5. Building Block View</a>
+<li><a href="#section-runtime-view">5. Runtime View</a>
 <ul class="sectlevel2">
-<li><a href="#_whitebox_overall_system">5.1. Whitebox Overall System</a></li>
-<li><a href="#_level_2">5.2. Level 2</a></li>
+<li><a href="#_runtime_scenario_1_user_login">5.1. &lt;Runtime Scenario 1 - User login&gt;</a></li>
+<li><a href="#_runtime_scenario_2_user_adds_private_elements_to_the_map">5.2. &lt;Runtime Scenario 2 - User adds private elements to the map&gt;</a></li>
+<li><a href="#_runtime_scenario_4_privacy_levels">5.3. &lt;Runtime Scenario 4 -Privacy levels &gt;</a></li>
 </ul>
 </li>
-<li><a href="#section-runtime-view">6. Runtime View</a>
+<li><a href="#section-deployment-view">6. Deployment View</a>
 <ul class="sectlevel2">
-<li><a href="#_runtime_scenario_1_user_login">6.1. &lt;Runtime Scenario 1 - User login&gt;</a></li>
-<li><a href="#_runtime_scenario_2_user_adds_private_elements_to_the_map">6.2. &lt;Runtime Scenario 2 - User adds private elements to the map&gt;</a></li>
-<li><a href="#_runtime_scenario_4_privacy_levels">6.3. &lt;Runtime Scenario 4 -Privacy levels &gt;</a></li>
+<li><a href="#_infrastructure_level_1">6.1. Infrastructure Level 1</a></li>
 </ul>
 </li>
-<li><a href="#section-deployment-view">7. Deployment View</a>
+<li><a href="#section-concepts">7. Cross-cutting Concepts</a>
 <ul class="sectlevel2">
-<li><a href="#_infrastructure_level_1">7.1. Infrastructure Level 1</a></li>
+<li><a href="#_domain_model">7.1. Domain model</a></li>
+<li><a href="#_architectural_and_design_patterns">7.2. Architectural and design patterns</a></li>
+<li><a href="#_testability">7.3. Testability</a></li>
+<li><a href="#_protection_and_security">7.4. Protection and Security</a></li>
 </ul>
 </li>
-<li><a href="#section-concepts">8. Cross-cutting Concepts</a>
+<li><a href="#section-design-decisions">8. Design Decisions</a>
 <ul class="sectlevel2">
-<li><a href="#_domain_model">8.1. Domain model</a></li>
-<li><a href="#_architectural_and_design_patterns">8.2. Architectural and design patterns</a></li>
-<li><a href="#_testability">8.3. Testability</a></li>
-<li><a href="#_protection_and_security">8.4. Protection and Security</a></li>
+<li><a href="#_architectural_decision_record">8.1. Architectural Decision Record</a></li>
+<li><a href="#_folder_structure">8.2. Folder structure</a></li>
+<li><a href="#_hosting_service">8.3. Hosting service</a></li>
 </ul>
 </li>
-<li><a href="#section-design-decisions">9. Design Decisions</a>
+<li><a href="#section-quality-scenarios">9. Quality Requirements</a>
 <ul class="sectlevel2">
-<li><a href="#_nodejs_express_why">9.1. NodeJs &amp; Express ¿Why?</a></li>
-<li><a href="#_mongo_db_why">9.2. Mongo DB ¿Why?</a></li>
-<li><a href="#_hosting_service">9.3. Hosting service</a></li>
+<li><a href="#_quality_tree">9.1. Quality Tree</a></li>
+<li><a href="#_quality_scenarios">9.2. Quality Scenarios</a></li>
 </ul>
 </li>
-<li><a href="#section-quality-scenarios">10. Quality Requirements</a>
-<ul class="sectlevel2">
-<li><a href="#_quality_tree">10.1. Quality Tree</a></li>
-<li><a href="#_quality_scenarios">10.2. Quality Scenarios</a></li>
-</ul>
-</li>
-<li><a href="#section-technical-risks">11. Risks and Technical Debts</a></li>
-<li><a href="#section-glossary">12. Glossary</a></li>
+<li><a href="#section-technical-risks">10. Risks and Technical Debts</a></li>
+<li><a href="#section-glossary">11. Glossary</a></li>
 </ul>
 </div>
 </div>
@@ -670,20 +666,9 @@ If requirements documents exist this overview should refer to these documents.</
 It will be stored in his/her own POD, and won&#8217;t be shared with any other user nor party.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Usability</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LoMap will be intuitive and easily used by both experienced and non-technical users. For that, naming, and content structuring  will be specially taken care of.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">User creates an account to record her favourite  city sight, and besides being elder &amp;  non-technically skilled, she manages to create a pin succesfully , since the menu structure is intuitive and options are structured correctly. Hints and tips are provided too.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Responsiveness</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LoMap will adapt it&#8217;s size and content distribution to the device it&#8217;s being accessed to, so usability is ensured.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">User want&#8217;s to know the general opinion of a local restaurant of a city she&#8217;s visiting. She owns an old , small-screened phone, and so , LoMap contents will change their layout so this user can navigate successfully though it.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maintainability</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any improvements or changes will easily be performed. Also , It will be ensured that documentation is  updated as changes take place in code, so it&#8217;s updated.
-LoMap will be developed minding the readability of its code and documentation. Tests will be applied to each module in order to avoid unexpected failures and behaviors.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A developer is  assigned to a task involved in a service whose development she has not participated at. She is able to perform her duty because she can understand the code and documentation solves most of her doubts.</p></td>
 </tr>
 </tbody>
 </table>
@@ -760,7 +745,8 @@ These stakeholders determine the extent and the level of detail of your work and
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Product owners</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Professor José Emilio Labra Gayo.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">José Emilio Labra Gayo, Pablo González González ,
+Irene Cid Rico , Cristian Augusto Alonso</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">They&#8217;ll provide the project with architectural guidance, constraints and requirements.</p></td>
 </tr>
 <tr>
@@ -794,13 +780,8 @@ These stakeholders determine the extent and the level of detail of your work and
 <td class="tableblock halign-left valign-top"><p class="tableblock">In order to test that the system is behaving as expected, engineers need to know how it is expected to work in the first place, and so, how not. For that, they&#8217;ll need to have detailed knowledge about the system&#8217;s architecture.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Map/ geodatabase provider</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Support of the provider (To be decided)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The provider of all map-related elements. We need to know their own api and probably some architecture aspects and constraints, to be able to comunicate with their services and to integrate their data into our app.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Existing SOLID-based applications</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Other group&#8217;s members. See LoMap_enX or LoMap_esX on GitHub.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Other group&#8217;s members. See LoMap_enX or LoMap_esX on GitHub. Inrupt, &amp; other pod providers.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">To develop an application whose pods can communicate with other SOLID oriented applications.</p></td>
 </tr>
 </tbody>
@@ -844,11 +825,6 @@ These stakeholders determine the extent and the level of detail of your work and
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Generic software solution</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>The idea is to develop a generic solution that could be deployed in any city needed, not just an exclusive solution to one city.</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Technical</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>TDD</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Test-Driven Development should be used regarding the development of the application in order to guarantee its proper functioning.</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Technical</p></td>
 </tr>
 <tr>
@@ -972,7 +948,20 @@ The title of the table is the name of your system, the three columns contain the
 </div>
 <div class="paragraph">
 <p><strong>External domain interfaces</strong>
-We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet) for the mapping features and open licence map provider (OpenStreetMap). And for managing the user’s data a React’s library that uses the Inrupt Javascript Client Libraries (Solid React SDK - solid-ui-react).</p>
+We will mainly use two resources for the map:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Google maps</p>
+</li>
+<li>
+<p>Inrup&#8217;s Solid React library</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>And for managing the user’s data a React’s library that uses the Inrupt Javascript Client Libraries (Solid React SDK - solid-ui-react).</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -987,19 +976,14 @@ We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet)
 <td class="tableblock halign-left valign-top"><p class="tableblock">Outputs</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Leaflet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geographical coordinates and a zoom level</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">map object</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OpenStreetMap</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">URL template, the attribution text and the maximum zoom level</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OpenStreetMap tile layer</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">solid-ui-react (Inrupt)</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">podURL, session</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">datasets/things</p></td>
 </tr>
 </tbody>
 </table>
@@ -1007,10 +991,7 @@ We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet)
 <div class="sect2">
 <h3 id="_technical_context">3.2. Technical Context</h3>
 <div class="paragraph">
-<p>We decided to use the MERN architecture.</p>
-</div>
-<div class="paragraph">
-<p>MERN  uses a 3-tier architecture comprising the front end, the back end, and a database. React is in charge of the Front-End. You then have Node and Express for the back end or server-side. Finally, MongoDB is the database chosen for this stack. These components use JavaScript and JSON (JavaScript Object Notation) to create web applications.</p>
+<p>We have decided to develop LoMap as a React Application, using express as a package manager. No Database , we will fully relly on the pods.</p>
 </div>
 <div class="paragraph">
 <p>One of the goals is the decentralization of the application. This is done thanks to the PODs that will help us to ensure user’s privacy.</p>
@@ -1027,10 +1008,6 @@ We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet)
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Technology</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Explication</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MongoDB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">We use it to store the location of the SOLID POD.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">React</p></td>
@@ -1065,26 +1042,18 @@ together with a mapping table showing the relationships between channels and inp
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="section-solution-strategy">4. Solution Strategy</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_technology_decisions">4.1. Technology decisions</h3>
+<h3 id="section-solution-strategy">3.3. Technology decisions</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Implement LoMap in the MERN (MongoDB, Express, React, Node) framework. LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.</p>
-</li>
-<li>
-<p>Use MongoDB in order to implement a database for the storage of non-private information. There will be some public information of public businesses and places that could be shared between all users' maps, so using a common database could be practical.</p>
+<p>LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_decisions_about_the_top_level_decomposotion_of_the_system">4.2. Decisions about the top-level decomposotion of the system</h3>
+<h3 id="_decisions_about_the_top_level_decomposotion_of_the_system">3.4. Decisions about the top-level decomposotion of the system</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1094,7 +1063,7 @@ together with a mapping table showing the relationships between channels and inp
 </div>
 </div>
 <div class="sect2">
-<h3 id="_decisions_on_how_to_achieve_key_quality_goals">4.3. Decisions on how to achieve key quality goals</h3>
+<h3 id="_decisions_on_how_to_achieve_key_quality_goals">3.5. Decisions on how to achieve key quality goals</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1110,7 +1079,7 @@ together with a mapping table showing the relationships between channels and inp
 </div>
 </div>
 <div class="sect2">
-<h3 id="_decisions_on_how_to_achieve_key_quality_goals_2">4.4. Decisions on how to achieve key quality goals</h3>
+<h3 id="_decisions_on_how_to_achieve_key_quality_goals_2">3.6. Decisions on how to achieve key quality goals</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1118,6 +1087,9 @@ together with a mapping table showing the relationships between channels and inp
 </li>
 <li>
 <p>Constant review and update of the projects documentation in order to develop an easy to understand application for other developers (not only potential users).</p>
+</li>
+<li>
+<p>Forget about using a centralised DataBase and a RestAPI. This will help to keep user&#8217;s data private since it will only use the SOLID POD.</p>
 </li>
 </ul>
 </div>
@@ -1163,7 +1135,7 @@ Refer to details in the following sections.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-building-block-view">5. Building Block View</h2>
+<h2 id="section-building-block-view">4. Building Block View</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -1207,7 +1179,7 @@ Thus it contains the white box description of selected building blocks of level 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_whitebox_overall_system">5.1. Whitebox Overall System</h3>
+<h3 id="_whitebox_overall_system">4.1. Whitebox Overall System</h3>
 <div class="sidebarblock arc42help">
 <div class="content">
 <div class="paragraph">
@@ -1251,7 +1223,7 @@ In the best case you will get away with examples or simple signatures.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Whitebox%20Overall%20diagram.png" alt="Whitebox Overall diagram" width="333" height="320">
+<img src="./images/Whitebox%20Overall%20diagram.png" alt="Whitebox Overall diagram" width="379" height="320">
 </div>
 </div>
 <div class="paragraph">
@@ -1329,14 +1301,14 @@ according the the following black box template:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_level_2">5.2. Level 2</h3>
+<h3 id="_level_2">4.2. Level 2</h3>
 <div class="paragraph">
 <p>In this view, we have a representation of the components of the system from a standpoint of the each module’s dependencies.
 <strong>Level 2 diagram</strong></p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Level%202%20diagram.png" alt="Level 2 diagram" width="1969" height="1221">
+<img src="./images/Level%202%20diagram.png" alt="Level 2 diagram" width="1856" height="1020">
 </div>
 </div>
 <div class="sidebarblock arc42help">
@@ -1381,7 +1353,7 @@ part of arc42 for additional levels.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-runtime-view">6. Runtime View</h2>
+<h2 id="section-runtime-view">5. Runtime View</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -1445,7 +1417,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 <p><em>All runtime scenarios where developed based on the <a href="http://solid.georgetown.domains/technical-component/">SOLID project documentation</em></a></p>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_1_user_login">6.1. &lt;Runtime Scenario 1 - User login&gt;</h3>
+<h3 id="_runtime_scenario_1_user_login">5.1. &lt;Runtime Scenario 1 - User login&gt;</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1484,7 +1456,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_2_user_adds_private_elements_to_the_map">6.2. &lt;Runtime Scenario 2 - User adds private elements to the map&gt;</h3>
+<h3 id="_runtime_scenario_2_user_adds_private_elements_to_the_map">5.2. &lt;Runtime Scenario 2 - User adds private elements to the map&gt;</h3>
 <div class="paragraph">
 <p>Location Addition Deletion &amp; Updating will work in a similar way architecture-wise. In general terms, the process will be the following :</p>
 </div>
@@ -1517,15 +1489,12 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_4_privacy_levels">6.3. &lt;Runtime Scenario 4 -Privacy levels &gt;</h3>
+<h3 id="_runtime_scenario_4_privacy_levels">5.3. &lt;Runtime Scenario 4 -Privacy levels &gt;</h3>
 <div class="paragraph">
-<p>LoMap will provide the users with three privacy levels:</p>
+<p>LoMap will provide the users with<strong> TWO privacy levels at the moment</strong>:</p>
 </div>
 <div class="ulist">
 <ul>
-<li>
-<p><strong>Public</strong> contributions to the map will be shown to <em>any</em> user.</p>
-</li>
 <li>
 <p><strong>Friends-Only</strong> posts will <em>only</em> be displayed to <em>their contacts</em></p>
 </li>
@@ -1535,32 +1504,35 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </ul>
 </div>
 <div class="paragraph">
-<p>The <strong>location</strong> of the data will change <strong>depending on it&#8217;s privacy level.</strong>:</p>
+<p>In <strong>further stages,</strong> a new privacy level will be implemented:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>All data the user decides to share with other users apart from his/her self will be stored in LoMaps database.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Friend-Only entries will be flagged so they are not shown if the user is not a contact of the creator.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>All contributions set as private will be stored in the POD associated to the id of the user.</p>
+<p><strong>Public</strong> contributions to the map will be shown to <em>any</em> user.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>The references to Friend  users are stored in the Pod, not in LoMap&#8217;s database.</strong> That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.
-    &#8594; LoMap will retrieve the locations set as friend-only  by each contact from the database and then add them to the user&#8217;s personal rendered map.</p>
+<p><strong>The references to Friend  users are stored in the Pod</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>That means that, to display friend content, a petition to the pod will be made to ask for the set of friends of a user.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>LoMap will retrieve the locations set as friend-only  by each contact from the pod and then add them to the user&#8217;s personal rendered map.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/FriendsContent.png" alt="FriendsContent" width="1217" height="1379">
+<img src="./images/FriendsContent.png" alt="FriendsContent" width="1085" height="1098">
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -1568,7 +1540,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-deployment-view">7. Deployment View</h2>
+<h2 id="section-deployment-view">6. Deployment View</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -1621,7 +1593,7 @@ when your infrastructure is more complex.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_infrastructure_level_1">7.1. Infrastructure Level 1</h3>
+<h3 id="_infrastructure_level_1">6.1. Infrastructure Level 1</h3>
 <div class="sidebarblock arc42help">
 <div class="content">
 <div class="paragraph">
@@ -1653,7 +1625,7 @@ when your infrastructure is more complex.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/DeploymentOverview.png" alt="DeploymentOverview" width="1948" height="552">
+<img src="./images/DeploymentOverview.png" alt="DeploymentOverview" width="1775" height="1021">
 </div>
 </div>
 <div class="dlist">
@@ -1712,7 +1684,7 @@ when your infrastructure is more complex.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-concepts">8. Cross-cutting Concepts</h2>
+<h2 id="section-concepts">7. Cross-cutting Concepts</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -1811,15 +1783,15 @@ on this list.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_domain_model">8.1. Domain model</h3>
+<h3 id="_domain_model">7.1. Domain model</h3>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Domain%20model%20UML%20Diagram.png" alt="Domain model UML Diagram" width="461" height="584">
+<img src="./images/Domain%20model%20UML%20Diagram.png" alt="Domain model UML Diagram" width="310" height="386">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_architectural_and_design_patterns">8.2. Architectural and design patterns</h3>
+<h3 id="_architectural_and_design_patterns">7.2. Architectural and design patterns</h3>
 <div class="paragraph">
 <p>For this application we choose to use the Modular Monolith Architecture.</p>
 </div>
@@ -1828,13 +1800,13 @@ on this list.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_testability">8.3. Testability</h3>
+<h3 id="_testability">7.3. Testability</h3>
 <div class="paragraph">
 <p>We will use Unit Testing in order to assume that the development of this application goes as planed without having any functioning issues. Before implementing a new functionality we must be sure that the actual version of the application passes all our test and satisfies all our scenarios until that moment. We will test separately every part of our code.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_protection_and_security">8.4. Protection and Security</h3>
+<h3 id="_protection_and_security">7.4. Protection and Security</h3>
 <div class="paragraph">
 <p>One of the main priorities of LoMap is to ensure our clients a about their privacy giving them the option to choose with who they want to share their data and with who they want to interact to by using the app.
 The app will be secure as every user&#8217;s data will be safely saved in a POD.</p>
@@ -1847,7 +1819,7 @@ The app will be secure as every user&#8217;s data will be safely saved in a POD.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-design-decisions">9. Design Decisions</h2>
+<h2 id="section-design-decisions">8. Design Decisions</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -1888,45 +1860,71 @@ here in this central section or whether you better document it locally
 </div>
 </div>
 <div class="sect2">
-<h3 id="_nodejs_express_why">9.1. NodeJs &amp; Express ¿Why?</h3>
-<div class="paragraph">
-<p>Main reasons to choose these technologies have been:</p>
+<h3 id="_architectural_decision_record">8.1. Architectural Decision Record</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Decision</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Using a MERN STACK</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Horizontal scalability . Good choice for real-time apps.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Using Render as a hosting service</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Offers free hosting with integrated continuous deployment. Https granted too.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Having two privacy levels : Just for friends and private.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To allow the user to decide which people he/she shares the locations with.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Using Just React and Express</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We will rely on solid pods, so we don&#8217;t need to provide an api + Privacy.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Folder structure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We will take advantage of the pods folders "public" &amp; "private". Inside each one we will create the folder for the private section of lomap, and the folder for the locations shared with friends.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usage of Azure as a hosting service</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Render required organization permissions to apply continuous integration since it was a third part app. Azure is just fine for the time our app will be deployed.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>It will provide the app with <strong>Horizontal scalability</strong>, so we can model the system using different modules each of which, will represent a node.</p>
-</li>
-<li>
-<p>OpenSource** &amp; has an Active community so there&#8217;s also good documentation to be found.</p>
-</li>
-</ul>
-</div>
+<div class="sect2">
+<h3 id="_folder_structure">8.2. Folder structure</h3>
 <div class="paragraph">
-<p>The main reason is <strong>that it&#8217;s  good with real-time apps </strong>and , since the map will need for LoMap to make may I/O simultaneous operations. We know services like Uber , that also works with geolocation and maps does work with NodeJS too.</p>
+<p>In order to avoid collisions with other lomap applications, and so , allow our users to be able to use several LoMap solutions, we have thought of the following</p>
 </div>
-<div class="paragraph">
-<p><em>Also it&#8217;s fair to mention that some of the members of the group have worked with this technologies before &amp; we feel more powerful with JavaScript, BUT, as shown before  that was <strong> not</strong> the only reason.</em></p>
+<div class="literalblock">
+<div class="content">
+<pre>POD:
+    Public:
+        --LoMapEn3b:
+            --Pictures:
+                -beach.png
+            --Locations.ttl
+            --Reviews.ttl
+    Private:
+        --LoMapEn3b:
+            --Pictures:
+                -Selfie.png
+            --Locations.ttl
+            --Reviews.ttl</pre>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_mongo_db_why">9.2. Mongo DB ¿Why?</h3>
-<div class="paragraph">
-<p>Once we decided that we were going to use Node and  express, we figured MongoDb was a good fit because:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>It&#8217;s non-relational and therefore, the schemas are flexible.</p>
-</li>
-<li>
-<p>It&#8217;s simple to install and work with, specially using Node.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_hosting_service">9.3. Hosting service</h3>
+<h3 id="_hosting_service">8.3. Hosting service</h3>
 <div class="paragraph">
 <p>Regarding hosting services , we&#8217;ve  balanced the following options:</p>
 </div>
@@ -1998,53 +1996,20 @@ We are not really sure if it would be compatible with continuous deployment, sin
 <p>We knew no option could be perfect, specially when looking for free services. But we also knew, these options were not the best fit they could be&#8230;&#8203;At least not if we did not go serverless.</p>
 </div>
 <div class="paragraph">
-<p>Then we found <strong>Render</strong> hosting service. And we decided to use it because it provides , for free:</p>
+<p>The option chosen was Azure. There, we will create a virtual machine , that will host a docker container running , made from an image of our application.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Continuous integration with git.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>render builds and deploys automatically everytime a push is made</p>
-</li>
-<li>
-<p>it provides with <strong>previews</strong> of pull requests</p>
-</li>
-<li>
-<p>It allows instant Rollbacks.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>In order for it to be compatible with Inrupt, we will use port  443(https) to serve our application.</p>
 </div>
-</li>
-<li>
-<p>Custom domains</p>
-</li>
-<li>
-<p>Instant rollbacks</p>
-</li>
-<li>
-<p>DDoS protection</p>
-</li>
-<li>
-<p>Free and fully-managed TLS certificates(SSL)</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Because of that, HTTPs can be used so compatibility with SOLID pods will be granted.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
+<div class="paragraph">
+<p>In order to enable the https certificates required , we will use certbot, letencrypt and docker volumes to map the required directories.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-quality-scenarios">10. Quality Requirements</h2>
+<h2 id="section-quality-scenarios">9. Quality Requirements</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -2065,7 +2030,7 @@ concrete and measurable.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_tree">10.1. Quality Tree</h3>
+<h3 id="_quality_tree">9.1. Quality Tree</h3>
 <div class="paragraph">
 <p><span class="image"><img src="./images/QualityDiagram.png" alt="The quality diagram"></span></p>
 </div>
@@ -2100,7 +2065,7 @@ concrete and measurable.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_scenarios">10.2. Quality Scenarios</h3>
+<h3 id="_quality_scenarios">9.2. Quality Scenarios</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2169,7 +2134,7 @@ more easily measure or decide whether they are fulfilled.</p>
 </div>
 <div class="paragraph">
 <p>Especially when you want to assess your architecture using methods like
-ATAM you need to describe your quality goals (from section 1.2)
+ATAM you need to describe  your quality goals (from section 1.2)
 more precisely down to a level of scenarios that can be discussed and evaluated.</p>
 </div>
 <div class="paragraph">
@@ -2183,7 +2148,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-technical-risks">11. Risks and Technical Debts</h2>
+<h2 id="section-technical-risks">10. Risks and Technical Debts</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Risks</caption>
@@ -2258,7 +2223,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">12. Glossary</h2>
+<h2 id="section-glossary">11. Glossary</h2>
 <div class="sectionbody">
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -2367,7 +2332,7 @@ Created by Dr. Peter Hruschka &amp; Dr. Gernot Starke.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-14 18:18:07 +0100
+Last updated 2023-03-15 15:19:34 +0100
 </div>
 </div>
 </body>
