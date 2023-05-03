@@ -178,6 +178,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
           setKey(selected[0].key);
           setDescription(selected[0].description);
           setImage(selected[0].pic);
+          setOwner(profilename);
           upgradeComments();
           countStars(selected[0].comments);
           setAdded(false);
@@ -225,9 +226,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
             ratingStars = '⭐'.repeat(selectedRating);
         }
 
-        setReview((prevReview) => [...prevReview, {owner,comment, commentpic, ratingStars}]);
+        setReview((prevReview) => [...prevReview, {comment, commentpic, ratingStars,owner}]);
 
-        setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
+        setComments((comments) => [...comments,{ string:`<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`,owner}]);
         setComment('');
         setCommentpic('');
         setAdded(true);
@@ -240,9 +241,12 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
                 throw new Error("Comments are not available.");
             }
             const newComments = selected[0].comments.map((comment) => {
-                const { comment: text, commentpic, ratingStars } = comment;
+                const { comment: text, commentpic, ratingStars,owner } = comment;
 
-                return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
+                return {
+                    owner,
+                    string: `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`
+                };
             });
             setComments(newComments);
         } catch (error) {
@@ -369,13 +373,13 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
                     <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                         <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
                         <List sx={{ overflowY: 'scroll', maxWidth:'17rem', maxHeight: '22.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
-                            {comments.map((html, index) => (
+                            {comments.map(({ string: html, owner }, index) => (
                                 <ListItem key={index} sx={{ width: '100%', bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                     <ListItemText
                                         primary={
                                             <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '70%' }}>
                                                 <Avatar />
-                                                <Box sx={{ ml: '0.5rem' }}>{profilename}</Box>
+                                                <Box sx={{ ml: '0.5rem' }}>{owner.split('/').slice(-2)[0].split('.')[0]}</Box>
                                             </Box>}
                                         secondary={<div dangerouslySetInnerHTML={{__html: html}} />}
                                         primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 'bold', mb: '0.3125rem' }}
