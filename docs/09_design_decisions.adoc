@@ -24,26 +24,44 @@ Various options:
 * more detailed in form of separate sections per decision
 * ADR (architecture decision record) for every important decision
 ****
-=== NodeJs & Express ¿Why?
-Main reasons to choose these technologies have been:
 
- * It will provide the app with *Horizontal scalability*, so we can model the system using different modules each of which, will represent a node.
-        * OpenSource** & has an Active community so there's also good documentation to be found.
-
-The main reason is **that it's  good with real-time apps **and , since the map will need for LoMap to make may I/O simultaneous operations. We know services like Uber , that also works with geolocation and maps does work with NodeJS too.
+=== Architectural Decision Record
 
 
-_Also it's fair to mention that some of the members of the group have worked with this technologies before & we feel more powerful with JavaScript, BUT, as shown before  that was ** not** the only reason._
+|===
+|Decision| Description
 
-=== Mongo DB ¿Why not?
-At the beginning we have decided that we were going to use Node and  express and that MongoDb was a good fit because:
+|Using a MERN STACK
+|  Horizontal scalability . Good choice for real-time apps.
+|Using Render as a hosting service
+| Offers free hosting with integrated continuous deployment. Https granted too.
+|Having two privacy levels : Just for friends and private.
+| To allow the user to decide which people he/she shares the locations with.
+|Using Just React and Express
+|We will rely on solid pods, so we don't need to provide an api + Privacy.
+|Folder structure
+|We will take advantage of the pods folders "public" & "private". Inside each one we will create the folder for the private section of lomap, and the folder for the locations shared with friends.
+|Usage of Azure as a hosting service
+|Render required organization permissions to apply continuous integration since it was a third part app. Azure is just fine for the time our app will be deployed.
 
-        * It's non-relational and therefore, the schemas are flexible.
+|===
 
-        * It's simple to install and work with, specially using Node.
-But have decline this option because we realised that we were not using it for storing anything. all the data will come from the user's POD
-or from the user's friends' PODS
+=== Folder structure
+In order to avoid collisions with other lomap applications, and so , allow our users to be able to use several LoMap solutions, we have thought of the following
 
+    POD:
+        Public:
+            --LoMapEn3b:
+                --Pictures:
+                    -beach.png
+                --Locations.ttl
+                --Reviews.ttl
+        Private:
+            --LoMapEn3b:
+                --Pictures:
+                    -Selfie.png
+                --Locations.ttl
+                --Reviews.ttl
 
 === Hosting service
 
@@ -119,20 +137,9 @@ We are not really sure if it would be compatible with continuous deployment, sin
 
 We knew no option could be perfect, specially when looking for free services. But we also knew, these options were not the best fit they could be...At least not if we did not go serverless.
 
-Then we found *Render* hosting service. And we decided to use it because it provides , for free:
+The option chosen was Azure. There, we will create a virtual machine , that will host a docker container running , made from an image of our application.
 
-   * Continuous integration with git.
+In order for it to be compatible with Inrupt, we will use port  443(https) to serve our application.
 
-         ** render builds and deploys automatically everytime a push is made
-
-        ** it provides with *previews* of pull requests
-
-        ** It allows instant Rollbacks.
-
-    *  Custom domains
-    * Instant rollbacks
-    * DDoS protection
-    * Free and fully-managed TLS certificates(SSL)
-        ** Because of that, HTTPs can be used so compatibility with SOLID pods will be granted.
-
+In order to enable the https certificates required , we will use certbot, letencrypt and docker volumes to map the required directories.
 

@@ -62,7 +62,12 @@ System --> MapAPI: request
 MapAPI --> System: data 
 ----
 **External domain interfaces**
-We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet) for the mapping features and open licence map provider (OpenStreetMap). And for managing the user’s data a React’s library that uses the Inrupt Javascript Client Libraries (Solid React SDK - solid-ui-react).
+We will mainly use two resources for the map:
+
+- Google maps
+- Inrup's Solid React library
+
+And for managing the user’s data a React’s library that uses the Inrupt Javascript Client Libraries (Solid React SDK - solid-ui-react).
 
 |===
 |Communication partner|Inputs|Outputs
@@ -76,9 +81,9 @@ We have decided to two Mapping APIs; an open-source JavaScript library (Leaflet)
 === Technical Context
 
 
-We decided to use the MERN architecture.
 
-MERN  uses a 3-tier architecture comprising the front end, the back end, and a database. React is in charge of the Front-End. You then have Node and Express for the back end or server-side. Finally, MongoDB is the database chosen for this stack. These components use JavaScript and JSON (JavaScript Object Notation) to create web applications.
+
+We have decided to develop LoMap as a React Application, using express as a package manager. No Database , we will fully relly on the pods.
 
 
 One of the goals is the decentralization of the application. This is done thanks to the PODs that will help us to ensure user’s privacy.

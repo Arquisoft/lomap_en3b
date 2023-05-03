@@ -18,7 +18,7 @@ export default  function App()
     session.onLogin(async () => {
 
          await checkForLomap(session);
-         //Todo if no folder, give the option to create it or to logout
+
         setIsLoggedIn(true);
     });
 //We have logged out

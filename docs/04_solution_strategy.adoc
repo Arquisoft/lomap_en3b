@@ -4,6 +4,7 @@
 * Implement LoMap in mainly a React framework with a Express server. React is a really suitable framework for the use of pods and also for the developing of one page applications.
 * Javascript: The programming language we chose was Javascript as none of us had any experience with neither Javascript or Typescript and we thought the learning curve of the first one could be a bit easier to deal with.
 
+
 === Decisions about the top-level decomposition of the system
 * Do not have a database: During the development process we found ourselves not needing a centralised database.
 This is mainly because our top quality goal was privacy and to get such goal the use of the pods to store every piece of information of the user was the best approach in our eyes.
