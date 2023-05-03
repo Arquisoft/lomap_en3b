@@ -216,7 +216,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
                         if(controlMng.lockedName){
                             //It has been reject once
                             controlMng.lockedName = '';
-                            window.alert('The locations does not belong to Oviedo, will not be added: ');
+                            console.log('The locations does not belong to Oviedo, will not be added: ');
                             originalMarkers.pop();
                         }else{
                             //First attempt

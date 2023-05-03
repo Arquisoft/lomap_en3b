@@ -132,7 +132,7 @@ export class Controller {
             let resourceIMGURL = this.user.userWebId.concat(loc.privacy).concat(this.user.imgResourceURL);
             writeLocationWithImg(resourceURL, this.session, loc, resourceIMGURL)
                 .then(() => {
-                    window.alert("Location saved");
+                    console.log("Location saved");
                 })
                 .catch(error => {
                     console.error(error);
@@ -141,7 +141,7 @@ export class Controller {
             let resourceURL = this.user.userWebId.concat(loc.privacy).concat(this.user.locResourceURL);
             writeLocationWithoutImg(resourceURL, this.session, loc)
                 .then(() => {
-                    window.alert("Location saved");
+                    console.log("Location saved");
                 })
                 .catch(error => {
                     console.error(error);
@@ -209,7 +209,7 @@ export class Controller {
             let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
             writeReviewWithIMG(resourceURL, this.session, rev, privacy, resourceIMGURL)
                 .then(() => {
-                    window.alert("Review saved");
+                    console.log("Review saved");
                 })
                 .catch(error => {
                     console.error(error);
@@ -217,7 +217,7 @@ export class Controller {
         } else {
             writeReviewWithoutIMG(resourceURL, this.session, rev, privacy)
                 .then(() => {
-                    window.alert("Review saved");
+                    console.log("Review saved");
                 })
                 .catch(error => {
                     console.error(error);
