@@ -16,6 +16,7 @@ import {
     convertPODLocationIntoDomainModelLocation,
     convertPODReviewIntoDomainModelReview
 } from "../util/convertor";
+import {CoordinateNotInDomain} from "../util/Exceptions/exceptions";
 
 /* ------------------- LOCATION ------------------- */
 /**
@@ -38,8 +39,6 @@ export async function readLocations(resourceURL,session, userIDWeb) {
             try {
                 //Convert into LocationLM object
                 location= convertPODLocationIntoDomainModelLocation(locationThing, userIDWeb)
-                //location.locOwner = userIDWeb;
-                //console.log(location.locID);
 
                 // media
                 let mediaURL = getUrl(locationThing, SCHEMA_LOMAP.rev_hasPart);
@@ -51,18 +50,11 @@ export async function readLocations(resourceURL,session, userIDWeb) {
                 locationsRetrieved.push(location);
 
             } catch (error) {
-                //TODO:
-                /*
-                if (error instanceof StringInvalidFormatException ) {
-                    //TODO: Some argument where not valid
-                    console.error('StringInvalidFormatException:', error.message);
-                } else if (error instanceof CoordinateNotInDomain){
-                    //TODO: Some argument where not valid
-                    console.error('CoordinateNotInDomain:', error.message);
+                if (error instanceof CoordinateNotInDomain){
+                    console.error('The locations does not belong to the specified domain:', error.message);
                 }else{
                     console.error(error);
                 }
-                 */
             }
         }
     }

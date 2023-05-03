@@ -2,7 +2,6 @@ import {
     getPodUrlAll,
     createContainerAt,
     getSolidDataset,
-    getStringNoLocale,
     getThing,
     getUrlAll,
     getSolidDatasetWithAcl,
@@ -14,9 +13,7 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getNamedNode,
-
-
+    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getNamedNode
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
@@ -59,11 +56,11 @@ export async function checkForLomap(session) {
 export async function checkForLomapInPod(pod,session) {
     try {
 
-     let aux= await getSolidDataset(pod+"public/lomapen3b",{fetch : session.fetch});
-     let aux2= await getSolidDataset(pod+"private/lomapen3b",{fetch : session.fetch});
+     let aux = await getSolidDataset(pod+"public/lomapen3b",{fetch : session.fetch});
+     let aux2 = await getSolidDataset(pod+"private/lomapen3b",{fetch : session.fetch});
 
     } catch (error) {
-        console.log("Not found lomap folder in pod, we'll try creating one...")
+        console.error("Not found lomap folder in pod, we'll try creating one...")
         return false;
     }
     console.log("Found lomap folder in pod.")
@@ -119,7 +116,7 @@ async function mockFiles(session, resource) {
     try {
         await saveSolidDatasetAt(currentUserLomapLocation, mockDataset, {fetch: session.fetch});
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 }
 
@@ -233,7 +230,7 @@ async function giveFriendsAccess(session, access) {
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
     }
     catch (error){
-        console.log(error)// catch any error
+        console.error(error)// catch any error
     }
 }
 
@@ -277,7 +274,7 @@ async function giveDefaultAccessToFile(resource, friend, session) {
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
     }
     catch (error){ // catch any possible thrown errors
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -321,7 +318,7 @@ async function giveAccessToFile(resource, friend, session){
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
     }
     catch (error){ // catch any possible thrown errors
-        console.log(error)
+        console.error(error)
     }
 }
 

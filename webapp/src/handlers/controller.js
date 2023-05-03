@@ -11,6 +11,7 @@ import {convertDomainModelLocationIntoViewLocation, convertDomainModelReviewInto
 import {extractBase64Image, getRate} from "../util/utilMethods";
 
 export class Controller {
+    lockedName
     /**
      * Creates a new Controller instance.
      * @param {*} sessionGiven - The session object.
