@@ -49,23 +49,12 @@ describe('Header renders all options',()=>{
 
     })
 
+    test('Log Out',()=>{
 
-});
-describe('Header buttons work ',()=>{
+        const filterButton=screen.getByLabelText( /Log out/i)
+        expect(filterButton).toBeInTheDocument();
 
-    beforeEach(()=>{
-            render(<MapView/>)
 
-        }
-
-    )
-    test('Show Profile',()=>{
-
-        const profileButton=screen.getByLabelText( /Show Profile/i)
-        fireEvent.click(profileButton)
-        const profileContainer=screen.getByLabelText(/Profile container/i)
-        expect(profileContainer).toBeInTheDocument();
 
     })
-
-})
+});

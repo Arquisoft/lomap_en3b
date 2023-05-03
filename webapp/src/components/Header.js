@@ -200,7 +200,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             <IconButton  aria-label="Show Profile"  color="inherit"  onClick={handleAccountPageClick} >
               <AccountIcon />
             </IconButton>
-            <IconButton color="inherit" onClick={handleLogOutClick} >
+            <IconButton aria-label="Log Out option" color="inherit" onClick={handleLogOutClick} >
               <LogoutIcon />
             </IconButton>
           </div>

@@ -43,20 +43,37 @@ const List = ({ isVisible, onAddMarker}) => {
     const [privacy, setPrivacy] = useState('public');
     const[pic,setPic] = useState(""); //Picture
     const[description,setDescription] = useState(""); //Picture
+    const [isValid,setIsValid] = useState(false);
+    const validationError = document.getElementById("validation-error");
+
 
     // Define a function to handle the "Finish" button click event
     const handleAddButtonClick = () => {
-        if (name !== '' && category !== '') {
+        if (isValid) {
             onAddMarker({ name, category, privacy,pic,description });//sends an object containing the new values to the Map component where we update the location
             setName('');
             setCategory('');
             setPrivacy('public');
             setPic("");
             setDescription("");
+            validationError.style.display = "none";
+            setIsValid(false);
 
 
+        }else{
+            validationError.style.display = "block";
         }
     };
+
+    React.useEffect(() => {
+        //console.log(name);
+
+        if (name !== '' && category !== '') {
+            setIsValid(true);
+        } else {
+            setIsValid(false);
+        }
+    }, [name, category]);
 
 
     // Define a style object based on the visibility prop passed to the component
@@ -114,23 +131,24 @@ const List = ({ isVisible, onAddMarker}) => {
     return (
         <Container style={style}>
             <>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" style={{ fontFamily: 'Arial' }}>Click after you finish to Add a Marker</Typography>
+                <div style={{ display: 'flex',flexDirection:'column' ,alignItems: 'center' }}>
+                    <Typography variant="h4" style={{ fontFamily: 'Arial' }}>Add a marker!</Typography>
+                    <Typography variant='subtitle2' style={{ fontFamily: 'Arial',fontStyle:'italic' }}>Click on the map after filling this form.</Typography>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column'}}>
                     <FormControl style={{ width: '100%' }}>
                         <InputLabel> Name: </InputLabel>
                         <TextField style={{ width: '100%' }} value={name} onChange={(e) => setName(e.target.value)} />
                     </FormControl>
-                    <FormControl style={{ width: '100%'}}>
+                    <FormControl aria-label={'type form'} style={{ width: '100%'}}>
                         <InputLabel>Type</InputLabel>
-                        <Select style={{ width: '100px' }} value={category} onChange={(e) => setCategory(e.target.value)}>
-                            <MenuItem value="bar">Bar</MenuItem>
-                            <MenuItem value="shop">Shop</MenuItem>
-                            <MenuItem value="restaurant">Restaurant</MenuItem>
-                            <MenuItem value="park">Park</MenuItem>
-                            <MenuItem value="monument">Monument</MenuItem>
-                            <MenuItem value="sight">Sight</MenuItem>
+                        <Select labelId={'type options'}  style={{ width: '100px' }} value={category} onChange={(e) => setCategory(e.target.value)}>
+                            <MenuItem aria-label='type option' value="bar">Bar</MenuItem>
+                            <MenuItem aria-label='type option' value="shop">Shop</MenuItem>
+                            <MenuItem aria-label='type option' value="restaurant">Restaurant</MenuItem>
+                            <MenuItem aria-label='type option' value="park">Park</MenuItem>
+                            <MenuItem aria-label='type option' value="monument">Monument</MenuItem>
+                            <MenuItem aria-label='type option' value="sight">Sight</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl style={{ width: '100%' }}>
@@ -140,6 +158,7 @@ const List = ({ isVisible, onAddMarker}) => {
                                 value="public"
                                 control={<Radio color="default" />}
                                 label="Public"
+
                             />
                             <FormControlLabel
                                 value="private"
@@ -150,7 +169,7 @@ const List = ({ isVisible, onAddMarker}) => {
                     </FormControl>
                     <FormControl style={{ display: 'flex', alignItems: 'center' }}>
                         <InputLabel style={{ flex: 1 }}>Picture</InputLabel>
-                        <Button  onClick={handleImageUpload} size='small'>
+                        <Button aria-label={'add image'} onClick={handleImageUpload} size='small'>
                             <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
                                 {pic ? (
                                     <img src={pic} alt="uploaded image" style={{ width: '80px', height: '70px' }} />
@@ -173,8 +192,11 @@ const List = ({ isVisible, onAddMarker}) => {
                        
                     />
                      </FormControl>
+                    <div id="validation-error" style={{ display: 'none',color: 'red' }}>
+                        Please complete name and type .
+                    </div>
                     <div style={{ display: 'flex', justifyContent: 'center'}}>
-                        <Button variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
+                        <Button aria-label={'Finish button'} variant="contained" style={{ backgroundColor: 'grey' }} onClick={() => {
                             handleAddButtonClick(); //event to know that the action is finoished
                     }}>
                         Finish

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'deployment-And-Tests'
 
 jobs:
  unit-test-webapp:
@@ -14,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        fetch-depth: false
     - uses: actions/setup-node@v3
       with:
         node-version: 18
@@ -66,7 +67,7 @@ jobs:
           user: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           command: |
-            wget https://raw.githubusercontent.com/arquisoft/lomap_en3b/master/docker-compose-deploy.yml -O docker-compose.yml
+            wget https://raw.githubusercontent.com/arquisoft/lomap_en3b/deployment-And-Tests/docker-compose-deploy.yml -O docker-compose.yml
             docker-compose stop
             docker-compose rm -f
             docker-compose pull   

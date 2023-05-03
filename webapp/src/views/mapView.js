@@ -11,6 +11,7 @@ import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
 import ErrorView from "./errorView"
+import MapErrorBoundary from "../components/MapErrorBoundry";
 
 
 
@@ -40,7 +41,7 @@ const MapView = ({session,onSearch}) => {
   const [showEditList, setShowEditList] = useState(false); // track whether the edit list is being shown
   const [showInfoList, setShowInfoList] = useState(false); // track whether the info list is being shown
   const [showAccountPage, setShowAccountPage] = useState(false); // track whether the account page is being shown
-  const [searchValue, setSearchValue] = useState(''); // track the value of the search bar
+
   const [filterSideBar, setFilterSideBar] = useState(false); // track whether the filter sidebar is being shown
   const [selectedFilters, setSelectedFilters] = useState([]); // track which filters are selected
   const [markerData, setMarkerData] = useState([]); // track marker data for the list and comments
@@ -128,37 +129,15 @@ const MapView = ({session,onSearch}) => {
 
   };
 
-  const makeLoOutDisapear = () => {
+  const makeLogOutDisapear = () => {
     setShowLogOut(!showLogOut);
 
   };
 
-//Arama kutusunda bir karakter değişikliği olduğunda tetiklenen fonksiyon
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-  }
 
-  //Arama kutusuna "Searrch Icon" tuşuna basıldığında tetiklenen fonksiyon
-  const handleSearchSubmit = (event) => {
-    event.preventDefault(); // Sayfanın yenilenmesini önlemek için varsayılan işlemi durduruyoruz.
-    const request = {
-      query: searchValue,
-      fields: ["name","geometry"],
-    };
-    const service = new window.google.maps.places.PlacesService(
-        document.createElement("div")
-    );
-    service.findPlaceFromQuery(request, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        const firstResult = results[0];
-        const { lat, lng } = firstResult.geometry.location;
-        onSearch(lat, lng);
-      } else {
-        console.log("Error Searching for Place");
-      }
-    });
-  };
-  if (loadError) return <div> Error Loading Maps </div>;
+
+
+  if (loadError) return <ErrorView/>;
 
   return (
       <>
@@ -169,32 +148,24 @@ const MapView = ({session,onSearch}) => {
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
-            onLogOut={() => makeLoOutDisapear()}
+            onLogOut={() => makeLogOutDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
         <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
+       
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} />
+        
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
 
 
-        <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
+        <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLogOutDisapear()}/>
         { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
+        <MapErrorBoundary>
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
-          <form onSubmit={handleSearchSubmit} style={{ borderRadius: '0.5rem', backgroundColor: 'white', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <InputBase
-                  placeholder="Search Location"
-                  value={searchValue}
-                  onChange={handleSearchChange} // handleSearchChange fonksiyonunun çalışmasını sağlıyoruz
-                  style={{ marginRight: '1rem' }}
-              />
-              <IconButton type="submit" aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </div>
-          </form>
+        </MapErrorBoundary>
+          
         </Grid>}
       </Grid>
       </>
