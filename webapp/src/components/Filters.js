@@ -74,62 +74,69 @@ export default function FilterSidebar({visible, onFilterLocations,onFilterSelect
                <FormControlLabel
                    control={<Checkbox
                        icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
-                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       checkedIcon={<FmdGoodIcon  htmlColor="yellow" />} // Use FmdGoodIcon as the checked icon
                        value="sight"
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Sight"
+                   aria-label="Sight"
+                    label="Sight"
                />
                <FormControlLabel
                    control={<Checkbox
                        icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
-                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       checkedIcon={<FmdGoodIcon htmlColor="orange" />} // Use FmdGoodIcon as the checked icon
                        value="restaurant"
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
+                   aria-label="Restaurant"
                    label="Restaurant"
                />
                <FormControlLabel
                    control={<Checkbox
                        icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
-                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       checkedIcon={<FmdGoodIcon  htmlColor="purple" />} // Use FmdGoodIcon as the checked icon
                        value="monument"
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Monument"
+                   aria-label="Monument"
+                    label="Monument"
                />
                <FormControlLabel
                    control={<Checkbox
                        icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
-                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       checkedIcon={<FmdGoodIcon  htmlColor="green" />} // Use FmdGoodIcon as the checked icon
                        value="park"
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Park"
+                   aria-label="Park"
+                    label="Park"
                />
                <FormControlLabel
                    control={<Checkbox
                        icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
-                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       checkedIcon={<FmdGoodIcon htmlColor="red" />} // Use FmdGoodIcon as the checked icon
                        value="bar"
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
+                   aria-label="Bar"
                    label="Bar"
                />
+
                <FormControlLabel
                    control={<Checkbox
                        icon={<FmdGoodIcon />} // Use FmdGoodIcon as the unchecked icon
-                       checkedIcon={<FmdGoodIcon color="primary" />} // Use FmdGoodIcon as the checked icon
+                       checkedIcon={<FmdGoodIcon  htmlColor="blue" />} // Use FmdGoodIcon as the checked icon
                        value="shop"
                        onChange={(e) => updateFiltersSelected(e.target.checked, e.target.value)}
                    />}
                    style={{ flex: 1 }}
-                   label="Shop"
+                   aria-label="Shop"
+                    label="Shop"
                />
            </FormControl>
 
