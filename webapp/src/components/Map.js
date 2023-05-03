@@ -9,7 +9,7 @@ import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 import {
     convertDomainModelLocationIntoViewLocation,
-    convertViewLocationIntoDomainModelLocation
+    convertViewLocationIntoDomainModelLocation, convertViewReviewIntoDomainModelReview
 } from "../util/convertor";
 import {Controller} from "../handlers/controller";
 
@@ -57,7 +57,7 @@ export function handleRateChange(newRating, selected) { // ı made this export c
      * @param onInfoList
      * @param changesInComments
      */
-function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview, updateLocation,editLocation}) {
+function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMng, onMarkerAdded,markerData,onInfoList,  changesInComments,updatedReview, updateLocation,editLocation}) {
     // Defining the state variables
     const[originalMarkers,setOriginalMarkers]=React.useState([])// in order to restore markers after filtering
     const [markers, setMarkers] = React.useState([]);
@@ -66,7 +66,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const controlMng = new Controller(session);
+    //const controlMng = new Controller(session);
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -86,6 +86,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             locOwner: '',
             rate: "",
             comments:[],
+            domainID: '',
+            commentsAdded: 0
           },
         ]);
 
@@ -98,9 +100,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
-        //TODO: Check how it works
         let locations = await controlMng.retrievePrivateLocations();
-        console.log(locations);
         controlMng.saveLocationsFromPOD(locations);
 
         locations = await controlMng.retrievePublicLocations();
@@ -111,27 +111,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
         //Convert into View
         return controlMng.getViewLocations();
-        //OLD
-        /*
-        let friends = await getFriendsWebIds(session.info.webId);
-        let resource = session.info.webId.replace("/profile/card#me", "/private/lomapen3b/locations.ttl");
-        // Code to get the friends locations
-        let locations = await readLocations(resource, session);
-        resource = session.info.webId.replace("/profile/card#me", "/public/lomapen3b/locations.ttl");
-        locations = locations.concat(await readLocations(resource, session));
-        let friendsLocations = [];
-        for (let i = 0; i < friends.length; i++) {
-            try {
-                //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
-                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "public/lomapen3b/locations.ttl",session));
-            } catch (err) {
-                //Friend does not have LoMap??
-                console.log(err);
-            }
-        }
-
-        return locations.concat(friendsLocations); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
-        */
     }
 
     async function getAndSetLocations() {
@@ -177,7 +156,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
 
             const lastMarker = current[current.length - 1];
-            //console.log(lastMarker);
 
             const marker = markerData[0]; // Access the object inside the array
 
@@ -187,7 +165,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.pic=marker.pic;
             lastMarker.description=marker.description;
 
-            //TODO : It works here !
             saveLocations(lastMarker.lat, lastMarker.lng, lastMarker.name, lastMarker.description, lastMarker.category, lastMarker.privacy);
 
             return [...current];
@@ -201,8 +178,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         setOriginalMarkers((current) => {
 
 
-            
-            //console.log(lastMarker);
+
             const marker = markerData[0]; // Access the object inside the array
 
             const lastMarker = current[marker.key];
@@ -220,17 +196,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     };
 
 
-    const saveLocations = (lat, lng, name, description, category, privacy) => {
-        /*
-        console.log("I get: ");
-        console.log(lat, lng, name, description, category, privacy)
+    const saveLocations = () => {
         let market = originalMarkers[originalMarkers.length - 1]
-        controlMng.tryMethd(lat, lng, name, description, category, privacy, market);
-         */
-        //TODO: Add check bc it is call two times.
-        let market = originalMarkers[originalMarkers.length - 1]
-        //console.log("I get: ");
-        //console.log(market);
         if (market){
             //Create locationLM with marker data
             let loc = convertViewLocationIntoDomainModelLocation(market, controlMng.user.userWebId);
@@ -238,19 +205,40 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             if (controlMng.canBeLocationAdded(loc)){
                 controlMng.addLocation(loc);
                 controlMng.saveToPODLocation(loc);
+                originalMarkers[originalMarkers.length - 1] = convertDomainModelLocationIntoViewLocation(
+                    loc,
+                    originalMarkers[originalMarkers.length - 1].key
+                );
             }
         }
-        /*
-        if(viewLocat) {
-            //Create locationLM with marker data
-            let loc = convertViewLocationIntoDomainModelLocation(viewLocat);
-            loc.img = viewLocat.pic;
-            //Update Controller
-            controlMng.addLocation(loc);
-            //Save into the POD (async)
-            controlMng.saveToPODLocation(loc);
+    }
+
+    function saveCommentsFromLocation(lastMarker) {
+        let reviews = [];
+        for(let i = lastMarker.commentsAdded; i < lastMarker.comments.length; i++ ) {
+            let rev = convertViewReviewIntoDomainModelReview(
+                lastMarker.domainID,
+                controlMng.user.userWebId
+            );
+            rev = controlMng.completeReviewData(
+                rev,
+                lastMarker.comments[i].comment,
+                lastMarker.comments[i].ratingStars,
+                lastMarker.comments[i].commentpic
+            );
+            reviews.push(rev);
         }
-         */
+        //Update comments
+        reviews.forEach((rev) =>
+        {
+            controlMng.saveToPODReview(
+                rev,
+                lastMarker.locOwner,
+                lastMarker.privacy
+            );
+        });
+
+        lastMarker.commentsAdded = lastMarker.commentsAdded + reviews.length;
     }
 
     //function to update the comments
@@ -262,22 +250,14 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         const marker = markerData[0]; // Access the object inside the array
 
 
-
-
         const lastMarker = current[marker.key];
 
 
-
-       lastMarker.comments=marker.comments;
-
-
-            console.log(lastMarker);
-
+       
 
         lastMarker.comments=marker.review;
 
-        console.log(lastMarker.comments);
-
+        saveCommentsFromLocation(lastMarker);
         return [...current];
       });
     };
