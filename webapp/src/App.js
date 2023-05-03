@@ -5,7 +5,6 @@ import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
 import MapView from "./views/mapView";
-import {placeImageInContainer} from "./handlers/podAccess";
 
 export default  function App()
 {
