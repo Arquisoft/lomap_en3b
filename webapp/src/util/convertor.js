@@ -87,7 +87,8 @@ export function convertDomainModelReviewIntoViewReview(dmObj) {
         return {
             comment: dmObj.comment,
             commentpic: base64ToImg(dmObj.media),
-            ratingStars: getStars(dmObj.rate)
+            ratingStars: getStars(dmObj.rate),
+            owner: dmObj.user
         };
     } else {
         return []

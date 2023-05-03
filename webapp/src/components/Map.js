@@ -226,6 +226,9 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
                 lastMarker.comments[i].ratingStars,
                 lastMarker.comments[i].commentpic
             );
+
+            lastMarker.comments[i].owner = controlMng.user.userWebId;
+
             reviews.push(rev);
         }
         //Update comments
