@@ -25,7 +25,7 @@ export function convertViewLocationIntoDomainModelLocation(viewobj, userID) {
  * @param revs
  * @returns {{locOwner: string, comments: *[], lng, description, privacy: (string|*), pic: (string|*), domainID: string, rate: string, name, time, category, key, lat}}
  */
-export function convertDomainModelLocationIntoViewLocation(dmObj, pos, revs) {
+export function convertDomainModelLocationIntoViewLocation(dmObj, pos, revs =[]) {
     return {
         key: pos,
         lat: dmObj.lat,
@@ -82,16 +82,15 @@ export function convertViewReviewIntoDomainModelReview(locatID, userID) {
 }
 //Convert from domain to view (1)
 export function convertDomainModelReviewIntoViewReview(dmObj) {
-    //TODO:
-    /* DomainModelReview looks like:
-            ItemReviewed, user, time, revID (opt)
-            comment, rate, media
-    */
-    return {
-        comment: dmObj.comment, 
-        commentpic: base64ToImg(dmObj.media),
-        ratingStars: getStars(dmObj.rate)
-    };
+    if(dmObj.comment || dmObj.media || dmObj.rate) {
+        return {
+            comment: dmObj.comment,
+            commentpic: base64ToImg(dmObj.media),
+            ratingStars: getStars(dmObj.rate)
+        };
+    } else {
+        return []
+    }
 }
 //Convert from domain to POD (1)
 export function convertDomainModelReviewIntoPODReview(dmObj, privacy){

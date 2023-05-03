@@ -227,7 +227,8 @@ async function writeReview(resourceURL, session, rev, privacy, cond, imageContai
 
     //Check if it has been added before
     let reviewsStored = await readReviews(resourceURL,session);
-    let added = checkForDuplicates(reviewsStored, rev);
+    //let added = checkForDuplicates(reviewsStored, rev);
+    let added = false;
     if(!added) {
 
         //Create Thing
