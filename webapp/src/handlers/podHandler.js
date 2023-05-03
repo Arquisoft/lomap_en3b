@@ -2,6 +2,7 @@ import {
     getPodUrlAll,
     createContainerAt,
     getSolidDataset,
+    getStringNoLocale,
     getThing,
     getUrlAll,
     getSolidDatasetWithAcl,
@@ -13,26 +14,26 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getNamedNode
+    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getAgentResourceAccess, getAgentDefaultAccess, getNamedNode
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
 
 
 /**
- * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which 
+ * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which
  * all the application information is going to be stored.
- * @param {} session 
+ * @param {} session
  */
 export async function checkForLomap(session) {
 
     let anyContainer = false;
-    let pods = await getPodUrlAll(session.info.webId, {fetch : session.fetch});
+    let pods = await getPodUrlAll(session.info.webId, {fetch: session.fetch});
     let podWithFolder;
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
-        let currentPod=pods[i].replace("/profile/card#me","/")//Remove profile url string.
-        anyContainer = await checkForLomapInPod(currentPod,session);
+        let currentPod = pods[i].replace("/profile/card#me", "/")//Remove profile url string.
+        anyContainer = await checkForLomapInPod(currentPod, session);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
@@ -56,11 +57,11 @@ export async function checkForLomap(session) {
 export async function checkForLomapInPod(pod,session) {
     try {
 
-     let aux = await getSolidDataset(pod+"public/lomapen3b",{fetch : session.fetch});
-     let aux2 = await getSolidDataset(pod+"private/lomapen3b",{fetch : session.fetch});
+     let aux= await getSolidDataset(pod+"public/lomapen3b",{fetch : session.fetch});
+     let aux2= await getSolidDataset(pod+"private/lomapen3b",{fetch : session.fetch});
 
     } catch (error) {
-        console.error("Not found lomap folder in pod, we'll try creating one...")
+        console.log("Not found lomap folder in pod, we'll try creating one...")
         return false;
     }
     console.log("Found lomap folder in pod.")
@@ -116,7 +117,7 @@ async function mockFiles(session, resource) {
     try {
         await saveSolidDatasetAt(currentUserLomapLocation, mockDataset, {fetch: session.fetch});
     } catch (e) {
-        console.error(e);
+        console.log(e);
     }
 }
 
@@ -230,7 +231,7 @@ async function giveFriendsAccess(session, access) {
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
     }
     catch (error){
-        console.error(error)// catch any error
+        console.log(error)// catch any error
     }
 }
 
@@ -274,7 +275,7 @@ async function giveDefaultAccessToFile(resource, friend, session) {
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
     }
     catch (error){ // catch any possible thrown errors
-        console.error(error)
+        console.log(error)
     }
 }
 
@@ -318,7 +319,7 @@ async function giveAccessToFile(resource, friend, session){
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
     }
     catch (error){ // catch any possible thrown errors
-        console.error(error)
+        console.log(error)
     }
 }
 
