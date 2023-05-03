@@ -1,7 +1,7 @@
 [[section-solution-strategy]]
 
 === Technology decisions
-* Implement LoMap in the (Express, React, Node) framework. LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.
+* LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.
 
 === Decisions about the top-level decomposotion of the system
 * Apply a modular monolithic architecture (client-modular server-database and pods). Although we are not having just a source of data due to the use of pods.
