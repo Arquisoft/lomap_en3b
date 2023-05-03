@@ -187,7 +187,7 @@ export class Controller {
                 friendsLocations = friendsLocations.concat( await readLocations(resource, this.session, friendID));
             } catch (err) {
                 //Friend does not have LoMap??
-                console.log(err);
+                console.error(err);
             }
         }
         //Add Reviews
@@ -204,7 +204,6 @@ export class Controller {
      */
     saveToPODReview(rev, locOwner, privacy) {
         let resourceURL = locOwner.concat(privacy).concat(this.user.revResourceURL);
-        console.log("Where:" + resourceURL);
         if(rev.media) {
             let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
             writeReviewWithIMG(resourceURL, this.session, rev, privacy, resourceIMGURL)

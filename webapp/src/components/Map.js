@@ -228,11 +228,9 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
             );
             reviews.push(rev);
         }
-        console.log(reviews);
         //Update comments
         reviews.forEach((rev) =>
         {
-            console.log(rev);
             controlMng.saveToPODReview(
                 rev,
                 lastMarker.locOwner,
