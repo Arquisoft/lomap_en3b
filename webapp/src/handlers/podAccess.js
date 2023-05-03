@@ -38,7 +38,8 @@ export async function readLocations(resourceURL,session, userIDWeb) {
             try {
                 //Convert into LocationLM object
                 location= convertPODLocationIntoDomainModelLocation(locationThing, userIDWeb)
-                location.locOwner = userIDWeb;
+                //location.locOwner = userIDWeb;
+                //console.log(location.locID);
 
                 // media
                 let mediaURL = getUrl(locationThing, SCHEMA_LOMAP.rev_hasPart);

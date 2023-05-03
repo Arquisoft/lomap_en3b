@@ -172,7 +172,7 @@ export class Controller {
     }
 
     async retrieveFriendsPublicLocations() {
-        let friends = await getFriendsWebIds(this.user.userWebId);
+        let friends = await getFriendsWebIds(this.session.info.webId);
 
         let friendsLocations = [];
         let reviews = [];
@@ -187,7 +187,7 @@ export class Controller {
                 friendsLocations = friendsLocations.concat( await readLocations(resource, this.session, friendID));
             } catch (err) {
                 //Friend does not have LoMap??
-                console.log(err);
+                console.error(err);
             }
         }
         //Add Reviews

@@ -14,12 +14,12 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess,
+    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getNamedNode,
 
 
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
-import {FOAF} from "@inrupt/vocab-common-rdf";
+import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
 
 
 /**
@@ -182,6 +182,8 @@ async function giveFriendsAccess(session, access) {
     let reviewsURL = location + "reviews.ttl";
     let imagesURL = location + "images/";
 
+    let pic = await getProfilePicture(friend);
+
     await giveAccessToFile(locationsURL, friend, session);
     await giveAccessToFile(reviewsURL, friend, session);
     await giveAccessToFile(imagesURL, friend, session);
@@ -327,19 +329,13 @@ async function giveAccessToFile(resource, friend, session){
 /**
  * Returns the profile for a given webId
  * @param webId containing the webId whose profile we want
- * @returns {Promise<Thing & {url: UrlString}>} with the profile we need
  */
 async function getProfile(webId) {
     let dataset = await getSolidDataset(webId);
     return getThing(dataset, webId);
 }
 
-async function findName(webId) {
-    if (webId === undefined)
-        return "No name found";
-    else {
-        let profile = getProfile(webId);
-        let name = getStringNoLocale(profile, FOAF.name);
-        return name === null ? "No name found" : name;
-    }
+export async function getProfilePicture(webId) {
+    let profile = await getProfile(webId);
+    return (getNamedNode(profile, VCARD.hasPhoto))?.value;
 }

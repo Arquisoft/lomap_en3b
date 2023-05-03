@@ -345,8 +345,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     };
 
     return (
-        <Container style={style}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >
+        <Container  style={style}>
+            <Box  aria-label='detailed view container' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >
                 <Tabs
                     value={selectedTab}
                     onChange={handleTabChange}
@@ -354,10 +354,11 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                     textColor="inherit"
                     sx={{ marginTop: '0.1875rem' }}
                 >
-                    <Tab label="Reviews" icon={<ReviewsIcon />} />
-                    <Tab label="Location" icon={<LocationOnIcon />} />
+                    <Tab aria-label="Reviews" label="Reviews" icon={<ReviewsIcon />} />
+                    <Tab aria-label="Locations" label="Location" icon={<LocationOnIcon />} />
                     <Tab
                         label="Close"
+                        aria-label="Close"
                         icon={<CloseIcon/>}
                         component={ButtonBase}
                         onClick={handleAddButtonClick}
@@ -441,20 +442,20 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                             </IconButton>
                         </Box>
                     </Box></Typography>}
-                {selectedTab === ınfo && <Typography variant="body1">
+                {selectedTab === ınfo && <Typography aria-label="details view" variant="body1">
                     {image && <img src={image} alt="Image" style={{ width: '100%', borderRadius: '0.3125rem' }} onError={() => setImage(null)} />}
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
-                        <InputLabel sx={{ fontSize: '2rem', fontWeight: 'bold', maxWidth: '15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</InputLabel>
+                    < Box  sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',my: '0.625rem', width: '100%' }}>
+                        <InputLabel aria-label="locations name" sx={{ fontSize: '2rem', fontWeight: 'bold', maxWidth: '15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
 
                             <Rating name="size-small" value={stars} size="extra-small" readOnly />
 
 
                         </Box>
-                        <Typography variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
+                        <Typography aria-label=" location's privacy and category" variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
 
-                        <Typography variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
+                        <Typography aria-label=" location's description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
                             {description}
                         </Typography>
                         <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
