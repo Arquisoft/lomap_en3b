@@ -129,7 +129,7 @@ const MapView = ({session,onSearch}) => {
 
   };
 
-  const makeLoOutDisapear = () => {
+  const makeLogOutDisapear = () => {
     setShowLogOut(!showLogOut);
 
   };
@@ -137,7 +137,7 @@ const MapView = ({session,onSearch}) => {
 
 
 
-  if (loadError) return <div> Error Loading Maps </div>;
+  if (loadError) return <ErrorView/>;
 
   return (
       <>
@@ -148,7 +148,7 @@ const MapView = ({session,onSearch}) => {
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
             onAccountPage={() => makeAccountPageDisapear()}
-            onLogOut={() => makeLoOutDisapear()}
+            onLogOut={() => makeLogOutDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
@@ -160,7 +160,7 @@ const MapView = ({session,onSearch}) => {
         <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
 
 
-        <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLoOutDisapear()}/>
+        <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLogOutDisapear()}/>
         { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">
         <MapErrorBoundary>
           <Map filterChanges={changesInFilters} selectedFilters={selectedFilters} isInteractive={isInteractive} session={session} onMarkerAdded={handleMarkerAdded} markerData={markerData} onInfoList={(marker)=>makeInfoPanelDisapear(marker)} changesInComments={changesInComments} updatedReview={updateComments} updateLocation={updateLocation} editLocation={updateDone}/>
