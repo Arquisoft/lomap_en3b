@@ -70,9 +70,9 @@ cloud "LoMAP deployment" as dep{
    }
 
 }
-node "Render hosting server" <<device>> as lomap {
+node "Azure Virtual Machine " <<device>> as lomap {
 cloud "LoMAP execution enviroment" as env{
-    [Lomap Deployment]
+    [Lomap container]
 }
 }
 node "Google Maps' Server" <<device>> as maps{
