@@ -31,6 +31,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import EditIcon from '@mui/icons-material/Edit';
+import { getProfilePicture } from "../handlers/podHandler";
 
 
 /**
@@ -58,6 +59,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
     const[image,setImage]=useState("");
     const[description,setDescription]=useState("");
     const[owner,setOwner]=useState("");
+    const[imageUrl,setImageUrl]=useState("");
 
     const[stars,setStars]=useState(0);
 
@@ -161,6 +163,17 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
         maxWidth: '18.75rem',
         minWidth: '15.625rem',
     };
+
+
+    async function getAvatarHtml(owner) {
+
+        let picture =await getProfilePicture(owner);
+
+        return picture ;
+    };
+
+
+    
 
 
     // Define an event handler to update the list with the propertys from the selected component
@@ -373,12 +386,14 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
                     <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                         <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
                         <List sx={{ overflowY: 'scroll', maxWidth:'17rem', maxHeight: '22.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
-                            {comments.map(({ string: html, owner }, index) => (
+                            {comments.map( ({ string: html, owner }, index) => (
                                 <ListItem key={index} sx={{ width: '100%', bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                     <ListItemText
                                         primary={
                                             <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '70%' }}>
-                                                <Avatar />
+                                                
+                                                <Avatar src={ getAvatarHtml(owner)} />
+
                                                 <Box sx={{ ml: '0.5rem' }}>{owner.split('/').slice(-2)[0].split('.')[0]}</Box>
                                             </Box>}
                                         secondary={<div dangerouslySetInnerHTML={{__html: html}} />}
