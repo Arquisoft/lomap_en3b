@@ -204,6 +204,7 @@ export class Controller {
      */
     saveToPODReview(rev, locOwner, privacy) {
         let resourceURL = locOwner.concat(privacy).concat(this.user.revResourceURL);
+        console.log("Where:" + resourceURL);
         if(rev.media) {
             let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
             writeReviewWithIMG(resourceURL, this.session, rev, privacy, resourceIMGURL)

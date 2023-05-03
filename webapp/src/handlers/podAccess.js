@@ -206,6 +206,10 @@ export function writeReviewWithIMG(resourceURL, session, rev, privacy, imageCont
  * @returns {Promise<string|*>}
  */
 async function writeReview(resourceURL, session, rev, privacy, cond, imageContainerUrl="") {
+    console.log(resourceURL);
+    console.log(session);
+    console.log(rev);
+    console.log(privacy);
     //Get dataSet
     let dataset = await getDataset(resourceURL, session);
 
