@@ -1,6 +1,8 @@
 import {checkStringInvalidFormat} from "../util/utilMethods";
+import {getProfilePicture} from "../handlers/podHandler";
 
 export class User {
+    profilePicture;
     locations = new Map(); // a map to store the user's locations
     reviews = new Map(); // a map to store the user's reviews
     userWebId; // the user's WebID
@@ -12,9 +14,10 @@ export class User {
      * Constructor for the User class.
      * @param {*} sessionGiven - An object containing information about the user's session.
      */
-    constructor(sessionGiven) {
-        checkStringInvalidFormat(sessionGiven, 'userWebId' );
+    async constructor(sessionGiven) {
+        checkStringInvalidFormat(sessionGiven, 'userWebId');
         this.userWebId = sessionGiven.info.webId.replace("/profile/card#me", "/");
+        this.profilePicture = await getProfilePicture(sessionGiven.info.webId);
     }
 
     /**
