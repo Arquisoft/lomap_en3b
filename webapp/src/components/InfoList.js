@@ -64,6 +64,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
     const validationError = document.getElementById("validation-error");
     const validationErrorRef = React.useRef(null);
 
+    const[added,setAdded]=useState(false);
+
 
 
 
@@ -176,6 +178,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
           setImage(selected[0].pic);
           upgradeComments();
           countStars(selected[0].comments);
+          setAdded(false);
 
         } else {
             setComments([]);
@@ -212,6 +215,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
     // Define an event handler to add a new comment to the comments array
 
     const onClickHandler = () => {
+
         let ratingStars = '';
         if (selectedRating === 1) {
             ratingStars = '⭐';
@@ -224,6 +228,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
         setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
         setComment('');
         setCommentpic('');
+        setAdded(true);
     };
 
 
@@ -299,8 +304,11 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
     const handleAddButtonClick = () => {
         onInfoList();
         setSelectedTab(1);
+        if(added){
+            newComments( {key,review});
+        }
 
-        newComments( {key,review});
+        
 
     };
 
