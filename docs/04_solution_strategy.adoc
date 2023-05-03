@@ -1,21 +1,24 @@
 [[section-solution-strategy]]
 
 === Technology decisions
-* Implement LoMap in the (Express, React, Node) framework. LoMap will be a webapp, therefore we need a nice framework for developing fullstack applications. Also React is a really suitable framework for the use of the pods.
+* Implement LoMap in mainly a React framework with a Express server. React is a really suitable framework for the use of pods and also for the developing of one page applications.
+* Javascript: The programming language we chose was Javascript as none of us had any experience with neither Javascript or Typescript and we thought the learning curve of the first one could be a bit easier to deal with.
 
-=== Decisions about the top-level decomposotion of the system
-* Apply a modular monolithic architecture (client-modular server-database and pods). Although we are not having just a source of data due to the use of pods.
+=== Decisions about the top-level decomposition of the system
+* Do not have a database: During the development process we found ourselves not needing a centralised database.
+This is mainly because our top quality goal was privacy and to get such goal the use of the pods to store every piece of information of the user was the best approach in our eyes.
+It keeps the information of the user decentralised and at their disposal at all times.
+* This makes our application mainly client-side, with a server using just express.
+* No REST API needed.
 
 === Decisions on how to achieve key quality goals
-* Private information stored in pods. Key aspect regarding the individual data of the users.
 * Use Google Maps API regarding the maps of the application. Brings us a nice infrastructure regarding every location aspect of the application we could need.
-* Use the corresponding APIs in order to establish proper connection with the pods. 
+* Use the corresponding APIs in order to establish proper connection with the pods.
 
-=== Decisions on how to achieve key quality goals
+=== Relevant organizational decisions
 * Use of git workflow regarding version control. This way we can have a great amount of control over the versioning and updating of the code when developing the application.
 * Constant review and update of the projects documentation in order to develop an easy to understand application for other developers (not only potential users).
-* Forget about using a centralised DataBase and a RestAPI. This will help to keep user's data private since it will only use the SOLID POD.
-
+* Delegate in the solid provider all the possible actions related to the pods, such as login, management of the adding and removing of friends or the users' own profile.
 
 [role="arc42help"]
 ****
