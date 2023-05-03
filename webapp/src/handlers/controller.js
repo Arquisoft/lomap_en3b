@@ -187,7 +187,7 @@ export class Controller {
                 friendsLocations = friendsLocations.concat( await readLocations(resource, this.session, friendID));
             } catch (err) {
                 //Friend does not have LoMap??
-                console.log(err);
+                console.error(err);
             }
         }
         //Add Reviews
@@ -204,23 +204,27 @@ export class Controller {
      */
     saveToPODReview(rev, locOwner, privacy) {
         let resourceURL = locOwner.concat(privacy).concat(this.user.revResourceURL);
-        if(rev.media) {
-            let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
-            writeReviewWithIMG(resourceURL, this.session, rev, privacy, resourceIMGURL)
-                .then(() => {
-                    //window.alert("Review saved");
-                })
-                .catch(error => {
-                    //console.error(error);
-                });
-        } else {
-            writeReviewWithoutIMG(resourceURL, this.session, rev, privacy)
-                .then(() => {
-                    //window.alert("Review saved");
-                })
-                .catch(error => {
-                    //console.error(error);
-                });
+        try{
+            if(rev.media) {
+                let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
+                writeReviewWithIMG(resourceURL, this.session, rev, privacy, resourceIMGURL)
+                    .then(() => {
+                        //window.alert("Review saved");
+                    })
+                    .catch(error => {
+                        //console.error(error);
+                    });
+            } else {
+                writeReviewWithoutIMG(resourceURL, this.session, rev, privacy)
+                    .then(() => {
+                        //window.alert("Review saved");
+                    })
+                    .catch(error => {
+                        //console.error(error);
+                    });
+            }
+        } catch(e){
+            //TODO: finish this. if is already added, continue
         }
     }
 
@@ -236,6 +240,7 @@ export class Controller {
                 }
             }
             ret.push(convertDomainModelLocationIntoViewLocation(aux[i], i, comments));
+
         }
         return ret;
     }
