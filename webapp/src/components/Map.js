@@ -4,11 +4,14 @@ import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps
 import { formatRelative } from "date-fns";
 import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
-import {readLocations, writeLocations} from "../handlers/podAccess";
 import Rating from "react-rating-stars-component";
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
-import {getFriendsWebIds} from "../handlers/podHandler";
+import {
+    convertDomainModelLocationIntoViewLocation,
+    convertViewLocationIntoDomainModelLocation
+} from "../util/convertor";
+import {Controller} from "../handlers/controller";
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -63,7 +66,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const mapRef = React.useRef(null);
     const [showNameInput, setShowNameInput] = useState(false); // ınfowindow buton
     const [selectedMarker, setSelectedMarker] = useState(null);
-    
+    const controlMng = new Controller(session);
 
     // Function for adding a marker
     const addMarker = React.useCallback(
@@ -80,6 +83,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             name: '',
             category: '',
             privacy: '',
+            locOwner: '',
             rate: "",
             comments:[],
           },
@@ -94,17 +98,32 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
       // Function to get and set the locations on the map
     const retrieveLocations=async () => {
+        //TODO: Check how it works
+        let locations = await controlMng.retrievePrivateLocations();
+        console.log(locations);
+        controlMng.saveLocationsFromPOD(locations);
+
+        locations = await controlMng.retrievePublicLocations();
+        controlMng.saveLocationsFromPOD(locations);
+
+        locations = await controlMng.retrieveFriendsPublicLocations();
+        controlMng.saveLocationsFromPOD(locations);
+
+        //Convert into View
+        return controlMng.getViewLocations();
+        //OLD
+        /*
         let friends = await getFriendsWebIds(session.info.webId);
-        let resource = session.info.webId.replace("/profile/card#me", "/private/lomap/locations.ttl");
+        let resource = session.info.webId.replace("/profile/card#me", "/private/lomapen3b/locations.ttl");
         // Code to get the friends locations
         let locations = await readLocations(resource, session);
-        resource = session.info.webId.replace("/profile/card#me", "/public/lomap/locations.ttl");
+        resource = session.info.webId.replace("/profile/card#me", "/public/lomapen3b/locations.ttl");
         locations = locations.concat(await readLocations(resource, session));
         let friendsLocations = [];
         for (let i = 0; i < friends.length; i++) {
             try {
                 //concat it with the previous locations (concat returns a new array instead of modifying any of the existing ones)
-                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "public/lomap/locations.ttl",session));
+                friendsLocations = friendsLocations.concat(await readLocations(friends[i].replace("/profile/card", "/") + "public/lomapen3b/locations.ttl",session));
             } catch (err) {
                 //Friend does not have LoMap??
                 console.log(err);
@@ -112,6 +131,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
         }
 
         return locations.concat(friendsLocations); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+        */
     }
 
     async function getAndSetLocations() {
@@ -158,6 +178,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
 
             const lastMarker = current[current.length - 1];
             //console.log(lastMarker);
+
             const marker = markerData[0]; // Access the object inside the array
 
             lastMarker.name = marker.name;
@@ -166,20 +187,16 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.pic=marker.pic;
             lastMarker.description=marker.description;
 
+            //TODO : It works here !
+            saveLocations(lastMarker.lat, lastMarker.lng, lastMarker.name, lastMarker.description, lastMarker.category, lastMarker.privacy);
 
             return [...current];
         });
-        //TRYING
-        console.log("1.- original");
-        console.log(originalMarkers);
-        console.log("2.- markers");
-        console.log(markers);
-        await saveLocations();
     };
 
 
 
-    const updateMarker = async () => {
+    const updateMarker = () => {
 
         setOriginalMarkers((current) => {
 
@@ -195,17 +212,45 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
             lastMarker.privacy = marker.privacy;
             lastMarker.pic=marker.pic;
             lastMarker.description=marker.description;
-
-
             return [...current];
         });
-       
+        //We are only adding one, the last one
+        //saveLocations(originalMarkers[originalMarkers.length -1]);
+
     };
 
 
-    const saveLocations=async () => {
-        let resourceFirst = session.info.webId.replace("/profile/card#me", "/")
-        return await writeLocations(resourceFirst, "/lomap/locations.ttl", session, originalMarkers); //TODO -> si usamos session handler podríamos tener las localizaciones en session?
+    const saveLocations = (lat, lng, name, description, category, privacy) => {
+        /*
+        console.log("I get: ");
+        console.log(lat, lng, name, description, category, privacy)
+        let market = originalMarkers[originalMarkers.length - 1]
+        controlMng.tryMethd(lat, lng, name, description, category, privacy, market);
+         */
+        //TODO: Add check bc it is call two times.
+        let market = originalMarkers[originalMarkers.length - 1]
+        //console.log("I get: ");
+        //console.log(market);
+        if (market){
+            //Create locationLM with marker data
+            let loc = convertViewLocationIntoDomainModelLocation(market, controlMng.user.userWebId);
+            loc.img = market.pic;
+            if (controlMng.canBeLocationAdded(loc)){
+                controlMng.addLocation(loc);
+                controlMng.saveToPODLocation(loc);
+            }
+        }
+        /*
+        if(viewLocat) {
+            //Create locationLM with marker data
+            let loc = convertViewLocationIntoDomainModelLocation(viewLocat);
+            loc.img = viewLocat.pic;
+            //Update Controller
+            controlMng.addLocation(loc);
+            //Save into the POD (async)
+            controlMng.saveToPODLocation(loc);
+        }
+         */
     }
 
     //function to update the comments

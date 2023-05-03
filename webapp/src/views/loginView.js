@@ -9,7 +9,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const Login = () => {
-    const [redirectUrl, setRedirectUrl] = useState("");
+    const [redirectUrl, setRedirectUrl] = useState(window.location.href);
     const [provider,setProvider]= useState("https://inrupt.net");
     const authOptions={
         clientName:"LoMap",
@@ -22,6 +22,7 @@ const Login = () => {
 
     }
     const handleLogin = () => {
+
         setRedirectUrl(window.location.href);
     };
 
@@ -57,9 +58,10 @@ const Login = () => {
                         </Select>
                         <InputLabel>(Inrupt By default)</InputLabel>
                     </FormControl>
-                    <LoginButton oidcIssuer={provider} redirectUrl={redirectUrl} authOptions={authOptions}>
+                    <LoginButton oidcIssuer={provider} redirectUrl={redirectUrl} authOptions={authOptions} startIcon={<AccountCircleIcon />}>
                         <Button name="lomapLoginButton" variant="contained" color="inherit" startIcon={<AccountCircleIcon />} onClick={handleLogin}>Login</Button>
                     </LoginButton>
+
                 </Box>
             </Grid>
         </Grid>
