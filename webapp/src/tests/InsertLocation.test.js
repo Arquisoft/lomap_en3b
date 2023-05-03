@@ -20,23 +20,7 @@ const mockImpl=()=>{}
             expect(nameField).toBeInTheDocument();
 
         })
-        test('Select type',()=>{
-            const typesAvailable=['sight','restaurant','monument','park','bar','shop']
 
-            //const optionsDropdown=document.querySelector("div[aria-labelledby='type options']")
-            /**
-            const optionsDropdown  =document.querySelector("div[ aria-labelledby='type options']");
-            const listbox = within(optionsDropdown).getByRole(
-                'listbox'
-            );
-            fireEvent.click(optionsDropdown)
-
-
-            for (let i = 0; i <typesAvailable.length ; i++) {
-                expect((within(optionsDropdown).getByDisplayValue(typesAvailable[i]) ).toBeInTheDocument());
-            }*/
-
-        })
         test('Select privacy level',()=>{
             const pubButton=screen.getByDisplayValue( /Public/i)
             expect(pubButton).toBeInTheDocument();

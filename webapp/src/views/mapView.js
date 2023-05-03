@@ -137,7 +137,7 @@ const MapView = ({session,onSearch}) => {
 
 
 
-  if (loadError) return <div> Error Loading Maps </div>;
+  if (loadError) return <ErrorView/>;
 
   return (
       <>
