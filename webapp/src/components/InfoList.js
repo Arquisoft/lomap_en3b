@@ -31,6 +31,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import EditIcon from '@mui/icons-material/Edit';
+import { getProfilePicture } from "../handlers/podHandler";
 
 
 /**
@@ -49,7 +50,7 @@ import EditIcon from '@mui/icons-material/Edit';
  * @param newComments
  */
 
-const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,profilename}) => {
 
     const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
@@ -57,6 +58,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const[review,setReview]=useState([]);
     const[image,setImage]=useState("");
     const[description,setDescription]=useState("");
+    const[owner,setOwner]=useState("");
+    const[imageUrl,setImageUrl]=useState("");
+    const[poster,setPoster]=useState("");
 
     const[stars,setStars]=useState(0);
 
@@ -162,6 +166,17 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     };
 
 
+    async function getAvatarHtml(owner) {
+
+        let picture =await getProfilePicture(owner);
+
+        return picture ;
+    };
+
+
+    
+
+
     // Define an event handler to update the list with the propertys from the selected component
     React.useEffect(() => {
         if (isInfoVisible) {
@@ -177,6 +192,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
           setKey(selected[0].key);
           setDescription(selected[0].description);
           setImage(selected[0].pic);
+          setPoster(selected[0].locOwner);
+          setOwner(profilename);
           upgradeComments();
           countStars(selected[0].comments);
           setAdded(false);
@@ -224,9 +241,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
             ratingStars = '⭐'.repeat(selectedRating);
         }
 
-        setReview((prevReview) => [...prevReview, {comment, commentpic, ratingStars}]);
+        setReview((prevReview) => [...prevReview, {comment, commentpic, ratingStars,owner}]);
 
-        setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
+        setComments((comments) => [...comments,{ string:`<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`,owner}]);
         setComment('');
         setCommentpic('');
         setAdded(true);
@@ -239,9 +256,12 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                 throw new Error("Comments are not available.");
             }
             const newComments = selected[0].comments.map((comment) => {
-                const { comment: text, commentpic, ratingStars } = comment;
+                const { comment: text, commentpic, ratingStars,owner } = comment;
 
-                return `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`;
+                return {
+                    owner,
+                    string: `<div style="margin-bottom: 5px;">${text}</div><div>${commentpic}</div><div>${ratingStars}</div>`
+                };
             });
             setComments(newComments);
         } catch (error) {
@@ -368,13 +388,15 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                     <Box sx={{ width: '100%', backgroundColor: '#f5f5f5', borderRadius: '0.3125rem', p: '0.625rem', my: '0.625rem' }}>
                         <Typography variant="caption" sx={{ fontWeight: 'bold', mb: '0.625rem' }}>Reviews</Typography>
                         <List sx={{ overflowY: 'scroll', maxWidth:'17rem', maxHeight: '22.25rem', fontWeight: 'bold', mb: '0.625rem' }}>
-                            {comments.map((html, index) => (
+                            {comments.map( ({ string: html, owner }, index) => (
                                 <ListItem key={index} sx={{ width: '100%', bgcolor: '#fafafa', borderRadius: '0.1875rem', my: '0.1875rem' }}>
                                     <ListItemText
                                         primary={
                                             <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '70%' }}>
-                                                <Avatar />
-                                                <Box sx={{ ml: '0.5rem' }}>Batu</Box>
+                                                
+                                                <Avatar src={ getAvatarHtml(owner)} />
+
+                                                <Box sx={{ ml: '0.5rem' }}>{owner.split('/').slice(-2)[0].split('.')[0]}</Box>
                                             </Box>}
                                         secondary={<div dangerouslySetInnerHTML={{__html: html}} />}
                                         primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 'bold', mb: '0.3125rem' }}
@@ -454,7 +476,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
                         </Box>
                         <Typography aria-label=" location's privacy and category" variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
-
+                        <Typography variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.2rem', fontStyle: 'italic' }}>
+                                    Created by: {poster.split('/').slice(-2)[0].split('.')[0]}
+                        </Typography>
                         <Typography aria-label=" location's description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
                             {description}
                         </Typography>

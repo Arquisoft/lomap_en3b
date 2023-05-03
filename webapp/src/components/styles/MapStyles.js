@@ -52,5 +52,19 @@ export default [
                 "color": "#aee0f4"
             }
         ]
-    }
+    },
+    {
+        "featureType": "poi",
+        "elementType": "label",
+        "stylers": [
+          { "visibility": "off" }
+        ]
+      },
+      {
+        "featureType": "transit.station",
+        "stylers": [
+          { "visibility": "off" }
+        ]
+      }
+      
 ]

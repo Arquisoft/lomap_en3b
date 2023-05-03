@@ -66,7 +66,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterLocations,onLogOut}) => {
+const Header = ({ onAddMarker, onInfoList, onAccountPage,onFilterLocations,onLogOut}) => {
 
 
   const handleAddButtonClick = () => {
@@ -82,9 +82,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
     onInfoList();
   };
 
-  const handleAccountPageClick = () => {
-    onAccountPage();
-  };
+ 
 
   const handleLogOutClick = () => {
     onLogOut();
@@ -197,9 +195,7 @@ const Header = ({ onAddMarker, onInfoList, onEditMarker, onAccountPage,onFilterL
             <IconButton  aria-label="Add Location"  color="inherit" onClick={handleAddButtonClick} >
               <AddLocationAltIcon />
             </IconButton>
-            <IconButton  aria-label="Show Profile"  color="inherit"  onClick={handleAccountPageClick} >
-              <AccountIcon />
-            </IconButton>
+            
             <IconButton aria-label="Log Out option" color="inherit" onClick={handleLogOutClick} >
               <LogoutIcon />
             </IconButton>
