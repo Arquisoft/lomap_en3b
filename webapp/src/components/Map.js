@@ -11,7 +11,7 @@ import {
     convertDomainModelLocationIntoViewLocation,
     convertViewLocationIntoDomainModelLocation, convertViewReviewIntoDomainModelReview
 } from "../util/convertor";
-import {Controller} from "../handlers/controller";
+import {CoordinateNotInDomain} from "../util/Exceptions/exceptions";
 
 // setting the width and height of the <div> around the google map
 const containerStyle = {
@@ -199,16 +199,32 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
     const saveLocations = () => {
         let market = originalMarkers[originalMarkers.length - 1]
         if (market){
-            //Create locationLM with marker data
-            let loc = convertViewLocationIntoDomainModelLocation(market, controlMng.user.userWebId);
-            loc.img = market.pic;
-            if (controlMng.canBeLocationAdded(loc)){
-                controlMng.addLocation(loc);
-                controlMng.saveToPODLocation(loc);
-                originalMarkers[originalMarkers.length - 1] = convertDomainModelLocationIntoViewLocation(
-                    loc,
-                    originalMarkers[originalMarkers.length - 1].key
-                );
+            try {
+                //Create locationLM with marker data
+                let loc = convertViewLocationIntoDomainModelLocation(market, controlMng.user.userWebId);
+                loc.img = market.pic;
+                if (controlMng.canBeLocationAdded(loc)) {
+                    controlMng.addLocation(loc);
+                    controlMng.saveToPODLocation(loc);
+                    originalMarkers[originalMarkers.length - 1] = convertDomainModelLocationIntoViewLocation(
+                        loc,
+                        originalMarkers[originalMarkers.length - 1].key
+                    );
+                }
+            } catch (error) {
+                if (error instanceof CoordinateNotInDomain){
+                        if(controlMng.lockedName){
+                            //It has been reject once
+                            controlMng.lockedName = '';
+                            console.log('The locations does not belong to Oviedo, will not be added: ');
+                            originalMarkers.pop();
+                        }else{
+                            //First attempt
+                            controlMng.lockedName = market.name;
+                        }
+                }else{
+                    console.error(error);
+                }
             }
         }
     }

@@ -19,7 +19,7 @@ export class LocationLM {
      */
     constructor(coorLat, coorLng, name, descrip, cat, priv, date,
                 owner, id = uuidv4()) {
-        //checkCoordinates(!is_in_city(coorLat, coorLng));
+        checkCoordinates(!is_in_city(coorLat, coorLng));
         this.lat = coorLat;
         this.lng = coorLng;
         checkStringInvalidFormat(name, 'name' );

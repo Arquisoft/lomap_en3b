@@ -14,28 +14,26 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getNamedNode,
-
-
+    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getAgentResourceAccess, getAgentDefaultAccess, getNamedNode
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
 
 
 /**
- * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which 
+ * This method gets all the pods relative to a user given the session from a logged in user and looks for the corresponding "lomap" folder in which
  * all the application information is going to be stored.
- * @param {} session 
+ * @param {} session
  */
 export async function checkForLomap(session) {
 
     let anyContainer = false;
-    let pods = await getPodUrlAll(session.info.webId, {fetch : session.fetch});
+    let pods = await getPodUrlAll(session.info.webId, {fetch: session.fetch});
     let podWithFolder;
     let i = 0;
     while (!anyContainer && i < pods.length) {//While there are pods left and none of them has a lomap folder
-        let currentPod=pods[i].replace("/profile/card#me","/")//Remove profile url string.
-        anyContainer = await checkForLomapInPod(currentPod,session);
+        let currentPod = pods[i].replace("/profile/card#me", "/")//Remove profile url string.
+        anyContainer = await checkForLomapInPod(currentPod, session);
         if (anyContainer) {
             podWithFolder = pods[i];
         }
