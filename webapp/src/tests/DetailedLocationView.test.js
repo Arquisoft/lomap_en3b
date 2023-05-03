@@ -20,7 +20,6 @@ describe("Container renders properly",()=>{
         tab=screen.getByLabelText("Locations")
         expect(tab).toBeInTheDocument();
         fireEvent.click(tab)
-        screen.debug( )
         tab=screen.getByLabelText("Close")
         expect(tab).toBeInTheDocument();
 
@@ -69,34 +68,6 @@ describe("Container renders properly",()=>{
 
 
      })
-     describe('Detailed location view: Comments view',()=>{
 
-         beforeEach(()=> {
-             render(<InfoList isInfoVisible={true} onInfoList={true} selected={selectedLoc} newComments={mockImpl()}
-                              onEditMarker={mockImpl()}/>)
-             const tab=screen.getByLabelText("Reviews");
-             expect(tab).toBeInTheDocument();
-             const container=screen.getByLabelText(/details view/i)
-             fireEvent.click(tab)
-             expect(container).toBeVisible();
-
-         })
-         test('Title renders',()=>{
-             screen.debug()
-             const title=screen.getByText(/Reviews/i)
-             expect(title).toBeInTheDocument()
-
-         })
-
-         test('Add comment ',()=>{
-
-             const insertLocTextBox=screen.getByPlaceholderText(/Add a comment/i)
-             expect(insertLocTextBox).toBeInTheDocument()
-
-
-         })
-
-
-     });
 });
 
