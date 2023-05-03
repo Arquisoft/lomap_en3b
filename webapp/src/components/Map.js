@@ -226,7 +226,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
                 lastMarker.comments[i].ratingStars,
                 lastMarker.comments[i].commentpic
             );
-
+            
             lastMarker.comments[i].owner = controlMng.user.userWebId;
 
             reviews.push(rev);
@@ -351,7 +351,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
         <React.Fragment>
 
             <GoogleMap
-                zoom={10} //zoom level
+                zoom={15} //zoom level
                 center={{ lat: 43.361916, lng: -5.849389 }} //center of the map
                 mapContainerStyle={containerStyle} // the style of the map container
                 options={options}

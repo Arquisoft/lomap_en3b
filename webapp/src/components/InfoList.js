@@ -60,6 +60,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
     const[description,setDescription]=useState("");
     const[owner,setOwner]=useState("");
     const[imageUrl,setImageUrl]=useState("");
+    const[poster,setPoster]=useState("");
 
     const[stars,setStars]=useState(0);
 
@@ -191,6 +192,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
           setKey(selected[0].key);
           setDescription(selected[0].description);
           setImage(selected[0].pic);
+          setPoster(selected[0].locOwner);
           setOwner(profilename);
           upgradeComments();
           countStars(selected[0].comments);
@@ -474,7 +476,9 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
 
                         </Box>
                         <Typography aria-label=" location's privacy and category" variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
-
+                        <Typography variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.2rem', fontStyle: 'italic' }}>
+                                    Created by: {poster.split('/').slice(-2)[0].split('.')[0]}
+                        </Typography>
                         <Typography aria-label=" location's description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
                             {description}
                         </Typography>
