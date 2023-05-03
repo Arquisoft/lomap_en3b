@@ -143,7 +143,9 @@ export async function readReviews(resourceURL,session) {
                 if(mediaURL){
                     //IMG url
                     let mediaThingURL = mediaURL.toString();
-                    review.media = getImageFromPod(mediaThingURL, session);
+                    //"data:image/png;base64,".concat(
+                    let aux = await getImageFromPod(mediaThingURL, session);
+                    review.media = "data:image/png;base64,".concat(aux);
                 }
 
                 //Add review into List
@@ -193,25 +195,6 @@ export function writeReviewWithIMG(resourceURL, session, rev, privacy, imageCont
 }
 
 /**
- *
- * @param {ReviewLM[]} reviewsStored
- * @param {ReviewLM} rev
- * @returns {boolean}
- */
-function checkForDuplicates(reviewsStored, rev) {
-    if (reviewsStored) {
-        for (let i = 0; i < reviewsStored.length; rev) {
-            let review = reviewsStored[i];
-            if(review.ItemReviewed === rev.ItemReviewed && review.user === rev.user &&
-                review.comment === rev.comment && review.rate === rev.rate && review.media === rev.media){
-                return false
-            }
-        }
-    }
-    return true;
-}
-
-/**
  * This JavaScript function writes a new review by creating a new Thing with the review data and adding it
  *  to a SolidDataset located at the specified resourceURL.
  * @param resourceURL - The URL of the SolidDataset to save the review
@@ -226,32 +209,26 @@ async function writeReview(resourceURL, session, rev, privacy, cond, imageContai
     //Get dataSet
     let dataset = await getDataset(resourceURL, session);
 
-    //Check if it has been added before
-    let reviewsStored = await readReviews(resourceURL,session);
-    //let added = checkForDuplicates(reviewsStored, rev);
-    let added = false;
-    if(!added) {
+    //Create Thing
+    let reviewThing = convertDomainModelReviewIntoPODReview(rev, privacy);
 
-        //Create Thing
-        let reviewThing = convertDomainModelReviewIntoPODReview(rev, privacy);
+    if (cond) {
+        let name = rev.revID.concat(".png")
+        //Save image file into POD and get URL
+        await saveImageToPod(imageContainerUrl, session, rev.media, name);
 
-        if (cond) {
-            let name = rev.revID.concat(".png")
-            //Save image file into POD and get URL
-            await saveImageToPod(imageContainerUrl, session, rev.media, name);
+        //URL where it saved
+        let imageUrl = imageContainerUrl.concat("/").concat(name);
 
-            //URL where it saved
-            let imageUrl = imageContainerUrl.concat("/").concat(name);
-
-            reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
-        }
-
-        //Add Thing into DataSet
-        dataset = setThing(dataset, reviewThing);
-
-        //Save dataSet into POD
-        await saveNew(resourceURL, dataset, session);
+        reviewThing = addUrl(reviewThing, SCHEMA_LOMAP.rev_hasPart, imageUrl);       //Img
     }
+
+    //Add Thing into DataSet
+    dataset = setThing(dataset, reviewThing);
+
+    //Save dataSet into POD
+    await saveNew(resourceURL, dataset, session);
+
     return rev.revID;
 }
 

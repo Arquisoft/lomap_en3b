@@ -86,7 +86,8 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
             locOwner: '',
             rate: "",
             comments:[],
-            domainID: ''
+            domainID: '',
+            commentsAdded: 0
           },
         ]);
 
@@ -177,7 +178,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
         setOriginalMarkers((current) => {
 
 
-            
+
             const marker = markerData[0]; // Access the object inside the array
 
             const lastMarker = current[marker.key];
@@ -204,40 +205,42 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
             if (controlMng.canBeLocationAdded(loc)){
                 controlMng.addLocation(loc);
                 controlMng.saveToPODLocation(loc);
+                originalMarkers[originalMarkers.length - 1] = convertDomainModelLocationIntoViewLocation(
+                    loc,
+                    originalMarkers[originalMarkers.length - 1].key
+                );
             }
-            originalMarkers[originalMarkers.length - 1] = convertDomainModelLocationIntoViewLocation(
-                loc,
-                originalMarkers[originalMarkers.length - 1].key
-            );
         }
     }
 
     function saveCommentsFromLocation(lastMarker) {
         let reviews = [];
-        lastMarker.comments.forEach( (review) => {
+        for(let i = lastMarker.commentsAdded; i < lastMarker.comments.length; i++ ) {
+//        lastMarker.comments.forEach( (review) => {
             let rev = convertViewReviewIntoDomainModelReview(
                 lastMarker.domainID,
                 controlMng.user.userWebId
             );
             rev = controlMng.completeReviewData(
                 rev,
-                review.comment,
-                review.ratingStars,
-                review.commentpic
+                lastMarker.comments[i].comment,
+                lastMarker.comments[i].ratingStars,
+                lastMarker.comments[i].commentpic
             );
             reviews.push(rev);
-        });
+//        });
+        }
+        //Update comments
         reviews.forEach((rev) =>
         {
-            if(controlMng.canBeReviewAdded(rev)){
-                controlMng.addReview(rev);
-                controlMng.saveToPODReview(
-                    rev,
-                    lastMarker.locOwner,
-                    lastMarker.privacy
-                )
-            }
+            controlMng.saveToPODReview(
+                rev,
+                lastMarker.locOwner,
+                lastMarker.privacy
+            );
         });
+
+        lastMarker.commentsAdded = lastMarker.commentsAdded + reviews.length;
     }
 
     //function to update the comments
@@ -335,7 +338,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
         bar: "/redLocation.svg",
         restaurant: "/orangeLocation.svg",
         shop: "/blueLocation.svg",
-        sight:"/trasnparentLocation.svg",
+        sight:"/yellow1Location.svg",
         monument:"/purpleLocation.svg",
         other:  "/blackLocation.svg",
         // u can Adding more types and URLs as needed

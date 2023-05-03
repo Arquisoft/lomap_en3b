@@ -39,7 +39,8 @@ export function convertDomainModelLocationIntoViewLocation(dmObj, pos, revs =[])
         locOwner: dmObj.locOwner,
         rate: '',
         comments: revs,
-        domainID: dmObj.locID
+        domainID: dmObj.locID,
+        commentsAdded: revs.length
     };
 }
 //Convert from domain to POD (1)
