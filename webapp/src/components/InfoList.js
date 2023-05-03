@@ -64,6 +64,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const validationError = document.getElementById("validation-error");
     const validationErrorRef = React.useRef(null);
 
+    const[added,setAdded]=useState(false);
+
 
 
 
@@ -164,17 +166,20 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     React.useEffect(() => {
         if (isInfoVisible) {
 
-            upgradeComments();
+           
 
 
           setName(selected[0].name);
           setCategory(selected[0].category); //setters for every field in the infoList
           setPrivacy(selected[0].privacy);
+          setReview(selected[0].comments);
           
           setKey(selected[0].key);
           setDescription(selected[0].description);
           setImage(selected[0].pic);
+          upgradeComments();
           countStars(selected[0].comments);
+          setAdded(false);
 
         } else {
             setComments([]);
@@ -183,6 +188,10 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
 
 
       const countStars = (reviews) => {
+        try{
+        if (!selected || !selected[0] || !selected[0].comments) {
+                throw new Error("Comments are not available.");
+            }
         let totalStars = 0;
         let totalComments = 0;
         reviews.forEach((comment) => {
@@ -193,8 +202,11 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
         });
         const averageStars = totalComments > 0 ? totalStars / totalComments : 0;
         setStars(averageStars);
+        }catch(error){
+            setStars(0);
+        }
         
-      }
+      };
       
       
 
@@ -204,6 +216,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     // Define an event handler to add a new comment to the comments array
 
     const onClickHandler = () => {
+
         let ratingStars = '';
         if (selectedRating === 1) {
             ratingStars = '⭐';
@@ -216,6 +229,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
         setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
         setComment('');
         setCommentpic('');
+        setAdded(true);
     };
 
 
@@ -231,7 +245,8 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
             });
             setComments(newComments);
         } catch (error) {
-            console.error(error);
+           
+           
             // handle the error here, for example:
             // setComments(["No comments available."]);
         }
@@ -290,8 +305,11 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const handleAddButtonClick = () => {
         onInfoList();
         setSelectedTab(1);
+        if(added){
+            newComments( {key,review});
+        }
 
-        newComments( {key,review});
+        
 
     };
 
@@ -520,4 +538,3 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
         </Container>
     )};
 export default InfoList;
-
