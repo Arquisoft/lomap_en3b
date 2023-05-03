@@ -172,7 +172,7 @@ export class Controller {
     }
 
     async retrieveFriendsPublicLocations() {
-        let friends = await getFriendsWebIds(this.user.userWebId);
+        let friends = await getFriendsWebIds(this.session.info.webId);
 
         let friendsLocations = [];
         let reviews = [];

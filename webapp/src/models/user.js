@@ -14,10 +14,17 @@ export class User {
      * Constructor for the User class.
      * @param {*} sessionGiven - An object containing information about the user's session.
      */
-    async constructor(sessionGiven) {
+    constructor(sessionGiven) {
         checkStringInvalidFormat(sessionGiven, 'userWebId');
         this.userWebId = sessionGiven.info.webId.replace("/profile/card#me", "/");
-        this.profilePicture = await getProfilePicture(sessionGiven.info.webId);
+        this.profilePicture = getProfilePicture(sessionGiven.info.webId)
+            .then( (pic) =>
+            {
+                return pic;
+            })
+            .catch( () => {
+                console.error("Something went wrong while getting the user's picture! ");
+            });
     }
 
     /**
