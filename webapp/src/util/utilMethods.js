@@ -104,6 +104,7 @@ export function extractBase64Image(str) {
     return '';
 }
 
+
 export function base64ToImg(base64Image) {
     if(base64Image) {
         const img = document.createElement("img");

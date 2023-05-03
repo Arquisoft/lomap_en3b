@@ -208,18 +208,18 @@ export class Controller {
             let resourceIMGURL = locOwner.concat(privacy).concat(this.user.imgResourceURL);
             writeReviewWithIMG(resourceURL, this.session, rev, privacy, resourceIMGURL)
                 .then(() => {
-                    //window.alert("Review saved");
+                    window.alert("Review saved");
                 })
                 .catch(error => {
-                    //console.error(error);
+                    console.error(error);
                 });
         } else {
             writeReviewWithoutIMG(resourceURL, this.session, rev, privacy)
                 .then(() => {
-                    //window.alert("Review saved");
+                    window.alert("Review saved");
                 })
                 .catch(error => {
-                    //console.error(error);
+                    console.error(error);
                 });
         }
     }
