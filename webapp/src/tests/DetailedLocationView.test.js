@@ -15,7 +15,7 @@ describe("Container renders properly",()=>{
 
         const container=screen.getByLabelText( /detailed view container/i)
         expect(container).toBeInTheDocument();
-        let tab=document.querySelector(  "Reviews" )
+        let tab=screen.getByLabelText(  "Reviews" )
         expect(tab).toBeInTheDocument();
         tab=screen.getByLabelText("Locations")
         expect(tab).toBeInTheDocument();
