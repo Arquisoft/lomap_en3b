@@ -5,7 +5,7 @@ import LoginForm from "./views/loginView"
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import { checkForLomap } from './handlers/podHandler';
 import MapView from "./views/mapView";
-import {placeImageInContainer} from "./handlers/podAccess";
+
 
 export default  function App()
 {
@@ -19,7 +19,7 @@ export default  function App()
     session.onLogin(async () => {
 
          await checkForLomap(session);
-         //Todo if no folder, give the option to create it or to logout
+
         setIsLoggedIn(true);
     });
 //We have logged out
