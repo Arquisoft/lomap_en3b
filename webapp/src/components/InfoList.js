@@ -49,7 +49,7 @@ import EditIcon from '@mui/icons-material/Edit';
  * @param newComments
  */
 
-const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}) => {
+const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,profilename}) => {
 
     const[comment,setComment] = useState("");
     const[commentpic,setCommentpic] = useState("");
@@ -57,6 +57,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
     const[review,setReview]=useState([]);
     const[image,setImage]=useState("");
     const[description,setDescription]=useState("");
+    const[owner,setOwner]=useState("");
 
     const[stars,setStars]=useState(0);
 
@@ -224,7 +225,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
             ratingStars = '⭐'.repeat(selectedRating);
         }
 
-        setReview((prevReview) => [...prevReview, {comment, commentpic, ratingStars}]);
+        setReview((prevReview) => [...prevReview, {owner,comment, commentpic, ratingStars}]);
 
         setComments((comments) => [...comments, `<div style="margin-bottom: 5px;">${comment}</div><div>${commentpic}</div><div>${ratingStars}</div>`]);
         setComment('');
@@ -374,7 +375,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                                         primary={
                                             <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '70%' }}>
                                                 <Avatar />
-                                                <Box sx={{ ml: '0.5rem' }}>Batu</Box>
+                                                <Box sx={{ ml: '0.5rem' }}>{profilename}</Box>
                                             </Box>}
                                         secondary={<div dangerouslySetInnerHTML={{__html: html}} />}
                                         primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 'bold', mb: '0.3125rem' }}
