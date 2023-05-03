@@ -73,6 +73,7 @@ export function checkCoordinates(cond) {
 
 // Helper function to check if a string value is defined
 export function checkStringInvalidFormat (value, name){
+
     if(!value){
         throw new StringInvalidFormatException(`${name} must be defined`);
     }

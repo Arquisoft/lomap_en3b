@@ -68,6 +68,7 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, onMarkerA
     const [selectedMarker, setSelectedMarker] = useState(null);
     const controlMng = new Controller(session);
 
+
     // Function for adding a marker
     const addMarker = React.useCallback(
       (event) => {
