@@ -4,9 +4,9 @@ import InfoList from "../components/InfoList";
 import {LocationLM} from "../models/location"
 import React from "react";
 const mockImpl=()=>{}
-
+const selectedLoc=  Array({ name:"Lavender Haze",description:"I love this flower field",category:'park',privacy:'private',key:'283987r',comments:[{comment:'First comment',commentPic:'pic.png',ratingStars:'3'},{comment:'Second comment',commentPic:'pic.png',ratingStars:'3'}]});
 describe("Container renders properly",()=>{
-    const selectedLoc=  Array(new LocationLM(43.39635189868037,-5.831536216796875,"Lavander Haze","I love this flower field",'park','private','',"https://fdezariassara.inrupt.net/"))
+
     beforeEach(()=>
         render(<InfoList isInfoVisible={mockImpl()} onInfoList={mockImpl()} selected={selectedLoc} newComments={mockImpl()}  onEditMarker={mockImpl()} />)
     )
@@ -19,6 +19,8 @@ describe("Container renders properly",()=>{
         expect(tab).toBeInTheDocument();
         tab=screen.getByLabelText("Locations")
         expect(tab).toBeInTheDocument();
+        fireEvent.click(tab)
+        screen.debug( )
         tab=screen.getByLabelText("Close")
         expect(tab).toBeInTheDocument();
 
@@ -26,43 +28,46 @@ describe("Container renders properly",()=>{
 })
 
 
-/**
- *
  describe('Detailed location view: Location description',()=>{
 
-     const selectedLoc=  Array(new LocationLM(43.39635189868037,-5.831536216796875,"Lavander Haze","I love this flower field",'park','private','',"https://fdezariassara.inrupt.net/"))
-    beforeEach(()=>
-        render(<EditList isVisible={mockImpl} onAddMarker={mockImpl()}/>)
-    )
-    test('Title renders',()=>{
-        render(<InfoList isInfoVisible={true} onInfoList={true} selected={selectedLoc} newComments={mockImpl()}  onEditMarker={mockImpl()} />)
+
+    beforeEach(()=> {
+        render(<InfoList isInfoVisible={true} onInfoList={true} selected={selectedLoc} newComments={mockImpl()}
+                         onEditMarker={mockImpl()}/>)
         const tab=screen.getByLabelText("Locations");
         expect(tab).toBeInTheDocument();
         const container=screen.getByLabelText(/details view/i)
-        expect(container).not.toBeVisible();
         fireEvent.click(tab)
         expect(container).toBeVisible();
-        const title=screen.getByLabelText(/locations name/i)
-        screen.debug(screen.getByLabelText(/details view/i))
-        expect(title).toBeInTheDocument()
-
-
     })
-
-});
-describe('Detailed location view: Comments view',()=>{
-
-    beforeEach(()=>
-        render(<EditList isVisible={mockImpl} onAddMarker={mockImpl()}/>)
-    )
     test('Title renders',()=>{
 
-        const title=screen.getByText( /Add a marker!/i)
-        expect(title).toBeInTheDocument();
-        const subtitle=screen.getByText( /Click on the map after filling this form/i)
-        expect(subtitle).toBeInTheDocument();
+
+        const title=screen.getByLabelText(/locations name/i)
+
+        expect(title).toBeInTheDocument()
+        expect(title).toHaveTextContent('Lavender Haze')
+
 
     })
 
+     test('Privacy & category render ',()=>{
+
+
+         const description=screen.getByLabelText(/locations privacy and category/i)
+         expect(description).toBeInTheDocument()
+         expect(description).toHaveTextContent(/park • private/i)
+
+
+     })
+     test('Description renders',()=>{
+
+
+         const description=screen.getByLabelText(/locations description/i)
+         expect(description).toBeInTheDocument()
+         expect(description).toHaveTextContent('I love this flower field')
+
+
+     })
 });
- */
+

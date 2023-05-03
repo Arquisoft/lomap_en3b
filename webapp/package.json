@@ -29,10 +29,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
- 
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --coverage",
+    "test:e2e": "start-server-and-test start 3000 \"cd e2e && jest --runInBand --coverage \" ",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -54,7 +54,12 @@
     ]
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^9.1.1",
     "@testing-library/react": "^14.0.0",
-    "jest-google-maps-mock": "^1.0.7"
+    "cucumber": "^6.0.7",
+    "jest-cucumber": "^3.0.1",
+    "jest-google-maps-mock": "^1.0.7",
+    "puppeteer": "^20.0.0",
+    "start-server-and-test": "^2.0.0"
   }
 }

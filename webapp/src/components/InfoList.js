@@ -431,13 +431,13 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker}
                         <InputLabel aria-label="locations name" sx={{ fontSize: '2rem', fontWeight: 'bold', maxWidth: '15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</InputLabel>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: '0.3125rem' }}>
 
-                            <Rating name="size-small" value={stars} size="extra-small" readOnly />
+                            <Rating aria-label='locations rating' name="size-small" value={stars} size="extra-small" readOnly />
 
 
                         </Box>
-                        <Typography aria-label=" location's privacy and category" variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
+                        <Typography aria-label="locations privacy and category" variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
 
-                        <Typography aria-label=" location's description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
+                        <Typography aria-label="locations description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
                             {description}
                         </Typography>
                         <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>

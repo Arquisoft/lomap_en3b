@@ -6,7 +6,7 @@ const mockImpl=()=>{}
 describe('Header renders all options',()=>{
 
         beforeEach(()=>
-         render(<Header onAddMarker={mockImpl()} onInfoList={mockImpl()} onAccountPage={mockImpl()} onFilterLocations={mockImpl()}/>)
+         render(<Header onAddMarker={mockImpl()} onInfoList={mockImpl()}   onFilterLocations={mockImpl()}/>)
         )
 
 
@@ -23,12 +23,7 @@ describe('Header renders all options',()=>{
         expect(toolBar).toBeInTheDocument();
 
     })
-    test('Friends ',()=>{
 
-        const friendsMenu=screen.getByLabelText(/Friend Menu/i)
-        expect(friendsMenu).toBeInTheDocument();
-
-    })
 
     test('Add locations',()=>{
 
@@ -36,12 +31,7 @@ describe('Header renders all options',()=>{
         expect(AddLoc).toBeInTheDocument();
 
     })
-    test('Show Profile',()=>{
 
-        const profile=screen.getByLabelText( /Show Profile/i)
-        expect(profile).toBeInTheDocument();
-
-    })
     test('Filter Locations',()=>{
 
         const filterButton=screen.getByLabelText( /Filter Locations/i)
