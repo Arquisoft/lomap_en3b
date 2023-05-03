@@ -216,7 +216,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
     function saveCommentsFromLocation(lastMarker) {
         let reviews = [];
         for(let i = lastMarker.commentsAdded; i < lastMarker.comments.length; i++ ) {
-//        lastMarker.comments.forEach( (review) => {
             let rev = convertViewReviewIntoDomainModelReview(
                 lastMarker.domainID,
                 controlMng.user.userWebId
@@ -228,7 +227,6 @@ function Map({ changesInFilters,selectedFilters,isInteractive,session, controlMn
                 lastMarker.comments[i].commentpic
             );
             reviews.push(rev);
-//        });
         }
         //Update comments
         reviews.forEach((rev) =>
