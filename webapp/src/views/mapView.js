@@ -5,7 +5,7 @@ import List from "../components/List";
 import Map from "../components/Map";
 import InfoList from "../components/InfoList";
 import EditList from "../components/EditList";
-import AccountPage from "../components/AccountPage";
+
 import LogOut from "../components/LogOut";
 import {Search as SearchIcon, Search} from "@mui/icons-material";
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
