@@ -4,15 +4,15 @@ import Header from "../components/Header";
 import List from "../components/List";
 import Map from "../components/Map";
 import InfoList from "../components/InfoList";
-import EditList from "../components/EditList";
-import AccountPage from "../components/AccountPage";
+
 import LogOut from "../components/LogOut";
-import {Search as SearchIcon, Search} from "@mui/icons-material";
+
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
 import ErrorView from "./errorView"
 import MapErrorBoundary from "../components/MapErrorBoundry";
 import {Controller} from "../handlers/controller";
+import { getProfilePicture } from "../handlers/podHandler";
 
 
 
@@ -41,7 +41,7 @@ const MapView = ({session}) => {
   const [showList, setShowList] = useState(false); // track whether the list is being shown
   const [showEditList, setShowEditList] = useState(false); // track whether the edit list is being shown
   const [showInfoList, setShowInfoList] = useState(false); // track whether the info list is being shown
-  const [showAccountPage, setShowAccountPage] = useState(false); // track whether the account page is being shown
+ 
 
   const [filterSideBar, setFilterSideBar] = useState(false); // track whether the filter sidebar is being shown
   const [selectedFilters, setSelectedFilters] = useState([]); // track which filters are selected
@@ -50,6 +50,8 @@ const MapView = ({session}) => {
   const [showLogOut, setShowLogOut] = useState(false);
   const [updateLocation, setupdateLocation] = useState(false);
 
+  const ProfileName = session.info.webId.split(".")[0].split("//")[1];
+  //const profile = await getProfilePicture(session.info.webId);
   const controlMng = new Controller(session);
 
   const { isLoaded, loadError } = useLoadScript({
@@ -127,10 +129,7 @@ const MapView = ({session}) => {
     setFilterSideBar(!filterSideBar);
 
   }
-  const makeAccountPageDisapear = () => {
-    setShowAccountPage(!showAccountPage);
-
-  };
+  
 
   const makeLogOutDisapear = () => {
     setShowLogOut(!showLogOut);
@@ -150,18 +149,17 @@ const MapView = ({session}) => {
 
             onEditMarker={() => makePanelDisapear()}
             onMarker={() => makeEditPanelDisapear()}
-            onAccountPage={() => makeAccountPageDisapear()}
+            
             onLogOut={() => makeLogOutDisapear()}
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
-        <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
+
        
-        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} />
+        <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} profilename={ProfileName} />
         
         <FilterSidebar visible={filterSideBar} onFilterLocations={() => displayFilterSideBar()} onFilterSelected={(filters)=>updateFilterListInUse(filters)}  />
-        <AccountPage isAccountVisible={showAccountPage} onAccountPage={() => makeAccountPageDisapear()}/>
-
+        
 
         <LogOut isLogOutVisible={showLogOut} onLogOut={() => makeLogOutDisapear()}/>
         { (!isLoaded || loadError) ? <ErrorView />: <Grid item xs={12} md={8} aria-label="Map container">

@@ -1,15 +1,26 @@
 [[section-architecture-constraints]]
 == Architecture Constraints
 [options="header",cols="1,2,2"]
+=== Technical constraints
 |===
-|Constraint|Explanation|Type
-| _Maps should be under full control of the users_ | _One of the main focuses of the application is the user, therefore all the maps created and personalized by them should be under their full control._| Technical
-| _Use of pods_ | _Following with the users' focus, all the shared information by them should be stored in their corresponding personal pods according to the SOLID project, guaranteeing their real ownership of such information._| Technical
-| _Web application_ | _LoMap is a Full Stack web application, therefore should be composed of both a front-end and a back-end layer, making it easy for most if not all users to use the application._| Technical
-| _Generic software solution_ | _The idea is to develop a generic solution that could be deployed in any city needed, not just an exclusive solution to one city._| Technical
-| _GitHub_ | _Use of a repository regarding version control._ | Technical
-| _Delivery deadlines_ | _There are 4 deliverables every 3 weeks that should be followed accordingly before the deployment of the application._ | Organizational 
-| _ARC42_ | _Documentation format must follow the ARC42 standards._ | Conventional
+|Constraint|Explanation
+| _Maps should be under full control of the users_ | _One of the main focuses of the application is the user, therefore all the maps created and personalized by them should be under their full control._
+| _Use of pods_ | _Following with the users' focus, all the shared information by them should be stored in their corresponding personal pods according to the SOLID project, guaranteeing their real ownership of such information._
+| _Web application_ | _LoMap is mainly a web application, making it easy for most if not all users to use and access the application._
+| _Generic software solution_ | _The idea is to develop a generic solution that could be deployed in any city needed, not just an exclusive solution to one city._
+| _GitHub_ | _Use of a repository regarding version control._
+|===
+=== Organizational constraints
+|===
+|Constraint|Explanation
+| _Budget_ | _The team is not getting any budget whatsoever, so if there is a need to pay for something, it will run on the members of the team._
+| _Delivery deadlines_ | _There are 4 deliverables every 3 weeks that should be followed accordingly before the deployment of the application._
+|===
+=== Conventional constraints
+|===
+|Constraint|Explanation
+| _ARC42_ | _Documentation format must follow the ARC42 standards._
+| _English_ | _The project must be developed in such language._
 |===
 [role="arc42help"]
 ****
