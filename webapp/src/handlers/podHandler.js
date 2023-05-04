@@ -169,11 +169,15 @@ async function giveFriendsAccess(session, access) {
 }
 
 async function getAccessForFriend(friend, location, session) {
-    let datasetWithACL = await getSolidDatasetWithAcl(location, {fetch: session.fetch})
-    let ACL = await getResourceAcl(datasetWithACL);
-    let access = await getAgentResourceAccess(ACL, friend);
-    if (!access.read || !access.append) {
-        await setAccessToFriend(friend, location, true, session);
+    try {
+        let datasetWithACL = await getSolidDatasetWithAcl(location, {fetch: session.fetch})
+        let ACL = await getResourceAcl(datasetWithACL);
+        let access = await getAgentResourceAccess(ACL, friend);
+        if (!access.read || !access.append) {
+            await setAccessToFriend(friend, location, true, session);
+        }
+    } catch (e) {
+        console.log("Friend is not a lomapen3b user.")
     }
 }
 

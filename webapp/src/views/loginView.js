@@ -52,9 +52,6 @@ const Login = () => {
                         <Select id="providerList" aria-label="providers" style={{ width: '100%' } } value={provider} label="inrupt.net" onChange={handleSelection}>
                             <MenuItem  value={"https://inrupt.net"} aria-label="inrupt">Inrupt.net</MenuItem>
                             <MenuItem value={"https://solidcommunity.net/"}    aria-label="solid community" >Solid Community</MenuItem>
-                            <MenuItem value={"https://solidweb.org/login/"}    aria-label="solid web" >Solid Web</MenuItem>
-                            <MenuItem value={"https://login.inrupt.com"}    aria-label="inrupt pod browser"  >Pod spaces browser</MenuItem>
-
                         </Select>
                         <InputLabel>(Inrupt By default)</InputLabel>
                     </FormControl>

@@ -475,7 +475,6 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
                         <Typography aria-label=" locations description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
                             {description}
                         </Typography>
-                        <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>
                     </Box>
                 </Typography>}
                 {selectedTab === edit && <Typography variant="body1">
