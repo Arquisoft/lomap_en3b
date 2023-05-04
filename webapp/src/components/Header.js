@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import {AppBar, Button, IconButton, Toolbar, Typography, InputBase, TextField} from '@mui/material';
-import { AddCircleOutline as AddIcon, AccountCircle as AccountIcon, Place as PlaceIcon } from '@mui/icons-material';
+import {AppBar, Button, IconButton, Toolbar, Typography, TextField} from '@mui/material';
+import { Place as PlaceIcon } from '@mui/icons-material';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
-import EditLocationIcon from '@mui/icons-material/EditLocation';
 import {
-  Box,
   List,
   ListItem,
   ListItemIcon,
@@ -16,12 +14,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import TuneIcon from '@mui/icons-material/Tune';
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -125,7 +118,6 @@ const Header = ({ onAddMarker, onInfoList,  onFilterLocations,onLogOut}) => {
           <Typography  variant="h6" sx={{ flexGrow: 1 }}>
             LOMAP
             <Button color="inherit">Home</Button>
-
 
             
           </Typography>
