@@ -1,12 +1,8 @@
 // the list where I will retrive the markers from juan and preload them
 import React, {useState} from "react";
-import { GoogleMap, InfoWindow, Marker, useLoadScript } from "@react-google-maps/api";
-import { formatRelative } from "date-fns";
+import { GoogleMap, Marker} from "@react-google-maps/api";
 import "./styles/Locations.css"
 import mapStyles from "./styles/MapStyles";
-import Rating from "react-rating-stars-component";
-import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import {Box, InputLabel,Typography, Container,IconButton} from '@mui/material';
 import {
     convertDomainModelLocationIntoViewLocation,
     convertViewLocationIntoDomainModelLocation, convertViewReviewIntoDomainModelReview

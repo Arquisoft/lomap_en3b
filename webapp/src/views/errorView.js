@@ -1,6 +1,5 @@
 import { Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
-import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ErrorView() {
