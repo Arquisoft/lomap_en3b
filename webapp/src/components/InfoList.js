@@ -166,13 +166,6 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
     };
 
 
-    async function getAvatarHtml(owner) {
-
-        let picture =await getProfilePicture(owner);
-
-        return picture ;
-    };
-
 
     
 
@@ -394,7 +387,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
                                         primary={
                                             <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '70%' }}>
                                                 
-                                                <Avatar src={ getAvatarHtml(owner)} />
+                                                <Avatar  />
 
                                                 <Box sx={{ ml: '0.5rem' }}>{owner.split('/').slice(-2)[0].split('.')[0]}</Box>
                                             </Box>}
