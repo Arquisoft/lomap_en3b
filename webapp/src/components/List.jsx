@@ -10,18 +10,8 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import {
     FormControl,
-    SelectEmpty,
-    Loading,
     Container,
-    MarginBottom,
 } from './styles/ListStyle.js';
-import Rating from "react-rating-stars-component";
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {IconButton, Grid, } from "@mui/material";
-import {Place as PlaceIcon} from "@mui/icons-material";
-import Map from  "../components/Map";
-import CloseIcon from "@mui/icons-material/Close";
-
 /**
  * The add Marker List
  *

@@ -2,7 +2,6 @@ import {
     getPodUrlAll,
     createContainerAt,
     getSolidDataset,
-    getStringNoLocale,
     getThing,
     getUrlAll,
     getSolidDatasetWithAcl,
@@ -18,10 +17,7 @@ import {
     saveSolidDatasetAt,
     setAgentDefaultAccess,
     getAgentResourceAccess,
-    getAgentDefaultAccess,
     getNamedNode
-
-
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
