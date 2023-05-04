@@ -1,7 +1,7 @@
 [[section-architecture-constraints]]
 == Architecture Constraints
 [options="header",cols="1,2,2"]
-=== 2.1 Technical constraints
+=== Technical constraints
 |===
 |Constraint|Explanation
 | _Maps should be under full control of the users_ | _One of the main focuses of the application is the user, therefore all the maps created and personalized by them should be under their full control._
@@ -10,13 +10,13 @@
 | _Generic software solution_ | _The idea is to develop a generic solution that could be deployed in any city needed, not just an exclusive solution to one city._
 | _GitHub_ | _Use of a repository regarding version control._
 |===
-=== 2.2 Organizational constraints
+=== Organizational constraints
 |===
 |Constraint|Explanation
 | _Budget_ | _The team is not getting any budget whatsoever, so if there is a need to pay for something, it will run on the members of the team._
 | _Delivery deadlines_ | _There are 4 deliverables every 3 weeks that should be followed accordingly before the deployment of the application._
 |===
-=== 2.3 Conventional constraints
+=== Conventional constraints
 |===
 |Constraint|Explanation
 | _ARC42_ | _Documentation format must follow the ARC42 standards._
