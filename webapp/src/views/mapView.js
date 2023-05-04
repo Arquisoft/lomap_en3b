@@ -12,7 +12,7 @@ import FilterSidebar from "../components/Filters";
 import ErrorView from "./errorView"
 import MapErrorBoundary from "../components/MapErrorBoundry";
 import {Controller} from "../handlers/controller";
-import { getProfilePicture } from "../handlers/podHandler";
+
 
 
 
