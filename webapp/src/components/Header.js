@@ -1,21 +1,10 @@
 import React, { useState } from 'react';
-import {AppBar, Button, IconButton, Toolbar, Typography, TextField} from '@mui/material';
+import {AppBar, Button, IconButton, Toolbar, Typography} from '@mui/material';
 import { Place as PlaceIcon } from '@mui/icons-material';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Avatar,
-  ListItemButton,
-} from '@mui/material';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import TuneIcon from '@mui/icons-material/Tune';
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
-import Divider from '@mui/material/Divider';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const StyledMenu = styled((props) => (

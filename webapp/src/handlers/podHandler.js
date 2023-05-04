@@ -16,8 +16,7 @@ import {
     createSolidDataset,
     saveSolidDatasetAt,
     setAgentDefaultAccess,
-    getAgentResourceAccess,
-    getNamedNode
+    getAgentResourceAccess
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
 import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
