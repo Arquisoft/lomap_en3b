@@ -5,7 +5,7 @@ import React from "react";
 
 describe(("Filter menu functionality "),()=>{
     beforeEach(()=>{
-        render(<MapView/>)
+        render(<MapView session={{info:{webId:'https://lomaper.inrupt.net'}}}/>)
         const filterButton=screen.getByLabelText( /Filter Locations/i)
         fireEvent.click(filterButton)
     })

@@ -1,5 +1,5 @@
 import {fireEvent, render, screen,within} from "@testing-library/react";
-import EditList from "../components/EditList";
+
 import InfoList from "../components/InfoList";
 import {LocationLM} from "../models/location"
 import React from "react";
