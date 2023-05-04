@@ -4,10 +4,9 @@ import Header from "../components/Header";
 import List from "../components/List";
 import Map from "../components/Map";
 import InfoList from "../components/InfoList";
-import EditList from "../components/EditList";
-import AccountPage from "../components/AccountPage";
+
 import LogOut from "../components/LogOut";
-import {Search as SearchIcon, Search} from "@mui/icons-material";
+
 import {CssBaseline, Grid, IconButton, InputBase,FormControl,Select} from "@mui/material";
 import FilterSidebar from "../components/Filters";
 import ErrorView from "./errorView"
@@ -155,7 +154,7 @@ const MapView = ({session}) => {
             onFilterLocations={() => displayFilterSideBar()}
         />    <Grid container spacing={4} style={{ width: "100%" }}>
         <List isVisible={showList} onAddMarker={(marker) => makePanelDisapear(marker)} />
-        <EditList isEditVisible={showEditList} onEditMarker={() => makeEditPanelDisapear()} />
+
        
         <InfoList isInfoVisible={showInfoList}  onInfoList={() => makeInfoPanelDisapear()} selected={selected} newComments={(marker) => makeComments(marker)} onEditMarker={(marker) => makeEdit(marker)} profilename={ProfileName} />
         

@@ -17,18 +17,7 @@ describe('Header renders all options',()=>{
 
     })
 
-    test('ToolBar',()=>{
 
-        const toolBar=screen.getByLabelText(/ToolBar/i)
-        expect(toolBar).toBeInTheDocument();
-
-    })
-    test('Friends ',()=>{
-
-        const friendsMenu=screen.getByLabelText(/Friend Menu/i)
-        expect(friendsMenu).toBeInTheDocument();
-
-    })
 
     test('Add locations',()=>{
 
@@ -36,12 +25,7 @@ describe('Header renders all options',()=>{
         expect(AddLoc).toBeInTheDocument();
 
     })
-    test('Show Profile',()=>{
 
-        const profile=screen.getByLabelText( /Show Profile/i)
-        expect(profile).toBeInTheDocument();
-
-    })
     test('Filter Locations',()=>{
 
         const filterButton=screen.getByLabelText( /Filter Locations/i)

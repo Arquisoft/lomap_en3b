@@ -8,13 +8,14 @@ import {
 import React from "react";
 
 import MapView from "../views/mapView"
+import {Session} from "@inrupt/solid-client-authn-browser";
 
 describe('Log out functionality ',()=>{
 
 
     test('Show log out dialogue',()=>{
 
-        render(<MapView/>);
+        render(<MapView session={{info:{webId:'https://lomaper.inrupt.net'}}}/>);
         const logOutMenuOption=screen.getByLabelText( /Log out option/i)
         fireEvent.click(logOutMenuOption)
         const logoutDialog=screen.getByLabelText(/Log out dialogue/i)
