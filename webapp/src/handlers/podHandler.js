@@ -14,12 +14,17 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getAgentResourceAccess, getAgentDefaultAccess
+    createSolidDataset,
+    saveSolidDatasetAt,
+    setAgentDefaultAccess,
+    getAgentResourceAccess,
+    getAgentDefaultAccess,
+    getNamedNode
 
 
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
-import {FOAF} from "@inrupt/vocab-common-rdf";
+import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
 
 
 /**
@@ -334,12 +339,7 @@ async function getProfile(webId) {
     return getThing(dataset, webId);
 }
 
-async function findName(webId) {
-    if (webId === undefined)
-        return "No name found";
-    else {
-        let profile = getProfile(webId);
-        let name = getStringNoLocale(profile, FOAF.name);
-        return name === null ? "No name found" : name;
-    }
+export async function getProfilePicture(webId) {
+    let profile = await getProfile(webId);
+    return (await getNamedNode(profile, VCARD.hasPhoto))?.value;
 }
