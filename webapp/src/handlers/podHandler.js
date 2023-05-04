@@ -14,10 +14,12 @@ import {
     getResourceAcl,
     setAgentResourceAccess,
     saveAclFor,
-    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getAgentResourceAccess, getAgentDefaultAccess, getNamedNode
+    createSolidDataset, saveSolidDatasetAt, setAgentDefaultAccess, getAgentResourceAccess, getAgentDefaultAccess
+
+
 } from "@inrupt/solid-client";
 import {issueAccessRequest, redirectToAccessManagementUi} from "@inrupt/solid-client-access-grants";
-import {FOAF, VCARD} from "@inrupt/vocab-common-rdf";
+import {FOAF} from "@inrupt/vocab-common-rdf";
 
 
 /**
@@ -39,26 +41,26 @@ export async function checkForLomap(session) {
         }
 
         i++;
-        
-    }
-    if(!podWithFolder){//If no pod has that folde
-
-      podWithFolder=await createLomapContainer(pods[0].replace("/profile/card#me","/"),session)
-
 
     }
-    return  podWithFolder;
+    if (!podWithFolder) {//If no pod has that folde
+
+        podWithFolder = await createLomapContainer(pods[0].replace("/profile/card#me", "/"), session)
+
+
+    }
+    return podWithFolder;
 }
 
 /**
  * This method checks if the lomap folder exists given a pod.
- * @param {} _pod 
+ * @param {} _pod
  */
-export async function checkForLomapInPod(pod,session) {
+export async function checkForLomapInPod(pod, session) {
     try {
 
-     let aux= await getSolidDataset(pod+"public/lomapen3b",{fetch : session.fetch});
-     let aux2= await getSolidDataset(pod+"private/lomapen3b",{fetch : session.fetch});
+        let aux = await getSolidDataset(pod + "public/lomapen3b", {fetch: session.fetch});
+        let aux2 = await getSolidDataset(pod + "private/lomapen3b", {fetch: session.fetch});
 
     } catch (error) {
         console.log("Not found lomap folder in pod, we'll try creating one...")
@@ -75,25 +77,25 @@ export async function checkForLomapInPod(pod,session) {
  * @param session
  * @returns {Promise<void>}
  */
-export async function requestAccessToLomap( session){
+export async function requestAccessToLomap(session) {
 
     //this part sets the requested access (if granted) to expire in 5 minutes.
-    let accessExpiration = new Date( Date.now() +  5 * 60000 );
+    let accessExpiration = new Date(Date.now() + 5 * 60000);
     const requestVC = await issueAccessRequest( //WE CREATE A NEW ACCESS REQUEST.
 
         //Vc stands for Verifiable credential
         {
 
-            "access":  { read: true , write:true},//the permissions to be asking
-            "resources":session.info.webId,
+            "access": {read: true, write: true},//the permissions to be asking
+            "resources": session.info.webId,
             "resourceOwner": session.info.webId,
             "expirationDate": accessExpiration,
 
         },
 
-        { fetch : session.fetch ,updateAcr:true}//update acr makes the request grant effective if given
+        {fetch: session.fetch, updateAcr: true}//update acr makes the request grant effective if given
     );
-    console.log("rvc"+requestVC)
+    console.log("rvc" + requestVC)
     //we actually send the access request to the access management ui, so the user can accept the request.
     await redirectToAccessManagementUi(
         requestVC.id,
@@ -112,8 +114,6 @@ async function mockFiles(session, resource) {
     let currentUserLomapLocation = resource;
     let mockDataset = createSolidDataset();
 
-
-
     try {
         await saveSolidDatasetAt(currentUserLomapLocation, mockDataset, {fetch: session.fetch});
     } catch (e) {
@@ -121,10 +121,10 @@ async function mockFiles(session, resource) {
     }
 }
 
-export async function createLomapContainer(pod,session) {
+export async function createLomapContainer(pod, session) {
     // create the lomap containers
-    await createContainerAt(pod + "public/lomapen3b/",{fetch : session.fetch});
-    await createContainerAt(pod + "private/lomapen3b/",{fetch : session.fetch});
+    await createContainerAt(pod + "public/lomapen3b/", {fetch: session.fetch});
+    await createContainerAt(pod + "private/lomapen3b/", {fetch: session.fetch});
     // create all the tl files used to store locations and reviews (all empty)
     await mockFiles(session, session.info.webId.replace("/profile/card#me", "/private/lomapen3b/locations.ttl"));
     await mockFiles(session, session.info.webId.replace("/profile/card#me", "/public/lomapen3b/locations.ttl"));
@@ -161,12 +161,21 @@ async function giveFriendsAccess(session, access) {
     let friends = await getFriendsWebIds(currentUser);
     let resourceURL = currentUser.replace("/profile/card#me", "/") + "public/lomapen3b/";
 
-    for (let i = 0; i < friends.length; i++) { //Set access to  public (friends only) locations
-        await setAccessToFriend(friends[i].replace("/profile/card","/")+"profile/card#me", resourceURL, access, session);
+
+    for (let i = 0; i < friends.length; i++) { //Set access to  public (friends only) resources
+        await getAccessForFriend(friends[i].replace("/profile/card", "/") + "profile/card#me", resourceURL, session);
+
     }
 }
 
-
+async function getAccessForFriend(friend, location, session) {
+    let datasetWithACL = await getSolidDatasetWithAcl(location, {fetch: session.fetch})
+    let ACL = await getResourceAcl(datasetWithACL);
+    let access = await getAgentResourceAccess(ACL, friend);
+    if (!access.read || !access.append) {
+        await setAccessToFriend(friend, location, true, session);
+    }
+}
 
 /**
  * Grant/ Revoke permissions of friends regarding a particular location
@@ -175,12 +184,10 @@ async function giveFriendsAccess(session, access) {
  * @param access boolean containing the value regarding permissions
  * @param session object containing the current session info
  */
- async function setAccessToFriend(friend, location, access, session){
+async function setAccessToFriend(friend, location, access, session) {
     let locationsURL = location + "locations.ttl";
     let reviewsURL = location + "reviews.ttl";
     let imagesURL = location + "images/";
-
-    let pic = await getProfilePicture(friend);
 
     await giveAccessToFile(locationsURL, friend, session);
     await giveAccessToFile(reviewsURL, friend, session);
@@ -200,8 +207,7 @@ async function giveFriendsAccess(session, access) {
             if (!hasFallbackAcl(myDatasetWithAcl)) {
                 // create new ACL
                 resourceAcl = createAcl(myDatasetWithAcl);
-            }
-            else{
+            } else {
                 // create ACL from fallback
                 resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
             }
@@ -216,21 +222,19 @@ async function giveFriendsAccess(session, access) {
             updatedAcl = setAgentResourceAccess(
                 resourceAcl,
                 friend,
-                { read: true, append: true, write: false, control: false }
+                {read: true, append: true, write: false, control: false}
             );
-        }
-        else {
+        } else {
             // cancel permissions
             updatedAcl = setAgentResourceAccess(
                 resourceAcl,
                 friend,
-                { read: false, append: false, write: false, control: false }
+                {read: false, append: false, write: false, control: false}
             );
         }
         // save the ACL
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
-    }
-    catch (error){
+    } catch (error) {
         console.log(error)// catch any error
     }
 }
@@ -254,8 +258,7 @@ async function giveDefaultAccessToFile(resource, friend, session) {
             if (!hasFallbackAcl(myDatasetWithAcl)) {
                 // create new access control list
                 resourceAcl = createAcl(myDatasetWithAcl);
-            }
-            else{
+            } else {
                 // create access control list from fallback
                 resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
             }
@@ -269,12 +272,11 @@ async function giveDefaultAccessToFile(resource, friend, session) {
         updatedAcl = setAgentDefaultAccess(
             resourceAcl,
             friend,
-            { read: true, append: true, write: false, control: false }
+            {read: true, append: true, write: false, control: false}
         );
         // save the access control list
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
-    }
-    catch (error){ // catch any possible thrown errors
+    } catch (error) { // catch any possible thrown errors
         console.log(error)
     }
 }
@@ -285,7 +287,7 @@ async function giveDefaultAccessToFile(resource, friend, session) {
  * @param friend containing the webID of the friend we are giving access
  * @param session with the current session
  */
-async function giveAccessToFile(resource, friend, session){
+async function giveAccessToFile(resource, friend, session) {
     let myDatasetWithAcl;
     try {
         myDatasetWithAcl = await getSolidDatasetWithAcl(resource, {fetch: session.fetch}); // inventory
@@ -298,8 +300,7 @@ async function giveAccessToFile(resource, friend, session){
             if (!hasFallbackAcl(myDatasetWithAcl)) {
                 // create new access control list
                 resourceAcl = createAcl(myDatasetWithAcl);
-            }
-            else{
+            } else {
                 // create access control list from fallback
                 resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
             }
@@ -313,12 +314,11 @@ async function giveAccessToFile(resource, friend, session){
         updatedAcl = setAgentResourceAccess(
             resourceAcl,
             friend,
-            { read: true, append: true, write: false, control: false }
+            {read: true, append: true, write: false, control: false}
         );
         // save the access control list
         await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
-    }
-    catch (error){ // catch any possible thrown errors
+    } catch (error) { // catch any possible thrown errors
         console.log(error)
     }
 }
@@ -327,13 +327,19 @@ async function giveAccessToFile(resource, friend, session){
 /**
  * Returns the profile for a given webId
  * @param webId containing the webId whose profile we want
+ * @returns {Promise<Thing & {url: UrlString}>} with the profile we need
  */
 async function getProfile(webId) {
     let dataset = await getSolidDataset(webId);
     return getThing(dataset, webId);
 }
 
-export async function getProfilePicture(webId) {
-    let profile = await getProfile(webId);
-    return (getNamedNode(profile, VCARD.hasPhoto))?.value;
+async function findName(webId) {
+    if (webId === undefined)
+        return "No name found";
+    else {
+        let profile = getProfile(webId);
+        let name = getStringNoLocale(profile, FOAF.name);
+        return name === null ? "No name found" : name;
+    }
 }
