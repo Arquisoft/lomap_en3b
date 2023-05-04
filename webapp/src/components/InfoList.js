@@ -31,7 +31,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import EditIcon from '@mui/icons-material/Edit';
-import { getProfilePicture } from "../handlers/podHandler";
+
 
 
 /**
@@ -165,13 +165,6 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
         minWidth: '15.625rem',
     };
 
-
-    async function getAvatarHtml(owner) {
-
-        let picture =await getProfilePicture(owner);
-
-        return picture ;
-    };
 
 
     
@@ -394,7 +387,7 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
                                         primary={
                                             <Box sx={{ display: 'flex', alignItems: 'center', mt: '0.3125rem', width: '70%' }}>
                                                 
-                                                <Avatar src={ getAvatarHtml(owner)} />
+                                                <Avatar  />
 
                                                 <Box sx={{ ml: '0.5rem' }}>{owner.split('/').slice(-2)[0].split('.')[0]}</Box>
                                             </Box>}
@@ -475,11 +468,11 @@ const InfoList = ({isInfoVisible, onInfoList,selected,newComments, onEditMarker,
 
 
                         </Box>
-                        <Typography aria-label=" location's privacy and category" variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
+                        <Typography aria-label=" locations privacy and category" variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.4rem', fontWeight: 'bold' }}>{category} • {privacy}</Typography>
                         <Typography variant="caption" sx={{ mt: '0.3125rem', fontSize: '1.2rem', fontStyle: 'italic' }}>
                                     Created by: {poster.split('/').slice(-2)[0].split('.')[0]}
                         </Typography>
-                        <Typography aria-label=" location's description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
+                        <Typography aria-label=" locations description" variant="body2" sx={{ mt: '0.3125rem',textAlign: 'center', width: '16rem', height: '10rem', overflow: 'auto' }}>
                             {description}
                         </Typography>
                         <IconButton onClick={onClickEdit} size="small"><EditIcon/></IconButton>

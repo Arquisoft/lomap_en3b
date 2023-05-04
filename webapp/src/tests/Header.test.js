@@ -1,12 +1,12 @@
 import {fireEvent, render, screen} from '@testing-library/react'
 import Header from '../components/Header'
-import MapView from "../views/mapView";
+
 import React from 'react'
 const mockImpl=()=>{}
 describe('Header renders all options',()=>{
 
         beforeEach(()=>
-         render(<Header onAddMarker={mockImpl()} onInfoList={mockImpl()} onAccountPage={mockImpl()} onFilterLocations={mockImpl()}/>)
+         render(<Header onAddMarker={mockImpl()} onInfoList={mockImpl()}  onFilterLocations={mockImpl()}/>)
         )
 
 

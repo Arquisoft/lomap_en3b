@@ -59,7 +59,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const Header = ({ onAddMarker, onInfoList, onAccountPage,onFilterLocations,onLogOut}) => {
+const Header = ({ onAddMarker, onInfoList,  onFilterLocations,onLogOut}) => {
 
 
   const handleAddButtonClick = () => {
@@ -118,50 +118,6 @@ const Header = ({ onAddMarker, onInfoList, onAccountPage,onFilterLocations,onLog
           <Typography  variant="h6" sx={{ flexGrow: 1 }}>
             LOMAP
             <Button color="inherit">Home</Button>
-
-            <StyledMenu
-                aria-label='Friend menu'
-                id="demo-customized-menu"
-                MenuListProps={{
-                  'aria-labelledby': 'demo-customized-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                sx={{ fontSize: '1rem' }}
-            >
-              <Divider sx={{ my: '0.5rem' }} />
-
-              <div>
-                <TextField
-                    aria-label="Search Friend"
-                    variant="outlined"
-                    value={filter}
-                    onChange={handleFilterChange}
-                    sx={{ mb: '1rem', width: '100%', height: '3rem', fontSize: '1.5rem' }}
-                />
-
-                <div style={{ overflowY: 'auto', maxHeight: '12.5rem' }}>
-                  <List sx={{ width: '100%', maxWidth: '37.5rem' }} aria-label="contacts">
-                    {filteredContacts.map((contact) => (
-                        <ListItem disablePadding key={contact.name}>
-                          <ListItemButton>
-                            <ListItemIcon>
-                              <Avatar src={contact.avatar} />
-                            </ListItemIcon>
-                            <ListItemText primary={contact.name} />
-                            <IconButton>
-                              <PersonRemoveIcon />
-                            </IconButton>
-                          </ListItemButton>
-                        </ListItem>
-                    ))}
-                  </List>
-                </div>
-              </div>
-              <Divider sx={{ my: '0.5rem' }} />
-            </StyledMenu>
-
 
             
           </Typography>
