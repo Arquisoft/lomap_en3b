@@ -8,7 +8,7 @@
 .Content
 The building block view shows the static decomposition of the system into building blocks (modules, components, subsystems, classes,
 interfaces, packages, libraries, frameworks, layers, partitions, tiers, functions, macros, operations,
-datas structures, ...) as well as their dependencies (relationships, associations, ...)
+data structures, ...) as well as their dependencies (relationships, associations, ...)
 
 This view is mandatory for every architecture documentation.
 In analogy to a house this is the _floor plan_.
@@ -126,33 +126,30 @@ cloud {
 }
 
 database "Someone else's Solid POD" as Pod2 {
-  folder "else's Private Data" {
-    [else's data] as data2
-    [else's reviews] as review2
-    [else's friends] as friend2
-    [else's locations] as Loc2
+  folder "FriendID/private/lomapen3b" {
+    folder "img"
+    [else's reviews] as review1
+    [else's locations] as Loc1
 
   }
-  folder "else's Only Friend's Data" {
-    [else's reviews] as reviewF2
-    [else's locations] as LocF2
-
-
+  folder "FriendID/public/lomapen3b" as PODF{
+    [reviews] as reviewF2
+    [locations] as LocF2
+    folder "img" as im1
   }
 }
 
 database "Solid POD" as Pod1 {
-  folder "Private Data" {
-    [data] as data1
-    [reviews] as review1
-    [friends] as friend1
-    [locations] as Loc1
+  folder "user/private/lomapen3b" {
+    [reviews] as review3
+    folder "img" as img2
+    [locations] as Loc3
 
   }
-  folder "Only Friend's Data" {
+  folder "user/public/lomapen3b" {
     [reviews] as reviewF1
     [locations] as LocF1
-
+    folder "img" as img3
   }
 }
 node "LoMapUI" as LoMapFE {
@@ -161,7 +158,6 @@ node "LoMapUI" as LoMapFE {
 
 node "LoMap" as LoMapBE {
   [Controller] as crl
-  [SessionManager] as ssmng
   [podHandler] as PODHdr
   [podAccess] as PODAcc
   [Location] as Loc
@@ -171,27 +167,27 @@ node "LoMap" as LoMapBE {
 }
 
 UI --> MapP : request Map (changes)
-MapP --> UI : return changes
-UI --> crl : request changes
-crl --> PODAP : request Data
-PODAP --> crl : return Data
-crl --> UI : update values
+MapP --> UI : return map
+UI --down-> crl : request changes
+PODAcc --> PODAP : request Data
+PODAP --> PODAcc : return Data
+crl -up--> UI : update values
 
-crl --> Utl
-ssmng --> PODAcc
-UI --> PODHdr : request data from POD
+crl --right-> Utl :Conversion
+crl --> PODAcc :write
+PODAcc --> crl :read
+crl -> PODHdr : request data from POD
 PODHdr ---> PODAP : request data changes
-PODAcc ---> PODAP : request data changes
+
+PODAcc --> Utl :Conversion
 
 PODAP --> Pod1
-PODAP --> Pod2
+PODAP --left-> PODF
 
-crl --> ssmng
-ssmng --> U
-U --> Loc
-Loc --> Rev
+crl --> U
+U --> Loc :has
+U --> Rev :has
 ----
-
 [role="arc42help"]
 ****
 Here you can specify the inner structure of (some) building blocks from level 1 as white boxes.
