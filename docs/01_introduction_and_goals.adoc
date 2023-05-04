@@ -1,12 +1,11 @@
 [[section-introduction-and-goals]]
 == Introduction and Goals
-LoMap is an application designed for citizens in order to allow them to personalize their city map.
+LoMap is a software system being developed as a university project. It is designed to help citizens create personalized maps of places and local businesses in their city.
 
-For that matter , users of LoMap will be allowed to do such things as leaving reviews of establishments, monuments or any other place of the city; as well as pinning those places they want to visit or have visited already.
+The aim of the project is to develop a generic software solution that can be deployed and used in other cities as well. The system will allow users to add locations in different categories like shops, bars, restaurants, sights, monuments, etc. and show them in a map window. Users will also be able to add review scores, comments, pictures, and more about the added places. The shared information will be stored in a personal pod according to the SOLID project.
 
-LoMap will also be a tool for establishment owners to boost their businesses digitally by allowing them to have their own space on the map.
+The project's initial focus is on the user, allowing them to create their personal map of the places they live. Users can manage the information that is accessible to either themselves or all of their friends. The system will allow users to see places and information about those places taken from their friends.
 
-In brief, LoMap is more than a Map application , but a tool for cities to develop and offer their best to anybody that is interested in visiting them. Powered by its own inhabitants honest opinions, the city will open itself to outlanders allowing them to know places they probably would have never reached.
 [role="arc42help"]
 ****
 Describes the relevant requirements and the driving forces that software architects and development team must consider. These include
@@ -21,18 +20,18 @@ Describes the relevant requirements and the driving forces that software archite
 
 *All LoMap* Users will be able to:
 
-* [x] Add locations and categorize them between a wide range of options, for example as restaurants or bars.
-* [x] Leave reviews and multimedia of their experiences in such places.
-* [x]  Stablish friendships , meaning that , they will be able to access all the contents other users label as friend-only.
-    ** Users will be able to decide, then, if their posts are shared with all users, their friends only or remain accesible to themselves only.
-* [x]  Filter the contents being displayed in the map by different parameters such as it being friend-content, it's  category...
+* [x] Add locations in different categories like shops, bars, restaurants, sights, monuments, etc.
+* [x] Add review scores, comments, pictures, and more about the added places.
+* [x] See places and information about those places taken from their friends
+    ** Users will be able to decide, then, if their posts are shared with their friends only or remain accessible to themselves only.
 
-In further of stages of the project, _stablishment owners & public entities_ will be able to:
+In further of stages of the project:
 
-* [x] create public map locations for their businesses
+* [x] _Establishment owners and public entities_ will be able to create public map locations for their businesses
+* [x] _Users_ will be able to decide what city are the living in.
+- [x] _Users_ will be able to personalized the set of friends the locations will be shared to.
 
-
-Keeping privacy in mind, all of the above, will be supported by the **SOLID project specification **, making use of **SOLID Pods ** for individual data storage. This way , users will be in full control of *which* information they share *and of who* they are sharing it to.
+Keeping privacy in mind, all of the above, will be supported by the **SOLID project specification **, making use of **SOLID Pods ** for individual data storage. This way, users will be in full control of *which* information they share *and of who* they are sharing it to.
 
 _More details are described in the following document: https://arquisoft.github.io/course2223/labAssignmentDescription.html[LoMap Assigment Description]_
 
@@ -61,7 +60,7 @@ Keep these excerpts as short as possible. Balance readability of this document w
 
 |Privacy
 | Data will only be shared with those parties the owner agrees to.
-| The user pins his/her own home in the map, and wants it to remain private, and not accesible to other users.
+| The user pins his/her own home in the map, and wants it to remain private, and not accessible to other users.
 It will be stored in his/her own POD, and won't be shared with any other user nor party.
 
 
