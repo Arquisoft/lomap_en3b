@@ -1,8 +1,8 @@
 import {checkStringInvalidFormat} from "../util/utilMethods";
-import {getProfilePicture} from "../handlers/podHandler";
+
 
 export class User {
-    profilePicture;
+
     locations = new Map(); // a map to store the user's locations
     reviews = new Map(); // a map to store the user's reviews
     userWebId; // the user's WebID
@@ -17,14 +17,7 @@ export class User {
     constructor(sessionGiven) {
         checkStringInvalidFormat(sessionGiven, 'userWebId');
         this.userWebId = sessionGiven.info.webId.replace("/profile/card#me", "/");
-        this.profilePicture = getProfilePicture(sessionGiven.info.webId)
-            .then( (pic) =>
-            {
-                return pic;
-            })
-            .catch( () => {
-                console.error("Something went wrong while getting the user's picture! ");
-            });
+
     }
 
     /**

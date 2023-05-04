@@ -339,7 +339,4 @@ async function getProfile(webId) {
     return getThing(dataset, webId);
 }
 
-export async function getProfilePicture(webId) {
-    let profile = await getProfile(webId);
-    return (await getNamedNode(profile, VCARD.hasPhoto))?.value;
-}
+
