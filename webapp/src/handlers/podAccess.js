@@ -23,44 +23,11 @@ import {CoordinateNotInDomain} from "../util/Exceptions/exceptions";
  * This method returns a list od LocationLM locations that are read from the user's pod
  * @param {String} resourceURL The URL of the SolidDataset from where to retrieve the locations
  * @param {*} session - The authentication session used to access the user's pod.
- * @param {String} userIDWeb - Owner of the locations
  * @returns {Promise<*[]>}
  */
-export async function readLocations(resourceURL,session, userIDWeb) {
+export async function readLocations(resourceURL,session) {
     let locationThings=await getThingsFromDataset(resourceURL,session);
-    let location,locationThing;
-    let locationsRetrieved = [];
-    if(locationThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
-        //Convert into LocationLM object
-        for (let i = 0; i < locationThings.length; i++) {
-            //Get a Thing
-            locationThing =locationThings[i];
-
-            try {
-                //Convert into LocationLM object
-                location= convertPODLocationIntoDomainModelLocation(locationThing, userIDWeb)
-
-                // media
-                let mediaURL = getUrl(locationThing, SCHEMA_LOMAP.rev_hasPart);
-                if(mediaURL){
-                    let aux = await getImageFromPod(mediaURL, session);
-                    location.img = "data:image/png;base64,".concat(aux);
-                }
-                //Add locationLM into List
-                locationsRetrieved.push(location);
-
-            } catch (error) {
-                if (error instanceof CoordinateNotInDomain){
-                    console.error('The locations does not belong to the specified domain:', error.message);
-                }else{
-                    console.error(error);
-                }
-            }
-        }
-    }
-
-    //Return list
-    return locationsRetrieved;
+    return locationThings;
 
 }
 
@@ -144,15 +111,7 @@ export async function readReviews(resourceURL,session) {
                 reviewsRetrieved.push(review);
 
             } catch (error) {
-                //TODO:
-                /*
-                if (error instanceof StringInvalidFormatException) {
-                    //TODO: Some argument where not valid
-                    console.error('StringInvalidFormatException:', error.message);
-                } else{
-                    console.error(error);
-                }
-                 */
+                console.error(error);
             }
         }
     }
@@ -232,7 +191,7 @@ async function writeReview(resourceURL, session, rev, privacy, cond, imageContai
  * @param {*} session - The authentication session used to access the user's pod.
  * @returns {Promise<unknown>} - A promise that resolves to a Blob object containing the image file data.
  */
-async function getImageFromPod(fileUrl, session) {
+export async function getImageFromPod(fileUrl, session) {
     try {
         // Get the file from the container
         const imageBlob = await getFile(fileUrl, { fetch: session.fetch });

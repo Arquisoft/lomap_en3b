@@ -12,6 +12,30 @@ It keeps the information of the user decentralised and at their disposal at all 
 * This makes our application mainly client-side, with a server using just express.
 * No REST API needed.
 
+=== Decisions about Region-specific map view.
+In accordance with the original vision for LoMap, which aimed to provide citizens with personalised maps of places and
+local businesses in their city, we made the decision to initially limit the app's functionality to only allow users to
+add locations within a specific city or region. This was done to ensure that the app aligned with its intended purpose
+and catered specifically to the needs of local citizens.
+
+However, we understand that there may be a need to expand the
+app's scope in the future, and we remain open to exploring options for extending its reach beyond a single city or region.
+
+The feature we added to show the specific region and the places added by them or their friends directly on the map
+is an example of how we prioritized usability and user experience in our app development. By this, we aimed to enhance
+the user's overall experience by reducing the effort required to find relevant locations on the map.
+
+This feature improves the user interface's efficiency and responsiveness by showing the most relevant information right
+away, leading to increased user satisfaction and engagement. Overall, our focus on usability and user experience aligns
+with the quality attributes of usability, accessibility, and responsiveness, which are essential for modern web applications.
+
+=== Asynchronous Programming to Improve User Experience
+The decision to introduce asynchronous programming in LoMAP is a crucial one, with the potential to significantly
+improve the user experience. Asynchronous programming allows the application to execute multiple tasks simultaneously,
+without blocking the user interface, resulting in faster and more responsive applications.
+
+
+
 === Decisions on how to achieve key quality goals
 * Use Google Maps API regarding the maps of the application. Brings us a nice infrastructure regarding every location aspect of the application we could need.
 * Use the corresponding APIs in order to establish proper connection with the pods.
@@ -20,6 +44,8 @@ It keeps the information of the user decentralised and at their disposal at all 
 * Use of git workflow regarding version control. This way we can have a great amount of control over the versioning and updating of the code when developing the application.
 * Constant review and update of the projects documentation in order to develop an easy to understand application for other developers (not only potential users).
 * Delegate in the solid provider all the possible actions related to the pods, such as login, management of the adding and removing of friends or the users' own profile.
+
+
 
 [role="arc42help"]
 ****

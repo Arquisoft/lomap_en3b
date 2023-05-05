@@ -63,8 +63,15 @@ In order to avoid collisions with other lomap applications, and so , allow our u
                 --Locations.ttl
                 --Reviews.ttl
 
-=== Hosting service
+=== Friends
+The app description does not provide a clear definition of what 'friends' means. We have decided that the system's
+friends will be the user's friends in their POD's provider.
 
+This decision was made to ensure that the app is easy and convenient to use for our target users, as they would already
+be familiar with their SOLID POD friends and would not need to spend extra time creating new friend groups within the app.
+It prioritizes the user privacy and data security.
+
+=== Hosting service
 Regarding hosting services , we've  balanced the following options:
 
 |===

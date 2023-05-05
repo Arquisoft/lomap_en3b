@@ -71,8 +71,11 @@ MapAPI --> System: data
 ----
 
 The section shows the static decomposition of the system into building blocks as well as dependencies. We are following SOLID architecture, so the system will have three main sections which communicate between them:
+
 1. LoMap: allows users to manage personalised maps
-2. Map Provider: provides the app with a map to display 
+
+2. Map Provider: provides the app with a map to display
+
 3. Data Access Provider: gives access to user’s data
 
 

@@ -1,5 +1,6 @@
 import {User} from "../models/user";
 import {
+    getImageFromPod,
     readLocations, readReviews,
     writeLocationWithImg,
     writeLocationWithoutImg,
@@ -7,8 +8,15 @@ import {
     writeReviewWithoutIMG
 } from "./podAccess";
 import {getFriendsWebIds} from "./podHandler";
-import {convertDomainModelLocationIntoViewLocation, convertDomainModelReviewIntoViewReview} from "../util/convertor";
+import {
+    convertDomainModelLocationIntoViewLocation,
+    convertDomainModelReviewIntoViewReview,
+    convertPODLocationIntoDomainModelLocation
+} from "../util/convertor";
 import {extractBase64Image, getRate} from "../util/utilMethods";
+import {getUrl} from "@inrupt/solid-client";
+import {SCHEMA_LOMAP} from "../util/schema";
+import {CoordinateNotInDomain} from "../util/Exceptions/exceptions";
 
 export class Controller {
     lockedName
@@ -153,7 +161,10 @@ export class Controller {
     //TODO: Comment method.
     async retrievePrivateLocations() {
         let resource = this.user.userWebId.concat("private").concat(this.user.locResourceURL);
-        let locats = await readLocations(resource, this.session, this.user.userWebId);
+        let locationThings = await readLocations(resource, this.session);
+
+        //Convert into LocationLM
+        let locats = await this.getDomainLocations(locationThings, this.user.userWebId);
 
         let resourceR = this.user.userWebId.concat("private").concat(this.user.revResourceURL);
         let reviews = await readReviews(resourceR, this.session);
@@ -163,7 +174,10 @@ export class Controller {
     }
     async retrievePublicLocations() {
         let resource = this.user.userWebId.concat("public").concat(this.user.locResourceURL);
-        let locats = await readLocations(resource, this.session, this.user.userWebId);
+        let locationThings = await readLocations(resource, this.session);
+
+        //Convert into LocationLM
+        let locats = await this.getDomainLocations(locationThings, this.user.userWebId);
 
         let resourceR = this.user.userWebId.concat("public").concat(this.user.revResourceURL);
         let reviews = await readReviews(resourceR, this.session);
@@ -184,8 +198,9 @@ export class Controller {
                 let resource = friendID.concat("public").concat(this.user.locResourceURL);
 
                 let resourceR = friendID.concat("public").concat(this.user.revResourceURL);
+                let friendsLocationThings = await readLocations(resource, this.session);
+                friendsLocations = friendsLocations.concat( await this.getDomainLocations(friendsLocationThings, friendID));
                 reviews = reviews.concat(await readReviews(resourceR, this.session));
-                friendsLocations = friendsLocations.concat( await readLocations(resource, this.session, friendID));
             } catch (err) {
                 //Friend does not have LoMap??
                 console.error(err);
@@ -241,4 +256,39 @@ export class Controller {
         return ret;
     }
 
+    async getDomainLocations(locationThings, userIDWeb) {
+        let location, locationThing;
+        let locationsRetrieved = [];
+        if (locationThings) {//Check if the list of things retrieved from the resource is not undefined nor null.
+            //Convert into LocationLM object
+            for (let i = 0; i < locationThings.length; i++) {
+                //Get a Thing
+                locationThing = locationThings[i];
+
+                try {
+                    //Convert into LocationLM object
+                    location = convertPODLocationIntoDomainModelLocation(locationThing, userIDWeb)
+
+                    // media
+                    let mediaURL = getUrl(locationThing, SCHEMA_LOMAP.rev_hasPart);
+                    if (mediaURL) {
+                        let aux = await getImageFromPod(mediaURL, this.session);
+                        location.img = "data:image/png;base64,".concat(aux);
+                    }
+                    //Add locationLM into List
+                    locationsRetrieved.push(location);
+
+                } catch (error) {
+                    if (error instanceof CoordinateNotInDomain) {
+                        console.error('The locations does not belong to the specified domain:', error.message);
+                    } else {
+                        console.error(error);
+                    }
+                }
+            }
+        }
+
+        //Return list
+        return locationsRetrieved;
+    }
 }
