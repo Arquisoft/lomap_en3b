@@ -8,7 +8,7 @@
 .Content
 The building block view shows the static decomposition of the system into building blocks (modules, components, subsystems, classes,
 interfaces, packages, libraries, frameworks, layers, partitions, tiers, functions, macros, operations,
-data structures, ...) as well as their dependencies (relationships, associations, ...)
+datas structures, ...) as well as their dependencies (relationships, associations, ...)
 
 This view is mandatory for every architecture documentation.
 In analogy to a house this is the _floor plan_.
@@ -71,9 +71,12 @@ MapAPI --> System: data
 ----
 
 The section shows the static decomposition of the system into building blocks as well as dependencies. We are following SOLID architecture, so the system will have three main sections which communicate between them:
+
 1. LoMap: allows users to manage personalised maps
-2. Map Provider: provides the app with a map to display 
-3. Data Access Provider: gives access to user’s data
+
+2. Map Provider: provides the app with a map to display
+
+3. Data Access Provider: gives access to user’s POD
 
 
 [role="arc42help"]
@@ -112,8 +115,19 @@ according the the following black box template:
 ****
 
 === Level 2
+Zooming into LoMap.
+
 In this view, we have a representation of the components of the system from a standpoint of the each module’s dependencies.
-**Level 2 diagram**
+
+The modules that we have implemented are:
+
+* Friends Management: to handle control over the pod; get user's friends and give access to user's data
+* Data Management: To handle data's insertion and retrieval to/from user's pod
+* User's View: shows a map with all the app's components. A map that can show markers and also let the user create new ones.
+* Controller: Links everything up and add the business logic.
+
+All of them but Controller can work independently. It is the Controller that add the logic to let the app work as expected.
+
 [plantuml,"Level 2 diagram",png]
 ----
 title "LoMap Level 2"
@@ -126,30 +140,33 @@ cloud {
 }
 
 database "Someone else's Solid POD" as Pod2 {
-  folder "FriendID/private/lomapen3b" {
-    folder "img"
-    [else's reviews] as review1
-    [else's locations] as Loc1
+  folder "else's Private Data" {
+    [else's data] as data2
+    [else's reviews] as review2
+    [else's friends] as friend2
+    [else's locations] as Loc2
 
   }
-  folder "FriendID/public/lomapen3b" as PODF{
-    [reviews] as reviewF2
-    [locations] as LocF2
-    folder "img" as im1
+  folder "else's Only Friend's Data" {
+    [else's reviews] as reviewF2
+    [else's locations] as LocF2
+
+
   }
 }
 
 database "Solid POD" as Pod1 {
-  folder "user/private/lomapen3b" {
-    [reviews] as review3
-    folder "img" as img2
-    [locations] as Loc3
+  folder "Private Data" {
+    [data] as data1
+    [reviews] as review1
+    [friends] as friend1
+    [locations] as Loc1
 
   }
-  folder "user/public/lomapen3b" {
+  folder "Only Friend's Data" {
     [reviews] as reviewF1
     [locations] as LocF1
-    folder "img" as img3
+
   }
 }
 node "LoMapUI" as LoMapFE {
@@ -158,37 +175,64 @@ node "LoMapUI" as LoMapFE {
 
 node "LoMap" as LoMapBE {
   [Controller] as crl
-  [podHandler] as PODHdr
-  [podAccess] as PODAcc
-  [Location] as Loc
-  [Review] as Rev
-  [User] as U
-  [Util] as Utl
+  [PodHandler] as FMmt
+  [DataAccess] as DataMnt
 }
 
 UI --> MapP : request Map (changes)
-MapP --> UI : return map
-UI --down-> crl : request changes
-PODAcc --> PODAP : request Data
-PODAP --> PODAcc : return Data
-crl -up--> UI : update values
+MapP --> UI : return changes
 
-crl --right-> Utl :Conversion
-crl --> PODAcc :write
-PODAcc --> crl :read
-crl -> PODHdr : request data from POD
-PODHdr ---> PODAP : request data changes
+UI -down-> crl :new data
+crl --> DataMnt
+DataMnt --> crl
+crl --> FMmt
+FMmt --> crl
+crl ---> UI : validated data
 
-PODAcc --> Utl :Conversion
+FMmt --down-> PODAP : request data
+PODAP --> FMmt : friends[]
+DataMnt -down--> PODAP : write data
+PODAP --> DataMnt: read data
 
-PODAP --> Pod1
-PODAP --left-> PODF
+PODAP -down-> Pod1
+PODAP -down-> Pod2
 
-crl --> U
-U --> Loc :has
-U --> Rev :has
+----
+
+=== Level 3
+
+Zooming into Controller.
+
+In this view, we have a better look of the business logic of our app.
+
+This module consists in some classes related between each other:
+
+* Controller: handle the app logic. It also has two attributes; user and Session.
+* User: represents the current user. It has a Map of LocationsLM and a Map of ReviewsLM.
+* LocationLM: represents a place in the map. It has a name, description, ...
+* ReviewLM: represents a review of a given place. It should have a user, place, content, ...
+
+
+**Level 3 diagram**
+
+[plantuml,"Level 3 diagram",png]
+----
+title "LoMap Level 3"
+
+node "LoMap" as LoMapBE {
+  [Controller] as crl
+  [LocationLM] as loc
+  [ReviewLM] as rev
+  [User] as user
+}
+
+user o-- loc
+user o-- rev
+
+crl -- user
 ----
 [role="arc42help"]
+
 ****
 Here you can specify the inner structure of (some) building blocks from level 1 as white boxes.
 
