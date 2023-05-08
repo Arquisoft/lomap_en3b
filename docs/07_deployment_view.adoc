@@ -127,7 +127,7 @@ Mapping of Building Blocks to Infrastructure::
 |===
 |Element | Description
 
-|Render
+|Azure
 | Hosting service
 
 |GitHub
